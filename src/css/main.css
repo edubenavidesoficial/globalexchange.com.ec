@@ -1,0 +1,14 @@
+@import "./base/reset.css";
+@import "./base/variables.css";
+@import "./base/typography.css";
+
+/* Los siguientes se irán activando conforme migremos el proyecto */
+
+/*
+@import "./layout/header.css";
+@import "./layout/footer.css";
+
+@import "./components/buttons.css";
+
+@import "./pages/home.css";
+*/
