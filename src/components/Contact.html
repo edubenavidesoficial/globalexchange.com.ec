@@ -1,0 +1,256 @@
+<!--
+====================================================
+COMPONENTE: CONTACT
+
+Origen:
+index.htm (Contact)
+
+Estado:
+Migrado con limpieza de HTML.
+
+Observaciones:
+- Conserva todas las clases de Elementor
+- Conserva data-id, data-element_type y data-settings
+- Conserva la estructura del formulario Contact Form 7 (WPCF7)
+- Conserva todos los atributos de validación (aria-*)
+- Conserva imágenes, srcset, sizes y loading
+- Conserva la jerarquía original de secciones y columnas
+- Se mantienen los campos hidden utilizados por Contact Form 7
+- CORREGIDO: Se eliminó el estilo inline "text-align: left" (se moverá al CSS en Fase 4)
+- Los nombres duplicados "your-name" se conservan (heredados de WordPress, se corregirán en Fase 6)
+- No existen widgets vacíos
+
+Fase:
+3 - Migración del HTML.
+====================================================
+-->
+
+<section
+    class="elementor-section elementor-top-section elementor-element elementor-element-e787d2f elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    data-id="e787d2f" data-element_type="section">
+    <div class="elementor-container elementor-column-gap-default">
+        <div class="elementor-row">
+
+            <!-- ==========================================
+                 COLUMNA IZQUIERDA - Imagen
+            ========================================== -->
+
+            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-6c3e58d"
+                data-id="6c3e58d" data-element_type="column">
+                <div class="elementor-column-wrap elementor-element-populated">
+                    <div class="elementor-widget-wrap">
+                        <div class="elementor-element elementor-element-1436dbe animated-fast elementor-invisible elementor-widget elementor-widget-image"
+                            data-id="1436dbe" data-element_type="widget"
+                            data-settings="{&quot;_animation&quot;:&quot;fadeInLeft&quot;}"
+                            data-widget_type="image.default">
+                            <div class="elementor-widget-container">
+                                <div class="elementor-image">
+                                    <img width="665" height="585" src="wp-content/uploads/2021/01/home10_img5.jpg"
+                                        class="attachment-full size-full" alt="" loading="lazy"
+                                        srcset="wp-content/uploads/2021/01/home10_img5.jpg 665w, wp-content/uploads/2021/01/home10_img5-300x264.jpg 300w, wp-content/uploads/2021/01/home10_img5-480x422.jpg 480w"
+                                        sizes="(max-width: 665px) 100vw, 665px" title="Smiling girl">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 COLUMNA DERECHA - Contenido y Formulario
+            ========================================== -->
+
+            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-0138aa4"
+                data-id="0138aa4" data-element_type="column">
+                <div class="elementor-column-wrap elementor-element-populated">
+                    <div class="elementor-widget-wrap">
+                        <section
+                            class="elementor-section elementor-inner-section elementor-element elementor-element-a85ef1c elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+                            data-id="a85ef1c" data-element_type="section">
+                            <div class="elementor-container elementor-column-gap-default">
+                                <div class="elementor-row">
+                                    <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-81cd046"
+                                        data-id="81cd046" data-element_type="column">
+                                        <div class="elementor-column-wrap elementor-element-populated">
+                                            <div class="elementor-widget-wrap">
+
+                                                <!-- ==========================================
+                                                     TÍTULO
+                                                ========================================== -->
+
+                                                <div class="elementor-element elementor-element-eb8944d elementor-widget elementor-widget-heading"
+                                                    data-id="eb8944d" data-element_type="widget"
+                                                    data-widget_type="heading.default">
+                                                    <div class="elementor-widget-container">
+                                                        <h2 class="elementor-heading-title elementor-size-default">
+                                                            GLOBAL EXCHANGE</h2>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ==========================================
+                                                     DESCRIPCIÓN
+                                                ========================================== -->
+
+                                                <div class="elementor-element elementor-element-738ce57 elementor-widget elementor-widget-text-editor"
+                                                    data-id="738ce57" data-element_type="widget"
+                                                    data-widget_type="text-editor.default">
+                                                    <div class="elementor-widget-container">
+                                                        <div class="elementor-text-editor elementor-clearfix">
+                                                            <p>Convertimos a estudiantes en ciudadanos del mundo con mas
+                                                                oportunidades.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ==========================================
+                                                     FORMULARIO CONTACT FORM 7
+                                                ========================================== -->
+
+                                                <div class="elementor-element elementor-element-3d1883c gt3_custom_form_large default elementor-widget elementor-widget-shortcode"
+                                                    data-id="3d1883c" data-element_type="widget"
+                                                    data-widget_type="shortcode.default">
+                                                    <div class="elementor-widget-container">
+                                                        <div class="elementor-shortcode">
+                                                            <div role="form" class="wpcf7" id="wpcf7-f5426-p6782-o1"
+                                                                lang="en-US" dir="ltr">
+                                                                <div class="screen-reader-response">
+                                                                    <p role="status" aria-live="polite"
+                                                                        aria-atomic="true"></p>
+                                                                    <ul></ul>
+                                                                </div>
+
+                                                                <!-- ==========================================
+                                                                     FORMULARIO
+                                                                ========================================== -->
+
+                                                                <form action="/#wpcf7-f5426-p6782-o1" method="post"
+                                                                    class="wpcf7-form init" novalidate="novalidate"
+                                                                    data-status="init">
+
+                                                                    <!-- ==========================================
+                                                                         CAMPOS OCULTOS DE WORDPRESS
+                                                                    ========================================== -->
+
+                                                                    <div style="display: none;">
+                                                                        <input type="hidden" name="_wpcf7" value="5426">
+                                                                        <input type="hidden" name="_wpcf7_version"
+                                                                            value="5.5.1">
+                                                                        <input type="hidden" name="_wpcf7_locale"
+                                                                            value="en_US">
+                                                                        <input type="hidden" name="_wpcf7_unit_tag"
+                                                                            value="wpcf7-f5426-p6782-o1">
+                                                                        <input type="hidden"
+                                                                            name="_wpcf7_container_post" value="6782">
+                                                                        <input type="hidden"
+                                                                            name="_wpcf7_posted_data_hash" value="">
+                                                                    </div>
+
+                                                                    <!-- ==========================================
+                                                                         FILA 1: NOMBRE + EMAIL
+                                                                    ========================================== -->
+
+                                                                    <div class="row gt3_contactform_home6">
+
+                                                                        <!-- Nombre -->
+                                                                        <div class="span6">
+                                                                            <span
+                                                                                class="wpcf7-form-control-wrap your-name">
+                                                                                <input type="text" name="your-name"
+                                                                                    value="" size="40"
+                                                                                    class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
+                                                                                    aria-required="true"
+                                                                                    aria-invalid="false"
+                                                                                    placeholder="Your Name*">
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <!-- Email -->
+                                                                        <div class="span6">
+                                                                            <span
+                                                                                class="wpcf7-form-control-wrap your-email">
+                                                                                <input type="email" name="your-email"
+                                                                                    value="" size="40"
+                                                                                    class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email"
+                                                                                    aria-required="true"
+                                                                                    aria-invalid="false"
+                                                                                    placeholder="Email*">
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <!-- ==========================================
+                                                                             FILA 2: TELÉFONO + WEBSITE
+                                                                        ========================================== -->
+
+                                                                        <!-- Teléfono -->
+                                                                        <div class="span6">
+                                                                            <span
+                                                                                class="wpcf7-form-control-wrap your-name">
+                                                                                <input type="text" name="your-name"
+                                                                                    value="" size="40"
+                                                                                    class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
+                                                                                    aria-required="true"
+                                                                                    aria-invalid="false"
+                                                                                    placeholder="Phone">
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <!-- Website -->
+                                                                        <div class="span6">
+                                                                            <span
+                                                                                class="wpcf7-form-control-wrap your-url">
+                                                                                <input type="url" name="your-url"
+                                                                                    value="" size="40"
+                                                                                    class="wpcf7-form-control wpcf7-text wpcf7-url wpcf7-validates-as-required wpcf7-validates-as-url"
+                                                                                    aria-required="true"
+                                                                                    aria-invalid="false"
+                                                                                    placeholder="Website*">
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <!-- ==========================================
+                                                                             FILA 3: MENSAJE
+                                                                        ========================================== -->
+
+                                                                        <div class="span12">
+                                                                            <span
+                                                                                class="wpcf7-form-control-wrap your-message">
+                                                                                <textarea name="your-message" cols="40"
+                                                                                    rows="10"
+                                                                                    class="wpcf7-form-control wpcf7-textarea"
+                                                                                    aria-invalid="false"
+                                                                                    placeholder="Message"></textarea>
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <!-- ==========================================
+                                                                             BOTÓN ENVIAR
+                                                                        ========================================== -->
+
+                                                                        <div class="span12">
+                                                                            <input type="submit" value="send message"
+                                                                                class="wpcf7-form-control has-spinner wpcf7-submit">
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    <div class="wpcf7-response-output"
+                                                                        aria-hidden="true"></div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
