@@ -1,0 +1,138 @@
+/* ====================================================
+   PROGRAMS - Estilos para sección de programas
+   Clase principal: .programs
+   Incluye: Programs.html + Programs_Title.html
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL - PROGRAMS
+========================================== */
+
+.programs {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    background-color: var(--white);
+    text-align: center;
+}
+
+/* ==========================================
+   CONTENEDOR INTERNO
+========================================== */
+
+.programs__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+
+.programs__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ==========================================
+   TÍTULO - PROGRAMS
+========================================== */
+
+.programs__title {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    line-height: 1.4;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.programs__title i {
+    font-style: italic;
+    font-weight: var(--font-semibold);
+    color: var(--heading);
+}
+
+/* ==========================================
+   PROGRAMS TITLE - Títulos decorativos
+   (para Programs_Title.html)
+========================================== */
+
+.programs-title__text {
+    font-size: var(--font-sm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-sm);
+}
+
+.programs-title__heading {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    margin-bottom: var(--spacing-lg);
+}
+
+.programs-title__logo {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.programs-title__logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .programs__title {
+        font-size: var(--font-xl);
+    }
+
+    .programs-title__heading {
+        font-size: var(--font-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .programs {
+        padding: var(--spacing-2xl) var(--spacing-md);
+    }
+
+    .programs__title {
+        font-size: var(--font-lg);
+    }
+
+    .programs-title__heading {
+        font-size: var(--font-lg);
+    }
+
+    .programs-title__logo {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .programs {
+        padding: var(--spacing-xl) var(--spacing-sm);
+    }
+
+    .programs__title {
+        font-size: var(--font-md);
+    }
+
+    .programs-title__heading {
+        font-size: var(--font-md);
+    }
+
+    .programs-title__logo {
+        max-width: 150px;
+    }
+}

@@ -6,10 +6,11 @@ Origen:
 index.htm (Contact)
 
 Estado:
-Migrado con limpieza de HTML.
+Migrado con limpieza de HTML y clase semántica añadida.
 
 Observaciones:
-- Conserva todas las clases de Elementor
+- Se añadió clase "contact" para CSS propio
+- Se conservan todas las clases de Elementor
 - Conserva data-id, data-element_type y data-settings
 - Conserva la estructura del formulario Contact Form 7 (WPCF7)
 - Conserva todos los atributos de validación (aria-*)
@@ -26,25 +27,25 @@ Fase:
 -->
 
 <section
-    class="elementor-section elementor-top-section elementor-element elementor-element-e787d2f elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    class="contact elementor-section elementor-top-section elementor-element elementor-element-e787d2f elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="e787d2f" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-default">
+    <div class="contact__container elementor-container elementor-column-gap-default">
         <div class="elementor-row">
 
             <!-- ==========================================
                  COLUMNA IZQUIERDA - Imagen
             ========================================== -->
 
-            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-6c3e58d"
+            <div class="contact__image-col elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-6c3e58d"
                 data-id="6c3e58d" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="contact__image-wrap elementor-widget-wrap">
                         <div class="elementor-element elementor-element-1436dbe animated-fast elementor-invisible elementor-widget elementor-widget-image"
                             data-id="1436dbe" data-element_type="widget"
                             data-settings="{&quot;_animation&quot;:&quot;fadeInLeft&quot;}"
                             data-widget_type="image.default">
                             <div class="elementor-widget-container">
-                                <div class="elementor-image">
+                                <div class="contact__image elementor-image">
                                     <img width="665" height="585" src="wp-content/uploads/2021/01/home10_img5.jpg"
                                         class="attachment-full size-full" alt="" loading="lazy"
                                         srcset="wp-content/uploads/2021/01/home10_img5.jpg 665w, wp-content/uploads/2021/01/home10_img5-300x264.jpg 300w, wp-content/uploads/2021/01/home10_img5-480x422.jpg 480w"
@@ -60,10 +61,10 @@ Fase:
                  COLUMNA DERECHA - Contenido y Formulario
             ========================================== -->
 
-            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-0138aa4"
+            <div class="contact__form-col elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-0138aa4"
                 data-id="0138aa4" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="contact__form-wrap elementor-widget-wrap">
                         <section
                             class="elementor-section elementor-inner-section elementor-element elementor-element-a85ef1c elementor-section-boxed elementor-section-height-default elementor-section-height-default"
                             data-id="a85ef1c" data-element_type="section">
@@ -72,7 +73,7 @@ Fase:
                                     <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-81cd046"
                                         data-id="81cd046" data-element_type="column">
                                         <div class="elementor-column-wrap elementor-element-populated">
-                                            <div class="elementor-widget-wrap">
+                                            <div class="contact__form-inner elementor-widget-wrap">
 
                                                 <!-- ==========================================
                                                      TÍTULO
@@ -82,7 +83,8 @@ Fase:
                                                     data-id="eb8944d" data-element_type="widget"
                                                     data-widget_type="heading.default">
                                                     <div class="elementor-widget-container">
-                                                        <h2 class="elementor-heading-title elementor-size-default">
+                                                        <h2
+                                                            class="contact__title elementor-heading-title elementor-size-default">
                                                             GLOBAL EXCHANGE</h2>
                                                     </div>
                                                 </div>
@@ -95,7 +97,8 @@ Fase:
                                                     data-id="738ce57" data-element_type="widget"
                                                     data-widget_type="text-editor.default">
                                                     <div class="elementor-widget-container">
-                                                        <div class="elementor-text-editor elementor-clearfix">
+                                                        <div
+                                                            class="contact__description elementor-text-editor elementor-clearfix">
                                                             <p>Convertimos a estudiantes en ciudadanos del mundo con mas
                                                                 oportunidades.</p>
                                                         </div>
@@ -106,7 +109,7 @@ Fase:
                                                      FORMULARIO CONTACT FORM 7
                                                 ========================================== -->
 
-                                                <div class="elementor-element elementor-element-3d1883c gt3_custom_form_large default elementor-widget elementor-widget-shortcode"
+                                                <div class="contact__form elementor-element elementor-element-3d1883c gt3_custom_form_large default elementor-widget elementor-widget-shortcode"
                                                     data-id="3d1883c" data-element_type="widget"
                                                     data-widget_type="shortcode.default">
                                                     <div class="elementor-widget-container">
@@ -149,7 +152,8 @@ Fase:
                                                                          FILA 1: NOMBRE + EMAIL
                                                                     ========================================== -->
 
-                                                                    <div class="row gt3_contactform_home6">
+                                                                    <div
+                                                                        class="contact__form-row row gt3_contactform_home6">
 
                                                                         <!-- Nombre -->
                                                                         <div class="span6">
@@ -228,7 +232,7 @@ Fase:
 
                                                                         <div class="span12">
                                                                             <input type="submit" value="send message"
-                                                                                class="wpcf7-form-control has-spinner wpcf7-submit">
+                                                                                class="contact__submit wpcf7-form-control has-spinner wpcf7-submit">
                                                                         </div>
 
                                                                     </div>

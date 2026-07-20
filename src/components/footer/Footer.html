@@ -6,10 +6,11 @@ Origen:
 index.htm (Footer)
 
 Estado:
-Migrado con limpieza de HTML.
+Migrado con limpieza de HTML y clase semántica añadida.
 
 Observaciones:
-- Conserva todas las clases de Elementor
+- Se añadió clase "footer" para CSS propio
+- Se conservan todas las clases de Elementor
 - CORREGIDO: Se eliminaron todos los IDs menu-item-* generados por WordPress
 - Se conservan las clases originales para mantener compatibilidad con CSS
 - Se conservan los scripts JSON de Elementor temporalmente
@@ -20,23 +21,25 @@ Fase:
 ====================================================
 -->
 
-<footer>
+<footer class="footer">
     <div data-elementor-type="wpda-footer" data-elementor-id="7803"
         class="elementor elementor-7803 wpda-builder-page-7803 wpda-builder wpda-footer-builder"
         data-elementor-settings="[]">
         <div class="elementor-inner">
             <div class="elementor-section-wrap">
                 <section
-                    class="elementor-section elementor-top-section elementor-element elementor-element-70be064 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+                    class="footer__section elementor-section elementor-top-section elementor-element elementor-element-70be064 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
                     data-id="70be064" data-element_type="section"
                     data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-                    <div class="elementor-container elementor-column-gap-default">
+                    <div class="footer__container elementor-container elementor-column-gap-default">
                         <div class="elementor-row">
                             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-6550ca10"
                                 data-id="6550ca10" data-element_type="column">
                                 <div class="elementor-column-wrap elementor-element-populated">
-                                    <div class="elementor-widget-wrap">
-                                        <div class="elementor-element elementor-element-73feaf10 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
+                                    <div class="footer__content elementor-widget-wrap">
+
+                                        <!-- Divider superior -->
+                                        <div class="footer__divider elementor-element elementor-element-73feaf10 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
                                             data-id="73feaf10" data-element_type="widget"
                                             data-widget_type="divider.default">
                                             <div class="elementor-widget-container">
@@ -45,15 +48,22 @@ Fase:
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- ==========================================
+                                             FILA: UBICACIÓN Y CONTACTO
+                                        ========================================== -->
+
                                         <section
-                                            class="elementor-section elementor-inner-section elementor-element elementor-element-77f5324 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+                                            class="footer__info-section elementor-section elementor-inner-section elementor-element elementor-element-77f5324 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
                                             data-id="77f5324" data-element_type="section">
                                             <div class="elementor-container elementor-column-gap-default">
                                                 <div class="elementor-row">
-                                                    <div class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-3a99f48b"
+
+                                                    <!-- Columna 1: Ubicaciones -->
+                                                    <div class="footer__locations elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-3a99f48b"
                                                         data-id="3a99f48b" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__locations-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-f43ecf5 elementor-widget elementor-widget-spacer"
                                                                     data-id="f43ecf5" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -68,7 +78,7 @@ Fase:
                                                                     data-widget_type="gt3-core-imagebox.default">
                                                                     <div class="elementor-widget-container">
                                                                         <div
-                                                                            class="gt3-core-imagebox-wrapper elementor-image_icon-position-default">
+                                                                            class="footer__location-item gt3-core-imagebox-wrapper elementor-image_icon-position-default">
                                                                             <figure class="gt3-core-imagebox-img">
                                                                                 <img width="76" height="74"
                                                                                     src="wp-content/uploads/2019/12/img_box_30_violet.png"
@@ -87,7 +97,7 @@ Fase:
                                                                         </div>
                                                                         <br>
                                                                         <div
-                                                                            class="gt3-core-imagebox-wrapper elementor-image_icon-position-default">
+                                                                            class="footer__location-item gt3-core-imagebox-wrapper elementor-image_icon-position-default">
                                                                             <figure class="gt3-core-imagebox-img">
                                                                                 <img width="76" height="74"
                                                                                     src="wp-content/uploads/2019/12/img_box_30_violet.png"
@@ -110,10 +120,12 @@ Fase:
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-1675d773"
+
+                                                    <!-- Columna 2: Contacto -->
+                                                    <div class="footer__contact-col elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-1675d773"
                                                         data-id="1675d773" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__contact-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-55f1002 elementor-widget elementor-widget-spacer"
                                                                     data-id="55f1002" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -123,7 +135,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-12f13e88 elementor-widget__width-auto elementor-widget-tablet__width-auto elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                                                                <div class="footer__contact elementor-element elementor-element-12f13e88 elementor-widget__width-auto elementor-widget-tablet__width-auto elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                                                                     data-id="12f13e88" data-element_type="widget"
                                                                     data-widget_type="gt3-core-imagebox.default">
                                                                     <div class="elementor-widget-container">
@@ -156,15 +168,22 @@ Fase:
                                                 </div>
                                             </div>
                                         </section>
+
+                                        <!-- ==========================================
+                                             FILA: MENÚS Y GALERÍA
+                                        ========================================== -->
+
                                         <section
-                                            class="elementor-section elementor-inner-section elementor-element elementor-element-36b79983 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+                                            class="footer__nav-section elementor-section elementor-inner-section elementor-element elementor-element-36b79983 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
                                             data-id="36b79983" data-element_type="section">
                                             <div class="elementor-container elementor-column-gap-extended">
                                                 <div class="elementor-row">
-                                                    <div class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-415e9e5a"
+
+                                                    <!-- Columna 1: Acerca de -->
+                                                    <div class="footer__about-col elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-415e9e5a"
                                                         data-id="415e9e5a" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__about-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-3ee659aa elementor-widget elementor-widget-spacer"
                                                                     data-id="3ee659aa" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -174,7 +193,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-46108c3a elementor-widget elementor-widget-text-editor"
+                                                                <div class="footer__about-title elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-46108c3a elementor-widget elementor-widget-text-editor"
                                                                     data-id="46108c3a" data-element_type="widget"
                                                                     data-widget_type="text-editor.default">
                                                                     <div class="elementor-widget-container">
@@ -184,7 +203,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_color elementor-element elementor-element-7555758f elementor-widget elementor-widget-text-editor"
+                                                                <div class="footer__about-text elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_color elementor-element elementor-element-7555758f elementor-widget elementor-widget-text-editor"
                                                                     data-id="7555758f" data-element_type="widget"
                                                                     data-widget_type="text-editor.default">
                                                                     <div class="elementor-widget-container">
@@ -197,7 +216,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-3e52fb1f elementor-shape-square e-grid-align-left elementor-grid-0 elementor-widget elementor-widget-social-icons"
+                                                                <div class="footer__social elementor-element elementor-element-3e52fb1f elementor-shape-square e-grid-align-left elementor-grid-0 elementor-widget elementor-widget-social-icons"
                                                                     data-id="3e52fb1f" data-element_type="widget"
                                                                     data-widget_type="social-icons.default">
                                                                     <div class="elementor-widget-container">
@@ -266,10 +285,12 @@ Fase:
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-79dc8458"
+
+                                                    <!-- Columna 2: Mapa del Sitio -->
+                                                    <div class="footer__sitemap-col elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-79dc8458"
                                                         data-id="79dc8458" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__sitemap-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-3a437120 elementor-widget elementor-widget-spacer"
                                                                     data-id="3a437120" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -279,7 +300,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-3c04219b elementor-widget elementor-widget-text-editor"
+                                                                <div class="footer__sitemap-title elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-3c04219b elementor-widget elementor-widget-text-editor"
                                                                     data-id="3c04219b" data-element_type="widget"
                                                                     data-widget_type="text-editor.default">
                                                                     <div class="elementor-widget-container">
@@ -289,7 +310,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-2e2cb06f elementor-widget elementor-widget-wpda-builder-menu"
+                                                                <div class="footer__sitemap-menu elementor-element elementor-element-2e2cb06f elementor-widget elementor-widget-wpda-builder-menu"
                                                                     data-id="2e2cb06f" data-element_type="widget"
                                                                     data-widget_type="wpda-builder-menu.default">
                                                                     <div class="elementor-widget-container">
@@ -301,7 +322,7 @@ Fase:
                                                                         <div class="wpda-navbar-collapse">
                                                                             <nav class="wpda-builder-menu">
                                                                                 <ul id="menu-main-menu-1"
-                                                                                    class="wpda-menu">
+                                                                                    class="footer__sitemap wpda-menu">
                                                                                     <li
                                                                                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-6782 current_page_item">
                                                                                         <a href="index.htm">Inicio</a>
@@ -413,10 +434,12 @@ Fase:
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-7512ac0a"
+
+                                                    <!-- Columna 3: Comunidad (Galería) -->
+                                                    <div class="footer__gallery-col elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-7512ac0a"
                                                         data-id="7512ac0a" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__gallery-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-261f93ce elementor-widget elementor-widget-spacer"
                                                                     data-id="261f93ce" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -426,7 +449,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-7ec1e2c2 elementor-widget elementor-widget-text-editor"
+                                                                <div class="footer__gallery-title elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-7ec1e2c2 elementor-widget elementor-widget-text-editor"
                                                                     data-id="7ec1e2c2" data-element_type="widget"
                                                                     data-widget_type="text-editor.default">
                                                                     <div class="elementor-widget-container">
@@ -436,7 +459,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-3ffd82a gallery-spacing-custom elementor-widget elementor-widget-image-gallery"
+                                                                <div class="footer__gallery elementor-element elementor-element-3ffd82a gallery-spacing-custom elementor-widget elementor-widget-image-gallery"
                                                                     data-id="3ffd82a" data-element_type="widget"
                                                                     data-widget_type="image-gallery.default">
                                                                     <div class="elementor-widget-container">
@@ -560,10 +583,12 @@ Fase:
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-5ee14e87"
+
+                                                    <!-- Columna 4: Logo + Buscador -->
+                                                    <div class="footer__brand-col elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-5ee14e87"
                                                         data-id="5ee14e87" data-element_type="column">
                                                         <div class="elementor-column-wrap elementor-element-populated">
-                                                            <div class="elementor-widget-wrap">
+                                                            <div class="footer__brand-wrap elementor-widget-wrap">
                                                                 <div class="elementor-element elementor-element-2865ca4a elementor-widget elementor-widget-spacer"
                                                                     data-id="2865ca4a" data-element_type="widget"
                                                                     data-widget_type="spacer.default">
@@ -573,7 +598,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-4b09af3 elementor-invisible elementor-widget elementor-widget-wpda-header-logo"
+                                                                <div class="footer__logo elementor-element elementor-element-4b09af3 elementor-invisible elementor-widget elementor-widget-wpda-header-logo"
                                                                     data-id="4b09af3" data-element_type="widget"
                                                                     data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;}"
                                                                     data-widget_type="wpda-header-logo.default">
@@ -591,7 +616,7 @@ Fase:
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="elementor-element elementor-element-b5d6ef8 alignment-center elementor-widget elementor-widget-wpda-builder-search"
+                                                                <div class="footer__search elementor-element elementor-element-b5d6ef8 alignment-center elementor-widget elementor-widget-wpda-builder-search"
                                                                     data-id="b5d6ef8" data-element_type="widget"
                                                                     data-widget_type="wpda-builder-search.default">
                                                                     <div class="elementor-widget-container">
@@ -620,7 +645,9 @@ Fase:
                                                 </div>
                                             </div>
                                         </section>
-                                        <div class="elementor-element elementor-element-90ddb52 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
+
+                                        <!-- Divider inferior -->
+                                        <div class="footer__divider-bottom elementor-element elementor-element-90ddb52 elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
                                             data-id="90ddb52" data-element_type="widget"
                                             data-widget_type="divider.default">
                                             <div class="elementor-widget-container">
@@ -629,7 +656,9 @@ Fase:
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_color elementor-element elementor-element-1d26260d elementor-widget elementor-widget-text-editor"
+
+                                        <!-- Copyright -->
+                                        <div class="footer__copyright elementor-element-custom_font_size elementor-element-custom_line_height elementor-element-custom_color elementor-element elementor-element-1d26260d elementor-widget elementor-widget-text-editor"
                                             data-id="1d26260d" data-element_type="widget"
                                             data-widget_type="text-editor.default">
                                             <div class="elementor-widget-container">
@@ -644,6 +673,7 @@ Fase:
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

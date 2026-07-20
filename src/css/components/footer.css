@@ -1,0 +1,73 @@
+/* ====================================================
+   FOOTER - Estilos básicos
+   ==================================================== */
+
+.footer-container {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.footer-locations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.footer-locations h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-locations p {
+    color: var(--color-text-light);
+    line-height: 1.8;
+}
+
+.footer-contact {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.footer-contact h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-contact p {
+    color: var(--color-text-light);
+}
+
+.footer-social {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.footer-social a {
+    color: var(--color-white);
+    text-decoration: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-text-light);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.footer-social a:hover {
+    background: var(--color-primary);
+    color: var(--color-dark);
+    border-color: var(--color-primary);
+}
+
+.footer-copyright {
+    border-top: 1px solid var(--color-text-light);
+    padding-top: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-text-light);
+}
+
+.footer-copyright a {
+    color: var(--color-primary);
+    text-decoration: none;
+}

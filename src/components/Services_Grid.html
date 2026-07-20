@@ -6,10 +6,13 @@ Origen:
 index.htm (Services)
 
 Estado:
-Migrado con limpieza de HTML.
+Migrado con limpieza de HTML y clase semántica añadida.
 
 Observaciones:
-- Conserva todas las clases de Elementor
+- Se añadió clase "services" para CSS propio
+- Se añadió clase "services__grid" para el grid
+- Se añadió clase "services__card" para cada tarjeta
+- Se conservan todas las clases de Elementor
 - Conserva data-id, data-element_type y data-settings
 - Conserva todas las clases GT3 ImageBox
 - Se mantienen src, srcset, sizes y loading de todas las imágenes
@@ -24,26 +27,26 @@ Fase:
 -->
 
 <section
-    class="elementor-section elementor-inner-section elementor-element elementor-element-303ac15 gt3_cycled_animation elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    class="services elementor-section elementor-inner-section elementor-element elementor-element-303ac15 gt3_cycled_animation elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="303ac15" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-extended">
+    <div class="services__container elementor-container elementor-column-gap-extended">
         <div class="elementor-row">
 
             <!-- ==================================================
                  COLUMNA 1
             ================================================== -->
 
-            <div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-5e4e7f8"
+            <div class="services__col elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-5e4e7f8"
                 data-id="5e4e7f8" data-element_type="column"
                 data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="services__col-content elementor-widget-wrap">
 
                         <!-- ==========================================
                              Servicio: PROGRAMA IDIOMÁTICO
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-a2aa2a0 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-a2aa2a0 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="a2aa2a0" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -63,16 +66,17 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="idiomas">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a
                                                     href="https://globalexchange.com.ec/cursos-de-idiomas-en-el-extranjero-2/index.htm">PROGRAMA
-                                                    IDIOM&Aacute;TICO</a>
+                                                    IDIOMÁTICO</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Aprende o perfecciona una lengua con
+                                        <p class="services__card-desc gt3-core-imagebox-description">Aprende o
+                                            perfecciona una lengua con
                                             GLOBAL EXCHANGE En 76 destinos del mundo. Disfruta de un ambiente exclusivo
                                             en nuestras academias de lengua.<br></p>
-                                        <center>No hay limite de edad <br>"18 a&ntilde;os en adelante"</center>
+                                        <center>No hay limite de edad <br>"18 años en adelante"</center>
                                     </div>
                                 </div>
                                 <a href="#"></a>
@@ -83,7 +87,7 @@ Fase:
                              Servicio: UNIVERSIDAD EN EL EXTERIOR
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-cfabd60 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-cfabd60 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="cfabd60" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -103,16 +107,17 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="studying">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a href="https://globalexchange.com.ec/acceso-universitario/index.htm">UNIVERSIDAD
                                                     EN EL EXTERIOR</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Las mejores universidades del mundo
+                                        <p class="services__card-desc gt3-core-imagebox-description">Las mejores
+                                            universidades del mundo
                                             esperan por ti. Te ayudamos a aplicar a universidades internacionales en
-                                            pa&iacute;ses como Francia, Italia, Alemania, B&eacute;lgica, Australia,
-                                            Austria, Holanda y Suiza; son pa&iacute;ses que ofrecen educaci&oacute;n
-                                            p&uacute;blica casi gratuita.</p>
+                                            países como Francia, Italia, Alemania, Bélgica, Australia,
+                                            Austria, Holanda y Suiza; son países que ofrecen educación
+                                            pública casi gratuita.</p>
                                     </div>
                                 </div>
                                 <a href="#"></a>
@@ -123,7 +128,7 @@ Fase:
                              Servicio: SUMMER CAMP
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-0d58de1 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-0d58de1 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="0d58de1" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -143,14 +148,15 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="tent">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a href="https://globalexchange.com.ec/summer-camps/index.htm">SUMMER
                                                     CAMP</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Las escuelas normalmente ofrecen
-                                            excursiones y eventos especiales en los d&iacute;as festivos como navidad,
-                                            spring-break, graduaci&oacute;n, entre otros</p>
+                                        <p class="services__card-desc gt3-core-imagebox-description">Las escuelas
+                                            normalmente ofrecen
+                                            excursiones y eventos especiales en los días festivos como navidad,
+                                            spring-break, graduación, entre otros</p>
                                     </div>
                                 </div>
                                 <a href="#"></a>
@@ -161,7 +167,7 @@ Fase:
                              Servicio: NANNY
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-5837fb8 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-5837fb8 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="5837fb8" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -181,15 +187,16 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="cot">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a
                                                     href="https://globalexchange.com.ec/programa-nanny-intercambios-alemania-usa-holanda/index.htm">NANNY</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Haz un intercambio cultural durante un
-                                            a&ntilde;o, mientras trabajas como Nanny en el seno de una familia
-                                            anfitriona.<br><br><b>No incluye </b><br>- Pasajes A&eacute;reos<br>-
-                                            Presentaci&oacute;n consular <br>- Traducciones / apostillado de documentos
+                                        <p class="services__card-desc gt3-core-imagebox-description">Haz un intercambio
+                                            cultural durante un
+                                            año, mientras trabajas como Nanny en el seno de una familia
+                                            anfitriona.<br><br><b>No incluye </b><br>- Pasajes Aéreos<br>-
+                                            Presentación consular <br>- Traducciones / apostillado de documentos
                                         </p>
                                     </div>
                                 </div>
@@ -205,16 +212,16 @@ Fase:
                  COLUMNA 2
             ================================================== -->
 
-            <div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-8dfa260"
+            <div class="services__col elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-8dfa260"
                 data-id="8dfa260" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="services__col-content elementor-widget-wrap">
 
                         <!-- ==========================================
                              Servicio: EDUCACION DUAL
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-f4e84ac elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-f4e84ac elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="f4e84ac" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -236,15 +243,16 @@ Fase:
                                                         title="educacion-a-distancia">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a href="#">EDUCACION DUAL</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">El componente b&aacute;sico de un
-                                            programa de estudio dual es la combinaci&oacute;n de trabajo pr&aacute;ctico
-                                            en una empresa y clases te&oacute;ricas en una universidad o centro de
-                                            formaci&oacute;n cooperativa.<br><br><b>Pa&iacute;ses</b></p>
-                                        <center>Alemania, B&eacute;lgica, Francia, Holanda, Austria, China, Suiza,
+                                        <p class="services__card-desc gt3-core-imagebox-description">El componente
+                                            básico de un
+                                            programa de estudio dual es la combinación de trabajo práctico
+                                            en una empresa y clases teóricas en una universidad o centro de
+                                            formación cooperativa.<br><br><b>Países</b></p>
+                                        <center>Alemania, Bélgica, Francia, Holanda, Austria, China, Suiza,
                                             Australia, Liechtenstein, Noruega, Italia.</center>
                                     </div>
                                 </div>
@@ -256,7 +264,7 @@ Fase:
                              Servicio: AUSBILDUNG
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-f8f52e8 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-f8f52e8 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="f8f52e8" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -276,14 +284,15 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="educacion">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a href="#">AUSBILDUNG</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">La formaci&oacute;n Ausbildung es una
+                                        <p class="services__card-desc gt3-core-imagebox-description">La formación
+                                            Ausbildung es una
                                             medida educativa en la que se imparten o desarrollan conocimientos y
-                                            habilidades de trabajo y a la finalizaci&oacute;n de la capacitaci&oacute;n,
-                                            las personas pueden ejercer una actividad espec&iacute;fica t&eacute;cnica.
+                                            habilidades de trabajo y a la finalización de la capacitación,
+                                            las personas pueden ejercer una actividad específica técnica.
                                         </p>
                                     </div>
                                 </div>
@@ -295,7 +304,7 @@ Fase:
                              Servicio: SISTEMA DE EDUCACIÓN EUROPEO
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-10a264b elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-10a264b elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="10a264b" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -315,13 +324,14 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="airplane (1)">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
-                                                <a href="#">SISTEMA DE EDUCACI&Oacute;N EUROPEO</a>
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
+                                                <a href="#">SISTEMA DE EDUCACIÓN EUROPEO</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Bachelor (licenciatura) en 6 semestres.
-                                            Maestr&iacute;as 2-3 a&ntilde;os (tercer nivel) gratuito. <br>Doctorado 2
-                                            a&ntilde;os gratuito. <br>Posdoctorado 2 a&ntilde;os gratuito. Nivel
+                                        <p class="services__card-desc gt3-core-imagebox-description">Bachelor
+                                            (licenciatura) en 6 semestres.
+                                            Maestrías 2-3 años (tercer nivel) gratuito. <br>Doctorado 2
+                                            años gratuito. <br>Posdoctorado 2 años gratuito. Nivel
                                             educacional de alto reconocimiento, ubicando sus universidades dentro de las
                                             100 mejores del mundo.</p>
                                     </div>
@@ -338,16 +348,16 @@ Fase:
                  COLUMNA 3
             ================================================== -->
 
-            <div class="elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-c60d4d7"
+            <div class="services__col elementor-column elementor-col-33 elementor-inner-column elementor-element elementor-element-c60d4d7"
                 data-id="c60d4d7" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="services__col-content elementor-widget-wrap">
 
                         <!-- ==========================================
                              Servicio: PASANTÍAS UNIVERSITARIAS
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-f36da1d elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-f36da1d elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="f36da1d" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -367,21 +377,22 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="businessman">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a
-                                                    href="https://globalexchange.com.ec/pasantias-profesionales-en-el-exterior/index.htm">PASANT&Iacute;AS
+                                                    href="https://globalexchange.com.ec/pasantias-profesionales-en-el-exterior/index.htm">PASANTÍAS
                                                     UNIVERSITARIAS</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Desarrolla tu capacidad
-                                            ling&uuml;&iacute;stica y habilidades laborales en un entorno de trabajo
+                                        <p class="services__card-desc gt3-core-imagebox-description">Desarrolla tu
+                                            capacidad
+                                            lingüística y habilidades laborales en un entorno de trabajo
                                             real.<br><br><b> Programas </b></p>
-                                        <center>Alem&aacute;n, Franc&eacute;s, Italiano, Ingl&eacute;s</center>
+                                        <center>Alemán, Francés, Italiano, Inglés</center>
                                         <b>Opciones en el Exterior</b>
-                                        <center>- Pr&aacute;cticas profesionales <br>- Plazas de trabajo <br>-
-                                            Maestr&iacute;as gratuitas <br></center>
+                                        <center>- Prácticas profesionales <br>- Plazas de trabajo <br>-
+                                            Maestrías gratuitas <br></center>
                                         <b>Tiempo</b>
-                                        <center>4/8/12 semanas <br>1 a 3 a&ntilde;os</center>
+                                        <center>4/8/12 semanas <br>1 a 3 años</center>
                                     </div>
                                 </div>
                                 <a href="#"></a>
@@ -392,7 +403,7 @@ Fase:
                              Servicio: ESCOLARIDAD
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-c5adb34 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-c5adb34 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="c5adb34" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -412,12 +423,13 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="idiomas">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a
                                                     href="https://globalexchange.com.ec/services/index.htm">ESCOLARIDAD</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description"><b>Programa de Escolaridad Global
+                                        <p class="services__card-desc gt3-core-imagebox-description"><b>Programa de
+                                                Escolaridad Global
                                                 Exchange</b><br>La oportunidad de sumergirte en la cultura y el idioma
                                             del país de destino está en tus manos, en este proceso nuestro (a)
                                             estudiante vivirá en el país del exterior durante: un trimestre o año
@@ -432,7 +444,7 @@ Fase:
                              Servicio: CURSOS ESPECIALES
                         ========================================== -->
 
-                        <div class="elementor-element elementor-element-b0f3198 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
+                        <div class="services__card elementor-element elementor-element-b0f3198 elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
                             data-id="b0f3198" data-element_type="widget" data-widget_type="gt3-core-imagebox.default">
                             <div class="elementor-widget-container">
                                 <div class="gt3-core-imagebox-wrapper elementor-image_icon-position-beside">
@@ -452,14 +464,15 @@ Fase:
                                                         sizes="(max-width: 512px) 100vw, 512px" title="idiomas (1)">
                                                 </a>
                                             </figure>
-                                            <h3 class="gt3-core-imagebox-title">
+                                            <h3 class="services__card-title gt3-core-imagebox-title">
                                                 <a href="https://globalexchange.com.ec/cursos-idioma-local/index.htm">CURSOS
                                                     ESPECIALES</a>
                                             </h3>
                                         </div>
-                                        <p class="gt3-core-imagebox-description">Adem&aacute;s de nuestros programas en
-                                            el Exterior Global Exchange te ofrece asesor&iacute;a para el ingreso y
-                                            aplicaci&oacute;n a las mejores Universidades del Mundo. Estaremos gustosos
+                                        <p class="services__card-desc gt3-core-imagebox-description">Además de nuestros
+                                            programas en
+                                            el Exterior Global Exchange te ofrece asesoría para el ingreso y
+                                            aplicación a las mejores Universidades del Mundo. Estaremos gustosos
                                             de ofrecerte las mejores alternativas y servicios para tus estudios
                                             superiores en el exterior.</p>
                                     </div>

@@ -1,0 +1,136 @@
+/* ====================================================
+   STATS - Estilos para contadores GT3
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+section[data-id="17a9ca9"] {
+    padding: 64px 0;
+    background-color: #f8f8f8;
+}
+
+/* ==========================================
+   IMAGEN DECORATIVA
+========================================== */
+
+.elementor-widget-image[data-id="94d6df7"] {
+    text-align: center;
+}
+
+.elementor-widget-image[data-id="94d6df7"] img {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* ==========================================
+   GRID DE CONTADORES
+========================================== */
+
+.elementor-section[data-id="d5a07b7"] {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 0;
+}
+
+/* ==========================================
+   CADA COLUMNA DE CONTADOR
+========================================== */
+
+.elementor-column .counter-wrapper {
+    text-align: center;
+}
+
+/* ==========================================
+   NÚMERO DEL CONTADOR
+========================================== */
+
+.counter-wrapper .counter {
+    display: block;
+    font-size: 40px;
+    font-weight: 800;
+    color: #e0cb45;
+    margin-bottom: 8px;
+}
+
+/* ==========================================
+   TEXTO CON GRADIENTE
+========================================== */
+
+.text_gradient .counter {
+    background: linear-gradient(96deg, #e28838 0%, #e0cb45 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==========================================
+   TEXTO DEBAJO DEL CONTADOR
+========================================== */
+
+.counter-wrapper .description p,
+.counter-wrapper .description h6 {
+    font-size: 18px;
+    color: #696687;
+    margin: 0;
+}
+
+/* ==========================================
+   IMAGEN DECORATIVA DERECHA
+========================================== */
+
+.elementor-widget-image[data-id="ba6f5f3"] img {
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+/* ==========================================
+   ELEMENTOS DECORATIVOS
+========================================== */
+
+.elementor-absolute .gt3_rotated_element {
+    position: absolute;
+}
+
+.elementor-absolute .gt3_moved_element {
+    position: absolute;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+    section[data-id="17a9ca9"] {
+        padding: 48px 0;
+    }
+
+    .counter-wrapper .counter {
+        font-size: 32px;
+    }
+
+    .counter-wrapper .description p,
+    .counter-wrapper .description h6 {
+        font-size: 16px;
+    }
+
+    .elementor-section[data-id="d5a07b7"] {
+        padding: 16px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    section[data-id="17a9ca9"] {
+        padding: 32px 0;
+    }
+
+    .counter-wrapper .counter {
+        font-size: 28px;
+    }
+
+    .counter-wrapper .description p,
+    .counter-wrapper .description h6 {
+        font-size: 14px;
+    }
+}

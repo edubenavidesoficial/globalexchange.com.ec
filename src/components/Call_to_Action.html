@@ -6,10 +6,11 @@ Origen:
 index.htm (Call To Action)
 
 Estado:
-Migrado con limpieza de HTML.
+Migrado con limpieza de HTML y clase semántica añadida.
 
 Observaciones:
-- Conserva todas las clases de Elementor
+- Se añadió clase "cta" para CSS propio
+- Se conservan todas las clases de Elementor
 - Conserva data-id, data-element_type y data-widget_type
 - Conserva la estructura completa del botón GT3
 - Conserva todos los enlaces originales de WordPress
@@ -25,14 +26,14 @@ Fase:
 -->
 
 <section
-    class="elementor-section elementor-top-section elementor-element elementor-element-0feec84 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    class="cta elementor-section elementor-top-section elementor-element elementor-element-0feec84 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="0feec84" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-default">
+    <div class="cta__container elementor-container elementor-column-gap-default">
         <div class="elementor-row">
             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-c371e8c"
                 data-id="c371e8c" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="cta__content elementor-widget-wrap">
 
                         <!-- ==========================================
                              TÍTULO PRINCIPAL
@@ -41,7 +42,8 @@ Fase:
                         <div class="elementor-element elementor-element-506e610 gt3_theme_textgradient-yes elementor-widget elementor-widget-heading"
                             data-id="506e610" data-element_type="widget" data-widget_type="heading.default">
                             <div class="elementor-widget-container">
-                                <h2 class="elementor-heading-title elementor-size-default">Hace 21 a&ntilde;os iniciamos
+                                <h2 class="cta__title elementor-heading-title elementor-size-default">Hace 21 años
+                                    iniciamos
                                     la aventura y hemos crecido!! </h2>
                             </div>
                         </div>
@@ -53,27 +55,27 @@ Fase:
                         <div class="elementor-element elementor-element-a79b9ff elementor-widget-divider--view-line elementor-widget elementor-widget-divider"
                             data-id="a79b9ff" data-element_type="widget" data-widget_type="divider.default">
                             <div class="elementor-widget-container">
-                                <div class="elementor-divider">
+                                <div class="cta__divider elementor-divider">
                                     <span class="elementor-divider-separator"></span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- ==========================================
-                             TEXT EDITOR - Estadísticas con estilo inline
+                             TEXT EDITOR - Estadísticas
                         ========================================== -->
 
                         <div class="elementor-element-custom_font_size elementor-element-custom_font_size_tablet elementor-element-custom_font_family elementor-element-custom_font_weight elementor-element-custom_color elementor-element elementor-element-8b1270f elementor-widget elementor-widget-text-editor"
                             data-id="8b1270f" data-element_type="widget" data-widget_type="text-editor.default">
                             <div class="elementor-widget-container">
-                                <div class="elementor-text-editor elementor-clearfix">
-                                    <p>
+                                <div class="cta__stats elementor-text-editor elementor-clearfix">
+                                    <p class="cta__stat-item">
                                         <span style="color: #ff6600;">
                                             <a href="tel:8002563123" style="color: #ff6600;">8.000 chicos viajados
                                                 alrededor del mundo.</a>
                                         </span>
                                     </p>
-                                    <p>
+                                    <p class="cta__stat-item">
                                         <span style="color: #ff6600;">
                                             <a href="tel:8002563123" style="color: #ff6600;">76 destinos esperan por
                                                 ti</a>
@@ -91,11 +93,11 @@ Fase:
                             data-id="89b3d94" data-element_type="widget" data-widget_type="gt3-core-button.default">
                             <div class="elementor-widget-container">
                                 <div
-                                    class="gt3_module_button_elementor size_custom alignment_center button_icon_none hover_type5 rounded">
+                                    class="cta__button gt3_module_button_elementor size_custom alignment_center button_icon_none hover_type5 rounded">
                                     <a class="button_size_elementor_custom alignment_center border_icon_none hover_type5 btn_icon_position_left"
                                         href="https://globalexchange.com.ec/contactoss/index.htm">
                                         <span class="gt3_module_button__container">
-                                            <span class="elementor_gt3_btn_text">Cont&aacute;ctanos </span>
+                                            <span class="elementor_gt3_btn_text">Contáctanos </span>
                                             <span class="gt3_module_button__cover front"></span>
                                             <span class="gt3_module_button__cover back"></span>
                                         </span>

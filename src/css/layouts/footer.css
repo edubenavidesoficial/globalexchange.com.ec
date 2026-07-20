@@ -1,0 +1,378 @@
+/* ====================================================
+   FOOTER - Estilos para el pie de página
+   Clase principal: .footer
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.footer {
+    background-color: var(--heading);
+    color: var(--white);
+    padding: var(--spacing-2xl) 0 0;
+    margin-top: var(--spacing-2xl);
+}
+
+.footer__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+.footer__content {
+    width: 100%;
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.footer__divider .elementor-divider-separator,
+.footer__divider-bottom .elementor-divider-separator {
+    display: block;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: var(--spacing-md) 0;
+}
+
+/* ==========================================
+   UBICACIONES
+========================================== */
+
+.footer__locations-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.footer__location-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.footer__location-item .gt3-core-imagebox-img img {
+    width: 40px;
+    height: auto;
+}
+
+.footer__location-item .gt3-core-imagebox-description {
+    font-size: var(--font-sm);
+    color: var(--text-light);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==========================================
+   CONTACTO
+========================================== */
+
+.footer__contact {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.footer__contact .gt3-core-imagebox-img img {
+    width: 35px;
+    height: auto;
+}
+
+.footer__contact .gt3-core-imagebox-title h6 {
+    font-size: var(--font-sm);
+    color: var(--white);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.footer__contact .gt3-core-imagebox-description {
+    font-size: var(--font-sm);
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* ==========================================
+   ACERCA DE
+========================================== */
+
+.footer__about-wrap h4 {
+    color: var(--primary);
+    font-size: var(--font-md);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer__about-text p {
+    font-size: var(--font-sm);
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+/* ==========================================
+   REDES SOCIALES
+========================================== */
+
+.footer__social {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.footer__social .elementor-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    transition: all var(--transition-fast);
+}
+
+.footer__social .elementor-social-icon:hover {
+    background-color: var(--primary);
+    color: var(--heading);
+    transform: translateY(-2px);
+}
+
+.footer__social .elementor-social-icon i {
+    font-size: var(--font-md);
+}
+
+/* ==========================================
+   MAPA DEL SITIO
+========================================== */
+
+.footer__sitemap-wrap h4 {
+    color: var(--primary);
+    font-size: var(--font-md);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer__sitemap {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer__sitemap>li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer__sitemap>li>a {
+    color: var(--text-light);
+    font-size: var(--font-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__sitemap>li>a:hover {
+    color: var(--primary);
+}
+
+.footer__sitemap .sub-menu {
+    list-style: none;
+    padding-left: var(--spacing-md);
+    margin-top: var(--spacing-xs);
+}
+
+.footer__sitemap .sub-menu li a {
+    color: var(--text-light);
+    font-size: var(--font-xs);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__sitemap .sub-menu li a:hover {
+    color: var(--primary);
+}
+
+/* ==========================================
+   GALERÍA
+========================================== */
+
+.footer__gallery-wrap h4 {
+    color: var(--primary);
+    font-size: var(--font-md);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer__gallery .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.footer__gallery .gallery-item {
+    margin: 0;
+    padding: 0;
+}
+
+.footer__gallery .gallery-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: none !important;
+    transition: transform var(--transition-fast);
+}
+
+.footer__gallery .gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   LOGO Y BUSCADOR
+========================================== */
+
+.footer__brand-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.footer__logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+.footer__search .wpda-builder-search {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+}
+
+.footer__search .search_text {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    font-size: var(--font-sm);
+}
+
+.footer__search .search_text::placeholder {
+    color: var(--text-light);
+}
+
+.footer__search .search_text:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.footer__search .search_submit {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: var(--font-sm);
+}
+
+.footer__search .search_submit:hover {
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   COPYRIGHT
+========================================== */
+
+.footer__copyright {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--spacing-lg);
+}
+
+.footer__copyright p {
+    font-size: var(--font-sm);
+    color: var(--text-light);
+    margin: 0;
+}
+
+.footer__copyright a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.footer__copyright a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .footer {
+        padding: var(--spacing-xl) 0 0;
+    }
+
+    .footer__gallery .gallery-item img {
+        height: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--spacing-lg) 0 0;
+        margin-top: var(--spacing-xl);
+    }
+
+    .footer__locations-wrap,
+    .footer__contact,
+    .footer__about-wrap,
+    .footer__sitemap-wrap,
+    .footer__gallery-wrap,
+    .footer__brand-wrap {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .footer__gallery .gallery {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer__gallery .gallery-item img {
+        height: 80px;
+    }
+
+    .footer__search .wpda-builder-search {
+        flex-direction: column;
+    }
+
+    .footer__search .search_text {
+        width: 100%;
+    }
+
+    .footer__search .search_submit {
+        width: 100%;
+    }
+
+    .footer__copyright {
+        padding: var(--spacing-md) 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: var(--spacing-md) 0 0;
+    }
+
+    .footer__gallery .gallery-item img {
+        height: 60px;
+    }
+
+    .footer__copyright p {
+        font-size: var(--font-xs);
+    }
+}

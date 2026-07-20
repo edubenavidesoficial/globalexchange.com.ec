@@ -1,0 +1,179 @@
+/* ====================================================
+   PORTFOLIO - Estilos para carrusel de portfolio
+   Clase principal: .portfolio
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.portfolio {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--white);
+    position: relative;
+}
+
+.portfolio__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   DECORACIÓN DE FONDO
+========================================== */
+
+.portfolio__bg-deco {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.portfolio__bg-deco img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==========================================
+   CARRUSEL
+========================================== */
+
+.portfolio__carousel {
+    position: relative;
+    z-index: 1;
+}
+
+.portfolio__carousel .items_list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+/* ==========================================
+   ITEM DEL PORTFOLIO
+========================================== */
+
+.portfolio__item {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.portfolio__item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==========================================
+   WRAPPER
+========================================== */
+
+.portfolio__item .wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ==========================================
+   IMAGEN
+========================================== */
+
+.portfolio__item .img_wrap {
+    overflow: hidden;
+}
+
+.portfolio__item .img_wrap .img {
+    transition: transform var(--transition-slow);
+}
+
+.portfolio__item:hover .img_wrap .img {
+    transform: scale(1.05);
+}
+
+.portfolio__item .img_wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================
+   TEXTO (Título + Categoría)
+========================================== */
+
+.portfolio__item .text_wrap {
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.portfolio__item .text_wrap .title {
+    font-size: var(--font-lg);
+    font-weight: var(--font-bold);
+    color: var(--heading);
+    margin-bottom: var(--spacing-xs);
+}
+
+.portfolio__item .text_wrap .title a {
+    color: var(--heading);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.portfolio__item .text_wrap .title a:hover {
+    color: var(--primary);
+}
+
+.portfolio__item .text_wrap .categories {
+    font-size: var(--font-sm);
+    color: var(--text-light);
+}
+
+.portfolio__item .text_wrap .categories span {
+    display: inline-block;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .portfolio__carousel .items_list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .portfolio__carousel .items_list {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .portfolio__item .text_wrap {
+        padding: var(--spacing-md);
+    }
+
+    .portfolio__item .text_wrap .title {
+        font-size: var(--font-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .portfolio {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .portfolio__item .text_wrap .title {
+        font-size: var(--font-sm);
+    }
+
+    .portfolio__item .text_wrap .categories {
+        font-size: var(--font-xs);
+    }
+}

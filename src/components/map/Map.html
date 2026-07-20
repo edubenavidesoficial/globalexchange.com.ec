@@ -6,10 +6,11 @@ Origen:
 index.htm (Map)
 
 Estado:
-Migrado con limpieza de HTML.
+Migrado con limpieza de HTML y clase semántica añadida.
 
 Observaciones:
-- Conserva todas las clases de Elementor
+- Se añadió clase "map" para CSS propio
+- Se conservan todas las clases de Elementor
 - Conserva data-id, data-element_type y data-widget_type
 - Conserva la estructura original de las dos secciones
 - Conserva la imagen completa con src, srcset, sizes y loading
@@ -27,18 +28,19 @@ Fase:
 ========================================== -->
 
 <section
-    class="elementor-section elementor-top-section elementor-element elementor-element-bc2d460 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    class="map map__title elementor-section elementor-top-section elementor-element elementor-element-bc2d460 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="bc2d460" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-default">
+    <div class="map__container elementor-container elementor-column-gap-default">
         <div class="elementor-row">
             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-ce61065"
                 data-id="ce61065" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="map__content elementor-widget-wrap">
                         <div class="elementor-element elementor-element-bd1d339 elementor-widget elementor-widget-heading"
                             data-id="bd1d339" data-element_type="widget" data-widget_type="heading.default">
                             <div class="elementor-widget-container">
-                                <h2 class="elementor-heading-title elementor-size-default">&iexcl;Te invitamos a conocer
+                                <h2 class="map__title-text elementor-heading-title elementor-size-default">&iexcl;Te
+                                    invitamos a conocer
                                     nuestro Mundo Global!<br>&iexcl;Consulta tambi&eacute;n nuestros destinos en
                                     Ecuador!</h2>
                             </div>
@@ -55,18 +57,18 @@ Fase:
 ========================================== -->
 
 <section
-    class="elementor-section elementor-top-section elementor-element elementor-element-09422d5 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+    class="map map__image-section elementor-section elementor-top-section elementor-element elementor-element-09422d5 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
     data-id="09422d5" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-default">
+    <div class="map__container elementor-container elementor-column-gap-default">
         <div class="elementor-row">
             <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-33f9344"
                 data-id="33f9344" data-element_type="column">
                 <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
+                    <div class="map__content elementor-widget-wrap">
                         <div class="elementor-element elementor-element-0c4b3c6 elementor-widget elementor-widget-image"
                             data-id="0c4b3c6" data-element_type="widget" data-widget_type="image.default">
                             <div class="elementor-widget-container">
-                                <div class="elementor-image">
+                                <div class="map__image elementor-image">
                                     <img width="2048" height="862"
                                         src="wp-content/uploads/2021/09/mapafinal-1-2048x862.jpg"
                                         class="attachment-2048x2048 size-2048x2048" alt="" loading="lazy"

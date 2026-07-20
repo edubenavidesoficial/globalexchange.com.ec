@@ -1,0 +1,180 @@
+/* ====================================================
+   CALL TO ACTION - Estilos para sección de llamada a la acción
+   Clase principal: .cta
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.cta {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--gray-200);
+    text-align: center;
+}
+
+/* ==========================================
+   CONTENEDOR INTERNO
+========================================== */
+
+.cta__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+
+.cta__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.cta__title {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    text-align: center;
+    line-height: 1.4;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.cta__divider {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.cta__divider .elementor-divider-separator {
+    display: inline-block;
+    width: 80px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+}
+
+/* ==========================================
+   ESTADÍSTICAS
+========================================== */
+
+.cta__stats {
+    max-width: 600px;
+    margin: 0 auto var(--spacing-2xl);
+}
+
+.cta__stat-item {
+    font-size: var(--font-xl);
+    font-weight: var(--font-bold);
+    color: var(--secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.cta__stat-item a {
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.cta__stat-item a:hover {
+    color: var(--primary);
+}
+
+.cta__stat-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.cta__button {
+    display: inline-block;
+}
+
+.cta__button a {
+    display: inline-block;
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: var(--spacing-md) var(--spacing-2xl);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cta__button a:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.cta__button .elementor_gt3_btn_text {
+    color: var(--white);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+    .cta {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .cta__title {
+        font-size: var(--font-xl);
+    }
+
+    .cta__stat-item {
+        font-size: var(--font-lg);
+    }
+
+    .cta__divider .elementor-divider-separator {
+        width: 60px;
+    }
+
+    .cta__button a {
+        padding: var(--spacing-md) var(--spacing-xl);
+        font-size: var(--font-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .cta {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .cta__title {
+        font-size: var(--font-lg);
+    }
+
+    .cta__stat-item {
+        font-size: var(--font-md);
+    }
+
+    .cta__divider .elementor-divider-separator {
+        width: 40px;
+        height: 2px;
+    }
+
+    .cta__button a {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--font-xs);
+    }
+}

@@ -1,0 +1,347 @@
+/* ====================================================
+   HERO - Estilos para sección principal
+   Clase principal: .hero
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.hero {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--white);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   COLUMNA IZQUIERDA - IMAGEN
+========================================== */
+
+.hero__image-col {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero__image-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Imagen principal */
+.hero__main-image {
+    width: 100%;
+    max-width: 500px;
+}
+
+.hero__main-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ==========================================
+   COLUMNA DERECHA - CONTENIDO
+========================================== */
+
+.hero__content-col {
+    padding-left: var(--spacing-2xl);
+}
+
+.hero__content-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.hero__inner-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ==========================================
+   TEXTO ANIMADO (TYPED)
+========================================== */
+
+.hero__typed {
+    margin-bottom: var(--spacing-sm);
+}
+
+.hero__typed .typing-effect-strings {
+    font-size: var(--font-3xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    font-family: var(--font-heading);
+}
+
+/* ==========================================
+   DESCRIPCIÓN
+========================================== */
+
+.hero__description {
+    margin-bottom: var(--spacing-md);
+}
+
+.hero__description p {
+    font-size: var(--font-lg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* ==========================================
+   BOTÓN CTA
+========================================== */
+
+.hero__button .elementor-button {
+    display: inline-block;
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: var(--spacing-md) var(--spacing-2xl);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-medium);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.hero__button .elementor-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ==========================================
+   CONTACTO - TELÉFONO Y EMAIL
+========================================== */
+
+.hero__contact {
+    margin-top: var(--spacing-md);
+}
+
+.hero__contact .gt3-core-imagebox-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.hero__contact .gt3-core-imagebox-img img {
+    width: 50px;
+    height: auto;
+}
+
+.hero__contact .gt3-core-imagebox-title h2 {
+    font-size: var(--font-md);
+    color: var(--heading);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.hero__contact .gt3-core-imagebox-title a {
+    color: var(--heading);
+    text-decoration: none;
+}
+
+.hero__contact .gt3-core-imagebox-title a:hover {
+    color: var(--primary);
+}
+
+.hero__contact .gt3-core-imagebox-description a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.hero__contact .gt3-core-imagebox-description a:hover {
+    color: var(--primary);
+}
+
+/* ==========================================
+   DECORACIONES
+========================================== */
+
+/* Elementos con posición absoluta */
+.elementor-absolute {
+    position: absolute;
+}
+
+/* Elementos rotados */
+.gt3_rotated_element {
+    animation: hero-rotate 20s linear infinite;
+}
+
+.gt3_moved_element {
+    animation: hero-float 3s ease-in-out infinite;
+}
+
+/* Posiciones específicas de decoraciones */
+.hero__deco--1 {
+    top: 10%;
+    left: 5%;
+    z-index: 2;
+}
+
+.hero__deco--2 {
+    bottom: 15%;
+    right: 5%;
+    z-index: 2;
+}
+
+.hero__deco--3 {
+    top: 20%;
+    right: 8%;
+    z-index: 2;
+}
+
+.hero__deco--4 {
+    bottom: 25%;
+    left: 8%;
+    z-index: 2;
+}
+
+.hero__deco--rotate1 {
+    top: 5%;
+    right: 15%;
+    z-index: 1;
+}
+
+.hero__deco--rotate2 {
+    bottom: 30%;
+    left: 3%;
+    z-index: 1;
+}
+
+.hero__deco--rotate3 {
+    top: 40%;
+    right: 2%;
+    z-index: 0;
+}
+
+.hero__deco--rotate4 {
+    bottom: 10%;
+    right: 20%;
+    z-index: 1;
+}
+
+/* Decoraciones en la columna derecha */
+.hero__deco--right1 {
+    top: 5%;
+    right: 10%;
+}
+
+.hero__deco--right2 {
+    bottom: 20%;
+    left: 5%;
+}
+
+.hero__deco--right3 {
+    top: 30%;
+    left: 3%;
+}
+
+.hero__deco--right4 {
+    bottom: 35%;
+    right: 8%;
+}
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+@keyframes hero-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes hero-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .hero {
+        min-height: auto;
+        padding: var(--spacing-xl) 0;
+    }
+
+    .hero__content-col {
+        padding-left: var(--spacing-lg);
+    }
+
+    .hero__typed .typing-effect-strings {
+        font-size: var(--font-2xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .hero__image-col {
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .hero__content-col {
+        padding-left: 0;
+    }
+
+    .hero__typed .typing-effect-strings {
+        font-size: var(--font-xl);
+    }
+
+    .hero__description p {
+        font-size: var(--font-md);
+    }
+
+    .hero__contact .gt3-core-imagebox-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Ocultar decoraciones en móvil */
+    .hero__deco {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: var(--spacing-md) 0;
+    }
+
+    .hero__typed .typing-effect-strings {
+        font-size: var(--font-lg);
+    }
+
+    .hero__button .elementor-button {
+        padding: var(--spacing-sm) var(--spacing-xl);
+        font-size: var(--font-sm);
+    }
+}

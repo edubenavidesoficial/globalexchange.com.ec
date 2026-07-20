@@ -1,14 +1,48 @@
-@import "./base/reset.css";
-@import "./base/variables.css";
-@import "./base/typography.css";
+/* ====================================================
+   MAIN CSS - Punto de entrada
+   ==================================================== */
 
-/* Los siguientes se irán activando conforme migremos el proyecto */
+/* ==========================================
+   BASE
+========================================== */
 
-/*
-@import "./layout/header.css";
-@import "./layout/footer.css";
+@import './base/variables.css';
+@import './base/reset.css';
+@import './base/typography.css';
 
-@import "./components/buttons.css";
+/* ==========================================
+   LAYOUTS
+========================================== */
 
-@import "./pages/home.css";
-*/
+@import './layouts/grid.css';
+@import './layouts/header.css';
+@import './layouts/footer.css';
+
+/* ==========================================
+   COMPONENTS
+========================================== */
+
+@import './components/partners.css';
+@import './components/map.css';
+@import './components/call-to-action.css';
+@import './components/about.css';
+@import './components/programs.css';
+@import './components/services.css';
+@import './components/hero.css';
+@import './components/contact.css';
+@import './components/stats.css';
+@import './components/programs-grid.css';
+@import './components/portfolio.css';
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+/* @import './utilities/helpers.css'; */
+/* @import './utilities/responsive.css'; */
+
+/* ==========================================
+   PAGES
+========================================== */
+
+/* @import './pages/home.css'; */

@@ -1,0 +1,232 @@
+/* ====================================================
+   GRID - Sistema de layout
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.container {
+    width: var(--container-width);
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--container-padding);
+    padding-left: var(--container-padding);
+}
+
+/* ==========================================
+   ROW
+========================================== */
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: calc(var(--container-padding) * -1);
+    margin-left: calc(var(--container-padding) * -1);
+}
+
+.row:after,
+.row:before {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.row:after {
+    clear: both;
+}
+
+/* ==========================================
+   COLUMNS
+========================================== */
+
+[class*="col-"] {
+    display: block;
+    float: left;
+    min-height: 1px;
+    padding-right: var(--container-padding);
+    padding-left: var(--container-padding);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* ==========================================
+   COLUMN WIDTHS
+========================================== */
+
+.col-12 {
+    width: 100%;
+}
+
+.col-11 {
+    width: 91.66666666666666%;
+}
+
+.col-10 {
+    width: 83.33333333333334%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-8 {
+    width: 66.66666666666666%;
+}
+
+.col-7 {
+    width: 58.333333333333336%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-5 {
+    width: 41.66666666666667%;
+}
+
+.col-4 {
+    width: 33.33333333333333%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-2 {
+    width: 16.666666666666664%;
+}
+
+.col-1 {
+    width: 8.333333333333332%;
+}
+
+/* ==========================================
+   ALIASES (Span classes)
+========================================== */
+
+.span12 {
+    width: 100%;
+}
+
+.span11 {
+    width: 91.66666666666666%;
+}
+
+.span10 {
+    width: 83.33333333333334%;
+}
+
+.span9 {
+    width: 75%;
+}
+
+.span8 {
+    width: 66.66666666666666%;
+}
+
+.span7 {
+    width: 58.333333333333336%;
+}
+
+.span6 {
+    width: 50%;
+}
+
+.span5 {
+    width: 41.66666666666667%;
+}
+
+.span4 {
+    width: 33.33333333333333%;
+}
+
+.span3 {
+    width: 25%;
+}
+
+.span2 {
+    width: 16.666666666666664%;
+}
+
+.span1 {
+    width: 8.333333333333332%;
+}
+
+/* ==========================================
+   CLEARFIX
+========================================== */
+
+.clearfix:after,
+.clearfix:before {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clear {
+    display: table;
+    clear: both;
+    height: 0;
+    font-size: 0;
+}
+
+.gt3_clear:after,
+.gt3_clear:before {
+    display: table;
+    content: " ";
+}
+
+.gt3_clear:after {
+    clear: both;
+}
+
+/* ==========================================
+   RESPONSIVE GRID
+========================================== */
+
+@media (max-width: 1200px) {
+    .container {
+        width: 998px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        width: 740px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 560px;
+    }
+
+    .col-6,
+    .col-4,
+    .col-3,
+    .span6,
+    .span4,
+    .span3 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 420px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+    }
+}

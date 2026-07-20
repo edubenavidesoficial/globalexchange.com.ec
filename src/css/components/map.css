@@ -1,0 +1,101 @@
+/* ====================================================
+   MAP - Estilos para sección de mapa
+   Clase principal: .map
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.map {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--white);
+}
+
+/* ==========================================
+   CONTENEDOR INTERNO
+========================================== */
+
+.map__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+
+.map__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.map__title-text {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    text-align: center;
+    line-height: 1.4;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ==========================================
+   IMAGEN
+========================================== */
+
+.map__image {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.map__image img {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+    .map {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .map__title-text {
+        font-size: var(--font-xl);
+    }
+
+    .map__image img {
+        border-radius: var(--radius-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .map {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .map__title-text {
+        font-size: var(--font-lg);
+    }
+
+    .map__image img {
+        border-radius: var(--radius-sm);
+    }
+}

@@ -1,0 +1,247 @@
+/* ====================================================
+   SERVICES - Estilos para sección de servicios
+   Clase principal: .services
+   Incluye: Services_Title.html + Services_Grid.html
+   Basado en legacy/theme/base.css
+   ==================================================== */
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL - SERVICES
+========================================== */
+
+.services {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--white);
+}
+
+.services__container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* ==========================================
+   SERVICES TITLE - Títulos decorativos
+   (para Services_Title.html)
+========================================== */
+
+.services-title__sub {
+    font-size: var(--font-sm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+.services-title__main {
+    font-size: var(--font-2xl);
+    font-weight: var(--font-extrabold);
+    color: var(--heading);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.services-title__deco {
+    display: inline-block;
+    margin: 0 var(--spacing-xs);
+}
+
+/* ==========================================
+   GRID DE SERVICIOS
+========================================== */
+
+.services .elementor-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+}
+
+/* ==========================================
+   COLUMNA
+========================================== */
+
+.services__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.services__col-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    width: 100%;
+}
+
+/* ==========================================
+   TARJETA DE SERVICIO
+========================================== */
+
+.services__card {
+    background-color: var(--gray-100);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.services__card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==========================================
+   TARJETA - IMAGEN / ICONO
+========================================== */
+
+.services__card .gt3-core-imagebox-img {
+    display: block;
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.services__card .gt3-core-imagebox-img img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+}
+
+/* ==========================================
+   TARJETA - TÍTULO
+========================================== */
+
+.services__card-title {
+    font-size: var(--font-md);
+    font-weight: var(--font-bold);
+    color: var(--heading);
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.services__card-title a {
+    color: var(--heading);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.services__card-title a:hover {
+    color: var(--primary);
+}
+
+/* ==========================================
+   TARJETA - DESCRIPCIÓN
+========================================== */
+
+.services__card-desc {
+    font-size: var(--font-sm);
+    color: var(--text);
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.services__card-desc:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   TARJETA - CENTER TAG (legacy)
+========================================== */
+
+.services__card center {
+    font-size: var(--font-sm);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.services__card b {
+    color: var(--heading);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+    .services .elementor-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+
+    .services-title__main {
+        font-size: var(--font-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .services {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .services .elementor-row {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .services__col {
+        gap: var(--spacing-md);
+    }
+
+    .services__col-content {
+        gap: var(--spacing-md);
+    }
+
+    .services__card {
+        padding: var(--spacing-md);
+    }
+
+    .services__card .gt3-core-imagebox-img img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .services__card-title {
+        font-size: var(--font-base);
+    }
+
+    .services__card-desc {
+        font-size: var(--font-xs);
+    }
+
+    .services-title__main {
+        font-size: var(--font-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .services {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .services__card {
+        padding: var(--spacing-sm);
+    }
+
+    .services__card .gt3-core-imagebox-img img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .services__card-title {
+        font-size: var(--font-sm);
+    }
+
+    .services__card-desc {
+        font-size: var(--font-xs);
+    }
+
+    .services-title__main {
+        font-size: var(--font-md);
+    }
+
+    .services-title__sub {
+        font-size: var(--font-xs);
+    }
+}
