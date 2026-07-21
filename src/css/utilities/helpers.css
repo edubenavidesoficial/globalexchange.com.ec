@@ -1,0 +1,20 @@
+/* ====================================================
+   HELPERS - Utilidades generales
+   ==================================================== */
+
+/* Clearfix */
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Ocultar elementos */
+.hidden {
+    display: none !important;
+}
+
+/* Visibilidad */
+.visible {
+    display: block !important;
+}
