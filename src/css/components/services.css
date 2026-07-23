@@ -1,94 +1,135 @@
 /* ====================================================
-   SERVICES - Estilos con valores fijos
+   SERVICES - Estilos para la sección Servicios
+   Clase principal: .services
+   Basado en el diseño original
    ==================================================== */
 
-.services {
-    padding: 64px 0;
-    background-color: #ffffff;
-    width: 100%;
-    display: block !important;
-}
+/* ==========================================
+   TÍTULO DE LA SECCIÓN
+========================================== */
 
-.services__container {
-    max-width: 1170px;
-    margin: 0 auto;
-    padding: 0 15px;
-    width: 100%;
+.services-title {
+    position: relative;
+    text-align: center;
+    padding: 40px 0 30px;
 }
 
 .services-title__sub {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #8a87a8;
-    margin-bottom: 8px;
-    text-align: center;
+    color: #3b3663;
+    margin: 0;
 }
 
 .services-title__main {
-    font-size: 30px;
+    font-family: 'Nunito', sans-serif;
     font-weight: 800;
+    font-size: 30px;
+    line-height: 40px;
     color: #3b3663;
-    margin-bottom: 24px;
-    text-align: center;
+    margin: 5px 0 0;
 }
 
+/* Decoraciones del título */
 .services-title__deco {
-    display: inline-block;
-    margin: 0 4px;
+    pointer-events: none;
 }
 
-.services .elementor-row {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 24px !important;
-    width: 100% !important;
+/* ==========================================
+   GRID DE SERVICIOS (3 columnas)
+========================================== */
+
+.services {
+    position: relative;
 }
 
-.services__col {
+.services__container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.elementor-row {
     display: flex;
-    flex-direction: column;
-    gap: 24px;
+    flex-wrap: wrap;
+}
+
+/* Columnas */
+.services__col {
+    width: 33.333%;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .services__col-content {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    width: 100%;
+    gap: 30px;
 }
 
+/* ==========================================
+   TARJETAS DE SERVICIOS
+========================================== */
+
 .services__card {
-    background-color: #f8f8f8;
-    border-radius: 12px;
-    padding: 24px;
-    text-align: center;
-    transition: transform 0.3s ease;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 25px 20px;
+    transition: box-shadow 0.3s ease;
+    border: 1px solid rgba(224, 203, 69, 0.1);
 }
 
 .services__card:hover {
-    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Icono del servicio */
+.services__card .gt3-core-imagebox-img {
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: middle;
+    flex-shrink: 0;
 }
 
 .services__card .gt3-core-imagebox-img img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin: 0 auto;
+    width: 60px;
+    height: auto;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.services__card:hover .gt3-core-imagebox-img img {
+    transform: scale(1.05);
+}
+
+/* Contenido de la tarjeta */
+.services__card .gt3-core-imagebox-wrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.services__card .gt3-core-imagebox-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .services__card-title {
-    font-size: 18px;
+    font-family: 'Nunito', sans-serif;
     font-weight: 700;
+    font-size: 18px;
+    line-height: 1.3;
     color: #3b3663;
-    text-align: center;
-    margin-bottom: 8px;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .services__card-title a {
-    color: #3b3663;
+    color: inherit;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .services__card-title a:hover {
@@ -96,68 +137,71 @@
 }
 
 .services__card-desc {
-    font-size: 14px;
-    color: #696687;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px;
     line-height: 1.6;
-    text-align: center;
-    margin-bottom: 8px;
+    color: #696687;
+    margin: 0 0 5px;
 }
 
-.services__card center {
-    font-size: 14px;
-    color: #696687;
-    line-height: 1.6;
-}
-
-.services__card b {
+.services__card-desc b {
     color: #3b3663;
+    font-weight: 600;
 }
+
+.services__card-desc center {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #696687;
+    margin-top: 5px;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
 
 @media (max-width: 1024px) {
-    .services .elementor-row {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .services {
-        padding: 48px 0;
-    }
-
-    .services .elementor-row {
-        grid-template-columns: 1fr !important;
-        gap: 16px;
+    .services__col {
+        width: 50%;
     }
 
     .services__card .gt3-core-imagebox-img img {
-        width: 60px;
-        height: 60px;
+        width: 50px;
     }
 
     .services__card-title {
         font-size: 16px;
     }
+
+    .services__card-desc {
+        font-size: 14px;
+    }
 }
 
-@media (max-width: 480px) {
-    .services {
-        padding: 32px 0;
+@media (max-width: 768px) {
+    .services__col {
+        width: 100%;
+    }
+
+    .services-title__main {
+        font-size: 24px;
+        line-height: 32px;
     }
 
     .services__card {
-        padding: 16px;
+        padding: 20px 15px;
     }
 
     .services__card .gt3-core-imagebox-img img {
-        width: 50px;
-        height: 50px;
+        width: 45px;
     }
 
     .services__card-title {
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .services__card-desc {
-        font-size: 12px;
+        font-size: 13px;
     }
 }

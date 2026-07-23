@@ -3,7 +3,7 @@
    ==================================================== */
 
 /* ==========================================
-   BASE
+   BASE (variables, reset, tipografía)
 ========================================== */
 
 @import './base/variables.css';
@@ -11,11 +11,10 @@
 @import './base/typography.css';
 
 /* ==========================================
-   LAYOUTS
+   LAYOUTS (grid, footer)
 ========================================== */
 
 @import './layouts/grid.css';
-@import './layouts/header.css';
 @import './layouts/footer.css';
 
 /* ==========================================
@@ -42,7 +41,7 @@
 @import './pages/home.css';
 
 /* ==========================================
-   UTILITIES
+   UTILITIES (helpers, spacing, responsive)
 ========================================== */
 
 @import './utilities/helpers.css';
@@ -50,8 +49,19 @@
 @import './utilities/responsive.css';
 
 /* ==========================================
-   VENDORS (desactivados temporalmente)
+   LEGACY (estilos originales de WordPress/Elementor)
+   ¡Importante! Debe ir ANTES de header.css
+   para que header.css pueda sobrescribirlo.
 ========================================== */
 
-/* @import './vendors/elementor.css'; */
-/* @import './vendors/animations.css'; */
+@import './legacy/theme/base.css';
+@import './legacy/theme/wpda.css';
+@import './legacy/elementor/frontend.min.css';
+@import './legacy/elementor/animations.min.css';
+@import './legacy/icons/font-awesome.min.css';
+
+/* ==========================================
+   HEADER (después de legacy para sobrescribir)
+========================================== */
+
+@import './layouts/header.css';

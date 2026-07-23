@@ -1,7 +1,5 @@
-/* ====================================================
+﻿/* ====================================================
    HEADER - Estilos para el encabezado
-   Clase principal: .header
-   Basado en legacy/theme/base.css
    ==================================================== */
 
 /* ==========================================
@@ -11,17 +9,20 @@
 .header {
     position: relative;
     z-index: 100;
-    background-color: var(--heading);
-    padding: var(--spacing-sm) 0;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    padding: 0 !important;
+    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.1) !important;
 }
 
 .header__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: var(--container-width);
+    /* ← Logo izquierda, menú centro, derecha agrupada */
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 0 var(--container-padding);
+    padding: 0 15px;
+    position: relative;
 }
 
 /* ==========================================
@@ -30,11 +31,14 @@
 
 .header__logo {
     flex-shrink: 0;
+    margin-right: 20px;
+    /* Espacio entre logo y menú */
 }
 
 .header__logo img {
-    max-height: 50px;
-    width: auto;
+    max-height: 68px !important;
+    height: 68px !important;
+    width: auto !important;
     display: block;
 }
 
@@ -46,12 +50,13 @@
     flex: 1;
     display: flex;
     justify-content: center;
+    /* ← Centra el menú */
 }
 
 .header__menu {
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: 0;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -64,34 +69,38 @@
 
 .header__menu>li>a {
     display: block;
-    padding: var(--spacing-sm) 0;
-    color: var(--white);
-    font-size: var(--font-sm);
-    font-weight: var(--font-medium);
+    padding: 10px 15px;
+    color: #3B3663 !important;
+    font-size: 16px;
+    font-weight: 400;
     text-decoration: none;
-    transition: color var(--transition-fast);
+    background: transparent !important;
+    transition: color 0.2s ease;
 }
 
 .header__menu>li>a:hover,
 .header__menu>li.current-menu-item>a {
-    color: var(--primary);
+    color: #F47514 !important;
 }
 
-/* Submenús */
+/* ==========================================
+   SUBMENÚS
+========================================== */
+
 .header__menu .sub-menu {
     position: absolute;
     top: 100%;
     left: 0;
     min-width: 200px;
-    background-color: var(--white);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    padding: var(--spacing-sm) 0;
+    background-color: #ffffff !important;
+    border: 1px solid #eaeaea !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    padding: 10px 0;
     list-style: none;
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
-    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
     z-index: 200;
 }
 
@@ -107,23 +116,69 @@
 
 .header__menu .sub-menu li a {
     display: block;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    color: var(--text);
-    font-size: var(--font-sm);
+    padding: 8px 20px;
+    color: #3B3663 !important;
+    font-size: 14px;
     text-decoration: none;
-    transition: background-color var(--transition-fast), color var(--transition-fast);
+    background: transparent !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .header__menu .sub-menu li a:hover {
-    background-color: var(--gray-200);
-    color: var(--primary);
+    color: #F47514 !important;
+    background-color: transparent !important;
 }
 
-/* Submenú anidado (tercer nivel) */
 .header__menu .sub-menu .sub-menu {
     top: 0;
     left: 100%;
     margin-left: 2px;
+}
+
+/* ==========================================
+   ELEMENTOS DE LA DERECHA (idioma, virtual, botón, buscador, burger)
+========================================== */
+
+/* Agrupa todos los elementos de la derecha */
+.header__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+/* Ítems de idioma y virtual (dentro del menú, los movemos aquí) */
+.header__language {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header__language a {
+    color: #3B3663 !important;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    padding: 5px 8px;
+    transition: color 0.2s ease;
+}
+
+.header__language a:hover {
+    color: #F47514 !important;
+}
+
+.header__virtual a {
+    color: #3B3663 !important;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    padding: 5px 8px;
+    transition: color 0.2s ease;
+}
+
+.header__virtual a:hover {
+    color: #F47514 !important;
 }
 
 /* ==========================================
@@ -132,39 +187,47 @@
 
 .header__button {
     flex-shrink: 0;
-    margin-left: var(--spacing-md);
 }
 
 .header__button a {
     display: inline-block;
-    background: var(--gradient-primary);
-    color: var(--white);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border-radius: var(--radius-md);
-    font-size: var(--font-sm);
-    font-weight: var(--font-medium);
+    background-image: linear-gradient(90deg, #FF4969 -20%, #FC9D44 115%) !important;
+    padding: 9px 20px !important;
+    font-size: 10px !important;
+    color: #ffffff !important;
+    border-radius: 30px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
     text-decoration: none;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: all 0.3s ease;
 }
 
 .header__button a:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background-image: linear-gradient(90deg, #FC9D44 -20%, #FF4969 115%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(255, 73, 105, 0.3) !important;
 }
 
 /* ==========================================
-   BUSCADOR
+   BUSCADOR (lupa)
 ========================================== */
 
 .header__search {
     flex-shrink: 0;
-    margin-left: var(--spacing-md);
+    position: relative;
+}
+
+/* Asegurar visibilidad en desktop (sobrescribir elementor-hidden-phone) */
+.header__search.elementor-hidden-phone {
+    display: block !important;
 }
 
 .header__search .wpda-search_icon {
     cursor: pointer;
-    color: var(--white);
-    font-size: var(--font-lg);
+    color: #3B3663 !important;
+    font-size: 18px;
+    display: block;
 }
 
 .header__search .wpda-search_icon i {
@@ -175,19 +238,21 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: var(--white);
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
-    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
     z-index: 200;
     min-width: 250px;
 }
 
-.header__search:hover .wpda-search_inner {
+.header__search:hover .wpda-search_inner,
+.header__search.active .wpda-search_inner {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -196,49 +261,58 @@
 .header__search .search_form {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: 8px;
 }
 
 .header__search .search_text {
     flex: 1;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 2px solid var(--gray-300);
-    border-radius: var(--radius-md);
-    font-size: var(--font-sm);
-    color: var(--text);
-    background-color: var(--white);
-    transition: border-color var(--transition-fast);
+    padding: 8px 12px;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #696687;
+    background-color: #ffffff;
+    height: 36px;
 }
 
 .header__search .search_text:focus {
-    border-color: var(--primary);
+    border-color: #e0cb45;
     outline: none;
 }
 
 .header__search .search_submit {
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: var(--gradient-primary);
-    color: var(--white);
+    padding: 8px 16px;
+    background-image: linear-gradient(90deg, #FF4969 -20%, #FC9D44 115%);
+    color: #ffffff;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 4px;
     cursor: pointer;
-    font-size: var(--font-sm);
-    font-weight: var(--font-medium);
-    transition: transform var(--transition-fast);
+    font-size: 12px;
+    font-weight: 500;
+    height: 36px;
+    transition: all 0.3s ease;
 }
 
 .header__search .search_submit:hover {
-    transform: scale(1.05);
+    background-image: linear-gradient(90deg, #FC9D44 -20%, #FF4969 115%);
 }
 
 /* ==========================================
-   BURGER SIDEBAR (menú móvil)
+   BURGER (menú móvil - tres líneas)
 ========================================== */
 
 .header__burger {
     flex-shrink: 0;
-    margin-left: var(--spacing-md);
     cursor: pointer;
+    display: none !important;
+    /* Oculto por defecto en desktop */
+}
+
+/* Asegurar visibilidad en móvil (sobrescribir elementor-hidden-phone) */
+@media (max-width: 768px) {
+    .header__burger.elementor-hidden-phone {
+        display: block !important;
+    }
 }
 
 .header__burger .burger_sidebar_icon {
@@ -252,9 +326,9 @@
 .header__burger .burger_sidebar_icon span {
     display: block;
     height: 2px;
-    background-color: var(--white);
+    background-color: #3B3663 !important;
     border-radius: 2px;
-    transition: all var(--transition-fast);
+    transition: all 0.2s;
 }
 
 .header__burger .burger_sidebar_icon span.first {
@@ -270,7 +344,7 @@
 }
 
 .header__burger:hover .burger_sidebar_icon span {
-    background-color: var(--primary);
+    background-color: #F47514 !important;
 }
 
 .header__burger:hover .burger_sidebar_icon span.second {
@@ -287,28 +361,22 @@
 
 @media (max-width: 1024px) {
     .header__menu {
-        gap: var(--spacing-md);
+        gap: 0;
     }
 
     .header__menu>li>a {
-        font-size: var(--font-xs);
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .header__logo img {
+        max-height: 50px !important;
+        height: 50px !important;
     }
 }
 
 @media (max-width: 768px) {
-    .header {
-        padding: var(--spacing-xs) 0;
-    }
-
     .header__nav {
-        display: none;
-    }
-
-    .header__button {
-        display: none;
-    }
-
-    .header__search {
         display: none;
     }
 
@@ -316,20 +384,33 @@
         display: block !important;
     }
 
-    .header__logo img {
-        max-height: 40px;
+    .header__button {
+        display: none;
     }
 
-    /* Menú móvil desplegable */
+    .header__search {
+        display: none !important;
+    }
+
+    .header__logo img {
+        max-height: 40px !important;
+        height: 40px !important;
+        margin-right: 0 !important;
+    }
+
+    .header__right {
+        gap: 8px;
+    }
+
     .header__nav.mobile-open {
         display: block;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background-color: var(--heading);
-        padding: var(--spacing-md);
-        box-shadow: var(--shadow-lg);
+        background-color: #ffffff !important;
+        padding: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         z-index: 150;
     }
 
@@ -340,11 +421,11 @@
     }
 
     .header__nav.mobile-open .header__menu>li {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .header__nav.mobile-open .header__menu>li>a {
-        padding: var(--spacing-md) 0;
+        padding: 12px 0;
     }
 
     .header__nav.mobile-open .header__menu .sub-menu {
@@ -353,27 +434,29 @@
         visibility: visible;
         transform: none;
         box-shadow: none;
-        background-color: rgba(255, 255, 255, 0.05);
-        padding-left: var(--spacing-md);
-        border-radius: 0;
+        border: none !important;
+        padding-left: 20px;
+        background-color: transparent !important;
     }
 
     .header__nav.mobile-open .header__menu .sub-menu li a {
-        color: var(--white);
-        padding: var(--spacing-sm) var(--spacing-md);
+        padding: 8px 0;
+        color: #3B3663 !important;
     }
 
     .header__nav.mobile-open .header__menu .sub-menu li a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        color: #F47514 !important;
     }
 }
 
 @media (max-width: 480px) {
     .header__logo img {
-        max-height: 32px;
+        max-height: 32px !important;
+        height: 32px !important;
     }
 
     .header__container {
-        padding: 0 var(--spacing-sm);
+        padding: 0 10px;
     }
+
 }
