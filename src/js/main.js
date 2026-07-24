@@ -1,3 +1,9 @@
-import "../css/main.css";
+// ====================================================
+// MAIN.JS - Punto de entrada de JavaScript
+// ====================================================
 
-console.log("Global Exchange iniciado correctamente.");
+import { initTyped } from './modules/typed-effect.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    initTyped();
+});

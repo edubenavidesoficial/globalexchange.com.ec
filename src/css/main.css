@@ -11,14 +11,34 @@
 @import './base/typography.css';
 
 /* ==========================================
-   LAYOUTS (grid, footer)
+   LAYOUTS (grid)
 ========================================== */
 
 @import './layouts/grid.css';
+
+/* ==========================================
+   LEGACY (estilos originales de WordPress/Elementor)
+   ¡Importante! Todo el CSS legacy debe ir ANTES
+   de los estilos propios para poder sobrescribirlo.
+========================================== */
+
+@import './legacy/theme/base.css';
+@import './legacy/theme/wpda.css';
+@import './legacy/elementor/frontend.min.css';
+@import './legacy/elementor/animations.min.css';
+@import './legacy/icons/font-awesome.min.css';
+
+/* ==========================================
+   LAYOUTS (componentes propios)
+   Ahora sí, después del legacy para sobrescribir
+========================================== */
+
+@import './layouts/header.css';
 @import './layouts/footer.css';
 
 /* ==========================================
-   COMPONENTS
+   COMPONENTS (estilos propios)
+   Deben ir después del legacy para tener prioridad
 ========================================== */
 
 @import './components/buttons.css';
@@ -47,21 +67,3 @@
 @import './utilities/helpers.css';
 @import './utilities/spacing.css';
 @import './utilities/responsive.css';
-
-/* ==========================================
-   LEGACY (estilos originales de WordPress/Elementor)
-   ¡Importante! Debe ir ANTES de header.css
-   para que header.css pueda sobrescribirlo.
-========================================== */
-
-@import './legacy/theme/base.css';
-@import './legacy/theme/wpda.css';
-@import './legacy/elementor/frontend.min.css';
-@import './legacy/elementor/animations.min.css';
-@import './legacy/icons/font-awesome.min.css';
-
-/* ==========================================
-   HEADER (después de legacy para sobrescribir)
-========================================== */
-
-@import './layouts/header.css';

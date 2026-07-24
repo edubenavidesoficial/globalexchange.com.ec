@@ -4,151 +4,154 @@
    ==================================================== */
 
 :root {
-  /* ==========================================
+   /* ==========================================
      COLORS - Brand
   ========================================== */
 
-  --primary: #e0cb45;
-  --primary-dark: #c4b03a;
-  --secondary: #ff7426;
-  --accent: #3ccfe0;
+   --primary: #e0cb45;
+   --primary-dark: #c4b03a;
+   --secondary: #ff7426;
+   --accent: #3ccfe0;
 
-  /* ==========================================
+   /* ==========================================
      COLORS - Text
   ========================================== */
 
-  --text: #696687;
-  --text-light: #8a87a8;
-  --heading: #3b3663;
-  --heading-dark: #2a264a;
+   --text: #696687;
+   --text-light: #8a87a8;
+   --heading: #3b3663;
+   --heading-dark: #2a264a;
 
-  /* ==========================================
+   /* ==========================================
      COLORS - Background
   ========================================== */
 
-  --white: #ffffff;
-  --gray-100: #f9f8ff;
-  --gray-200: #f8f8f8;
-  --gray-300: #eaedef;
-  --gray-400: #ced3d9;
-  --gray-500: #dddddd;
-  --border: #eeeeee;
+   --white: #ffffff;
+   --gray-100: #f9f8ff;
+   --gray-200: #f8f8f8;
+   --gray-300: #eaedef;
+   --gray-400: #ced3d9;
+   --gray-500: #dddddd;
+   --border: #eeeeee;
 
-  /* ==========================================
+   /* ==========================================
      COLORS - Footer
   ========================================== */
 
-  --footer-bg: #3b3663;
-  --footer-text: #8a87a8;
-  --footer-heading: #e0cb45;
+   --footer-bg: #3b3663;
+   --footer-text: #8a87a8;
+   --footer-heading: #e0cb45;
 
-  /* ==========================================
+   /* ==========================================
      TYPOGRAPHY - Font Family
+     (CORREGIDO: solo Rubik, como en el original)
   ========================================== */
 
-  --font-primary: 'Rubik', sans-serif;
-  --font-secondary: 'Nunito', sans-serif;
-  --font-heading: 'Nunito', sans-serif;
-  --font-icons: 'FontAwesome', sans-serif;
+   --font-primary: 'Rubik', sans-serif;
+   --font-secondary: 'Rubik', sans-serif;
+   /* Antes era Nunito */
+   --font-heading: 'Rubik', sans-serif;
+   /* Antes era Nunito */
+   --font-icons: 'FontAwesome', sans-serif;
 
-  /* ==========================================
+   /* ==========================================
      TYPOGRAPHY - Font Sizes
   ========================================== */
 
-  --font-xs: 12px;
-  --font-sm: 14px;
-  --font-base: 16px;
-  --font-md: 18px;
-  --font-lg: 20px;
-  --font-xl: 24px;
-  --font-2xl: 30px;
-  --font-3xl: 40px;
-  --font-4xl: 52px;
+   --font-xs: 12px;
+   --font-sm: 14px;
+   --font-base: 18px;
+   --font-md: 18px;
+   --font-lg: 20px;
+   --font-xl: 24px;
+   --font-2xl: 30px;
+   --font-3xl: 40px;
+   --font-4xl: 52px;
 
-  /* ==========================================
+   /* ==========================================
      TYPOGRAPHY - Font Weights
   ========================================== */
 
-  --font-light: 300;
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-extrabold: 800;
-  --font-black: 900;
+   --font-light: 300;
+   --font-normal: 400;
+   --font-medium: 500;
+   --font-semibold: 600;
+   --font-bold: 700;
+   --font-extrabold: 800;
+   --font-black: 900;
 
-  /* ==========================================
+   /* ==========================================
      SPACING
   ========================================== */
 
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
-  --spacing-3xl: 64px;
-  --spacing-4xl: 80px;
+   --spacing-xs: 4px;
+   --spacing-sm: 8px;
+   --spacing-md: 16px;
+   --spacing-lg: 24px;
+   --spacing-xl: 32px;
+   --spacing-2xl: 48px;
+   --spacing-3xl: 64px;
+   --spacing-4xl: 80px;
 
-  /* ==========================================
+   /* ==========================================
      BORDERS
   ========================================== */
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-full: 50%;
+   --radius-sm: 4px;
+   --radius-md: 8px;
+   --radius-lg: 12px;
+   --radius-full: 50%;
 
-  /* ==========================================
+   /* ==========================================
      BUTTONS
   ========================================== */
 
-  --btn-height: 50px;
-  --btn-padding: 10px 30px;
-  --btn-font-size: 12px;
-  --btn-font-weight: 500;
-  --btn-text-transform: uppercase;
-  --btn-radius: 5px;
+   --btn-height: 50px;
+   --btn-padding: 10px 30px;
+   --btn-font-size: 12px;
+   --btn-font-weight: 500;
+   --btn-text-transform: uppercase;
+   --btn-radius: 5px;
 
-  /* ==========================================
+   /* ==========================================
      SHADOWS
   ========================================== */
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
 
-  /* ==========================================
+   /* ==========================================
      GRADIENTES
   ========================================== */
 
-  --gradient-primary: linear-gradient(96deg, #e28838 0%, #e0cb45 100%);
-  --gradient-secondary: linear-gradient(96deg, #f0ac0e 0%, #ff7426 100%);
+   --gradient-primary: linear-gradient(96deg, #e28838 0%, #e0cb45 100%);
+   --gradient-secondary: linear-gradient(96deg, #f0ac0e 0%, #ff7426 100%);
 
-  /* ==========================================
+   /* ==========================================
      LAYOUT - Grid
   ========================================== */
 
-  --container-width: 1170px;
-  --container-padding: 15px;
-  --gutter: 30px;
+   --container-width: 1170px;
+   --container-padding: 15px;
+   --gutter: 30px;
 
-  /* ==========================================
+   /* ==========================================
      LAYOUT - Breakpoints
   ========================================== */
 
-  --breakpoint-xl: 1200px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-md: 768px;
-  --breakpoint-sm: 600px;
-  --breakpoint-xs: 480px;
+   --breakpoint-xl: 1200px;
+   --breakpoint-lg: 1024px;
+   --breakpoint-md: 768px;
+   --breakpoint-sm: 600px;
+   --breakpoint-xs: 480px;
 
-  /* ==========================================
+   /* ==========================================
      TRANSITIONS
   ========================================== */
 
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
+   --transition-fast: 0.2s ease;
+   --transition-normal: 0.3s ease;
+   --transition-slow: 0.5s ease;
 }

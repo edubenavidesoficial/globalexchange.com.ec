@@ -37,7 +37,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Rubik', sans-serif;
+    /* CAMBIADO: antes era Nunito */
     margin: 0;
     padding: 0;
     color: var(--heading, #3b3663);
