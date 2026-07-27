@@ -77,15 +77,44 @@
    TEXTO ANIMADO (TYPED)
 ========================================== */
 
-.hero__typed {
-    margin-bottom: var(--spacing-sm);
-}
+/* ==========================================
+   TEXTO ANIMADO (Typed.js)
+========================================== */
 
 .hero__typed .typing-effect-strings {
+
+    display: inline-block;
+
     font-size: var(--font-3xl);
     font-weight: var(--font-extrabold);
-    color: var(--heading);
     font-family: var(--font-heading);
+
+    color: var(--heading) !important;
+
+    -webkit-text-fill-color: var(--heading) !important;
+    -webkit-text-stroke: 0 transparent;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    background: none !important;
+}
+
+.hero__typed .typed-cursor {
+
+    color: var(--heading) !important;
+    -webkit-text-fill-color: var(--heading) !important;
+
+    font-weight: bold;
+    opacity: 1;
+
+}
+
+.hero__typed {
+
+    position: relative;
+    z-index: 10;
+
 }
 
 /* ==========================================
