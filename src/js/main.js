@@ -10,4 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initTyped();
 
+    // Mostrar elementos que Elementor ocultaba
+    document.querySelectorAll('.elementor-invisible')
+        .forEach(el => {
+            el.classList.remove('elementor-invisible');
+        });
+
 });
