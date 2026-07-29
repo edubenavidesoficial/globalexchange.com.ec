@@ -9,11 +9,17 @@
 ========================================== */
 
 .hero {
-    padding: var(--spacing-2xl) 0;
-    background-color: var(--white);
-    min-height: 80vh;
+
+    background: var(--white);
+
+    padding: 80px 0 0;
+
     display: flex;
     align-items: center;
+
+    overflow: hidden;
+    position: relative;
+
 }
 
 .hero__container {
@@ -70,14 +76,15 @@
 /* Imagen principal */
 .hero__main-image {
     width: 100%;
-    max-width: 500px;
+    max-width: 680px;
+    margin: 0 -18%;
 }
 
 .hero__main-image img {
     width: 100%;
     height: auto;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: 0;
+    box-shadow: none;
 }
 
 /* ==========================================
@@ -104,10 +111,6 @@
     flex-direction: column;
     gap: var(--spacing-md);
 }
-
-/* ==========================================
-   TEXTO ANIMADO (TYPED)
-========================================== */
 
 /* ==========================================
    TEXTO ANIMADO (Typed.js)
@@ -274,27 +277,31 @@
 /* Elementos rotatorios */
 
 .hero__deco--rotate1 {
-    top: 5%;
-    right: 15%;
-    z-index: 15;
+    top: 37%;
+    left: -52%;
+    width: 13px;
+    z-index: 50;
 }
 
 .hero__deco--rotate2 {
-    bottom: 30%;
-    left: 3%;
-    z-index: 15;
+    top: 27%;
+    left: -31%;
+    width: 21px;
+    z-index: 50;
 }
 
 .hero__deco--rotate3 {
-    top: 40%;
-    right: 2%;
-    z-index: 15;
+    top: 60%;
+    left: -43%;
+    width: 36px;
+    z-index: 50;
 }
 
 .hero__deco--rotate4 {
-    bottom: 10%;
-    right: 20%;
-    z-index: 15;
+    top: 14%;
+    right: 1%;
+    width: 13px;
+    z-index: 50;
 }
 
 /* ==========================================
