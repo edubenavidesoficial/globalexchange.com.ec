@@ -1,156 +1,186 @@
 /* ====================================================
-   HERO - Estilos para sección principal
-   Clase principal: .hero
-   Basado en legacy/theme/base.css
+   HERO - Sección principal
+   Archivo: src/css/components/hero.css
    ==================================================== */
 
+
 /* ==========================================
-   CONTENEDOR PRINCIPAL
+   SECCIÓN Y CONTENEDOR PRINCIPAL
 ========================================== */
 
 .hero {
+    position: relative;
 
-    background: var(--white);
+    display: flex;
+    align-items: center;
 
     padding: 80px 0 0;
 
-    display: flex;
-    align-items: center;
-
+    background: var(--white);
     overflow: hidden;
-    position: relative;
-
 }
 
 .hero__container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-
-    display: flex;
-    align-items: center;
-}
-
-.hero .elementor-row {
-
-    display: flex;
-    align-items: center;
     width: 100%;
+    max-width: 1380px;
 
+    margin: 0 auto;
+    padding: 0 30px;
+
+    display: flex;
+    align-items: center;
 }
 
-.hero__image-col,
-.hero__content-col {
+/*
+ * Esta clase todavía pertenece al HTML heredado.
+ * Se eliminará cuando terminemos de limpiar Hero.html.
+ */
+.hero .elementor-row {
+    display: flex;
+    align-items: center;
 
-    width: 50%;
-
+    width: 100%;
+    gap: 40px;
 }
 
-.hero__image-col,
-.hero__content-col {
 
-    flex: 0 0 50%;
-    max-width: 50%;
+/* ==========================================
+   DISTRIBUCIÓN DE COLUMNAS
+========================================== */
+
+.hero__image-col {
+    position: relative;
+
+    flex: 1.15 1 0;
+    width: auto;
+    max-width: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     box-sizing: border-box;
-
+    overflow: visible;
 }
+
+.hero__content-col {
+    flex: 0.85 1 0;
+    width: auto;
+    max-width: none;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: var(--spacing-xl);
+
+    box-sizing: border-box;
+}
+
 
 /* ==========================================
    COLUMNA IZQUIERDA - IMAGEN
 ========================================== */
 
-.hero__image-col {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .hero__image-wrap {
+    position: relative;
+
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+
+    overflow: visible;
 }
 
-/* Imagen principal */
 .hero__main-image {
-    width: 100%;
-    max-width: 680px;
-    margin: 0 -18%;
+    width: 112%;
+    max-width: none;
+
+    margin-left: -6%;
+    margin-right: -6%;
+
+    flex-shrink: 0;
 }
 
 .hero__main-image img {
+    display: block;
+
     width: 100%;
+    max-width: none;
     height: auto;
+
     border-radius: 0;
     box-shadow: none;
 }
+
 
 /* ==========================================
    COLUMNA DERECHA - CONTENIDO
 ========================================== */
 
-.hero__content-col {
-
-    padding-left: var(--spacing-2xl);
-
-    display: flex;
-    align-items: center;
-
-}
-
 .hero__content-wrap {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
+
     gap: var(--spacing-md);
 }
 
 .hero__inner-content {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
+
     gap: var(--spacing-md);
 }
 
+
 /* ==========================================
-   TEXTO ANIMADO (Typed.js)
+   TEXTO ANIMADO - TYPED.JS
 ========================================== */
 
-.hero__typed .typing-effect-strings {
-
-    display: inline-block;
-
-    font-size: var(--font-3xl);
-    font-weight: var(--font-extrabold);
-    font-family: var(--font-heading);
-
-    color: var(--heading) !important;
-
-    -webkit-text-fill-color: var(--heading) !important;
-    -webkit-text-stroke: 0 transparent;
-
-    opacity: 1 !important;
-    visibility: visible !important;
-
-    background: none !important;
-}
-
-.hero__typed .typed-cursor {
-
-    color: var(--heading) !important;
-    -webkit-text-fill-color: var(--heading) !important;
-
-    font-weight: bold;
-    opacity: 1;
-
-}
-
 .hero__typed {
-
     position: relative;
     z-index: 10;
 
+    min-height: 1.2em;
 }
+
+.hero__typed .gt3_typed_widget {
+    display: inline-block;
+}
+
+.hero__typed .typing-effect-strings {
+    display: inline-block;
+
+    font-family: var(--font-heading);
+    font-size: var(--font-3xl);
+    font-weight: var(--font-extrabold);
+    line-height: 1.15;
+
+    color: var(--heading) !important;
+    -webkit-text-fill-color: var(--heading) !important;
+    -webkit-text-stroke: 0 transparent;
+
+    background: none !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.hero__typed .typed-cursor {
+    color: var(--heading) !important;
+    -webkit-text-fill-color: var(--heading) !important;
+
+    font-size: var(--font-3xl);
+    font-weight: var(--font-bold);
+
+    opacity: 1;
+}
+
 
 /* ==========================================
    DESCRIPCIÓN
@@ -161,10 +191,14 @@
 }
 
 .hero__description p {
+    margin: 0;
+
     font-size: var(--font-lg);
-    color: var(--text);
     line-height: 1.6;
+
+    color: var(--text);
 }
+
 
 /* ==========================================
    BOTÓN CTA
@@ -172,12 +206,18 @@
 
 .hero__button .elementor-button {
     display: inline-block;
-    background: var(--gradient-primary);
-    color: var(--white);
+
     padding: var(--spacing-md) var(--spacing-2xl);
-    border-radius: var(--radius-md);
+
     font-weight: var(--font-medium);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    color: var(--white);
+
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .hero__button .elementor-button:hover {
@@ -185,30 +225,47 @@
     box-shadow: var(--shadow-lg);
 }
 
+
 /* ==========================================
-   CONTACTO - TELÉFONO Y EMAIL
+   CONTACTO - TELÉFONO Y CORREO
 ========================================== */
 
 .hero__contact {
+    width: 100%;
     margin-top: var(--spacing-md);
 }
 
 .hero__contact .gt3-core-imagebox-wrapper {
     display: flex;
     align-items: flex-start;
+
     gap: var(--spacing-md);
 }
 
+.hero__contact .gt3-core-imagebox-img {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
 .hero__contact .gt3-core-imagebox-img img {
+    display: block;
+
     width: 50px;
+    max-width: none;
     height: auto;
 }
 
+.hero__contact .gt3-core-imagebox-content {
+    flex: 1;
+}
+
 .hero__contact .gt3-core-imagebox-title h2 {
-    font-size: var(--font-md);
-    color: var(--heading);
     margin: 0;
+
+    font-size: var(--font-md);
     line-height: 1.4;
+
+    color: var(--heading);
 }
 
 .hero__contact .gt3-core-imagebox-title a {
@@ -220,6 +277,10 @@
     color: var(--primary);
 }
 
+.hero__contact .gt3-core-imagebox-description {
+    margin: 0;
+}
+
 .hero__contact .gt3-core-imagebox-description a {
     color: var(--text);
     text-decoration: none;
@@ -229,125 +290,214 @@
     color: var(--primary);
 }
 
-/* ==========================================
-   DECORACIONES
-========================================== */
-
-.hero__image-col {
-    position: relative;
-}
-
-.hero__image-wrap {
-    position: relative;
-}
-
-/* Todas las decoraciones */
-
-
-/* Posiciones */
-
-.hero__deco--1 {
-    top: 10%;
-    left: 5%;
-    animation-name: fadeInDown;
-    animation-delay: .2s;
-}
-
-.hero__deco--2 {
-    right: 4%;
-    top: 28%;
-    animation-name: zoomIn;
-    animation-delay: .5s;
-}
-
-.hero__deco--3 {
-    left: 8%;
-    bottom: 20%;
-    animation-name: fadeInLeft;
-    animation-delay: .8s;
-}
-
-.hero__deco--4 {
-    right: 5%;
-    bottom: 10%;
-    animation-name: fadeInUp;
-    animation-delay: 1.1s;
-}
-
-/* Elementos rotatorios */
-
-.hero__deco--rotate1 {
-    top: 37%;
-    left: -52%;
-    width: 13px;
-    z-index: 50;
-}
-
-.hero__deco--rotate2 {
-    top: 27%;
-    left: -31%;
-    width: 21px;
-    z-index: 50;
-}
-
-.hero__deco--rotate3 {
-    top: 60%;
-    left: -43%;
-    width: 36px;
-    z-index: 50;
-}
-
-.hero__deco--rotate4 {
-    top: 14%;
-    right: 1%;
-    width: 13px;
-    z-index: 50;
-}
 
 /* ==========================================
-   DECORACIONES
+   DECORACIONES - REGLAS GENERALES
 ========================================== */
 
 .hero__deco {
     position: absolute;
     z-index: 20;
-    opacity: 0;
-    animation-fill-mode: forwards;
+
+    display: block;
+
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: none;
 }
 
 .hero__deco img {
     display: block;
+
     width: auto;
-    height: auto;
     max-width: 90px;
+    height: auto;
 }
 
-/* Imágenes grandes */
 
-.hero__deco--2 img,
-.hero__deco--4 img {
-    max-width: 120px;
-}
+/* ==========================================
+   CUATRO ICONOS SOBRE LA IMAGEN PRINCIPAL
+========================================== */
 
-.hero__deco--2 img,
-.hero__deco--4 img {
-    max-width: 120px;
-}
-
-.hero__deco--1 {
-    animation: fadeInDown .8s ease forwards;
-}
-
-.hero__deco--2 {
-    animation: zoomIn .8s ease .2s forwards;
-}
-
-.hero__deco--3 {
-    animation: fadeInLeft .8s ease .4s forwards;
-}
-
+.hero__deco--1,
+.hero__deco--2,
+.hero__deco--3,
 .hero__deco--4 {
-    animation: fadeInUp .8s ease .6s forwards;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+/* Icono superior izquierdo */
+.hero__deco--1 {
+    top: 10%;
+    left: 5%;
+
+    animation: hero-fade-in-down 0.8s ease 0s forwards;
+}
+
+/* Icono superior derecho */
+.hero__deco--2 {
+    top: 28%;
+    right: 4%;
+
+    animation: hero-zoom-in 0.8s ease 0.2s forwards;
+}
+
+/* Icono inferior izquierdo */
+.hero__deco--3 {
+    bottom: 20%;
+    left: 8%;
+
+    animation: hero-fade-in-left 0.8s ease 0.4s forwards;
+}
+
+/* Icono inferior derecho */
+.hero__deco--4 {
+    right: 5%;
+    bottom: 10%;
+
+    animation: hero-fade-in-up 0.8s ease 0.6s forwards;
+}
+
+.hero__deco--2 img,
+.hero__deco--4 img {
+    max-width: 120px;
+}
+
+
+/* ==========================================
+   DECORACIONES PEQUEÑAS DE LA IZQUIERDA
+========================================== */
+
+.hero__deco--rotate1 {
+    top: 37%;
+    left: -52%;
+
+    width: 13px;
+    z-index: 50;
+
+    animation: hero-rotate 20s linear infinite;
+}
+
+.hero__deco--rotate2 {
+    top: 27%;
+    left: -31%;
+
+    width: 21px;
+    z-index: 50;
+
+    animation: hero-rotate 18s linear infinite reverse;
+}
+
+.hero__deco--rotate3 {
+    top: 60%;
+    left: -43%;
+
+    width: 36px;
+    z-index: 50;
+
+    animation: hero-rotate 22s linear infinite;
+}
+
+.hero__deco--rotate4 {
+    top: 14%;
+    right: 1%;
+
+    width: 13px;
+    z-index: 50;
+
+    animation: hero-rotate 16s linear infinite reverse;
+}
+
+.hero__deco--rotate1 img,
+.hero__deco--rotate2 img,
+.hero__deco--rotate3 img,
+.hero__deco--rotate4 img {
+    width: 100%;
+    max-width: none;
+}
+
+
+/* ==========================================
+   DECORACIONES DE LA COLUMNA DERECHA
+========================================== */
+
+.hero__deco--right1,
+.hero__deco--right2,
+.hero__deco--right3,
+.hero__deco--right4 {
+    position: absolute;
+    z-index: 5;
+
+    display: block;
+
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: none;
+}
+
+/* Cruz pequeña superior */
+.hero__deco--right1 {
+    top: 5%;
+    right: 10%;
+
+    width: 26px;
+    height: 26px;
+
+    animation: hero-rotate 18s linear infinite;
+}
+
+/* Triángulo azul */
+.hero__deco--right2 {
+    bottom: 20%;
+    left: 5%;
+
+    width: 72px;
+    height: 74px;
+
+    animation: hero-rotate 20s linear infinite reverse;
+}
+
+/* Círculo rosado */
+.hero__deco--right3 {
+    top: 30%;
+    left: 3%;
+
+    width: 48px;
+    height: 48px;
+
+    animation: hero-float 3s ease-in-out infinite;
+}
+
+/* Cruz morada inferior */
+.hero__deco--right4 {
+    right: 8%;
+    bottom: 35%;
+
+    width: 42px;
+    height: 42px;
+
+    animation: hero-rotate 16s linear infinite;
+}
+
+/* Impedir que Elementor agrande las imágenes */
+.hero__deco--right1 img,
+.hero__deco--right2 img,
+.hero__deco--right3 img,
+.hero__deco--right4 img {
+    display: block;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+
+    object-fit: contain;
+}
+
+.hero__inner-content {
+    position: relative;
 }
 
 /* ==========================================
@@ -376,87 +526,265 @@
     }
 }
 
-/* ==========================================
-   Animaciones de entrada
-========================================== */
-
-@keyframes zoomIn {
-
+@keyframes hero-fade-in-down {
     from {
         opacity: 0;
-        transform: scale(.5);
+        transform: translateY(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hero-fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes hero-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hero-zoom-in {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
     }
 
     to {
         opacity: 1;
         transform: scale(1);
     }
-
 }
 
+
 /* ==========================================
-   RESPONSIVE
+   RESPONSIVE - TABLETS Y LAPTOPS PEQUEÑAS
 ========================================== */
 
 @media (max-width: 1024px) {
     .hero {
-        min-height: auto;
         padding: var(--spacing-xl) 0;
     }
 
-    .hero__content-col {
-        padding-left: var(--spacing-lg);
+    .hero__container {
+        max-width: 960px;
+        padding: 0 var(--container-padding);
     }
 
-    .hero__typed .typing-effect-strings {
+    .hero .elementor-row {
+        gap: var(--spacing-xl);
+    }
+
+    .hero__image-col {
+        flex: 1.05 1 0;
+    }
+
+    .hero__content-col {
+        flex: 0.95 1 0;
+        padding-left: var(--spacing-md);
+    }
+
+    .hero__main-image {
+        width: 108%;
+
+        margin-left: -4%;
+        margin-right: -4%;
+    }
+
+    .hero__typed .typing-effect-strings,
+    .hero__typed .typed-cursor {
         font-size: var(--font-2xl);
     }
+
+    .hero__description p {
+        font-size: var(--font-lg);
+    }
 }
+
+
+/* ==========================================
+   RESPONSIVE - TABLETS VERTICALES Y MÓVILES
+========================================== */
 
 @media (max-width: 768px) {
     .hero {
         padding: var(--spacing-lg) 0;
     }
 
+    .hero__container {
+        width: 100%;
+        max-width: 100%;
+
+        padding: 0 var(--container-padding);
+    }
+
+    .hero .elementor-row {
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: var(--spacing-xl);
+    }
+
+    .hero__image-col,
+    .hero__content-col {
+        flex: 0 0 100%;
+
+        width: 100%;
+        max-width: 100%;
+    }
+
     .hero__image-col {
-        margin-bottom: var(--spacing-2xl);
+        margin-bottom: 0;
+    }
+
+    .hero__image-wrap {
+        width: 100%;
+    }
+
+    .hero__main-image {
+        width: 100%;
+        max-width: 620px;
+
+        margin: 0 auto;
     }
 
     .hero__content-col {
         padding-left: 0;
     }
 
-    .hero__typed .typing-effect-strings {
+    .hero__content-wrap,
+    .hero__inner-content {
+        width: 100%;
+    }
+
+    .hero__typed {
+        text-align: center;
+    }
+
+    .hero__typed .typing-effect-strings,
+    .hero__typed .typed-cursor {
         font-size: var(--font-xl);
+    }
+
+    .hero__description {
+        text-align: center;
     }
 
     .hero__description p {
         font-size: var(--font-md);
     }
 
-    .hero__contact .gt3-core-imagebox-wrapper {
-        flex-direction: column;
-        align-items: center;
+    .hero__button {
         text-align: center;
     }
 
-    /* Ocultar decoraciones en móvil */
+    .hero__contact .gt3-core-imagebox-wrapper {
+        flex-direction: column;
+        align-items: center;
+
+        text-align: center;
+    }
+
+    /* Las decoraciones se ocultan para evitar desbordamientos */
     .hero__deco {
         display: none;
     }
 }
+
+
+/* ==========================================
+   RESPONSIVE - MÓVILES PEQUEÑOS
+========================================== */
 
 @media (max-width: 480px) {
     .hero {
         padding: var(--spacing-md) 0;
     }
 
-    .hero__typed .typing-effect-strings {
+    .hero__container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .hero .elementor-row {
+        gap: var(--spacing-lg);
+    }
+
+    .hero__main-image {
+        width: 100%;
+        max-width: 420px;
+
+        margin: 0 auto;
+    }
+
+    .hero__typed .typing-effect-strings,
+    .hero__typed .typed-cursor {
         font-size: var(--font-lg);
+    }
+
+    .hero__description p {
+        font-size: var(--font-sm);
+        line-height: 1.5;
     }
 
     .hero__button .elementor-button {
         padding: var(--spacing-sm) var(--spacing-xl);
+
         font-size: var(--font-sm);
+    }
+
+    .hero__contact {
+        width: 100%;
+    }
+
+    .hero__contact .gt3-core-imagebox-wrapper {
+        width: 100%;
+    }
+
+    .hero__contact .gt3-core-imagebox-title h2 {
+        font-size: var(--font-sm);
+    }
+
+    .hero__contact .gt3-core-imagebox-description {
+        font-size: var(--font-sm);
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD - REDUCIR MOVIMIENTO
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .hero__deco {
+        animation: none !important;
+    }
+
+    .hero__deco--1,
+    .hero__deco--2,
+    .hero__deco--3,
+    .hero__deco--4 {
+        opacity: 1;
+    }
+
+    .hero__button .elementor-button {
+        transition: none;
     }
 }
