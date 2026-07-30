@@ -2,83 +2,72 @@
 ====================================================
 COMPONENTE: HERO
 
-Origen:
-index.htm (sección HERO - elementor-section-4bf712c)
+Proyecto:
+Global Exchange - Migración a Vite
 
 Estado:
-Migrado sin modificaciones funcionales con clase semántica añadida.
+- HTML propio y semántico
+- Sin dependencia estructural de Elementor
+- Typed.js conservado
+- Decoraciones controladas con CSS propio
+- Rutas servidas desde public/images
 
-Observaciones:
-- Se añadió clase "hero" para CSS propio
-- Se conservan todas las clases de Elementor (elementor-section, elementor-column, etc.)
-- Conserva data-id, data-element_type, data-settings de Elementor
-- Conserva scripts JSON de Elementor (settings--937c14f)
-- Imágenes: mantienen rutas originales de WordPress (wp-content/uploads/...)
-- srcset y loading="lazy" se conservan
-- Animaciones: data-settings con animation configurada
-- Mejoras aplicadas:
-  * Teléfono: href="#" → href="tel:+593983511575"
-  * Email: texto plano → mailto:info@globalexchange.com.ec
-
-Fase:
-3 - Migración del HTML.
+Archivos relacionados:
+- src/css/components/hero.css
+- src/js/modules/typed-effect.js
 ====================================================
 -->
 
-<section
-    class="hero elementor-section elementor-top-section elementor-element elementor-element-4bf712c elementor-section-content-middle elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-    data-id="4bf712c" data-element_type="section" data-settings="{&quot;animation&quot;:&quot;none&quot;}">
-    <div class="hero__container elementor-container elementor-column-gap-default">
-        <div class="elementor-row">
+<section class="hero" id="inicio">
+    <div class="hero__container">
+        <div class="hero__layout">
 
             <!-- ==========================================
-                 COLUMNA IZQUIERDA - IMAGEN Y DECORACIONES
+                 COLUMNA IZQUIERDA - IMAGEN
             ========================================== -->
 
-            <!-- Imagen principal -->
-            <div class="hero__image-col">
-                <div class="hero__image-wrap">
+            <div class="hero__visual">
+                <div class="hero__image-stage">
 
-                    <div class="hero__main-image">
-                        <img src="/images/hero/smiling_girl.jpg" alt="Estudiante sonriendo de Global Exchange"
-                            loading="lazy">
+                    <!-- Imagen principal -->
+                    <img class="hero__main-image" src="/images/hero/smiling_girl.jpg"
+                        alt="Estudiante sonriendo de Global Exchange" loading="eager">
+
+                    <!-- Cuatro imágenes sobre la fotografía -->
+
+                    <div class="hero__overlay hero__overlay--languages" aria-hidden="true">
+                        <img src="/images/hero/idiomas-1.png" alt="">
                     </div>
 
-                    <!-- decoraciones -->
-                    ...
-                    <!-- Elementos decorativos -->
-                    <div class="hero__deco hero__deco--1">
-                        <img src="/images/hero/idiomas-1.png" alt="Idiomas" loading="lazy">
+                    <div class="hero__overlay hero__overlay--message" aria-hidden="true">
+                        <img src="/images/hero/home10-img2.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--2">
-                        <img src="/images/hero/home10-img2.png" alt="Marketing" loading="lazy">
+                    <div class="hero__overlay hero__overlay--globe" aria-hidden="true">
+                        <img src="/images/hero/idioma-1.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--3">
-                        <img src="/images/hero/idioma-1.png" alt="Idioma" loading="lazy">
+                    <div class="hero__overlay hero__overlay--progress" aria-hidden="true">
+                        <img src="/images/hero/home10-img4.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--4">
-                        <img src="/images/hero/home10-img4.png" alt="Success" loading="lazy">
+                    <!-- Decoraciones pequeñas de la izquierda -->
+
+                    <div class="hero__shape hero__shape--left-cross" aria-hidden="true">
+                        <img src="/images/decorations/home_06_icon_22.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--rotate1">
-                        <img src="/images/decorations/home_06_icon_22.png" alt="" loading="lazy">
+                    <div class="hero__shape hero__shape--left-plus" aria-hidden="true">
+                        <img src="/images/decorations/home_06_icon_23.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--rotate2">
-                        <img src="/images/decorations/home_06_icon_23.png" alt="" loading="lazy">
+                    <div class="hero__shape hero__shape--left-triangle" aria-hidden="true">
+                        <img src="/images/decorations/triangle_orange.png" alt="">
                     </div>
 
-                    <div class="hero__deco hero__deco--rotate3">
-                        <img src="/images/decorations/triangle_orange.png" alt="" loading="lazy">
+                    <div class="hero__shape hero__shape--image-cross" aria-hidden="true">
+                        <img src="/images/decorations/home_06_icon_22.png" alt="">
                     </div>
-
-                    <div class="hero__deco hero__deco--rotate4">
-                        <img src="/images/decorations/home_06_icon_22.png" alt="" loading="lazy">
-                    </div>
-
 
                 </div>
             </div>
@@ -87,173 +76,90 @@ Fase:
                  COLUMNA DERECHA - CONTENIDO
             ========================================== -->
 
-            <div class="hero__content-col elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-b4cb8e0"
-                data-id="b4cb8e0" data-element_type="column">
-                <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="hero__content-wrap elementor-widget-wrap">
-                        <section
-                            class="elementor-section elementor-inner-section elementor-element elementor-element-e8de75d elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-                            data-id="e8de75d" data-element_type="section">
-                            <div class="elementor-container elementor-column-gap-default">
-                                <div class="elementor-row">
-                                    <div class="elementor-column elementor-col-100 elementor-inner-column elementor-element elementor-element-551fc34"
-                                        data-id="551fc34" data-element_type="column">
-                                        <div class="elementor-column-wrap elementor-element-populated">
-                                            <div class="hero__inner-content elementor-widget-wrap">
+            <div class="hero__content">
 
-                                                <!-- Texto animado -->
-                                                <div class="hero__typed elementor-element elementor-element-937c14f gt3_theme_textgradient-yes elementor-widget elementor-widget-gt3-core-typed-text"
-                                                    data-id="937c14f" data-element_type="widget"
-                                                    data-widget_type="gt3-core-typed-text.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="gt3_typed_widget">
-                                                            <span class="typing-effect-strings"
-                                                                id="typed_937c14f"></span>
-                                                        </div>
-                                                        <script type="application/json"
-                                                            id="settings--937c14f">{"id":"#typed_937c14f","strings":["\u00a1Ama, vive, viaja!","\u00a1Ama, vive, viaja!","\u00a1Ama, vive, viaja!"],"typeSpeed":100,"startDelay":0,"backSpeed":50,"smartBackspace":false,"backDelay":700,"loop":true,"loopCount":0,"showCursor":true,"cursorChar":"&nbsp;","fadeOut":false,"fadeOutDelay":700}</script>
-                                                    </div>
-                                                </div>
+                <!-- Texto animado -->
+                <div class="hero__typed">
+                    <div class="hero__typed-line">
+                        <span class="typing-effect-strings" id="typed_937c14f"></span>
+                    </div>
 
-                                                <!-- Descripción -->
-                                                <div class="hero__description elementor-element elementor-element-b1b55b5 elementor-widget elementor-widget-text-editor"
-                                                    data-id="b1b55b5" data-element_type="widget"
-                                                    data-widget_type="text-editor.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-text-editor elementor-clearfix">
-                                                            <p><span>En el mundo se hablan mas de mil
-                                                                    lenguas,</span><br><span>¡viaja con nosotros y
-                                                                    aprende una!</span></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <script type="application/json" id="settings--937c14f">
+                        {
+                            "id": "#typed_937c14f",
+                            "strings": [
+                                "¡Ama, vive, viaja!",
+                                "¡Ama, vive, viaja!",
+                                "¡Ama, vive, viaja!"
+                            ],
+                            "typeSpeed": 100,
+                            "startDelay": 0,
+                            "backSpeed": 50,
+                            "smartBackspace": false,
+                            "backDelay": 700,
+                            "loop": true,
+                            "loopCount": 0,
+                            "showCursor": true,
+                            "cursorChar": "|",
+                            "fadeOut": false,
+                            "fadeOutDelay": 700
+                        }
+                    </script>
+                </div>
 
-                                                <!-- Botón CTA -->
-                                                <div class="hero__button elementor-element elementor-element-8ca1b2c elementor-button-warning elementor-align-left elementor-widget elementor-widget-button"
-                                                    data-id="8ca1b2c" data-element_type="widget"
-                                                    data-widget_type="button.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-button-wrapper">
-                                                            <a href="https://globalexchange.com.ec/contactoss/index.htm"
-                                                                class="elementor-button-link elementor-button elementor-size-md"
-                                                                role="button">
-                                                                <span class="elementor-button-content-wrapper">
-                                                                    <span class="elementor-button-text">Contáctanos
-                                                                        Ahora !</span>
-                                                                </span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                <!-- Descripción -->
+                <p class="hero__description">
+                    En el mundo se hablan más de mil lenguas,
+                    <br>
+                    ¡viaja con nosotros y aprende una!
+                </p>
 
-                                                <!-- Spacer -->
-                                                <div class="elementor-element elementor-element-3d0cda1 elementor-widget elementor-widget-spacer"
-                                                    data-id="3d0cda1" data-element_type="widget"
-                                                    data-widget_type="spacer.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-spacer">
-                                                            <div class="elementor-spacer-inner"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                <!-- Botón -->
+                <div class="hero__actions">
+                    <a class="hero__cta" href="https://globalexchange.com.ec/contactoss/index.htm">
+                        Contáctanos Ahora !
+                    </a>
+                </div>
 
-                                                <!-- Contacto: Teléfono y Email -->
-                                                <div class="hero__contact elementor-element elementor-element-6b7130e elementor-position-left elementor-widget__width-auto elementor-vertical-align-top elementor-widget elementor-widget-gt3-core-imagebox"
-                                                    data-id="6b7130e" data-element_type="widget"
-                                                    data-widget_type="gt3-core-imagebox.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div
-                                                            class="gt3-core-imagebox-wrapper elementor-image_icon-position-default">
-                                                            <figure class="gt3-core-imagebox-img">
-                                                                <a href="#">
-                                                                    <img width="58" height="74"
-                                                                        src="/images/hero/img_box_29_orange.png"
-                                                                        class="attachment-full size-full" alt=""
-                                                                        loading="lazy" title="Phone">
-                                                                </a>
-                                                            </figure>
-                                                            <div class="gt3-core-imagebox-content">
-                                                                <div class="gt3-core-imagebox-title">
-                                                                    <h2 class="gt3-core-imagebox-title">
-                                                                        <a href="tel:+593983511575">Teléfono <br>
-                                                                            (+593) 98 351 1575 <br>(02) 380 0677</a>
-                                                                    </h2>
-                                                                </div>
-                                                                <p class="gt3-core-imagebox-description">
-                                                                    <a
-                                                                        href="mailto:info@globalexchange.com.ec">info@globalexchange.com.ec</a>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <a href="#"></a>
-                                                    </div>
-                                                </div>
+                <!-- Contacto -->
+                <div class="hero__contact">
+                    <div class="hero__contact-icon">
+                        <img src="/images/hero/img_box_29_orange.png" alt="" aria-hidden="true">
+                    </div>
 
-                                                <!-- Decoraciones en columna derecha -->
-                                                <div class="hero__deco hero__deco--right1 elementor-element elementor-element-d87dace gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                                                    data-id="d87dace" data-element_type="widget"
-                                                    data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                                                    data-widget_type="image.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-image">
-                                                            <img width="26" height="26"
-                                                                src="/images/decorations/home_06_icon_22.png"
-                                                                class="attachment-full size-full" alt="" loading="lazy"
-                                                                title="home_06_icon_22">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <div class="hero__contact-content">
+                        <h2 class="hero__contact-title">
+                            <a href="tel:+593983511575">
+                                Teléfono
+                                <span>(+593) 98 351 1575</span>
+                                <span>(02) 380 0677</span>
+                            </a>
+                        </h2>
 
-                                                <div class="hero__deco hero__deco--right2 elementor-element elementor-element-29f3943 gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                                                    data-id="29f3943" data-element_type="widget"
-                                                    data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                                                    data-widget_type="image.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-image">
-                                                            <img width="72" height="74"
-                                                                src="/images/decorations/triangle_blue.png"
-                                                                class="attachment-full size-full" alt="" loading="lazy"
-                                                                title="triangle">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="hero__deco hero__deco--right3 elementor-element elementor-element-9aac484 gt3_moved_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                                                    data-id="9aac484" data-element_type="widget"
-                                                    data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                                                    data-widget_type="image.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-image">
-                                                            <img width="48" height="48"
-                                                                src="/images/decorations/circle.png"
-                                                                class="attachment-full size-full" alt="" loading="lazy"
-                                                                title="circle">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="hero__deco hero__deco--right4 elementor-element elementor-element-4c7a213 gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                                                    data-id="4c7a213" data-element_type="widget"
-                                                    data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                                                    data-widget_type="image.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div class="elementor-image">
-                                                            <img width="42" height="42"
-                                                                src="/images/decorations/home_06_icon_23.png"
-                                                                class="attachment-full size-full" alt="" loading="lazy"
-                                                                title="home_06_icon_23">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                        <a class="hero__contact-email" href="mailto:info@globalexchange.com.ec">
+                            info@globalexchange.com.ec
+                        </a>
                     </div>
                 </div>
+
+                <!-- Decoraciones pequeñas de la derecha -->
+
+                <div class="hero__shape hero__shape--right-cross" aria-hidden="true">
+                    <img src="/images/decorations/home_06_icon_22.png" alt="">
+                </div>
+
+                <div class="hero__shape hero__shape--right-triangle" aria-hidden="true">
+                    <img src="/images/decorations/triangle_blue.png" alt="">
+                </div>
+
+                <div class="hero__shape hero__shape--right-circle" aria-hidden="true">
+                    <img src="/images/decorations/circle.png" alt="">
+                </div>
+
+                <div class="hero__shape hero__shape--right-plus" aria-hidden="true">
+                    <img src="/images/decorations/home_06_icon_23.png" alt="">
+                </div>
+
             </div>
 
         </div>
