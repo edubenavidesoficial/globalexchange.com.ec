@@ -1,27 +1,47 @@
 /* ====================================================
-   ABOUT - Estilos para sección "Global Exchange"
-   Clase principal: .about
-   Basado en legacy/theme/base.css
+   ABOUT
+   Archivo: src/css/components/about.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Sin GT3
    ==================================================== */
 
+
 /* ==========================================
-   CONTENEDOR PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .about {
-    padding: var(--spacing-3xl) 0;
+    position: relative;
+
+    width: 100%;
+
+    padding: 90px 0;
+
     background-color: var(--white);
+
+    overflow: hidden;
 }
 
+
 /* ==========================================
-   CONTENEDOR INTERNO
+   CONTENEDOR
 ========================================== */
 
 .about__container {
-    max-width: var(--container-width);
+    width: 100%;
+    max-width: 1200px;
+
     margin: 0 auto;
-    padding: 0 var(--container-padding);
+    padding: 0 30px;
 }
+
 
 /* ==========================================
    CONTENIDO
@@ -31,32 +51,34 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-}
 
-.about__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 860px;
+
     margin: 0 auto;
+
     text-align: center;
 }
+
 
 /* ==========================================
    TÍTULO
 ========================================== */
 
 .about__title {
-    font-size: var(--font-3xl);
+    margin: 0 0 24px;
+
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4vw, 58px);
     font-weight: var(--font-extrabold);
+    line-height: 1.1;
+    letter-spacing: -1px;
+
     color: var(--heading);
-    text-align: center;
-    margin-bottom: var(--spacing-lg);
+
+    animation: about-slide-up 0.8s ease both;
 }
+
 
 /* ==========================================
    TEXTO
@@ -64,14 +86,18 @@
 
 .about__text {
     width: 100%;
-    margin-bottom: var(--spacing-xl);
+
+    margin-bottom: 34px;
 }
 
 .about__text p {
-    font-size: var(--font-md);
+    margin: 0 0 14px;
+
+    font-family: inherit;
+    font-size: clamp(16px, 1.4vw, 20px);
+    line-height: 1.75;
+
     color: var(--text);
-    line-height: 1.8;
-    margin-bottom: var(--spacing-md);
 }
 
 .about__text p:last-child {
@@ -79,85 +105,156 @@
 }
 
 .about__highlight {
-    font-size: var(--font-lg);
+    margin-bottom: 18px !important;
 }
 
 .about__highlight strong {
-    color: var(--secondary);
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: var(--font-bold);
+
+    color: #ff9900;
 }
+
 
 /* ==========================================
    BOTÓN
 ========================================== */
 
 .about__button {
-    display: inline-block;
-}
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-.about__button a {
-    display: inline-block;
-    background: var(--gradient-primary);
-    color: var(--white);
-    padding: var(--spacing-md) var(--spacing-2xl);
-    border-radius: var(--radius-md);
+    min-width: 170px;
+    min-height: 48px;
+
+    padding: 12px 28px;
+
+    font-family: inherit;
+    font-size: 14px;
     font-weight: var(--font-medium);
+    line-height: 1;
+
+    color: var(--white);
+
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+
+    text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    text-decoration: none;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
-.about__button a:hover {
+.about__button:hover {
+    color: var(--white);
+
     transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
 }
 
-.about__button .elementor_gt3_btn_text {
-    color: var(--white);
-}
 
 /* ==========================================
-   RESPONSIVE
+   ANIMACIÓN
+========================================== */
+
+@keyframes about-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - TABLETS
 ========================================== */
 
 @media (max-width: 768px) {
     .about {
-        padding: var(--spacing-2xl) 0;
+        padding: 70px 0;
+    }
+
+    .about__container {
+        padding: 0 22px;
     }
 
     .about__title {
-        font-size: var(--font-2xl);
+        margin-bottom: 20px;
+    }
+
+    .about__text {
+        margin-bottom: 28px;
     }
 
     .about__text p {
-        font-size: var(--font-base);
+        line-height: 1.65;
     }
 
-    .about__highlight {
-        font-size: var(--font-md);
-    }
+    .about__button {
+        min-width: 160px;
 
-    .about__button a {
-        padding: var(--spacing-sm) var(--spacing-xl);
-        font-size: var(--font-sm);
+        padding: 11px 24px;
+
+        font-size: 13px;
     }
 }
 
+
+/* ==========================================
+   RESPONSIVE - MÓVILES
+========================================== */
+
 @media (max-width: 480px) {
     .about {
-        padding: var(--spacing-xl) 0;
+        padding: 55px 0;
+    }
+
+    .about__container {
+        padding: 0 18px;
     }
 
     .about__title {
-        font-size: var(--font-xl);
+        font-size: 32px;
+        letter-spacing: -0.5px;
     }
 
     .about__text p {
-        font-size: var(--font-sm);
+        font-size: 15px;
+        line-height: 1.6;
     }
 
-    .about__button a {
-        padding: var(--spacing-sm) var(--spacing-lg);
-        font-size: var(--font-xs);
+    .about__highlight strong {
+        font-size: 20px;
+    }
+
+    .about__button {
+        width: 100%;
+        max-width: 260px;
+
+        min-height: 46px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .about__title {
+        animation: none;
+    }
+
+    .about__button {
+        transition: none;
     }
 }

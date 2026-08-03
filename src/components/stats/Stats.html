@@ -2,239 +2,148 @@
 ====================================================
 COMPONENTE: STATS
 
-Origen:
-index.htm (sección - elementor-section-17a9ca9)
+Proyecto:
+Global Exchange - Migración a Vite
 
 Estado:
-Migrado con limpieza de HTML.
+- HTML propio y semántico
+- Sin Elementor
+- Sin WordPress
+- Sin GT3
+- Contadores animados con JavaScript propio
+- Decoraciones controladas con CSS propio
 
-Observaciones:
-- Conserva todas las clases de Elementor
-- Conserva data-id, data-element_type y data-settings
-- CORREGIDO: Se eliminó text-align:center inline de los contadores
-- CORREGIDO: Se eliminó el espacio &nbsp; innecesario en "Años de Experiencia"
-- Se conservan los scripts JSON de los GT3 Counter para conservar la animación numérica
-- Se conservan los atributos data-settings y data-options requeridos por los contadores GT3
-- Se conservan las imágenes decorativas
-- Los enlaces e imágenes de WordPress permanecen sin modificar
-
-Fase:
-3 - Migración del HTML.
+Archivos relacionados:
+- src/css/components/stats.css
+- src/js/modules/counters.js
 ====================================================
 -->
 
-<section
-    class="elementor-section elementor-top-section elementor-element elementor-element-17a9ca9 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-    data-id="17a9ca9" data-element_type="section">
-    <div class="elementor-container elementor-column-gap-default">
-        <div class="elementor-row">
-            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-b3da26e"
-                data-id="b3da26e" data-element_type="column">
-                <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
-                        <div class="elementor-element elementor-element-94d6df7 gt3_pulse_out_element elementor-invisible elementor-widget elementor-widget-image"
-                            data-id="94d6df7" data-element_type="widget"
-                            data-settings="{&quot;_animation&quot;:&quot;fadeInLeft&quot;,&quot;_animation_delay&quot;:500}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="777" height="644" src="/images/stats/home10_ellipse.png"
-                                        class="attachment-full size-full" alt="" loading="lazy"
-                                        srcset="/images/stats/home10_ellipse.png 777w, /images/home10_ellipse-300x249.png 300w, /images/home10_ellipse-768x637.png 768w, /images/home10_ellipse-480x398.png 480w"
-                                        sizes="(max-width: 777px) 100vw, 777px" title="Ellipse">
-                                </div>
-                            </div>
-                        </div>
-                        <section
-                            class="elementor-section elementor-inner-section elementor-element elementor-element-d5a07b7 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-                            data-id="d5a07b7" data-element_type="section">
-                            <div class="elementor-container elementor-column-gap-default">
-                                <div class="elementor-row">
-                                    <div class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-fff083a"
-                                        data-id="fff083a" data-element_type="column">
-                                        <div class="elementor-column-wrap elementor-element-populated">
-                                            <div class="elementor-widget-wrap">
-                                                <div class="elementor-element elementor-element-9f0ac6c gt3_theme_textgradient-yes elementor-align-center elementor-widget elementor-widget-gt3-core-counter"
-                                                    data-id="9f0ac6c" data-element_type="widget"
-                                                    data-widget_type="gt3-core-counter.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div data-settings="{&quot;start&quot;:10,&quot;end&quot;:8000,&quot;decimal&quot;:0,&quot;duration&quot;:0.5,&quot;options&quot;:{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}}"
-                                                            data-options="{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}"
-                                                            class="counter-wrapper icon_type-icon icon_position-left text_gradient">
-                                                            <div class="counter_text">
-                                                                <div class="counter"></div>
-                                                                <div class="hidden_end">8,000</div>
-                                                                <div class="description">
-                                                                    <p>Estudiantes<br>viajados</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <script type="application/json"
-                                                            id="settings--9f0ac6c">{"start":10,"end":8000,"decimal":0,"duration":0.5,"options":{"useEasing":false,"easingFn":"","useGrouping":true,"separator":",","decimal":".","prefix":"","suffix":""}}</script>
-                                                    </div>
-                                                </div>
-                                                <div class="elementor-element elementor-element-bda2536 gt3_theme_textgradient-yes elementor-align-center elementor-invisible elementor-widget elementor-widget-gt3-core-counter"
-                                                    data-id="bda2536" data-element_type="widget"
-                                                    data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;}"
-                                                    data-widget_type="gt3-core-counter.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div data-settings="{&quot;start&quot;:10,&quot;end&quot;:76,&quot;decimal&quot;:0,&quot;duration&quot;:0.5,&quot;options&quot;:{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}}"
-                                                            data-options="{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}"
-                                                            class="counter-wrapper icon_type-icon icon_position-left text_gradient">
-                                                            <div class="counter_text">
-                                                                <div class="counter"></div>
-                                                                <div class="hidden_end">76</div>
-                                                                <div class="description">
-                                                                    <p>Destinos</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <script type="application/json"
-                                                            id="settings--bda2536">{"start":10,"end":76,"decimal":0,"duration":0.5,"options":{"useEasing":false,"easingFn":"","useGrouping":true,"separator":"","decimal":".","prefix":"","suffix":""}}</script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-dff8a53"
-                                        data-id="dff8a53" data-element_type="column">
-                                        <div class="elementor-column-wrap elementor-element-populated">
-                                            <div class="elementor-widget-wrap">
-                                                <div class="elementor-element elementor-element-0fead66 gt3_theme_textgradient-yes elementor-align-center elementor-invisible elementor-widget elementor-widget-gt3-core-counter"
-                                                    data-id="0fead66" data-element_type="widget"
-                                                    data-settings="{&quot;_animation&quot;:&quot;fadeInDown&quot;}"
-                                                    data-widget_type="gt3-core-counter.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div data-settings="{&quot;start&quot;:10,&quot;end&quot;:21,&quot;decimal&quot;:0,&quot;duration&quot;:0.5,&quot;options&quot;:{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}}"
-                                                            data-options="{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&quot;}"
-                                                            class="counter-wrapper icon_type-icon icon_position-left text_gradient">
-                                                            <div class="counter_text">
-                                                                <div class="counter"></div>
-                                                                <div class="hidden_end">21</div>
-                                                                <div class="description">
-                                                                    <p>Años de Experiencia</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <script type="application/json"
-                                                            id="settings--0fead66">{"start":10,"end":21,"decimal":0,"duration":0.5,"options":{"useEasing":false,"easingFn":"","useGrouping":true,"separator":",","decimal":".","prefix":"","suffix":""}}</script>
-                                                    </div>
-                                                </div>
-                                                <div class="elementor-element elementor-element-7b5c2d4 gt3_theme_textgradient-yes elementor-align-center elementor-widget elementor-widget-gt3-core-counter"
-                                                    data-id="7b5c2d4" data-element_type="widget"
-                                                    data-widget_type="gt3-core-counter.default">
-                                                    <div class="elementor-widget-container">
-                                                        <div data-settings="{&quot;start&quot;:10,&quot;end&quot;:100,&quot;decimal&quot;:0,&quot;duration&quot;:0.5,&quot;options&quot;:{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&lt;span class=\&quot;counter_suffix\&quot;&gt;%&lt;\/span&gt;&quot;}}"
-                                                            data-options="{&quot;useEasing&quot;:false,&quot;easingFn&quot;:&quot;&quot;,&quot;useGrouping&quot;:true,&quot;separator&quot;:&quot;,&quot;,&quot;decimal&quot;:&quot;.&quot;,&quot;prefix&quot;:&quot;&quot;,&quot;suffix&quot;:&quot;&lt;span class=\&quot;counter_suffix\&quot;&gt;%&lt;\/span&gt;&quot;}"
-                                                            class="counter-wrapper icon_type-icon icon_position-left text_gradient">
-                                                            <div class="counter_text">
-                                                                <div class="counter"></div>
-                                                                <div class="hidden_end">100<span
-                                                                        class="counter_suffix">%</span></div>
-                                                                <div class="description">
-                                                                    <h6>24h/ 7 d&iacute;as a la semana</h6>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <script type="application/json"
-                                                            id="settings--7b5c2d4">{"start":10,"end":100,"decimal":0,"duration":0.5,"options":{"useEasing":false,"easingFn":"","useGrouping":true,"separator":",","decimal":".","prefix":"","suffix":"<span class=\"counter_suffix\">%<\/span>"}}</script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                        <div class="elementor-element elementor-element-d4482c9 gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="d4482c9" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="42" height="42" src="/images/decorations/home_06_icon_23.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="home_06_icon_23">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-16909a5 gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="16909a5" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="26" height="26" src="/images/decorations/home_06_icon_22.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="home_06_icon_22">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-cc54d9e gt3_moved_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="cc54d9e" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="72" height="74" src="/images/decorations/triangle_blue.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="triangle">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<section class="stats" id="estadisticas">
+    <div class="stats__container">
+
+        <div class="stats__layout">
+
+            <!-- ==========================================
+                 COLUMNA IZQUIERDA - CONTADORES
+            ========================================== -->
+
+            <div class="stats__data">
+
+                <!-- Fondo decorativo -->
+                <div class="stats__background" aria-hidden="true">
+                    <img src="/images/stats/home10_ellipse.png" alt="">
                 </div>
-            </div>
-            <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-25cb59d"
-                data-id="25cb59d" data-element_type="column">
-                <div class="elementor-column-wrap elementor-element-populated">
-                    <div class="elementor-widget-wrap">
-                        <div class="elementor-element elementor-element-ba6f5f3 animated-fast elementor-invisible elementor-widget elementor-widget-image"
-                            data-id="ba6f5f3" data-element_type="widget"
-                            data-settings="{&quot;_animation&quot;:&quot;fadeInRight&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="626" height="417" src="/images/stats/111.jpg"
-                                        class="attachment-full size-full" alt="" loading="lazy"
-                                        srcset="/images/stats/111.jpg 626w, /images/stats/111.jpg 300w, /images/stats/111.jpg 480w"
-                                        sizes="(max-width: 626px) 100vw, 626px" title="Global">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-f26a2c2 gt3_moved_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="f26a2c2" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="48" height="48" src="/images/decorations/circle.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="circle">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-6db9a99 gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="6db9a99" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="72" height="74" src="/images/decorations/triangle_orange.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="triangle">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-378900f gt3_rotated_element elementor-widget__width-initial elementor-absolute elementor-widget elementor-widget-image"
-                            data-id="378900f" data-element_type="widget"
-                            data-settings="{&quot;_position&quot;:&quot;absolute&quot;}"
-                            data-widget_type="image.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-image">
-                                    <img width="26" height="26" src="/images/decorations/home_06_icon_22.png"
-                                        class="attachment-full size-full" alt="" loading="lazy" title="home_06_icon_22">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                <!-- Grid de contadores -->
+                <div class="stats__grid">
+
+                    <!-- Estudiantes -->
+                    <article class="stats__item stats__item--students" data-counter data-start="10" data-end="8000"
+                        data-duration="900" data-separator=",">
+
+                        <span class="stats__number" aria-label="8000 estudiantes viajados">
+                            10
+                        </span>
+
+                        <p class="stats__label">
+                            Estudiantes
+                            <br>
+                            viajados
+                        </p>
+                    </article>
+
+                    <!-- Experiencia -->
+                    <article class="stats__item stats__item--experience" data-counter data-start="10" data-end="21"
+                        data-duration="900" data-separator="">
+
+                        <span class="stats__number" aria-label="21 años de experiencia">
+                            10
+                        </span>
+
+                        <p class="stats__label">
+                            Años de Experiencia
+                        </p>
+                    </article>
+
+                    <!-- Destinos -->
+                    <article class="stats__item stats__item--destinations" data-counter data-start="10" data-end="76"
+                        data-duration="900" data-separator="">
+
+                        <span class="stats__number" aria-label="76 destinos">
+                            10
+                        </span>
+
+                        <p class="stats__label">
+                            Destinos
+                        </p>
+                    </article>
+
+                    <!-- Disponibilidad -->
+                    <article class="stats__item stats__item--support" data-counter data-start="10" data-end="100"
+                        data-duration="900" data-separator="" data-suffix="%">
+
+                        <span class="stats__number" aria-label="100 por ciento de disponibilidad">
+                            10%
+                        </span>
+
+                        <p class="stats__label">
+                            24h / 7 días a la semana
+                        </p>
+                    </article>
+
                 </div>
+
+                <!-- Decoraciones columna izquierda -->
+
+                <div class="stats__shape stats__shape--left-plus" aria-hidden="true">
+
+                    <img src="/images/decorations/home_06_icon_23.png" alt="">
+                </div>
+
+                <div class="stats__shape stats__shape--left-cross" aria-hidden="true">
+
+                    <img src="/images/decorations/home_06_icon_22.png" alt="">
+                </div>
+
+                <div class="stats__shape stats__shape--left-triangle" aria-hidden="true">
+
+                    <img src="/images/decorations/triangle_blue.png" alt="">
+                </div>
+
             </div>
+
+            <!-- ==========================================
+                 COLUMNA DERECHA - IMAGEN
+            ========================================== -->
+
+            <div class="stats__visual">
+
+                <div class="stats__image">
+                    <img src="/images/stats/111.jpg" alt="Estudiante de Global Exchange en el extranjero"
+                        loading="lazy">
+                </div>
+
+                <!-- Decoraciones columna derecha -->
+
+                <div class="stats__shape stats__shape--right-circle" aria-hidden="true">
+
+                    <img src="/images/decorations/circle.png" alt="">
+                </div>
+
+                <div class="stats__shape stats__shape--right-triangle" aria-hidden="true">
+
+                    <img src="/images/decorations/triangle_orange.png" alt="">
+                </div>
+
+                <div class="stats__shape stats__shape--right-cross" aria-hidden="true">
+
+                    <img src="/images/decorations/home_06_icon_22.png" alt="">
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 </section>

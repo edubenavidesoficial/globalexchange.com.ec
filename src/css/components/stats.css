@@ -1,136 +1,553 @@
 /* ====================================================
-   STATS - Estilos para contadores GT3
+   STATS
+   Archivo: src/css/components/stats.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Sin GT3
+   - Contadores animados con JavaScript propio
    ==================================================== */
 
-/* ==========================================
-   CONTENEDOR PRINCIPAL
-========================================== */
-
-section[data-id="17a9ca9"] {
-    padding: 64px 0;
-    background-color: #f8f8f8;
-}
 
 /* ==========================================
-   IMAGEN DECORATIVA
+   SECCIÓN PRINCIPAL
 ========================================== */
 
-.elementor-widget-image[data-id="94d6df7"] {
-    text-align: center;
+.stats {
+    position: relative;
+
+    width: 100%;
+    padding: 90px 0;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
 }
 
-.elementor-widget-image[data-id="94d6df7"] img {
-    max-width: 300px;
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.stats__container {
+    width: 100%;
+    max-width: 1500px;
+
     margin: 0 auto;
+    padding: 0 55px;
 }
+
+
+/* ==========================================
+   DISTRIBUCIÓN GENERAL
+========================================== */
+
+.stats__layout {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 0.95fr) minmax(0, 1.05fr);
+
+    align-items: center;
+
+    gap: clamp(40px, 4vw, 70px);
+}
+
+
+/* ==========================================
+   COLUMNA IZQUIERDA
+========================================== */
+
+.stats__data {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 590px;
+}
+
+
+/* ==========================================
+   FONDO DECORATIVO
+========================================== */
+
+.stats__background {
+    position: absolute;
+    top: 50%;
+    left: 42%;
+    z-index: 1;
+
+    width: 118%;
+    max-width: 760px;
+
+    pointer-events: none;
+    user-select: none;
+
+    transform: translate(-50%, -50%);
+}
+
+.stats__background img {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
+
+    opacity: 0.75;
+}
+
 
 /* ==========================================
    GRID DE CONTADORES
 ========================================== */
 
-.elementor-section[data-id="d5a07b7"] {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 0;
+.stats__grid {
+    position: relative;
+    z-index: 5;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    width: 100%;
+    max-width: 590px;
+
+    gap: 30px 24px;
 }
 
+
 /* ==========================================
-   CADA COLUMNA DE CONTADOR
+   CADA CONTADOR
 ========================================== */
 
-.elementor-column .counter-wrapper {
+.stats__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    min-height: 245px;
+
+    padding: 28px 22px;
+
+    background-color: #ffffff;
+    border-radius: 10px;
+
+    box-shadow:
+        0 12px 30px rgba(59, 54, 99, 0.08),
+        0 3px 10px rgba(59, 54, 99, 0.04);
+
     text-align: center;
 }
 
+
 /* ==========================================
-   NÚMERO DEL CONTADOR
+   NÚMEROS
 ========================================== */
 
-.counter-wrapper .counter {
+.stats__number {
     display: block;
-    font-size: 40px;
-    font-weight: 800;
+
+    margin: 0 0 22px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: clamp(50px, 4vw, 64px);
+    font-weight: 500 !important;
+    font-style: normal;
+    line-height: 1;
+
     color: #e0cb45;
-    margin-bottom: 8px;
-}
 
-/* ==========================================
-   TEXTO CON GRADIENTE
-========================================== */
+    background-image: linear-gradient(96deg,
+            #ff5667 0%,
+            #ff9c43 100%);
 
-.text_gradient .counter {
-    background: linear-gradient(96deg, #e28838 0%, #e0cb45 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+
+    white-space: nowrap;
 }
 
+
 /* ==========================================
-   TEXTO DEBAJO DEL CONTADOR
+   DESCRIPCIONES
 ========================================== */
 
-.counter-wrapper .description p,
-.counter-wrapper .description h6 {
-    font-size: 18px;
-    color: #696687;
+.stats__label {
     margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.45;
+
+    color: #3b3663;
 }
 
+
 /* ==========================================
-   IMAGEN DECORATIVA DERECHA
+   COLUMNA DERECHA
 ========================================== */
 
-.elementor-widget-image[data-id="ba6f5f3"] img {
-    max-width: 100%;
-    border-radius: 12px;
+.stats__visual {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
 }
 
+
 /* ==========================================
-   ELEMENTOS DECORATIVOS
+   IMAGEN PRINCIPAL
 ========================================== */
 
-.elementor-absolute .gt3_rotated_element {
+.stats__image {
+    position: relative;
+    z-index: 5;
+
+    width: min(108%, 650px);
+
+    animation: stats-fade-right 0.9s ease both;
+}
+
+.stats__image img {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 12px 25px rgba(59, 54, 99, 0.15),
+        0 4px 10px rgba(59, 54, 99, 0.08);
+}
+
+
+/* ==========================================
+   DECORACIONES
+========================================== */
+
+.stats__shape {
     position: absolute;
+    z-index: 8;
+
+    display: block;
+
+    pointer-events: none;
+    user-select: none;
 }
 
-.elementor-absolute .gt3_moved_element {
-    position: absolute;
+.stats__shape img {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
 }
+
 
 /* ==========================================
-   RESPONSIVE
+   DECORACIONES IZQUIERDA
 ========================================== */
 
-@media (max-width: 768px) {
-    section[data-id="17a9ca9"] {
-        padding: 48px 0;
+.stats__shape--left-plus {
+    top: 11%;
+    left: -8%;
+
+    width: 20px;
+
+    animation: stats-rotate 18s linear infinite;
+}
+
+.stats__shape--left-cross {
+    top: 31%;
+    left: -18%;
+
+    width: 15px;
+
+    animation: stats-rotate 15s linear infinite reverse;
+}
+
+.stats__shape--left-triangle {
+    bottom: 10%;
+    left: -8%;
+
+    width: 38px;
+
+    animation:
+        stats-rotate 22s linear infinite,
+        stats-float 4s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   DECORACIONES DERECHA
+========================================== */
+
+.stats__shape--right-circle {
+    top: 7%;
+    right: -6%;
+
+    width: 28px;
+
+    animation: stats-float 3.2s ease-in-out infinite;
+}
+
+.stats__shape--right-triangle {
+    right: -15%;
+    bottom: 12%;
+
+    width: 42px;
+
+    animation:
+        stats-rotate 20s linear infinite reverse,
+        stats-float 4.5s ease-in-out infinite;
+}
+
+.stats__shape--right-cross {
+    top: 47%;
+    left: -9%;
+
+    width: 17px;
+
+    animation: stats-rotate 16s linear infinite;
+}
+
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+@keyframes stats-fade-right {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
     }
 
-    .counter-wrapper .counter {
-        font-size: 32px;
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes stats-rotate {
+    from {
+        transform: rotate(0deg);
     }
 
-    .counter-wrapper .description p,
-    .counter-wrapper .description h6 {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes stats-float {
+
+    0%,
+    100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -12px;
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1200px) {
+    .stats {
+        padding: 75px 0;
+    }
+
+    .stats__container {
+        padding: 0 35px;
+    }
+
+    .stats__layout {
+        gap: 45px;
+    }
+
+    .stats__data {
+        min-height: 520px;
+    }
+
+    .stats__grid {
+        max-width: 500px;
+
+        gap: 28px 22px;
+    }
+
+    .stats__item {
+        min-height: 220px;
+
+        padding: 24px 18px;
+    }
+
+    .stats__background {
+        width: 110%;
+        max-width: 620px;
+    }
+
+    .stats__number {
+        font-size: 54px;
+    }
+
+    .stats__label {
+        font-size: 17px;
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - TABLETS
+========================================== */
+
+@media (max-width: 900px) {
+    .stats {
+        padding: 65px 0;
+    }
+
+    .stats__container {
+        padding: 0 25px;
+    }
+
+    .stats__layout {
+        grid-template-columns: 1fr;
+
+        gap: 55px;
+    }
+
+    .stats__data {
+        min-height: 540px;
+    }
+
+    .stats__grid {
+        max-width: 540px;
+    }
+
+    .stats__visual {
+        width: 100%;
+    }
+
+    .stats__image {
+        width: min(100%, 626px);
+    }
+
+    .stats__shape--right-circle,
+    .stats__shape--right-triangle,
+    .stats__shape--right-cross {
+        display: none;
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - MÓVILES
+========================================== */
+
+@media (max-width: 600px) {
+    .stats {
+        padding: 50px 0;
+    }
+
+    .stats__container {
+        padding: 0 18px;
+    }
+
+    .stats__layout {
+        gap: 40px;
+    }
+
+    .stats__data {
+        min-height: auto;
+
+        padding: 40px 0;
+    }
+
+    .stats__background {
+        width: 120%;
+        max-width: 520px;
+    }
+
+    .stats__grid {
+        grid-template-columns: 1fr;
+
+        max-width: 320px;
+
+        gap: 26px;
+    }
+
+    .stats__item {
+        min-height: 190px;
+
+        padding: 24px 18px;
+    }
+
+    .stats__number {
+        margin-bottom: 18px;
+
+        font-size: 50px;
+        font-weight: 500 !important;
+    }
+
+    .stats__label {
         font-size: 16px;
     }
 
-    .elementor-section[data-id="d5a07b7"] {
-        padding: 16px 0;
+    .stats__shape {
+        display: none;
+    }
+
+    .stats__image img {
+        border-radius: 20px;
     }
 }
 
-@media (max-width: 480px) {
-    section[data-id="17a9ca9"] {
-        padding: 32px 0;
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 380px) {
+    .stats__container {
+        padding: 0 14px;
     }
 
-    .counter-wrapper .counter {
-        font-size: 28px;
+    .stats__number {
+        font-size: 42px;
+        font-weight: 500 !important;
     }
 
-    .counter-wrapper .description p,
-    .counter-wrapper .description h6 {
-        font-size: 14px;
+    .stats__label {
+        font-size: 15px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .stats__shape,
+    .stats__image {
+        animation: none !important;
     }
 }
