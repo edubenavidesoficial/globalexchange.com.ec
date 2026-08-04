@@ -285,27 +285,43 @@ Estado:
                     Tu futuro en el exterior comienza con una gran experiencia.
                 </p>
 
-                <form class="footer__search" action="https://globalexchange.com.ec/" method="get" role="search">
+                <div class="footer__search-wrapper">
 
-                    <label class="sr-only" for="footer-search">
-
-                        Buscar en el sitio
-                    </label>
-
-                    <input id="footer-search" class="footer__search-input" type="search" name="s" placeholder="Buscar"
-                        autocomplete="off">
-
-                    <button class="footer__search-button" type="submit" aria-label="Buscar">
+                    <button class="footer__search-toggle" type="button" aria-expanded="false"
+                        aria-controls="footer-search-panel" aria-label="Abrir buscador">
 
                         <svg viewBox="0 0 24 24" aria-hidden="true">
-
-                            <circle cx="10.5" cy="10.5" r="6.5">
-                            </circle>
-
+                            <circle cx="10.5" cy="10.5" r="6.5"></circle>
                             <path d="m15.5 15.5 5 5"></path>
                         </svg>
+
                     </button>
-                </form>
+
+                    <div class="footer__search-panel" id="footer-search-panel" aria-hidden="true">
+
+                        <form class="footer__search" action="https://globalexchange.com.ec/" method="get" role="search">
+
+                            <label class="sr-only" for="footer-search">
+                                Buscar en el sitio
+                            </label>
+
+                            <input id="footer-search" class="footer__search-input" type="search" name="s"
+                                placeholder="Search" autocomplete="off">
+
+                            <button class="footer__search-button" type="submit" aria-label="Buscar">
+
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="10.5" cy="10.5" r="6.5"></circle>
+                                    <path d="m15.5 15.5 5 5"></path>
+                                </svg>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
             </section>
 
         </div>

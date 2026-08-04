@@ -1,101 +1,173 @@
 /* ====================================================
-   MAP - Estilos para sección de mapa
-   Clase principal: .map
-   Basado en legacy/theme/base.css
+   MAP
+   Archivo: src/css/components/map.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Mapa y partners unidos
    ==================================================== */
 
+
 /* ==========================================
-   CONTENEDOR PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .map {
-    padding: var(--spacing-2xl) 0;
-    background-color: var(--white);
+    position: relative;
+
+    width: 100%;
+    padding: 30px 0 55px;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
 }
 
+
 /* ==========================================
-   CONTENEDOR INTERNO
+   CONTENEDOR
 ========================================== */
 
 .map__container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-}
-
-/* ==========================================
-   CONTENIDO
-========================================== */
-
-.map__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
+    padding: 0 30px;
 }
 
+
 /* ==========================================
-   TÍTULO
+   ENCABEZADO
 ========================================== */
 
-.map__title-text {
-    font-size: var(--font-2xl);
-    font-weight: var(--font-extrabold);
-    color: var(--heading);
+.map__header {
+    width: 100%;
+
+    margin-bottom: 35px;
+
     text-align: center;
-    line-height: 1.4;
-    max-width: 800px;
-    margin: 0 auto;
 }
 
+.map__title {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(28px, 2.7vw, 42px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #3b3663;
+}
+
+
 /* ==========================================
-   IMAGEN
+   IMAGEN DEL MAPA
 ========================================== */
 
 .map__image {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1450px;
+
     margin: 0 auto;
+
     text-align: center;
 }
 
 .map__image img {
+    display: block;
+
     width: 100%;
+    max-width: none;
     height: auto;
-    display: inline-block;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+
+    border-radius: 0;
+    box-shadow: none;
 }
+
 
 /* ==========================================
-   RESPONSIVE
+   PARTNERS
 ========================================== */
 
-@media (max-width: 768px) {
+.map__partners {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 18px auto 0;
+
+    text-align: center;
+}
+
+.map__partners img {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
     .map {
-        padding: var(--spacing-xl) 0;
+        padding: 25px 0 45px;
     }
 
-    .map__title-text {
-        font-size: var(--font-xl);
+    .map__container {
+        padding: 0 22px;
     }
 
-    .map__image img {
-        border-radius: var(--radius-md);
+    .map__header {
+        margin-bottom: 28px;
+    }
+
+    .map__title {
+        font-size: 30px;
+    }
+
+    .map__partners {
+        max-width: 720px;
+
+        margin-top: 16px;
     }
 }
 
-@media (max-width: 480px) {
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
     .map {
-        padding: var(--spacing-lg) 0;
+        padding: 20px 0 35px;
     }
 
-    .map__title-text {
-        font-size: var(--font-lg);
+    .map__container {
+        padding: 0 14px;
     }
 
-    .map__image img {
-        border-radius: var(--radius-sm);
+    .map__header {
+        margin-bottom: 22px;
+    }
+
+    .map__title {
+        font-size: 24px;
+        line-height: 1.25;
+    }
+
+    .map__partners {
+        margin-top: 12px;
     }
 }

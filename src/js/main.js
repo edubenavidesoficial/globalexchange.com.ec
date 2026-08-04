@@ -1,16 +1,22 @@
 // ====================================================
 // MAIN.JS
-// Punto de entrada principal de JavaScript
+// Punto de entrada principal
 // ====================================================
 
 import { initHeader } from './modules/header.js';
 import { initTyped } from './modules/typed-effect.js';
 import { initCounters } from './modules/counters.js';
+import { initPortfolioCarousel } from './modules/portfolio-carousel.js';
+import { initContactForm } from './modules/contact-form.js';
+import { initFooterSearch } from './modules/footer-search.js';
+import { initFloatingContact } from './modules/floating-contact.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ DOM cargado');
-
     initHeader();
     initTyped();
     initCounters();
+    initPortfolioCarousel();
+    initContactForm();
+    initFooterSearch();
+    initFloatingContact();
 });

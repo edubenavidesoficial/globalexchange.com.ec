@@ -1,221 +1,684 @@
 /* ====================================================
-   PROGRAMS GRID - Estilos para sección de programas
+   PROGRAMS GRID
+   Archivo: src/css/components/programs-grid.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Sin GT3
+   - Grid responsive
    ==================================================== */
+
+
+/* ==========================================
+   SECCIÓN PRINCIPAL
+========================================== */
+
+.programs-grid {
+    position: relative;
+
+    width: 100%;
+    padding: 65px 0 90px;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
 
 /* ==========================================
    CONTENEDOR PRINCIPAL
 ========================================== */
 
-.elementor-section[data-id="2612415"] {
-    padding: var(--spacing-3xl) 0;
-    background-color: var(--color-white);
+.programs-grid__container {
     position: relative;
-}
 
-.elementor-section[data-id="2612415"] .elementor-background-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.08fr) minmax(510px, 0.92fr);
+
+    align-items: center;
+
+    gap: 30px;
+
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.03);
-    pointer-events: none;
+    max-width: 1480px;
+
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
-.elementor-section[data-id="2612415"] .elementor-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
 
 /* ==========================================
-   COLUMNA IZQUIERDA - TEXTO Y BOTÓN
+   COLUMNA IZQUIERDA
 ========================================== */
 
-.elementor-column[data-id="070e3dc"] {
+.programs-grid__intro {
+    position: relative;
+
     display: flex;
     align-items: center;
-}
-
-.elementor-column[data-id="070e3dc"] .elementor-widget-wrap {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
-    padding: var(--spacing-2xl);
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
+
+    min-width: 0;
+    min-height: 650px;
+
+    /*
+       Permite que el mapa sobresalga hacia las tarjetas,
+       como ocurre en la página original.
+    */
+    overflow: visible;
 }
 
-/* Título */
-.elementor-widget-heading[data-id="95b5262"] {
-    margin-bottom: var(--spacing-lg);
+
+/* ==========================================
+   MAPA DECORATIVO
+========================================== */
+
+.programs-grid__map {
+    position: absolute;
+
+    top: 50%;
+    left: 54%;
+    z-index: 1;
+
+    width: 150%;
+    max-width: 1050px;
+    height: 690px;
+
+    background-image: url("/images/programs/world-map.png");
+    background-repeat: no-repeat;
+
+    /*
+       El PNG tiene márgenes transparentes.
+       Aumentamos solo el dibujo del fondo sin recortarlo
+       agresivamente con cover.
+    */
+    background-size: 152% auto;
+    background-position: 57% center;
+
+    opacity: 1;
+
+    filter:
+        brightness(0.97) contrast(1.08);
+
+    pointer-events: none;
+    user-select: none;
+
+    transform: translate(-50%, -50%);
 }
 
-.elementor-widget-heading[data-id="95b5262"] .elementor-heading-title {
-    font-size: var(--font-size-2xl);
-    font-weight: 800;
-    color: var(--color-dark);
-    line-height: 1.4;
+
+/* ==========================================
+   CONTENIDO IZQUIERDO
+========================================== */
+
+.programs-grid__intro-content {
+    position: relative;
+    z-index: 3;
+
+    width: 100%;
+    max-width: 640px;
+
+    text-align: center;
 }
 
-/* Botón */
-.gt3-core-button--alignment_inline .gt3_module_button_elementor a {
-    display: inline-block;
-    background: var(--gradient-primary);
-    color: var(--color-white);
-    padding: var(--spacing-md) var(--spacing-2xl);
-    border-radius: var(--border-radius-md);
-    text-decoration: none;
+.programs-grid__heading {
+    width: 100%;
+    max-width: 590px;
+
+    margin: 0 auto 42px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(29px, 2.1vw, 37px);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.17;
+
+    color: #f7ad43;
+}
+
+.programs-grid__description {
+    width: 100%;
+    max-width: 630px;
+
+    margin: 0 auto 60px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(25px, 1.9vw, 34px);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.18;
+
+    color: #f7ad43;
+}
+
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.programs-grid__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 150px;
+    min-height: 48px;
+
+    padding: 12px 26px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 12px;
     font-weight: 600;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    line-height: 1;
+
+    color: #3b3663;
+    background-color: rgba(255, 255, 255, 0.9);
+
+    border: 1px solid #e9c43f;
+    border-radius: 5px;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    transition:
+        color 0.3s ease,
+        background-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-.gt3-core-button--alignment_inline .gt3_module_button_elementor a:hover {
+.programs-grid__button:hover,
+.programs-grid__button:focus-visible {
+    color: #ffffff;
+    background-color: #f7ad43;
+
     transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+
+    box-shadow:
+        0 10px 22px rgba(247, 173, 67, 0.24);
 }
 
-.gt3-core-button--alignment_inline .gt3_module_button_elementor .elementor_gt3_btn_text {
-    color: var(--color-white);
-}
 
 /* ==========================================
-   COLUMNA DERECHA - GRID DE PROGRAMAS
+   GRID DE TARJETAS
 ========================================== */
 
-.elementor-column[data-id="305a0ea"] .elementor-widget-wrap {
-    padding: var(--spacing-md);
-}
+.programs-grid__cards {
+    position: relative;
+    z-index: 5;
 
-/* Grid interno */
-.elementor-section[data-id="bac22bd"] .elementor-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-lg);
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    align-items: stretch;
+
+    width: 100%;
+
+    gap: 30px;
+
+    /*
+       No añadimos margin-left porque separaba demasiado
+       las tarjetas del mapa.
+    */
+    margin: 0;
 }
 
+
 /* ==========================================
-   TARJETAS DE PROGRAMAS (CARDS)
+   TARJETAS
 ========================================== */
 
-/* Cada columna de tarjeta */
-.elementor-column[data-id="e66bff8"],
-.elementor-column[data-id="a2467fa"] {
+.programs-grid__card {
+    position: relative;
+
+    display: flex;
+
+    min-width: 0;
+    min-height: 250px;
+
+    background-color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    box-shadow:
+        0 14px 36px rgba(59, 54, 99, 0.09),
+        0 4px 12px rgba(59, 54, 99, 0.04);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.programs-grid__card--outlined {
+    border: 1px dashed #696687;
+    box-shadow: none;
+}
+
+.programs-grid__card-link {
+    position: relative;
+    z-index: 2;
+
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
-}
+    align-items: flex-start;
 
-/* Tarjeta individual */
-.gt3-core-imagebox-wrapper {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    text-align: center;
-    padding: var(--spacing-lg);
-}
-
-.gt3-core-imagebox-wrapper:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-}
-
-/* Imagen de la tarjeta */
-.gt3-core-imagebox-img {
-    display: block;
-    margin-bottom: var(--spacing-md);
-}
-
-.gt3-core-imagebox-img img {
     width: 100%;
-    max-width: 150px;
-    height: auto;
-    border-radius: var(--border-radius-md);
-    margin: 0 auto;
-}
 
-/* Título de la tarjeta */
-.gt3-core-imagebox-title h3 {
-    font-size: var(--font-size-md);
-    font-weight: 700;
-    color: var(--color-dark);
-    margin: 0;
-    line-height: 1.3;
-}
+    padding: 38px 38px 34px;
 
-.gt3-core-imagebox-title a {
-    color: var(--color-dark);
+    color: inherit;
     text-decoration: none;
-    transition: color var(--transition-fast);
 }
 
-.gt3-core-imagebox-title a:hover {
-    color: var(--color-primary);
-}
 
 /* ==========================================
-   RESPONSIVE
+   FONDO ANIMADO DE TARJETA
 ========================================== */
 
-@media (max-width: 1024px) {
-    .elementor-section[data-id="bac22bd"] .elementor-container {
-        gap: var(--spacing-md);
+.programs-grid__card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background: linear-gradient(135deg,
+            #ffb34a 0%,
+            #efca48 100%);
+
+    opacity: 0;
+
+    transform: translateY(101%);
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.4s ease;
+}
+
+.programs-grid__card:hover,
+.programs-grid__card:focus-within {
+    border-color: transparent;
+
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 22px 44px rgba(59, 54, 99, 0.15),
+        0 8px 18px rgba(59, 54, 99, 0.07);
+}
+
+.programs-grid__card:hover::before,
+.programs-grid__card:focus-within::before {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+.programs-grid__card-link>* {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ==========================================
+   IMÁGENES DE LAS TARJETAS
+========================================== */
+
+.programs-grid__card-image {
+    display: block;
+
+    width: 76px;
+    height: 76px;
+
+    margin: 0 0 26px;
+
+    opacity: 1;
+    visibility: visible;
+
+    border-radius: 7px;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.programs-grid__card:hover .programs-grid__card-image,
+.programs-grid__card:focus-within .programs-grid__card-image {
+    transform: scale(1.06);
+
+    box-shadow:
+        0 8px 18px rgba(59, 54, 99, 0.16);
+}
+
+
+/* ==========================================
+   TÍTULOS DE TARJETA
+========================================== */
+
+.programs-grid__card-title {
+    width: 100%;
+    max-width: 230px;
+
+    margin: 0;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(20px, 1.45vw, 26px);
+    font-weight: 800;
+    line-height: 1.25;
+
+    color: #24243f;
+
+    text-transform: uppercase;
+
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+
+    transition: color 0.35s ease;
+}
+
+.programs-grid__card:hover .programs-grid__card-title,
+.programs-grid__card:focus-within .programs-grid__card-title {
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   PUNTOS DECORATIVOS
+========================================== */
+
+.programs-grid__decoration {
+    position: absolute;
+    z-index: 8;
+
+    display: block;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    animation:
+        programs-grid-float 3s ease-in-out infinite;
+}
+
+.programs-grid__decoration--dot-left {
+    top: 11%;
+    left: 2%;
+
+    background-color: #42d7c0;
+}
+
+.programs-grid__decoration--dot-top {
+    top: 2%;
+    right: 2%;
+
+    background-color: #8539df;
+
+    animation-delay: 0.4s;
+}
+
+.programs-grid__decoration--dot-right {
+    top: 31%;
+    right: 0;
+
+    background-color: #ebd20b;
+
+    animation-delay: 0.8s;
+}
+
+.programs-grid__decoration--dot-bottom {
+    right: 24%;
+    bottom: 5%;
+
+    background-color: #f0ae31;
+
+    animation-delay: 1.1s;
+}
+
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+@keyframes programs-grid-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
-    .gt3-core-imagebox-wrapper {
-        padding: var(--spacing-md);
+    50% {
+        transform: translateY(-8px);
     }
 }
 
-@media (max-width: 768px) {
-    .elementor-section[data-id="2612415"] {
-        padding: var(--spacing-2xl) 0;
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1200px) {
+    .programs-grid {
+        padding: 60px 0 80px;
     }
 
-    .elementor-column[data-id="070e3dc"] .elementor-widget-wrap {
-        padding: var(--spacing-lg);
-        margin-bottom: var(--spacing-xl);
+    .programs-grid__container {
+        grid-template-columns:
+            minmax(0, 1fr) minmax(465px, 0.92fr);
+
+        gap: 25px;
+
+        padding: 0 28px;
     }
 
-    .elementor-widget-heading[data-id="95b5262"] .elementor-heading-title {
-        font-size: var(--font-size-xl);
+    .programs-grid__intro {
+        min-height: 570px;
     }
 
-    .elementor-section[data-id="bac22bd"] .elementor-container {
+    .programs-grid__map {
+        top: 50%;
+        left: 53%;
+
+        width: 150%;
+        max-width: 940px;
+        height: 650px;
+
+        background-size: 150% auto;
+        background-position: 57% center;
+    }
+
+    .programs-grid__cards {
+        gap: 24px;
+    }
+
+    .programs-grid__card {
+        min-height: 230px;
+    }
+
+    .programs-grid__card-link {
+        padding: 30px 28px;
+    }
+
+    .programs-grid__card-title {
+        font-size: 21px;
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 950px) {
+    .programs-grid__container {
         grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+
+        gap: 55px;
     }
 
-    .elementor-column[data-id="e66bff8"],
-    .elementor-column[data-id="a2467fa"] {
-        gap: var(--spacing-md);
+    .programs-grid__intro {
+        min-height: 520px;
     }
 
-    .gt3-core-imagebox-wrapper {
-        padding: var(--spacing-md);
+    .programs-grid__intro-content {
+        max-width: 650px;
     }
 
-    .gt3-core-imagebox-title h3 {
-        font-size: var(--font-size-sm);
+    .programs-grid__map {
+        top: 50%;
+        left: 50%;
+
+        width: 125%;
+        max-width: 800px;
+        height: 610px;
+
+        background-size: 145% auto;
+        background-position: center;
+    }
+
+    .programs-grid__cards {
+        width: 100%;
+        max-width: 650px;
+
+        margin: 0 auto;
     }
 }
 
-@media (max-width: 480px) {
-    .elementor-section[data-id="2612415"] {
-        padding: var(--spacing-xl) 0;
+
+/* ==========================================
+   MÓVILES
+========================================== */
+
+@media (max-width: 650px) {
+    .programs-grid {
+        padding: 50px 0 65px;
     }
 
-    .elementor-column[data-id="070e3dc"] .elementor-widget-wrap {
-        padding: var(--spacing-md);
+    .programs-grid__container {
+        padding: 0 18px;
     }
 
-    .elementor-widget-heading[data-id="95b5262"] .elementor-heading-title {
-        font-size: var(--font-size-lg);
+    .programs-grid__intro {
+        min-height: 450px;
     }
 
-    .gt3-core-imagebox-title h3 {
-        font-size: var(--font-size-xs);
+    .programs-grid__map {
+        top: 50%;
+        left: 50%;
+
+        width: 165%;
+        max-width: 720px;
+        height: 540px;
+
+        background-size: 150% auto;
+        background-position: center;
+
+        opacity: 0.9;
+    }
+
+    .programs-grid__heading {
+        margin-bottom: 28px;
+
+        font-size: 25px;
+    }
+
+    .programs-grid__description {
+        margin-bottom: 38px;
+
+        font-size: 23px;
+    }
+
+    .programs-grid__cards {
+        grid-template-columns: 1fr;
+
+        width: 100%;
+        max-width: 360px;
+
+        gap: 22px;
+
+        margin: 0 auto;
+    }
+
+    .programs-grid__card {
+        min-height: 220px;
+    }
+
+    .programs-grid__card-link {
+        align-items: center;
+
+        padding: 28px 24px;
+
+        text-align: center;
+    }
+
+    .programs-grid__card-title {
+        max-width: 270px;
+
+        font-size: 21px;
+    }
+}
+
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 400px) {
+    .programs-grid__container {
+        padding: 0 14px;
+    }
+
+    .programs-grid__intro {
+        min-height: 430px;
+    }
+
+    .programs-grid__map {
+        width: 190%;
+        height: 520px;
+
+        background-size: 155% auto;
+    }
+
+    .programs-grid__heading {
+        font-size: 22px;
+    }
+
+    .programs-grid__description {
+        font-size: 20px;
+    }
+
+    .programs-grid__button {
+        width: 100%;
+        max-width: 240px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .programs-grid__card,
+    .programs-grid__card::before,
+    .programs-grid__card-image,
+    .programs-grid__decoration {
+        animation: none;
+        transition: none;
     }
 }

@@ -1,0 +1,160 @@
+<!--
+====================================================
+COMPONENTE: PORTFOLIO
+
+Proyecto:
+Global Exchange - Migración a Vite
+
+Estado:
+- HTML propio y semántico
+- Sin Elementor
+- Sin WordPress
+- Sin GT3
+- Carrusel propio con JavaScript
+====================================================
+-->
+
+<section class="portfolio" id="programas-destacados">
+    <div class="portfolio__container">
+
+        <!-- Encabezado -->
+        <header class="portfolio__header">
+            <p class="portfolio__eyebrow">
+                PROGRAMAS
+            </p>
+
+            <h2 class="portfolio__title">
+                Nacionales &amp; internacionales
+            </h2>
+
+            <img class="portfolio__logo" src="/images/logo-1.png" alt="Global Exchange">
+        </header>
+
+        <!-- Decoración de fondo -->
+        <div class="portfolio__background" aria-hidden="true">
+            <img src="/images/portfolio/home10_ellipse2.png" alt="">
+        </div>
+
+        <!-- Carrusel -->
+        <div class="portfolio__carousel" data-portfolio-carousel aria-roledescription="carrusel">
+
+            <div class="portfolio__viewport">
+
+                <div class="portfolio__track">
+
+                    <!-- Curso local -->
+                    <article class="portfolio__slide">
+                        <a class="portfolio__card" href="/cursos-idioma-local/">
+
+                            <img class="portfolio__image" src="/images/portfolio/idioma-local.jpg"
+                                alt="Estudiantes en cursos de idioma local" loading="lazy">
+
+                            <span class="portfolio__overlay"></span>
+
+                            <div class="portfolio__content">
+                                <h3 class="portfolio__card-title">
+                                    Cursos de idioma local
+                                </h3>
+
+                                <p class="portfolio__category">
+                                    Programas Nacionales
+                                </p>
+                            </div>
+
+                        </a>
+                    </article>
+
+                    <!-- Español para extranjeros -->
+                    <article class="portfolio__slide">
+                        <a class="portfolio__card" href="/espanol-para-extranjeros-ecoturismo/">
+
+                            <img class="portfolio__image" src="/images/portfolio/espanol-extranjeros.jpg"
+                                alt="Estudiantes de español para extranjeros" loading="lazy">
+
+                            <span class="portfolio__overlay"></span>
+
+                            <div class="portfolio__content">
+                                <h3 class="portfolio__card-title">
+                                    Español para extranjeros
+                                </h3>
+
+                                <p class="portfolio__category">
+                                    Programas Nacionales
+                                </p>
+                            </div>
+
+                        </a>
+                    </article>
+
+                    <!-- Idiomas en el extranjero -->
+                    <article class="portfolio__slide">
+                        <a class="portfolio__card" href="/cursos-de-idiomas-en-el-extranjero-2/">
+
+                            <img class="portfolio__image" src="/images/portfolio/idiomas-extranjero.jpg"
+                                alt="Cursos de idiomas en el extranjero" loading="lazy">
+
+                            <span class="portfolio__overlay"></span>
+
+                            <div class="portfolio__content">
+                                <h3 class="portfolio__card-title">
+                                    Cursos de idiomas en el extranjero
+                                </h3>
+
+                                <p class="portfolio__category">
+                                    Programas Internacionales
+                                </p>
+                            </div>
+
+                        </a>
+                    </article>
+
+                    <!-- Pasantías -->
+                    <article class="portfolio__slide">
+                        <a class="portfolio__card" href="/pasantias-profesionales-en-el-exterior/">
+
+                            <img class="portfolio__image" src="/images/portfolio/pasantias-exterior.jpg"
+                                alt="Pasantías profesionales en el exterior" loading="lazy">
+
+                            <span class="portfolio__overlay"></span>
+
+                            <div class="portfolio__content">
+                                <h3 class="portfolio__card-title">
+                                    Pasantías profesionales en el exterior
+                                </h3>
+
+                                <p class="portfolio__category">
+                                    Programas Internacionales
+                                </p>
+                            </div>
+
+                        </a>
+                    </article>
+
+                </div>
+            </div>
+
+            <!-- Puntos -->
+            <div class="portfolio__dots" role="tablist" aria-label="Seleccionar programa">
+
+                <button class="portfolio__dot is-active" type="button" data-carousel-dot="0"
+                    aria-label="Mostrar primer grupo" aria-selected="true">
+                </button>
+
+                <button class="portfolio__dot" type="button" data-carousel-dot="1" aria-label="Mostrar segundo grupo"
+                    aria-selected="false">
+                </button>
+
+                <button class="portfolio__dot" type="button" data-carousel-dot="2" aria-label="Mostrar tercer grupo"
+                    aria-selected="false">
+                </button>
+
+                <button class="portfolio__dot" type="button" data-carousel-dot="3" aria-label="Mostrar cuarto grupo"
+                    aria-selected="false">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

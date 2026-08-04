@@ -2,92 +2,96 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Global Exchange - Tu futuro en el exterior</title>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- ==========================================
-    GOOGLE FONTS - Rubik (la fuente real del sitio)
-    ========================================== -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet" />
+     <title>Global Exchange - Tu futuro en el exterior</title>
 
-    <!-- ==========================================
-    FONTAWESOME (temporal mientras resolvemos la local)
+     <!-- ==========================================
+         GOOGLE FONTS
     ========================================== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
-    <!-- ==========================================
-    CSS PRINCIPAL (cargado por Vite)
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
+          rel="stylesheet" />
+
+     <!-- ==========================================
+         FONTAWESOME
+         Temporal mientras usamos la versión CDN
     ========================================== -->
-    <link rel="stylesheet" href="/src/css/main.css" />
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+     <!-- ==========================================
+         CSS PRINCIPAL
+    ========================================== -->
+
+     <link rel="stylesheet" href="/src/css/main.css" />
 </head>
 
 <body>
 
-    <!-- ==========================================
-    CONTENIDO PRINCIPAL
-    Cada sección se importa desde su archivo HTML
+     <!-- ==========================================
+         HEADER
     ========================================== -->
 
-    <!-- HEADER -->
-    <header id="header">
-        <!-- El contenido se carga desde src/components/header/Header.html -->
-        <!-- Incluido vía HTML includes o build tool -->
-        @@include('./src/components/header/Header.html')
-    </header>
+     @@include('./src/components/header/Header.html')
 
-    <!-- MAIN -->
-    <main>
 
-        <!-- HERO -->
-        <section id="hero">
-            @@include('./src/components/hero/Hero.html')
-        </section>
-
-        <!-- PROGRAMS -->
-        <section id="programs">
-            @@include('./src/components/programs/Programs.html')
-        </section>
-
-        <!-- ABOUT -->
-        <section id="about">
-            @@include('./src/components/about/About.html')
-        </section>
-
-        <!-- STATS -->
-        <section id="stats">
-            @@include('./src/components/stats/Stats.html')
-        </section>
-
-        <!-- SERVICES -->
-        <section id="services">
-            @@include('./src/components/services/Services.html')
-        </section>
-
-        <!-- CONTACT -->
-        <section id="contact">
-            @@include('./src/components/contact/Contact.html')
-        </section>
-
-        <!-- MAP -->
-        <section id="map">
-            @@include('./src/components/map/Map.html')
-        </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer id="footer">
-        @@include('./src/components/footer/Footer.html')
-    </footer>
-
-    <!-- ==========================================
-    SCRIPTS (FASE 6)
+     <!-- ==========================================
+         CONTENIDO PRINCIPAL
     ========================================== -->
-    <script type="module" src="/src/js/main.js"></script>
+
+     <main>
+
+          <!-- HERO -->
+          @@include('./src/components/hero/Hero.html')
+
+          <!-- PROGRAMS - TEXTO INTRODUCTORIO -->
+          @@include('./src/components/programs/Programs.html')
+
+          <!-- PROGRAMS - MAPA Y TARJETAS -->
+          @@include('./src/components/programs/Programs_Grid.html')
+
+          <!-- ABOUT -->
+          @@include('./src/components/about/About.html')
+
+          <!-- STATS -->
+          @@include('./src/components/stats/Stats.html')
+
+          <!-- PORTFOLIO -->
+          @@include('./src/components/portfolio/Portfolio.html')
+
+          <!-- SERVICES -->
+          @@include('./src/components/services/Services.html')
+
+          <!-- CONTACT -->
+          @@include('./src/components/contact/Contact.html')
+
+          <!-- CALL TO ACTION -->
+          @@include('./src/components/call-to-action/Call_To_Action.html')
+
+          <!-- MAP -->
+          @@include('./src/components/map/Map.html')
+
+     </main>
+
+
+     <!-- ==========================================
+         FOOTER
+    ========================================== -->
+
+     @@include('./src/components/footer/Footer.html')
+     @@include('./src/components/floating-contact/Floating_Contact.html')
+
+     <!-- ==========================================
+         JAVASCRIPT PRINCIPAL
+    ========================================== -->
+
+     <script type="module" src="/src/js/main.js"></script>
+
 </body>
 
 </html>

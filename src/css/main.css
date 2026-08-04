@@ -49,10 +49,10 @@
 @import './components/contact.css';
 @import './components/call-to-action.css';
 @import './components/map.css';
-@import './components/partners.css';
 @import './components/stats.css';
 @import './components/programs-grid.css';
 @import './components/portfolio.css';
+@import './components/floating-contact.css';
 
 /* ==========================================
    PAGES

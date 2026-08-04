@@ -1,138 +1,217 @@
 /* ====================================================
-   PROGRAMS - Estilos para sección de programas
-   Clase principal: .programs
-   Incluye: Programs.html + Programs_Title.html
-   Basado en legacy/theme/base.css
+   PROGRAMS
+   Archivo: src/css/components/programs.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Sin GT3
    ==================================================== */
 
+
 /* ==========================================
-   CONTENEDOR PRINCIPAL - PROGRAMS
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .programs {
-    padding: var(--spacing-3xl) var(--spacing-xl);
-    background-color: var(--white);
+    position: relative;
+
+    width: 100%;
+
+    padding: 38px 24px 30px;
+
+    background-color: #ffffff;
+
     text-align: center;
+
+    overflow: hidden;
 }
 
+
 /* ==========================================
-   CONTENEDOR INTERNO
+   CONTENEDOR
 ========================================== */
 
 .programs__container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-}
-
-/* ==========================================
-   CONTENIDO
-========================================== */
-
-.programs__content {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+
     width: 100%;
+    max-width: 1500px;
+
+    margin: 0 auto;
 }
 
+
 /* ==========================================
-   TÍTULO - PROGRAMS
+   TÍTULO
 ========================================== */
 
 .programs__title {
-    font-size: var(--font-2xl);
-    font-weight: var(--font-extrabold);
-    color: var(--heading);
-    line-height: 1.4;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1240px;
+
     margin: 0 auto;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(30px, 2.25vw, 43px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.08;
+    letter-spacing: -0.4px;
+
+    color: #3b3663;
+
+    text-align: center;
 }
 
-.programs__title i {
-    font-style: italic;
-    font-weight: var(--font-semibold);
-    color: var(--heading);
-}
 
 /* ==========================================
-   PROGRAMS TITLE - Títulos decorativos
-   (para Programs_Title.html)
+   COMPATIBILIDAD CON PROGRAMS TITLE
+   Mantener únicamente si Programs_Title.html
+   todavía forma parte del proyecto.
 ========================================== */
 
 .programs-title__text {
-    font-size: var(--font-sm);
+    margin: 0 0 10px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 1.5px;
+
+    color: #696687;
+
+    text-align: center;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-light);
-    margin-bottom: var(--spacing-sm);
 }
 
 .programs-title__heading {
-    font-size: var(--font-2xl);
-    font-weight: var(--font-extrabold);
-    color: var(--heading);
-    margin-bottom: var(--spacing-lg);
+    margin: 0 0 24px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #3b3663;
+
+    text-align: center;
 }
 
 .programs-title__logo {
+    width: 100%;
     max-width: 300px;
+
     margin: 0 auto;
 }
 
 .programs-title__logo img {
-    width: 100%;
-    height: auto;
     display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
 }
+
 
 /* ==========================================
-   RESPONSIVE
+   RESPONSIVE - PANTALLAS MEDIANAS
 ========================================== */
 
-@media (max-width: 1024px) {
-    .programs__title {
-        font-size: var(--font-xl);
+@media (max-width: 1200px) {
+    .programs {
+        padding: 36px 28px 30px;
     }
 
-    .programs-title__heading {
-        font-size: var(--font-xl);
+    .programs__title {
+        max-width: 1050px;
+
+        font-size: clamp(29px, 2.6vw, 38px);
+        line-height: 1.12;
     }
 }
 
-@media (max-width: 768px) {
+
+/* ==========================================
+   RESPONSIVE - TABLETS
+========================================== */
+
+@media (max-width: 900px) {
     .programs {
-        padding: var(--spacing-2xl) var(--spacing-md);
+        padding: 34px 24px 28px;
     }
 
     .programs__title {
-        font-size: var(--font-lg);
-    }
+        max-width: 760px;
 
-    .programs-title__heading {
-        font-size: var(--font-lg);
+        font-size: 30px;
+        line-height: 1.18;
+        letter-spacing: -0.2px;
     }
 
     .programs-title__logo {
-        max-width: 200px;
+        max-width: 230px;
     }
 }
 
-@media (max-width: 480px) {
+
+/* ==========================================
+   RESPONSIVE - MÓVILES
+========================================== */
+
+@media (max-width: 650px) {
     .programs {
-        padding: var(--spacing-xl) var(--spacing-sm);
+        padding: 30px 18px 26px;
     }
 
     .programs__title {
-        font-size: var(--font-md);
+        max-width: 520px;
+
+        font-size: 24px;
+        line-height: 1.22;
+        letter-spacing: 0;
     }
 
     .programs-title__heading {
-        font-size: var(--font-md);
+        font-size: 27px;
     }
 
     .programs-title__logo {
-        max-width: 150px;
+        max-width: 190px;
+    }
+}
+
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 400px) {
+    .programs {
+        padding: 26px 15px 22px;
+    }
+
+    .programs__title {
+        font-size: 21px;
+        line-height: 1.25;
+    }
+
+    .programs-title__text {
+        font-size: 12px;
+    }
+
+    .programs-title__heading {
+        font-size: 24px;
+    }
+
+    .programs-title__logo {
+        max-width: 160px;
     }
 }

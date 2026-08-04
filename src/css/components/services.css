@@ -1,207 +1,726 @@
 /* ====================================================
-   SERVICES - Estilos para la sección Servicios
-   Clase principal: .services
-   Basado en el diseño original
+   SERVICES
+   Archivo: src/css/components/services.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Estado:
+   - CSS propio
+   - Sin Elementor
+   - Sin WordPress
+   - Sin GT3
+   - Grid responsive de tres columnas
+   - Hover animado propio
    ==================================================== */
 
-/* ==========================================
-   TÍTULO DE LA SECCIÓN
-========================================== */
-
-.services-title {
-    position: relative;
-    text-align: center;
-    padding: 40px 0 30px;
-}
-
-.services-title__sub {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #3b3663;
-    margin: 0;
-}
-
-.services-title__main {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 30px;
-    line-height: 40px;
-    color: #3b3663;
-    margin: 5px 0 0;
-}
-
-/* Decoraciones del título */
-.services-title__deco {
-    pointer-events: none;
-}
 
 /* ==========================================
-   GRID DE SERVICIOS (3 columnas)
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .services {
     position: relative;
+
+    width: 100%;
+    padding: 0 0 100px;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
 }
 
-.services__container {
-    max-width: 1140px;
-    margin: 0 auto;
-}
 
-.elementor-row {
-    display: flex;
-    flex-wrap: wrap;
-}
+/* ==========================================
+   ENCABEZADO
+========================================== */
 
-/* Columnas */
-.services__col {
-    width: 33.333%;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
+.services__header {
+    position: relative;
 
-.services__col-content {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 185px;
+
+    padding: 50px 20px 45px;
+
+    text-align: center;
+}
+
+.services__eyebrow {
+    position: relative;
+    z-index: 5;
+
+    margin: 0 0 12px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+
+    color: #3b3663;
+
+    text-transform: uppercase;
+}
+
+.services__title {
+    position: relative;
+    z-index: 5;
+
+    margin: 0;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(30px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #3b3663;
+}
+
+
+/* ==========================================
+   DECORACIONES DEL ENCABEZADO
+========================================== */
+
+.services__decoration {
+    position: absolute;
+    z-index: 2;
+
+    display: block;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+.services__decoration img {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+    height: auto;
+}
+
+.services__decoration--cross-left {
+    top: 12%;
+    left: 30%;
+
+    width: 10px;
+
+    animation: services-rotate 16s linear infinite;
+}
+
+.services__decoration--triangle-orange {
+    top: 12%;
+    right: 22%;
+
+    width: 28px;
+
+    animation: services-rotate 20s linear infinite reverse;
+}
+
+.services__decoration--triangle-blue {
+    bottom: 4%;
+    left: 19%;
+
+    width: 30px;
+
+    animation: services-float 4s ease-in-out infinite;
+}
+
+.services__decoration--cross-right {
+    top: 38%;
+    right: 13%;
+
+    width: 12px;
+
+    animation: services-rotate 14s linear infinite;
+}
+
+.services__decoration--plus {
+    right: 31%;
+    bottom: 16%;
+
+    width: 15px;
+
+    animation: services-float 3.5s ease-in-out infinite;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.services__container {
+    width: 100%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+
+/* ==========================================
+   COLUMNAS
+========================================== */
+
+.services__columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    align-items: start;
+
     gap: 30px;
 }
 
+.services__column {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    gap: 30px;
+}
+
+
 /* ==========================================
-   TARJETAS DE SERVICIOS
+   TARJETAS
 ========================================== */
 
 .services__card {
-    background: #ffffff;
+    position: relative;
+    isolation: isolate;
+
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+
+    align-items: start;
+    gap: 20px;
+
+    width: 100%;
+
+    padding: 28px 24px;
+
+    background-color: #ffffff;
+    border: 1px solid rgba(59, 54, 99, 0.05);
     border-radius: 10px;
-    padding: 25px 20px;
-    transition: box-shadow 0.3s ease;
-    border: 1px solid rgba(224, 203, 69, 0.1);
+
+    box-shadow:
+        0 14px 35px rgba(59, 54, 99, 0.07),
+        0 3px 10px rgba(59, 54, 99, 0.03);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
 }
 
-.services__card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+/*
+   El fondo entra desde abajo, como el efecto
+   utilizado por la tarjeta original.
+*/
+
+.services__card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background: linear-gradient(135deg,
+            #ffb34a 0%,
+            #ffad4b 48%,
+            #efca48 100%);
+
+    transform: translateY(101%);
+
+    transition: transform 0.4s ease;
 }
 
-/* Icono del servicio */
-.services__card .gt3-core-imagebox-img {
-    display: inline-block;
-    margin-right: 15px;
-    vertical-align: middle;
-    flex-shrink: 0;
+.services__card:hover,
+.services__card:focus-within {
+    border-color: transparent;
+
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 22px 46px rgba(59, 54, 99, 0.16),
+        0 8px 18px rgba(59, 54, 99, 0.08);
 }
 
-.services__card .gt3-core-imagebox-img img {
-    width: 60px;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
+.services__card:hover::before,
+.services__card:focus-within::before {
+    transform: translateY(0);
 }
 
-.services__card:hover .gt3-core-imagebox-img img {
-    transform: scale(1.05);
-}
 
-/* Contenido de la tarjeta */
-.services__card .gt3-core-imagebox-wrapper {
+/* ==========================================
+   ICONOS
+========================================== */
+
+.services__icon {
+    position: relative;
+    z-index: 2;
+
     display: flex;
     align-items: flex-start;
+    justify-content: center;
+
+    width: 72px;
+
+    color: inherit;
+    text-decoration: none;
 }
 
-.services__card .gt3-core-imagebox-content {
-    flex: 1;
+.services__icon img {
+    display: block;
+
+    width: 64px;
+    max-width: 64px;
+    height: auto;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.35s ease,
+        filter 0.35s ease;
+}
+
+.services__card:hover .services__icon img,
+.services__card:focus-within .services__icon img {
+    transform: scale(1.08);
+}
+
+
+/* ==========================================
+   CONTENIDO DE LAS TARJETAS
+========================================== */
+
+.services__card-content {
+    position: relative;
+    z-index: 2;
+
     min-width: 0;
 }
 
+
+/* ==========================================
+   TÍTULOS DE TARJETAS
+========================================== */
+
 .services__card-title {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
+    margin: 0 0 12px;
+
+    font-family: "Nunito", sans-serif;
     font-size: 18px;
+    font-weight: 800;
     line-height: 1.3;
+
     color: #3b3663;
-    margin: 0 0 8px;
+
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.2px;
+
+    transition: color 0.35s ease;
 }
 
 .services__card-title a {
     color: inherit;
+
     text-decoration: none;
-    transition: color 0.3s ease;
+
+    transition: color 0.35s ease;
 }
 
 .services__card-title a:hover {
-    color: #e0cb45;
+    color: #e28838;
 }
 
-.services__card-desc {
-    font-family: 'Rubik', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    color: #696687;
-    margin: 0 0 5px;
+/* El hover de la tarjeta tiene prioridad */
+.services__card:hover .services__card-title,
+.services__card:hover .services__card-title a,
+.services__card:focus-within .services__card-title,
+.services__card:focus-within .services__card-title a {
+    color: #ffffff;
 }
 
-.services__card-desc b {
-    color: #3b3663;
-    font-weight: 600;
-}
-
-.services__card-desc center {
-    display: block;
-    text-align: center;
-    font-size: 14px;
-    color: #696687;
-    margin-top: 5px;
-}
 
 /* ==========================================
-   RESPONSIVE
+   DESCRIPCIONES
 ========================================== */
 
-@media (max-width: 1024px) {
-    .services__col {
-        width: 50%;
+.services__card-description {
+    margin: 0 0 12px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.65;
+
+    color: #696687;
+
+    transition: color 0.35s ease;
+}
+
+.services__card-description:last-child {
+    margin-bottom: 0;
+}
+
+.services__card-description strong {
+    font-weight: 500;
+
+    color: #3b3663;
+
+    transition: color 0.35s ease;
+}
+
+.services__card-note {
+    margin: 14px 0 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.55;
+
+    color: #696687;
+
+    text-align: center;
+
+    transition: color 0.35s ease;
+}
+
+
+/* ==========================================
+   DETALLES Y LISTAS
+========================================== */
+
+.services__details {
+    margin-top: 14px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    color: #696687;
+
+    transition: color 0.35s ease;
+}
+
+.services__details strong {
+    display: block;
+
+    margin: 12px 0 4px;
+
+    font-weight: 600;
+
+    color: #3b3663;
+
+    transition: color 0.35s ease;
+}
+
+.services__details strong:first-child {
+    margin-top: 0;
+}
+
+.services__details p {
+    margin: 0;
+
+    color: inherit;
+
+    transition: color 0.35s ease;
+}
+
+.services__details ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+
+    list-style: disc;
+}
+
+.services__details li {
+    margin-bottom: 3px;
+
+    color: inherit;
+
+    transition: color 0.35s ease;
+}
+
+
+/* ==========================================
+   COLORES DEL CONTENIDO EN HOVER
+========================================== */
+
+.services__card:hover .services__card-description,
+.services__card:focus-within .services__card-description,
+.services__card:hover .services__card-note,
+.services__card:focus-within .services__card-note,
+.services__card:hover .services__details,
+.services__card:focus-within .services__details,
+.services__card:hover .services__details p,
+.services__card:focus-within .services__details p,
+.services__card:hover .services__details li,
+.services__card:focus-within .services__details li {
+    color: rgba(255, 255, 255, 0.96);
+}
+
+.services__card:hover .services__card-description strong,
+.services__card:focus-within .services__card-description strong,
+.services__card:hover .services__details strong,
+.services__card:focus-within .services__details strong {
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+@keyframes services-rotate {
+    from {
+        transform: rotate(0deg);
     }
 
-    .services__card .gt3-core-imagebox-img img {
-        width: 50px;
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes services-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1200px) {
+    .services {
+        padding-bottom: 85px;
+    }
+
+    .services__container {
+        padding: 0 24px;
+    }
+
+    .services__columns {
+        gap: 24px;
+    }
+
+    .services__column {
+        gap: 24px;
+    }
+
+    .services__card {
+        grid-template-columns: 60px minmax(0, 1fr);
+
+        gap: 16px;
+
+        padding: 24px 20px;
+    }
+
+    .services__icon {
+        width: 60px;
+    }
+
+    .services__icon img {
+        width: 54px;
+        max-width: 54px;
     }
 
     .services__card-title {
         font-size: 16px;
     }
 
-    .services__card-desc {
-        font-size: 14px;
+    .services__card-description {
+        font-size: 13px;
     }
 }
 
-@media (max-width: 768px) {
-    .services__col {
-        width: 100%;
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 900px) {
+    .services__header {
+        min-height: 165px;
+
+        padding-top: 42px;
+        padding-bottom: 38px;
     }
 
-    .services-title__main {
-        font-size: 24px;
-        line-height: 32px;
+    .services__columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .services__column:last-child {
+        grid-column: 1 / -1;
+
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .services__decoration--triangle-orange,
+    .services__decoration--triangle-blue {
+        width: 24px;
+    }
+}
+
+
+/* ==========================================
+   RESPONSIVE - MÓVIL
+========================================== */
+
+@media (max-width: 650px) {
+    .services {
+        padding-bottom: 65px;
+    }
+
+    .services__header {
+        min-height: 145px;
+
+        padding: 36px 18px 32px;
+    }
+
+    .services__eyebrow {
+        margin-bottom: 10px;
+
+        font-size: 12px;
+    }
+
+    .services__title {
+        font-size: 28px;
+    }
+
+    .services__container {
+        padding: 0 18px;
+    }
+
+    .services__columns {
+        grid-template-columns: 1fr;
+
+        gap: 22px;
+    }
+
+    .services__column,
+    .services__column:last-child {
+        display: flex;
+        grid-column: auto;
+
+        gap: 22px;
     }
 
     .services__card {
-        padding: 20px 15px;
+        grid-template-columns: 54px minmax(0, 1fr);
+
+        gap: 15px;
+
+        padding: 22px 18px;
     }
 
-    .services__card .gt3-core-imagebox-img img {
-        width: 45px;
+    .services__icon {
+        width: 54px;
+    }
+
+    .services__icon img {
+        width: 48px;
+        max-width: 48px;
     }
 
     .services__card-title {
+        margin-bottom: 9px;
+
         font-size: 15px;
     }
 
-    .services__card-desc {
+    .services__card-description {
         font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .services__decoration--triangle-orange,
+    .services__decoration--triangle-blue {
+        display: none;
+    }
+
+    .services__decoration--cross-left {
+        left: 12%;
+    }
+
+    .services__decoration--cross-right {
+        right: 10%;
+    }
+}
+
+
+/* ==========================================
+   MÓVILES PEQUEÑOS
+========================================== */
+
+@media (max-width: 400px) {
+    .services__container {
+        padding: 0 14px;
+    }
+
+    .services__card {
+        grid-template-columns: 1fr;
+
+        justify-items: center;
+
+        padding: 22px 16px;
+
+        text-align: center;
+    }
+
+    .services__card-content {
+        width: 100%;
+    }
+
+    .services__details ul {
+        display: inline-block;
+
+        text-align: left;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .services__decoration,
+    .services__card,
+    .services__card::before,
+    .services__icon img {
+        animation: none;
+        transition: none;
+    }
+
+    .services__card::before {
+        transform: none;
+        opacity: 0;
+    }
+
+    .services__card:hover::before,
+    .services__card:focus-within::before {
+        opacity: 1;
     }
 }

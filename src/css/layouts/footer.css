@@ -424,87 +424,188 @@
    BUSCADOR
 ========================================== */
 
+/* ==========================================
+   BUSCADOR DESPLEGABLE
+========================================== */
+
+.footer__search-wrapper {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Lupa visible por defecto */
+
+.footer__search-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    margin: 0;
+    padding: 0;
+
+    color: #d9d9df;
+    background-color: transparent;
+
+    border: 0;
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.footer__search-toggle:hover,
+.footer__search-toggle:focus-visible {
+    color: #3b3663;
+    transform: scale(1.05);
+}
+
+.footer__search-toggle svg {
+    display: block;
+
+    width: 25px;
+    height: 25px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+
+/* Panel oculto */
+
+.footer__search-panel {
+    width: 100%;
+    max-height: 0;
+
+    margin-top: 0;
+
+    opacity: 0;
+    visibility: hidden;
+
+    overflow: hidden;
+
+    transform: translateY(-8px);
+
+    transition:
+        max-height 0.35s ease,
+        margin-top 0.35s ease,
+        opacity 0.25s ease,
+        visibility 0.25s ease,
+        transform 0.35s ease;
+}
+
+.footer__search-wrapper.is-open .footer__search-panel {
+    max-height: 90px;
+
+    margin-top: 12px;
+
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+/* Formulario */
+
 .footer__search {
     display: flex;
     align-items: stretch;
 
     width: 100%;
-    max-width: 300px;
 
     margin: 0;
 
     background-color: #ffffff;
-    border: 1px solid rgba(59, 54, 99, 0.16);
-    border-radius: 5px;
+    border-radius: 4px;
+
+    box-shadow:
+        0 8px 28px rgba(59, 54, 99, 0.1);
 
     overflow: hidden;
 }
 
 .footer__search:focus-within {
-    border-color: #f47514;
+    box-shadow:
+        0 8px 28px rgba(59, 54, 99, 0.14);
 }
+
+/* Campo */
 
 .footer__search-input {
     min-width: 0;
-    height: 44px;
+    height: 52px;
 
     flex: 1 1 auto;
 
     margin: 0;
-    padding: 10px 14px;
+    padding: 12px 20px;
 
     font-family: inherit;
-    font-size: 14px;
+    font-size: 15px;
 
     color: #3b3663;
     background-color: #ffffff;
+
     border: 0;
     outline: 0;
 }
 
 .footer__search-input::placeholder {
-    color: #a09db6;
+    color: #3b3663;
+    opacity: 1;
 }
+
+/* Botón de búsqueda dentro del panel */
 
 .footer__search-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    flex: 0 0 46px;
+    flex: 0 0 54px;
 
-    width: 46px;
-    height: 44px;
+    width: 54px;
+    height: 52px;
 
     margin: 0;
     padding: 0;
 
-    color: #ffffff;
-
-    background-image: linear-gradient(90deg,
-            #ff4969,
-            #fc9d44);
+    color: #3b3663;
+    background-color: #ffffff;
 
     border: 0;
 
     cursor: pointer;
 
-    transition: filter 0.2s ease;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
 }
 
-.footer__search-button:hover {
-    filter: brightness(1.05);
+.footer__search-button:hover,
+.footer__search-button:focus-visible {
+    color: #f47514;
+    background-color: #fafafa;
 }
 
 .footer__search-button svg {
-    width: 19px;
-    height: 19px;
+    width: 22px;
+    height: 22px;
 
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
 }
-
 
 /* ==========================================
    COPYRIGHT
