@@ -138,6 +138,16 @@ export default defineConfig({
                 localCourses: resolve(
                     process.cwd(),
                     'cursos-idioma-local/index.html'
+                ),
+
+                spanishEcotourism: resolve(
+                    process.cwd(),
+                    'espanol-para-extranjeros-ecoturismo/index.html'
+                ),
+
+                testimonials: resolve(
+                    process.cwd(),
+                    'testimonios/index.html'
                 )
             }
         }

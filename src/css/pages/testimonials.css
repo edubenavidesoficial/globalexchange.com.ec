@@ -1,0 +1,955 @@
+/* ====================================================
+   TESTIMONIALS
+   Archivo: src/css/pages/testimonials.css
+
+   Página:
+   Testimonios
+==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.testimonials-page,
+.testimonials-page *,
+.testimonials-page *::before,
+.testimonials-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.testimonials-page {
+    width: 100%;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   HERO
+==================================================== */
+
+.testimonials-hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 360px;
+
+    padding: 70px 0;
+
+    background-image:
+        url("/images/local-courses/pic_paralax_2.jpg");
+
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   OVERLAY
+========================================== */
+
+.testimonials-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(90deg,
+            rgba(15, 18, 54, 0.28) 0%,
+            rgba(15, 18, 54, 0.38) 50%,
+            rgba(15, 18, 54, 0.28) 100%);
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
+
+.testimonials-hero__container {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
+.testimonials-hero__title {
+    width: 100%;
+
+    margin: 0 auto 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(38px, 3.5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #ff7a2f;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.62);
+}
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
+
+.testimonials-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.testimonials-hero__breadcrumb a {
+    color: #ff7a2f;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.testimonials-hero__breadcrumb a:hover,
+.testimonials-hero__breadcrumb a:focus-visible {
+    color: #ffffff;
+}
+
+.testimonials-hero__separator {
+    display: block;
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+}
+
+
+/* ====================================================
+   TESTIMONIOS
+==================================================== */
+
+.testimonials {
+    position: relative;
+
+    width: 100%;
+
+    padding: 65px 0 85px;
+
+    background-color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.testimonials__container {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   BLOQUE INDIVIDUAL
+========================================== */
+
+.testimonials__item {
+    position: relative;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 54px 0 42px;
+
+    border-top: 2px solid #ff7a2f;
+}
+
+.testimonials__item:first-child {
+    padding-top: 44px;
+}
+
+.testimonials__item:last-child {
+    border-bottom: 2px solid #ff7a2f;
+}
+
+
+/* ==========================================
+   TÍTULO SOBRE LA LÍNEA
+========================================== */
+
+.testimonials__item-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 2;
+
+    width: max-content;
+    max-width: calc(100% - 40px);
+
+    margin: 0;
+    padding: 0 18px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(22px, 2vw, 28px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+    background-color: #ffffff;
+
+    text-align: center;
+
+    transform: translate(-50%, -55%);
+}
+
+.testimonials__item-title::after {
+    content: "";
+
+    position: absolute;
+    left: 50%;
+    bottom: -12px;
+
+    width: 7px;
+    height: 7px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+
+    transform: translateX(-50%);
+}
+
+
+/* ==========================================
+   FILA DE VIDEO Y TARJETA
+========================================== */
+
+.testimonials__row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 2.1fr) minmax(240px, 0.9fr);
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: clamp(40px, 6vw, 85px);
+}
+
+.testimonials__row--reverse {
+    grid-template-columns:
+        minmax(240px, 0.9fr) minmax(0, 2.1fr);
+}
+
+.testimonials__row--reverse .testimonials__video {
+    order: 2;
+}
+
+.testimonials__row--reverse .testimonials__card {
+    order: 1;
+}
+
+
+/* ==========================================
+   VIDEO
+========================================== */
+
+.testimonials__video {
+    position: relative;
+
+    width: 100%;
+    max-width: 720px;
+
+    aspect-ratio: 16 / 9;
+
+    margin: 0;
+
+    background-color: #111111;
+
+    border: 1px solid rgba(48, 41, 95, 0.12);
+    border-radius: 5px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 24px rgba(59, 54, 99, 0.12);
+}
+
+.testimonials__video iframe {
+    position: absolute;
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+}
+
+.testimonials__row:not(.testimonials__row--reverse) .testimonials__video {
+    justify-self: end;
+}
+
+.testimonials__row--reverse .testimonials__video {
+    justify-self: start;
+}
+
+
+/* ==========================================
+   TARJETA DEL ESTUDIANTE
+========================================== */
+
+.testimonials__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   FOTOGRAFÍAS PEQUEÑAS
+========================================== */
+
+.testimonials__image {
+    display: block;
+
+    width: 96px;
+    height: 138px;
+
+    margin: 0 auto 12px;
+
+    border: 2px solid #ff7a2f;
+    border-radius: 8px;
+
+    object-fit: cover;
+    object-position: center top;
+
+    box-shadow:
+        0 7px 16px rgba(59, 54, 99, 0.12);
+}
+
+.testimonials__item:first-child .testimonials__image {
+    margin-bottom: 16px;
+}
+
+
+/* ==========================================
+   NOMBRE
+========================================== */
+
+.testimonials__name {
+    margin: 0 0 7px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TEXTO DEL TESTIMONIO
+========================================== */
+
+.testimonials__quote {
+    width: 100%;
+    max-width: 315px;
+
+    margin: 0 auto;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+
+    color: #696687;
+
+    text-align: center;
+}
+
+blockquote.testimonials__quote {
+    padding: 0;
+
+    border: 0;
+}
+
+
+/* ====================================================
+   GALERÍA
+==================================================== */
+
+.testimonials-gallery {
+    position: relative;
+
+    width: 100%;
+
+    padding: 80px 0 100px;
+
+    background-color: #f8f7fd;
+}
+
+
+/* ==========================================
+   CONTENEDOR DE GALERÍA
+========================================== */
+
+.testimonials-gallery__container {
+    width: 100%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   CABECERA DE GALERÍA
+========================================== */
+
+.testimonials-gallery__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 45px;
+
+    text-align: center;
+}
+
+.testimonials-gallery__title {
+    margin: 0 0 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(32px, 3vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+}
+
+.testimonials-gallery__divider {
+    display: block;
+
+    width: 70px;
+    height: 3px;
+
+    margin-bottom: 16px;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border-radius: 999px;
+}
+
+.testimonials-gallery__description {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+
+    color: #696687;
+}
+
+
+/* ==========================================
+   CUADRÍCULA
+========================================== */
+
+.testimonials-gallery__grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 22px;
+}
+
+
+/* ==========================================
+   ELEMENTOS DE GALERÍA
+========================================== */
+
+.testimonials-gallery__item {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    background-color: #ffffff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 28px rgba(59, 54, 99, 0.10),
+        0 4px 10px rgba(59, 54, 99, 0.05);
+
+    text-decoration: none;
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.testimonials-gallery__item:hover,
+.testimonials-gallery__item:focus-visible {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 20px 38px rgba(59, 54, 99, 0.16),
+        0 7px 16px rgba(59, 54, 99, 0.08);
+}
+
+
+/* ==========================================
+   IMÁGENES DE GALERÍA
+========================================== */
+
+.testimonials-gallery__item img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition:
+        transform 0.45s ease,
+        filter 0.35s ease;
+}
+
+.testimonials-gallery__item:hover img,
+.testimonials-gallery__item:focus-visible img {
+    transform: scale(1.07);
+
+    filter: brightness(0.76);
+}
+
+
+/* ==========================================
+   CAPA E ICONO DE GALERÍA
+========================================== */
+
+.testimonials-gallery__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(135deg,
+            rgba(255, 95, 103, 0.16),
+            rgba(255, 139, 61, 0.20));
+
+    opacity: 0;
+
+    transition: opacity 0.35s ease;
+}
+
+.testimonials-gallery__overlay i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    font-size: 20px;
+
+    color: #ffffff;
+    background-color: rgba(48, 41, 95, 0.82);
+
+    border-radius: 50%;
+
+    transform: scale(0.75);
+
+    transition: transform 0.35s ease;
+}
+
+.testimonials-gallery__item:hover .testimonials-gallery__overlay,
+.testimonials-gallery__item:focus-visible .testimonials-gallery__overlay {
+    opacity: 1;
+}
+
+.testimonials-gallery__item:hover .testimonials-gallery__overlay i,
+.testimonials-gallery__item:focus-visible .testimonials-gallery__overlay i {
+    transform: scale(1);
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1050px) {
+    .testimonials__container {
+        max-width: 960px;
+    }
+
+    .testimonials__row {
+        grid-template-columns:
+            minmax(0, 1.8fr) minmax(220px, 0.8fr);
+
+        gap: 45px;
+    }
+
+    .testimonials__row--reverse {
+        grid-template-columns:
+            minmax(220px, 0.8fr) minmax(0, 1.8fr);
+    }
+
+    .testimonials__image {
+        width: 88px;
+        height: 130px;
+    }
+
+    .testimonials__quote {
+        max-width: 280px;
+
+        font-size: 13px;
+    }
+}
+
+
+/* ==========================================
+   GALERÍA EN TABLET HORIZONTAL
+========================================== */
+
+@media (max-width: 1000px) {
+    .testimonials-gallery__grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 850px) {
+    .testimonials {
+        padding: 55px 0 70px;
+    }
+
+    .testimonials__container {
+        max-width: 720px;
+
+        padding-right: 28px;
+        padding-left: 28px;
+    }
+
+    .testimonials__item {
+        padding: 55px 0 48px;
+    }
+
+    .testimonials__row,
+    .testimonials__row--reverse {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+    .testimonials__row--reverse .testimonials__video,
+    .testimonials__row--reverse .testimonials__card {
+        order: initial;
+    }
+
+    .testimonials__video,
+    .testimonials__row:not(.testimonials__row--reverse) .testimonials__video,
+    .testimonials__row--reverse .testimonials__video {
+        justify-self: center;
+
+        width: 100%;
+        max-width: 680px;
+
+        margin: 0 auto;
+    }
+
+    .testimonials__card {
+        max-width: 520px;
+
+        margin: 0 auto;
+    }
+
+    .testimonials__image {
+        width: 105px;
+        height: 152px;
+    }
+
+    .testimonials__quote {
+        max-width: 470px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================
+   TABLET PEQUEÑA
+========================================== */
+
+@media (max-width: 768px) {
+    .testimonials-hero {
+        min-height: 300px;
+
+        padding: 55px 0;
+    }
+
+    .testimonials-hero__container {
+        padding: 0 22px;
+    }
+
+    .testimonials__container,
+    .testimonials-gallery__container {
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+}
+
+
+/* ==========================================
+   GALERÍA EN MÓVIL GRANDE
+========================================== */
+
+@media (max-width: 700px) {
+    .testimonials-gallery {
+        padding: 65px 0 80px;
+    }
+
+    .testimonials-gallery__container {
+        padding-right: 22px;
+        padding-left: 22px;
+    }
+
+    .testimonials-gallery__header {
+        margin-bottom: 34px;
+    }
+
+    .testimonials-gallery__grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 16px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+    .testimonials {
+        padding: 45px 0 60px;
+    }
+
+    .testimonials__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .testimonials__item {
+        padding: 52px 0 42px;
+    }
+
+    .testimonials__item-title {
+        max-width: calc(100% - 20px);
+
+        padding-right: 12px;
+        padding-left: 12px;
+
+        font-size: 22px;
+    }
+
+    .testimonials__row,
+    .testimonials__row--reverse {
+        gap: 25px;
+    }
+
+    .testimonials__video {
+        border-radius: 3px;
+    }
+
+    .testimonials__image {
+        width: 96px;
+        height: 140px;
+    }
+
+    .testimonials__name {
+        font-size: 20px;
+    }
+
+    .testimonials__quote {
+        max-width: 100%;
+
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================
+   HERO EN MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+    .testimonials-hero {
+        min-height: 250px;
+
+        padding: 45px 0;
+    }
+
+    .testimonials-hero__container {
+        padding: 0 16px;
+    }
+
+    .testimonials-hero__title {
+        font-size: 32px;
+    }
+
+    .testimonials-hero__breadcrumb {
+        flex-wrap: wrap;
+
+        font-size: 12px;
+    }
+}
+
+
+/* ==========================================
+   GALERÍA EN MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 420px) {
+    .testimonials-gallery__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .testimonials-gallery__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonials-gallery__item {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+
+/* ==========================================
+   TELÉFONOS MUY PEQUEÑOS
+========================================== */
+
+@media (max-width: 400px) {
+    .testimonials__item-title {
+        font-size: 19px;
+    }
+
+    .testimonials__image {
+        width: 88px;
+        height: 130px;
+    }
+
+    .testimonials__quote {
+        font-size: 13px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .testimonials-hero__breadcrumb a,
+    .testimonials-gallery__item,
+    .testimonials-gallery__item img,
+    .testimonials-gallery__overlay,
+    .testimonials-gallery__overlay i {
+        transition: none;
+    }
+}

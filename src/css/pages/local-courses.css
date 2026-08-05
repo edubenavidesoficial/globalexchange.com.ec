@@ -1,7 +1,25 @@
 /* ====================================================
    LOCAL COURSES
    Archivo: src/css/pages/local-courses.css
-==================================================== */
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Página:
+   Cursos de idioma local
+   ==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.local-courses-page,
+.local-courses-page *,
+.local-courses-page *::before,
+.local-courses-page *::after {
+   box-sizing: border-box;
+}
 
 
 /* ==========================================
@@ -12,12 +30,14 @@
    width: 100%;
 
    background-color: #ffffff;
+
+   overflow: hidden;
 }
 
 
-/* ==========================================
+/* ====================================================
    HERO INTERNO
-========================================== */
+==================================================== */
 
 .local-courses-hero {
    position: relative;
@@ -41,15 +61,28 @@
    overflow: hidden;
 }
 
+
+/* ==========================================
+   OVERLAY DEL HERO
+========================================== */
+
 .local-courses-hero__overlay {
    position: absolute;
    inset: 0;
    z-index: 1;
 
-   background: linear-gradient(to bottom,
-         rgba(255, 255, 255, .25),
-         rgba(255, 255, 255, .18));
+   background:
+      linear-gradient(to bottom,
+         rgba(255, 255, 255, 0.25),
+         rgba(255, 255, 255, 0.18));
+
+   pointer-events: none;
 }
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
 
 .local-courses-hero__container {
    position: relative;
@@ -64,6 +97,11 @@
    text-align: center;
 }
 
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
 .local-courses-hero__title {
    margin: 0 0 20px;
 
@@ -75,9 +113,14 @@
    color: #ff7a2f;
 
    text-shadow:
-      0 2px 10px rgba(255, 255, 255, .85),
-      0 0 20px rgba(255, 255, 255, .55);
+      0 2px 10px rgba(255, 255, 255, 0.85),
+      0 0 20px rgba(255, 255, 255, 0.55);
 }
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
 
 .local-courses-hero__breadcrumb {
    display: flex;
@@ -90,62 +133,31 @@
    font-family: "Rubik", sans-serif;
    font-size: 14px;
    font-weight: 500;
+   line-height: 1.4;
 
    color: #ffffff;
 
    text-shadow:
-      0 1px 6px rgba(0, 0, 0, .45);
+      0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
 .local-courses-hero__breadcrumb a {
    color: #ff7a2f;
+
    text-decoration: none;
 
-   transition: color .3s ease;
+   transition: color 0.3s ease;
 }
 
-.local-courses-hero__breadcrumb a:hover {
+.local-courses-hero__breadcrumb a:hover,
+.local-courses-hero__breadcrumb a:focus-visible {
    color: #ffffff;
 }
 
-@media (max-width: 768px) {
-   .local-courses-hero {
-      min-height: 300px;
-      padding: 55px 0;
-   }
 
-   .local-courses-hero__container {
-      padding: 0 22px;
-   }
-
-   .local-courses-hero__title {
-      font-size: 40px;
-   }
-}
-
-@media (max-width: 480px) {
-   .local-courses-hero {
-      min-height: 250px;
-      padding: 45px 0;
-   }
-
-   .local-courses-hero__container {
-      padding: 0 16px;
-   }
-
-   .local-courses-hero__title {
-      font-size: 32px;
-   }
-
-   .local-courses-hero__breadcrumb {
-      flex-wrap: wrap;
-      font-size: 13px;
-   }
-}
-
-/* ==========================================
+/* ====================================================
    INTRODUCCIÓN
-========================================== */
+==================================================== */
 
 .local-courses-intro {
    position: relative;
@@ -157,6 +169,11 @@
 
    overflow: hidden;
 }
+
+
+/* ==========================================
+   CONTENEDOR DE INTRODUCCIÓN
+========================================== */
 
 .local-courses-intro__container {
    display: grid;
@@ -176,7 +193,7 @@
 
 
 /* ==========================================
-   IMAGEN
+   IMAGEN DE INTRODUCCIÓN
 ========================================== */
 
 .local-courses-intro__visual {
@@ -206,7 +223,7 @@
 
 
 /* ==========================================
-   CONTENIDO
+   CONTENIDO DE INTRODUCCIÓN
 ========================================== */
 
 .local-courses-intro__content {
@@ -246,7 +263,7 @@
 
 
 /* ==========================================
-   BOTÓN
+   BOTÓN DE INTRODUCCIÓN
 ========================================== */
 
 .local-courses-intro__button {
@@ -266,11 +283,13 @@
    line-height: 1;
 
    color: #ffffff;
-   background: linear-gradient(90deg,
+
+   background:
+      linear-gradient(90deg,
          #ff5f67 0%,
          #ff8b3d 100%);
 
-   border: none;
+   border: 0;
    border-radius: 5px;
 
    text-decoration: none;
@@ -294,18 +313,6 @@
    filter: brightness(1.05);
 }
 
-.local-courses-intro__button:hover,
-.local-courses-intro__button:focus-visible {
-   color: #ffffff;
-
-   transform: translateY(-3px);
-
-   box-shadow:
-      0 12px 24px rgba(95, 73, 230, 0.26);
-
-   filter: brightness(1.04);
-}
-
 
 /* ==========================================
    SUBTÍTULO
@@ -320,6 +327,343 @@
    line-height: 1.2;
 
    color: #30295f;
+}
+
+
+/* ====================================================
+   DETALLES DE CURSOS
+==================================================== */
+
+.local-courses-details {
+   position: relative;
+
+   width: 100%;
+
+   padding: 0;
+
+   background-color: #ffffff;
+
+   overflow: hidden;
+}
+
+
+/* ==========================================
+   FONDO DE LA SECCIÓN
+========================================== */
+
+.local-courses-details__background {
+   position: absolute;
+   top: 72px;
+   right: 0;
+   bottom: 74px;
+   left: 0;
+   z-index: 0;
+
+   background-color: #f7f6ff;
+
+   pointer-events: none;
+}
+
+
+/* ==========================================
+   FIGURAS DECORATIVAS DEL FONDO
+========================================== */
+
+.local-courses-details__background::before,
+.local-courses-details__background::after {
+   content: "";
+
+   position: absolute;
+
+   border:
+      1px solid rgba(123, 104, 238, 0.13);
+
+   border-radius:
+      48% 52% 62% 38% / 55% 45% 55% 45%;
+
+   pointer-events: none;
+}
+
+.local-courses-details__background::before {
+   left: -80px;
+   bottom: -145px;
+
+   width: 520px;
+   height: 370px;
+
+   transform: rotate(18deg);
+}
+
+.local-courses-details__background::after {
+   top: -130px;
+   right: -120px;
+
+   width: 520px;
+   height: 440px;
+
+   background-color:
+      rgba(232, 229, 255, 0.38);
+
+   transform: rotate(-12deg);
+}
+
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.local-courses-details__container {
+   position: relative;
+   z-index: 2;
+
+   display: grid;
+   grid-template-columns:
+      minmax(270px, 0.9fr) minmax(360px, 1.15fr) minmax(300px, 0.95fr);
+
+   align-items: center;
+
+   width: 100%;
+   max-width: 1260px;
+   min-height: 455px;
+
+   margin: 0 auto;
+   padding: 20px 35px 0;
+}
+
+
+/* ==========================================
+   INFORMACIÓN IZQUIERDA
+========================================== */
+
+.local-courses-details__info {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   justify-content: center;
+
+   gap: 22px;
+
+   min-width: 0;
+
+   padding-top: 32px;
+
+   text-align: right;
+}
+
+.local-courses-details__info-group {
+   display: flex;
+   align-items: flex-start;
+   justify-content: flex-end;
+
+   gap: 12px;
+
+   width: 100%;
+}
+
+.local-courses-details__icon {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+
+   flex: 0 0 auto;
+
+   width: 24px;
+   height: 24px;
+
+   margin-top: 1px;
+
+   font-size: 18px;
+   line-height: 1;
+}
+
+.local-courses-details__info-content {
+   min-width: 0;
+}
+
+.local-courses-details__info-title {
+   margin: 0 0 5px;
+
+   font-family: "Rubik", sans-serif;
+   font-size: 16px;
+   font-weight: 400;
+   line-height: 1.45;
+
+   color: #696687;
+}
+
+.local-courses-details__languages {
+   margin: 0;
+   padding: 0;
+
+   list-style: none;
+}
+
+.local-courses-details__languages li {
+   margin: 0 0 2px;
+
+   font-family: "Rubik", sans-serif;
+   font-size: 16px;
+   font-weight: 700;
+   line-height: 1.35;
+
+   color: #696687;
+}
+
+.local-courses-details__schedule {
+   width: 100%;
+   max-width: 310px;
+
+   margin: 0;
+
+   font-family: "Rubik", sans-serif;
+   font-size: 16px;
+   font-weight: 400;
+   line-height: 1.55;
+
+   color: #696687;
+}
+
+
+/* ==========================================
+   IMAGEN CENTRAL
+========================================== */
+
+.local-courses-details__visual {
+   position: relative;
+
+   display: flex;
+   align-items: flex-end;
+   justify-content: center;
+
+   align-self: stretch;
+
+   min-width: 0;
+}
+
+.local-courses-details__visual img {
+   display: block;
+
+   width: auto;
+   max-width: 100%;
+   height: 445px;
+
+   margin: 0 auto;
+
+   object-fit: contain;
+   object-position: center bottom;
+}
+
+
+/* ==========================================
+   DESCRIPCIÓN DERECHA
+========================================== */
+
+.local-courses-details__description {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+
+   min-width: 0;
+
+   margin: 0;
+   padding: 52px 0 20px 28px;
+
+   text-align: center;
+}
+
+.local-courses-details__description-icon {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+
+   width: 30px;
+   height: 30px;
+
+   margin-bottom: 10px;
+
+   font-size: 21px;
+   line-height: 1;
+}
+
+.local-courses-details__description p {
+   width: 100%;
+   max-width: 370px;
+
+   margin: 0;
+
+   font-family: "Rubik", sans-serif;
+   font-size: 16px;
+   font-weight: 400;
+   line-height: 1.55;
+
+   color: #696687;
+}
+
+
+/* ==========================================
+   CERTIFICACIONES Y PARTNERS
+========================================== */
+
+.local-courses-details__partners {
+   position: relative;
+   z-index: 3;
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   width: 100%;
+   min-height: 74px;
+
+   padding: 10px 25px;
+
+   background-color: #ffffff;
+}
+
+.local-courses-details__partners img {
+   display: block;
+
+   width: 100%;
+   max-width: 870px;
+   height: auto;
+
+   object-fit: contain;
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1050px) {
+   .local-courses-details__container {
+      grid-template-columns:
+         minmax(230px, 0.9fr) minmax(310px, 1.05fr) minmax(260px, 0.95fr);
+
+      padding-right: 25px;
+      padding-left: 25px;
+   }
+
+   .local-courses-details__visual img {
+      height: 400px;
+   }
+
+   .local-courses-details__description {
+      padding-left: 18px;
+   }
+
+   .local-courses-details__info-title,
+   .local-courses-details__languages li,
+   .local-courses-details__schedule,
+   .local-courses-details__description p {
+      font-size: 15px;
+   }
 }
 
 
@@ -343,6 +687,7 @@
    .local-courses-intro__image {
       max-width: 620px;
       height: auto;
+
       aspect-ratio: 3 / 2;
    }
 
@@ -362,6 +707,94 @@
 
    .local-courses-intro__button {
       margin-bottom: 28px;
+   }
+}
+
+
+/* ==========================================
+   TABLET VERTICAL
+========================================== */
+
+@media (max-width: 850px) {
+   .local-courses-details {
+      padding-top: 45px;
+   }
+
+   .local-courses-details__background {
+      top: 0;
+      bottom: 80px;
+   }
+
+   .local-courses-details__container {
+      grid-template-columns: 1fr;
+
+      gap: 35px;
+
+      max-width: 680px;
+      min-height: auto;
+
+      padding: 35px 30px 0;
+   }
+
+   .local-courses-details__info {
+      align-items: center;
+
+      padding-top: 0;
+
+      text-align: center;
+   }
+
+   .local-courses-details__info-group {
+      align-items: center;
+      justify-content: center;
+   }
+
+   .local-courses-details__schedule {
+      max-width: 450px;
+   }
+
+   .local-courses-details__visual {
+      order: 3;
+   }
+
+   .local-courses-details__visual img {
+      height: auto;
+      max-height: 470px;
+   }
+
+   .local-courses-details__description {
+      order: 2;
+
+      padding: 0;
+   }
+
+   .local-courses-details__description p {
+      max-width: 520px;
+   }
+
+   .local-courses-details__partners {
+      min-height: 70px;
+   }
+}
+
+
+/* ==========================================
+   TABLET PEQUEÑA
+========================================== */
+
+@media (max-width: 768px) {
+   .local-courses-hero {
+      min-height: 300px;
+
+      padding: 55px 0;
+   }
+
+   .local-courses-hero__container {
+      padding: 0 22px;
+   }
+
+   .local-courses-hero__title {
+      font-size: 40px;
    }
 }
 
@@ -403,134 +836,81 @@
    .local-courses-intro__subtitle {
       font-size: 24px;
    }
-}
 
-/* ==========================================
-   DETALLES
-========================================== */
-
-.local-courses-details {
-   padding: 90px 0;
-
-   background-color: #fafafd;
-}
-
-.local-courses-details__container {
-   width: 100%;
-   max-width: 1320px;
-
-   margin: 0 auto;
-   padding: 0 40px;
-}
-
-.local-courses-details__header {
-   margin-bottom: 50px;
-
-   text-align: center;
-}
-
-.local-courses-details__title {
-   margin: 0;
-
-   font-family: "Nunito", sans-serif;
-   font-size: clamp(34px, 3vw, 46px);
-   font-weight: 800;
-
-   color: #3b3663;
-}
-
-.local-courses-details__grid {
-   display: grid;
-   grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-   gap: 30px;
-
-   margin-bottom: 55px;
-}
-
-.local-courses-details__card {
-   padding: 28px;
-
-   background-color: #ffffff;
-   border-radius: 12px;
-
-   box-shadow:
-      0 14px 35px rgba(59, 54, 99, 0.08);
-}
-
-.local-courses-details__card .local-courses-details__placeholder {
-   min-height: 230px;
-
-   margin-bottom: 25px;
-}
-
-.local-courses-details__card h3 {
-   margin: 0 0 18px;
-
-   font-family: "Nunito", sans-serif;
-   font-size: 25px;
-
-   color: #3b3663;
-}
-
-.local-courses-details__card p,
-.local-courses-details__card li,
-.local-courses-details__description p {
-   font-size: 16px;
-   line-height: 1.7;
-
-   color: #696687;
-}
-
-.local-courses-details__description {
-   max-width: 900px;
-
-   margin: 0 auto;
-
-   text-align: center;
-}
-
-
-/* ==========================================
-   TABLET
-========================================== */
-
-@media (max-width: 900px) {
-   .local-courses-intro__container {
-      grid-template-columns: 1fr;
-
-      gap: 45px;
-   }
-
-   .local-courses-details__grid {
-      grid-template-columns: 1fr;
-   }
-}
-
-
-/* ==========================================
-   MÓVIL
-========================================== */
-
-@media (max-width: 600px) {
-   .local-courses-hero {
-      padding: 55px 0;
-   }
-
-   .local-courses-hero__container,
-   .local-courses-intro__container,
-   .local-courses-details__container {
-      padding-right: 18px;
-      padding-left: 18px;
-   }
-
-   .local-courses-intro,
    .local-courses-details {
-      padding: 60px 0;
+      padding-top: 35px;
    }
 
-   .local-courses-intro__placeholder {
-      min-height: 300px;
+   .local-courses-details__container {
+      gap: 28px;
+
+      padding: 28px 18px 0;
+   }
+
+   .local-courses-details__info {
+      gap: 18px;
+   }
+
+   .local-courses-details__info-group {
+      flex-direction: column;
+      align-items: center;
+
+      gap: 8px;
+   }
+
+   .local-courses-details__info-title,
+   .local-courses-details__languages li,
+   .local-courses-details__schedule,
+   .local-courses-details__description p {
+      font-size: 14px;
+   }
+
+   .local-courses-details__visual img {
+      max-height: 390px;
+   }
+
+   .local-courses-details__partners {
+      padding-right: 16px;
+      padding-left: 16px;
+   }
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+   .local-courses-hero {
+      min-height: 250px;
+
+      padding: 45px 0;
+   }
+
+   .local-courses-hero__container {
+      padding: 0 16px;
+   }
+
+   .local-courses-hero__title {
+      font-size: 32px;
+   }
+
+   .local-courses-hero__breadcrumb {
+      flex-wrap: wrap;
+
+      font-size: 13px;
+   }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+   .local-courses-hero__breadcrumb a,
+   .local-courses-intro__button {
+      transition: none;
    }
 }

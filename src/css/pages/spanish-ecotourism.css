@@ -1,0 +1,665 @@
+/* ====================================================
+   SPANISH ECOTOURISM
+   Archivo: src/css/pages/spanish-ecotourism.css
+
+   Página:
+   Español para extranjeros – ecoturismo
+==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.spanish-ecotourism-page,
+.spanish-ecotourism-page *,
+.spanish-ecotourism-page *::before,
+.spanish-ecotourism-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.spanish-ecotourism-page {
+    width: 100%;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   HERO
+==================================================== */
+
+.spanish-ecotourism-hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 360px;
+
+    padding: 70px 0;
+
+    background-image:
+        url("/images/local-courses/pic_paralax_2.jpg");
+
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   CAPA SOBRE LA IMAGEN
+========================================== */
+
+.spanish-ecotourism-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(90deg,
+            rgba(255, 255, 255, 0.25),
+            rgba(255, 255, 255, 0.18));
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
+
+.spanish-ecotourism-hero__container {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
+.spanish-ecotourism-hero__title {
+    display: block;
+
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(34px, 3.1vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #ff7a2f;
+    text-align: center;
+
+    text-shadow:
+        0 2px 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.62);
+}
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
+
+.spanish-ecotourism-hero__breadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    gap: 12px;
+
+    margin: 0 auto;
+    padding: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #ffffff;
+    text-align: center;
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.spanish-ecotourism-hero__breadcrumb a {
+    color: #ff7a2f;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.spanish-ecotourism-hero__breadcrumb a:hover,
+.spanish-ecotourism-hero__breadcrumb a:focus-visible {
+    color: #ffffff;
+}
+
+.spanish-ecotourism-hero__separator {
+    display: block;
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+}
+
+
+/* ====================================================
+   CONTENIDO PRINCIPAL
+==================================================== */
+
+.spanish-ecotourism-content {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    padding: 60px 0 80px;
+
+    background-color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.spanish-ecotourism-content__container {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 575px) minmax(0, 600px);
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    width: calc(100% - 70px);
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0;
+}
+
+
+/* ==========================================
+   IMAGEN
+========================================== */
+
+.spanish-ecotourism-content__visual {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.spanish-ecotourism-content__image {
+    display: block;
+
+    width: 100%;
+    max-width: 575px;
+    height: 720px;
+
+    margin: 0 auto;
+
+    border-radius: 38px;
+
+    object-fit: cover;
+    object-position: center;
+
+    box-shadow:
+        0 12px 26px rgba(59, 54, 99, 0.18),
+        0 4px 10px rgba(59, 54, 99, 0.08);
+}
+
+
+/* ==========================================
+   CUERPO DE TEXTO
+========================================== */
+
+.spanish-ecotourism-content__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+
+    padding: 0 0 0 2px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL CONTENIDO
+========================================== */
+
+.spanish-ecotourism-content__title {
+    width: 100%;
+    max-width: 600px;
+
+    margin: 0 auto 26px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(28px, 2.3vw, 34px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+
+    text-align: center;
+    text-transform: uppercase;
+}
+
+
+/* ==========================================
+   TEXTOS
+========================================== */
+
+.spanish-ecotourism-content__intro,
+.spanish-ecotourism-content__closing {
+    width: 100%;
+    max-width: 600px;
+}
+
+.spanish-ecotourism-content__body p {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.62;
+
+    color: #696687;
+}
+
+.spanish-ecotourism-content__intro {
+    margin: 0 auto 64px;
+
+    text-align: left;
+}
+
+.spanish-ecotourism-content__intro p+p {
+    margin-top: 2px;
+}
+
+
+/* ==========================================
+   BLOQUE DE IDIOMAS
+========================================== */
+
+.spanish-ecotourism-content__languages-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    max-width: 600px;
+
+    margin: 0 auto 24px;
+
+    text-align: center;
+}
+
+.spanish-ecotourism-content__subtitle {
+    display: block;
+
+    width: 100%;
+
+    margin: 0 auto 22px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.35;
+
+    color: #696687;
+
+    text-align: center;
+}
+
+.spanish-ecotourism-content__languages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.spanish-ecotourism-content__languages li {
+    position: relative;
+
+    padding-left: 18px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    color: #696687;
+
+    text-align: center;
+}
+
+.spanish-ecotourism-content__languages li::before {
+    content: "";
+
+    position: absolute;
+    top: 50%;
+    left: 0;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #e7d32f;
+    border-radius: 50%;
+
+    transform: translateY(-50%);
+}
+
+
+/* ==========================================
+   TEXTO FINAL
+========================================== */
+
+.spanish-ecotourism-content__closing {
+    margin: 0 auto 20px;
+
+    text-align: center;
+}
+
+.spanish-ecotourism-content__closing p+p {
+    margin-top: 18px;
+}
+
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.spanish-ecotourism-content__button {
+    align-self: flex-start;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 200px;
+    min-height: 50px;
+
+    margin: 0;
+    padding: 13px 24px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border: 0;
+    border-radius: 5px;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        filter 0.3s ease;
+}
+
+.spanish-ecotourism-content__button:hover,
+.spanish-ecotourism-content__button:focus-visible {
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 28px rgba(255, 95, 103, 0.3);
+
+    filter: brightness(1.05);
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1200px) {
+    .spanish-ecotourism-content__container {
+        grid-template-columns:
+            minmax(0, 520px) minmax(0, 540px);
+
+        gap: 30px;
+
+        width: calc(100% - 50px);
+    }
+
+    .spanish-ecotourism-content__image {
+        height: 660px;
+    }
+
+    .spanish-ecotourism-content__body p,
+    .spanish-ecotourism-content__languages li {
+        font-size: 15px;
+    }
+
+    .spanish-ecotourism-content__intro {
+        margin-bottom: 48px;
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+    .spanish-ecotourism-content {
+        padding: 60px 0 75px;
+    }
+
+    .spanish-ecotourism-content__container {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+        width: 100%;
+        max-width: 720px;
+
+        padding: 0 30px;
+    }
+
+    .spanish-ecotourism-content__image {
+        width: 100%;
+        max-width: 575px;
+        height: auto;
+
+        aspect-ratio: 4 / 5;
+    }
+
+    .spanish-ecotourism-content__body {
+        height: auto;
+    }
+
+    .spanish-ecotourism-content__intro {
+        margin-bottom: 42px;
+
+        text-align: center;
+    }
+
+    .spanish-ecotourism-content__button {
+        align-self: center;
+    }
+}
+
+
+/* ==========================================
+   TABLET PEQUEÑA
+========================================== */
+
+@media (max-width: 768px) {
+    .spanish-ecotourism-hero {
+        min-height: 300px;
+
+        padding: 55px 0;
+
+        background-position: center;
+    }
+
+    .spanish-ecotourism-hero__container {
+        padding: 0 22px;
+    }
+
+    .spanish-ecotourism-hero__title {
+        font-size: 34px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+    .spanish-ecotourism-content {
+        padding: 45px 0 60px;
+    }
+
+    .spanish-ecotourism-content__container {
+        gap: 35px;
+
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .spanish-ecotourism-content__image {
+        border-radius: 24px;
+    }
+
+    .spanish-ecotourism-content__title {
+        font-size: 27px;
+    }
+
+    .spanish-ecotourism-content__body p,
+    .spanish-ecotourism-content__languages li {
+        font-size: 15px;
+    }
+
+    .spanish-ecotourism-content__intro {
+        margin-bottom: 34px;
+    }
+
+    .spanish-ecotourism-content__subtitle {
+        font-size: 17px;
+    }
+
+    .spanish-ecotourism-content__button {
+        width: 100%;
+        max-width: 260px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+    .spanish-ecotourism-hero {
+        min-height: 250px;
+
+        padding: 45px 0;
+    }
+
+    .spanish-ecotourism-hero__container {
+        padding: 0 16px;
+    }
+
+    .spanish-ecotourism-hero__title {
+        font-size: 28px;
+    }
+
+    .spanish-ecotourism-hero__breadcrumb {
+        flex-wrap: wrap;
+        gap: 8px;
+
+        font-size: 12px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .spanish-ecotourism-hero__breadcrumb a,
+    .spanish-ecotourism-content__button {
+        transition: none;
+    }
+}
