@@ -1,0 +1,266 @@
+/* ====================================================
+   FLOATING DOTS
+   Decoración global de puntos ascendentes
+   ==================================================== */
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.floating-dots {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+
+/* ==========================================
+   PUNTOS
+========================================== */
+
+.floating-dots__dot {
+    position: absolute;
+    bottom: -20px;
+
+    display: block;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    animation-name: floating-dot-rise;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+
+/* ==========================================
+   DISTRIBUCIÓN
+========================================== */
+
+.floating-dots__dot--1 {
+    left: 5%;
+
+    background-color: #ef3ca3;
+
+    animation-duration: 17s;
+    animation-delay: -3s;
+}
+
+.floating-dots__dot--2 {
+    left: 12%;
+
+    width: 4px;
+    height: 4px;
+
+    background-color: #f4a51d;
+
+    animation-duration: 22s;
+    animation-delay: -14s;
+}
+
+.floating-dots__dot--3 {
+    left: 21%;
+
+    background-color: #3fd3b4;
+
+    animation-duration: 19s;
+    animation-delay: -7s;
+}
+
+.floating-dots__dot--4 {
+    left: 30%;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ee3b9d;
+
+    animation-duration: 24s;
+    animation-delay: -18s;
+}
+
+.floating-dots__dot--5 {
+    left: 41%;
+
+    width: 4px;
+    height: 4px;
+
+    background-color: #345ff0;
+
+    animation-duration: 18s;
+    animation-delay: -11s;
+}
+
+.floating-dots__dot--6 {
+    left: 50%;
+
+    background-color: #ff4d55;
+
+    animation-duration: 26s;
+    animation-delay: -20s;
+}
+
+.floating-dots__dot--7 {
+    left: 59%;
+
+    width: 4px;
+    height: 4px;
+
+    background-color: #e9d400;
+
+    animation-duration: 20s;
+    animation-delay: -5s;
+}
+
+.floating-dots__dot--8 {
+    left: 68%;
+
+    background-color: #8b42dc;
+
+    animation-duration: 23s;
+    animation-delay: -16s;
+}
+
+.floating-dots__dot--9 {
+    left: 76%;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ef474f;
+
+    animation-duration: 21s;
+    animation-delay: -9s;
+}
+
+.floating-dots__dot--10 {
+    left: 84%;
+
+    background-color: #37d7bd;
+
+    animation-duration: 25s;
+    animation-delay: -21s;
+}
+
+.floating-dots__dot--11 {
+    left: 91%;
+
+    width: 4px;
+    height: 4px;
+
+    background-color: #f4cb0f;
+
+    animation-duration: 18s;
+    animation-delay: -13s;
+}
+
+.floating-dots__dot--12 {
+    left: 96%;
+
+    background-color: #8640df;
+
+    animation-duration: 27s;
+    animation-delay: -24s;
+}
+
+
+/* ==========================================
+   ANIMACIÓN IRREGULAR
+========================================== */
+
+@keyframes floating-dot-rise {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(0, 30px, 0) scale(0.8);
+    }
+
+    8% {
+        opacity: 1;
+    }
+
+    22% {
+        transform:
+            translate3d(18px, -22vh, 0) scale(1);
+    }
+
+    40% {
+        transform:
+            translate3d(-14px, -42vh, 0) scale(0.9);
+    }
+
+    58% {
+        transform:
+            translate3d(24px, -62vh, 0) scale(1.05);
+    }
+
+    76% {
+        transform:
+            translate3d(-10px, -82vh, 0) scale(0.95);
+    }
+
+    92% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(20px, -115vh, 0) scale(0.8);
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+    .floating-dots__dot:nth-child(even) {
+        display: none;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+    .floating-dots__dot {
+        width: 4px;
+        height: 4px;
+    }
+
+    .floating-dots__dot--3,
+    .floating-dots__dot--7,
+    .floating-dots__dot--10 {
+        display: none;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .floating-dots {
+        display: none;
+    }
+}

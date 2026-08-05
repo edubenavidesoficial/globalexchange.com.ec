@@ -1,44 +1,145 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { resolve, dirname, isAbsolute } from 'path';
 import fs from 'fs';
 
 function htmlInclude() {
+    const includePattern = /@@include\(['"](.+?)['"]\)/g;
+
+    /**
+     * Procesa los includes de un archivo de forma recursiva.
+     *
+     * @param {string} html Contenido HTML.
+     * @param {string} htmlFile Archivo HTML que contiene el include.
+     * @param {Set<string>} includeStack Archivos abiertos para evitar ciclos.
+     * @returns {string}
+     */
+    function processIncludes(
+        html,
+        htmlFile,
+        includeStack = new Set()
+    ) {
+        return html.replace(
+            includePattern,
+            (match, includePath) => {
+                /*
+                 * Las rutas que empiezan con "/" se resuelven
+                 * desde la raíz del proyecto.
+                 *
+                 * Las rutas relativas se resuelven desde la
+                 * carpeta del HTML que contiene el include.
+                 */
+                const fullPath = isAbsolute(includePath)
+                    ? resolve(
+                        process.cwd(),
+                        includePath.replace(/^[/\\]+/, '')
+                    )
+                    : resolve(
+                        dirname(htmlFile),
+                        includePath
+                    );
+
+                if (includeStack.has(fullPath)) {
+                    console.error(
+                        `❌ Include circular detectado: ${fullPath}`
+                    );
+
+                    return (
+                        `<!-- ERROR: Include circular ${includePath} -->`
+                    );
+                }
+
+                try {
+                    const content = fs.readFileSync(
+                        fullPath,
+                        'utf-8'
+                    );
+
+                    console.log(
+                        `✅ Incluido: ${includePath} → ${fullPath}`
+                    );
+
+                    const nextStack = new Set(includeStack);
+                    nextStack.add(fullPath);
+
+                    /*
+                     * También procesa includes que estén dentro
+                     * de los propios componentes.
+                     */
+                    return processIncludes(
+                        content,
+                        fullPath,
+                        nextStack
+                    );
+                } catch (error) {
+                    console.error(
+                        `❌ No se pudo incluir: ${includePath}`,
+                        `\nRuta calculada: ${fullPath}`,
+                        `\nError: ${error.message}`
+                    );
+
+                    return (
+                        `<!-- ERROR: No se pudo incluir ${includePath} -->`
+                    );
+                }
+            }
+        );
+    }
+
     return {
         name: 'html-include',
-        transformIndexHtml(html) {
-            console.log('🔍 Procesando index.html con htmlInclude...');
-            let replacedCount = 0;
-            const result = html.replace(/@@include\(['"](.+?)['"]\)/g, (match, filePath) => {
-                replacedCount++;
-                const fullPath = resolve(process.cwd(), filePath);
-                console.log(`📄 Incluyendo archivo #${replacedCount}: ${filePath} → ${fullPath}`);
-                try {
-                    const content = fs.readFileSync(fullPath, 'utf-8');
-                    console.log(`✅ Leído: ${fullPath} (${content.length} caracteres)`);
-                    // Buscar si contiene el JSON de Typed
-                    if (content.includes('settings--937c14f')) {
-                        console.log(`🎯 ¡Encontrado settings--937c14f en ${filePath}!`);
-                    }
-                    return content;
-                } catch (error) {
-                    console.error(`❌ Error al incluir: ${filePath}`, error.message);
-                    return `<!-- ERROR: No se pudo incluir ${filePath} -->`;
-                }
-            });
-            console.log(`✅ Total de includes procesados: ${replacedCount}`);
-            return result;
+
+        transformIndexHtml(html, ctx) {
+            /*
+             * ctx.filename contiene la ruta absoluta del
+             * index.html que Vite está procesando.
+             */
+            const htmlFile = ctx.filename
+                ? resolve(ctx.filename)
+                : resolve(process.cwd(), 'index.html');
+
+            console.log(
+                `🔍 Procesando HTML: ${htmlFile}`
+            );
+
+            return processIncludes(
+                html,
+                htmlFile,
+                new Set([htmlFile])
+            );
         }
     };
 }
 
 export default defineConfig({
-    plugins: [htmlInclude()],
+    plugins: [
+        htmlInclude()
+    ],
+
     server: {
         port: 3000,
         open: true
     },
+
     build: {
         outDir: 'dist',
-        assetsDir: 'assets'
+        assetsDir: 'assets',
+
+        /*
+         * Entradas HTML de la aplicación multipágina.
+         * Esto es importante para npm run build.
+         */
+        rolldownOptions: {
+            input: {
+                home: resolve(
+                    process.cwd(),
+                    'index.html'
+                ),
+
+                localCourses: resolve(
+                    process.cwd(),
+                    'cursos-idioma-local/index.html'
+                )
+            }
+        }
     }
 });

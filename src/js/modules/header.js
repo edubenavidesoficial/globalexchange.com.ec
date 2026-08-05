@@ -11,7 +11,6 @@ export function initHeader() {
     }
 
     const navigation = header.querySelector('.header__nav');
-
     const mobileToggle = header.querySelector(
         '.header__mobile-toggle'
     );
@@ -24,122 +23,152 @@ export function initHeader() {
         '.header__nested-toggle'
     );
 
-    const language = header.querySelector(
-        '.header__language'
-    );
-
+    const language = header.querySelector('.header__language');
     const languageToggle = header.querySelector(
         '.header__language-toggle'
     );
 
-    const search = header.querySelector(
-        '.header__search'
-    );
-
+    const search = header.querySelector('.header__search');
     const searchToggle = header.querySelector(
         '.header__search-toggle'
     );
-
     const searchInput = header.querySelector(
         '.header__search-input'
     );
 
-    /**
-     * Cierra los submenús principales y anidados.
-     */
+    const drawer = document.querySelector(
+        '[data-header-drawer]'
+    );
+    const drawerBackdrop = document.querySelector(
+        '[data-header-drawer-backdrop]'
+    );
+    const drawerClose = document.querySelector(
+        '[data-header-drawer-close]'
+    );
+
     function closeDropdowns() {
         dropdownToggles.forEach((toggle) => {
-            toggle.setAttribute(
-                'aria-expanded',
-                'false'
-            );
+            toggle.setAttribute('aria-expanded', 'false');
 
-            const menuItem = toggle.closest(
-                '.header__menu-item'
-            );
-
-            menuItem?.classList.remove('is-open');
+            toggle
+                .closest('.header__menu-item')
+                ?.classList.remove('is-open');
         });
 
         nestedToggles.forEach((toggle) => {
-            toggle.setAttribute(
-                'aria-expanded',
-                'false'
-            );
+            toggle.setAttribute('aria-expanded', 'false');
 
-            const submenuItem = toggle.closest(
-                '.header__submenu-item--nested'
-            );
-
-            submenuItem?.classList.remove('is-open');
+            toggle
+                .closest('.header__submenu-item--nested')
+                ?.classList.remove('is-open');
         });
     }
 
-    /**
-     * Cierra el selector de idioma.
-     */
     function closeLanguage() {
-        if (!language || !languageToggle) {
-            return;
-        }
-
-        language.classList.remove('is-open');
-
-        languageToggle.setAttribute(
+        language?.classList.remove('is-open');
+        languageToggle?.setAttribute(
             'aria-expanded',
             'false'
         );
     }
 
-    /**
-     * Cierra el buscador.
-     */
     function closeSearch() {
-        if (!search || !searchToggle) {
-            return;
-        }
-
-        search.classList.remove('is-open');
-
-        searchToggle.setAttribute(
+        search?.classList.remove('is-open');
+        searchToggle?.setAttribute(
             'aria-expanded',
             'false'
         );
     }
 
-    /**
-     * Cierra la navegación móvil.
-     */
     function closeMobileNavigation() {
-        if (!navigation || !mobileToggle) {
+        navigation?.classList.remove('is-open');
+
+        if (window.innerWidth <= 1024) {
+            mobileToggle?.classList.remove('is-open');
+            mobileToggle?.setAttribute(
+                'aria-expanded',
+                'false'
+            );
+            mobileToggle?.setAttribute(
+                'aria-label',
+                'Abrir menú'
+            );
+        }
+    }
+
+    function openDrawer() {
+        if (!drawer || !drawerBackdrop || !mobileToggle) {
             return;
         }
 
-        navigation.classList.remove('is-open');
-        mobileToggle.classList.remove('is-open');
+        drawer.classList.add('is-open');
+        drawerBackdrop.classList.add('is-open');
+        document.body.classList.add('header-drawer-open');
 
-        mobileToggle.setAttribute(
-            'aria-expanded',
-            'false'
-        );
+        drawer.setAttribute('aria-hidden', 'false');
+        drawerBackdrop.setAttribute('aria-hidden', 'false');
 
+        mobileToggle.classList.add('is-open');
+        mobileToggle.setAttribute('aria-expanded', 'true');
         mobileToggle.setAttribute(
             'aria-label',
-            'Abrir menú'
+            'Cerrar panel informativo'
         );
+
+        window.setTimeout(() => {
+            drawerClose?.focus();
+        }, 300);
     }
 
-    /**
-     * Burger.
-     *
-     * En escritorio se conserva como elemento visual.
-     * En tablet y móvil abre la navegación.
-     */
-    mobileToggle?.addEventListener('click', () => {
-        if (window.innerWidth > 1024) {
+    function closeDrawer({ returnFocus = false } = {}) {
+        if (!drawer || !drawerBackdrop || !mobileToggle) {
             return;
         }
 
+        drawer.classList.remove('is-open');
+        drawerBackdrop.classList.remove('is-open');
+        document.body.classList.remove('header-drawer-open');
+
+        drawer.setAttribute('aria-hidden', 'true');
+        drawerBackdrop.setAttribute('aria-hidden', 'true');
+
+        mobileToggle.classList.remove('is-open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.setAttribute(
+            'aria-label',
+            'Abrir panel informativo'
+        );
+
+        if (returnFocus) {
+            mobileToggle.focus();
+        }
+    }
+
+    mobileToggle?.addEventListener('click', () => {
+        closeLanguage();
+        closeSearch();
+        closeDropdowns();
+
+        /*
+         * En escritorio abre el panel lateral.
+         */
+        if (window.innerWidth > 1024) {
+            const isOpen = drawer?.classList.contains(
+                'is-open'
+            );
+
+            if (isOpen) {
+                closeDrawer();
+            } else {
+                openDrawer();
+            }
+
+            return;
+        }
+
+        /*
+         * En tablet y móvil abre la navegación.
+         */
         const isOpen = navigation?.classList.toggle(
             'is-open'
         );
@@ -158,14 +187,16 @@ export function initHeader() {
             'aria-label',
             isOpen ? 'Cerrar menú' : 'Abrir menú'
         );
-
-        closeLanguage();
-        closeSearch();
     });
 
-    /**
-     * Desplegables principales.
-     */
+    drawerClose?.addEventListener('click', () => {
+        closeDrawer({ returnFocus: true });
+    });
+
+    drawerBackdrop?.addEventListener('click', () => {
+        closeDrawer();
+    });
+
     dropdownToggles.forEach((toggle) => {
         toggle.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -186,7 +217,6 @@ export function initHeader() {
 
             if (willOpen) {
                 menuItem.classList.add('is-open');
-
                 toggle.setAttribute(
                     'aria-expanded',
                     'true'
@@ -195,22 +225,19 @@ export function initHeader() {
         });
     });
 
-    /**
-     * Submenús anidados.
-     */
     nestedToggles.forEach((toggle) => {
         toggle.addEventListener('click', (event) => {
             event.stopPropagation();
 
-            const submenuItem = toggle.closest(
+            const item = toggle.closest(
                 '.header__submenu-item--nested'
             );
 
-            if (!submenuItem) {
+            if (!item) {
                 return;
             }
 
-            const isOpen = submenuItem.classList.toggle(
+            const isOpen = item.classList.toggle(
                 'is-open'
             );
 
@@ -221,9 +248,6 @@ export function initHeader() {
         });
     });
 
-    /**
-     * Idiomas.
-     */
     languageToggle?.addEventListener('click', (event) => {
         event.stopPropagation();
 
@@ -240,9 +264,6 @@ export function initHeader() {
         closeDropdowns();
     });
 
-    /**
-     * Buscador.
-     */
     searchToggle?.addEventListener('click', (event) => {
         event.stopPropagation();
 
@@ -273,18 +294,12 @@ export function initHeader() {
         event.stopPropagation();
     });
 
-    /**
-     * Cierra paneles al hacer clic fuera.
-     */
     document.addEventListener('click', () => {
         closeDropdowns();
         closeLanguage();
         closeSearch();
     });
 
-    /**
-     * Cierra con Escape.
-     */
     document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') {
             return;
@@ -294,11 +309,9 @@ export function initHeader() {
         closeLanguage();
         closeSearch();
         closeMobileNavigation();
+        closeDrawer({ returnFocus: true });
     });
 
-    /**
-     * Cierra el menú móvil al pulsar un enlace.
-     */
     navigation?.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', () => {
             if (window.innerWidth <= 1024) {
@@ -307,13 +320,12 @@ export function initHeader() {
         });
     });
 
-    /**
-     * Limpia estados al volver a escritorio.
-     */
     window.addEventListener('resize', () => {
         if (window.innerWidth > 1024) {
             closeMobileNavigation();
             closeDropdowns();
+        } else {
+            closeDrawer();
         }
     });
 }

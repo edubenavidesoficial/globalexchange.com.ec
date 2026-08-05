@@ -12,6 +12,7 @@
    - Sin WPDA
    - Sin GT3
    - Menú de escritorio y móvil
+   - Panel lateral informativo
    - Submenús accesibles
    - Alineación calibrada
    ==================================================== */
@@ -24,17 +25,24 @@
 .header,
 .header *,
 .header *::before,
-.header *::after {
+.header *::after,
+.header-drawer,
+.header-drawer *,
+.header-drawer *::before,
+.header-drawer *::after {
     box-sizing: border-box;
 }
 
 .header a,
 .header button,
-.header input {
+.header input,
+.header-drawer a,
+.header-drawer button {
     font-family: "Rubik", sans-serif;
 }
 
-.header button {
+.header button,
+.header-drawer button {
     margin: 0;
     padding: 0;
 
@@ -140,6 +148,12 @@
     display: flex;
     align-items: stretch;
 
+    /*
+       Esta separación real evita que Global y
+       Programas aparezcan pegados.
+    */
+    column-gap: 20px;
+
     height: 100%;
 
     margin: 0;
@@ -165,13 +179,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
 
     height: 100%;
     min-height: 100px;
 
     margin: 0;
-    padding: 2px 14px 0;
+
+    /*
+       El espacio entre elementos ahora lo controla
+       column-gap en .header__menu.
+    */
+    padding: 2px 0 0;
 
     font-family: "Rubik", sans-serif;
     font-size: 14px;
@@ -242,8 +261,6 @@
 
 /* ==========================================
    FLECHAS DEL MENÚ PRINCIPAL
-   Se dibujan con CSS para que Global y Programas
-   tengan exactamente la misma alineación.
 ========================================== */
 
 .header__menu>.header__menu-item--dropdown>.header__dropdown-toggle>.header__dropdown-arrow {
@@ -251,6 +268,7 @@
 }
 
 .header__menu>.header__menu-item--dropdown>.header__dropdown-toggle::after {
+
     content: "";
 
     display: block;
@@ -259,18 +277,19 @@
     width: 6px;
     height: 6px;
 
-    margin-left: 1px;
+    margin-left: 2px;
 
     border-right: 1px solid currentColor;
     border-bottom: 1px solid currentColor;
 
-    transform: rotate(45deg);
+    transform: rotate(45deg) translateY(-1px);
     transform-origin: center;
 
     transition: transform 0.2s ease;
 }
 
 .header__menu>.header__menu-item--dropdown>.header__dropdown-toggle[aria-expanded="true"]::after {
+
     transform: rotate(225deg);
 }
 
@@ -294,7 +313,9 @@
 
     background-color: #ffffff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.1);
 
     opacity: 0;
     visibility: hidden;
@@ -472,7 +493,9 @@
 
     background-color: #ffffff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.1);
 
     opacity: 0;
     visibility: hidden;
@@ -542,7 +565,8 @@
 
     color: #ffffff;
 
-    background-image: linear-gradient(135deg,
+    background-image:
+        linear-gradient(135deg,
             #f6a8b7 0%,
             #f37742 100%);
 
@@ -555,6 +579,7 @@
 
 .header__virtual:hover {
     color: #ffffff;
+
     filter: brightness(1.04);
 }
 
@@ -580,7 +605,8 @@
 
     color: #ffffff;
 
-    background-image: linear-gradient(90deg,
+    background-image:
+        linear-gradient(90deg,
             #ff4969 -20%,
             #fc9d44 115%);
 
@@ -599,12 +625,15 @@
 .header__contact-button:hover {
     color: #ffffff;
 
-    background-image: linear-gradient(90deg,
+    background-image:
+        linear-gradient(90deg,
             #fc9d44 -20%,
             #ff4969 115%);
 
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 73, 105, 0.3);
+
+    box-shadow:
+        0 4px 12px rgba(255, 73, 105, 0.3);
 }
 
 
@@ -689,7 +718,9 @@
     background-color: #ffffff;
     border: 1px solid #eaeaea;
     border-radius: 5px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.12);
 
     opacity: 0;
     visibility: hidden;
@@ -731,12 +762,14 @@
 
     color: #696687;
     background-color: #ffffff;
+
     border: 1px solid #eaeaea;
     border-radius: 4px;
 }
 
 .header__search-input:focus {
     border-color: #f47514;
+
     outline: none;
 }
 
@@ -752,7 +785,8 @@
 
     color: #ffffff;
 
-    background-image: linear-gradient(90deg,
+    background-image:
+        linear-gradient(90deg,
             #ff4969 -20%,
             #fc9d44 115%);
 
@@ -763,7 +797,8 @@
 }
 
 .header__search-submit:hover {
-    background-image: linear-gradient(90deg,
+    background-image:
+        linear-gradient(90deg,
             #fc9d44 -20%,
             #ff4969 115%);
 }
@@ -850,6 +885,286 @@
 }
 
 
+/* ====================================================
+   PANEL LATERAL INFORMATIVO
+==================================================== */
+
+
+/* ==========================================
+   FONDO OSCURO
+========================================== */
+
+.header-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 3990;
+
+    background-color:
+        rgba(0, 0, 0, 0.68);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.header-drawer__backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+/* ==========================================
+   PANEL
+========================================== */
+
+.header-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 4000;
+
+    width: min(405px, 100%);
+    height: 100vh;
+
+    background-color: #ffffff;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    visibility: hidden;
+
+    transform: translateX(100%);
+
+    transition:
+        transform 0.4s ease,
+        visibility 0.4s ease;
+}
+
+.header-drawer.is-open {
+    visibility: visible;
+
+    transform: translateX(0);
+}
+
+.header-drawer__inner {
+    position: relative;
+
+    min-height: 100%;
+
+    padding: 42px 32px 55px;
+}
+
+
+/* ==========================================
+   BOTÓN CERRAR
+========================================== */
+
+.header-drawer__close {
+    position: absolute;
+    top: 21px;
+    right: 22px;
+
+    width: 40px;
+    height: 40px;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+    border: 0;
+
+    cursor: pointer;
+}
+
+.header-drawer__close span {
+    position: absolute;
+    top: 19px;
+    left: 8px;
+
+    display: block;
+
+    width: 25px;
+    height: 2px;
+
+    background-color: #3b3663;
+}
+
+.header-drawer__close span:first-child {
+    transform: rotate(45deg);
+}
+
+.header-drawer__close span:last-child {
+    transform: rotate(-45deg);
+}
+
+
+/* ==========================================
+   LOGO DEL PANEL
+========================================== */
+
+.header-drawer__logo {
+    display: block;
+
+    width: 100%;
+    max-width: 180px;
+
+    margin: 0 0 36px;
+}
+
+.header-drawer__logo img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+}
+
+
+/* ==========================================
+   DESCRIPCIÓN DEL PANEL
+========================================== */
+
+.header-drawer__description {
+    margin: 0 0 34px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+
+    color: #696687;
+}
+
+.header-drawer__separator {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    margin-bottom: 12px;
+}
+
+.header-drawer__separator span {
+    display: block;
+
+    width: 3px;
+    height: 3px;
+
+    background-color: #3b3663;
+    border-radius: 50%;
+}
+
+.header-drawer__info-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 42px;
+
+    font-size: 14px;
+
+    color: #696687;
+    text-decoration: none;
+}
+
+.header-drawer__info-link span {
+    color: #e6d219;
+}
+
+
+/* ==========================================
+   CONTACTOS DEL PANEL
+========================================== */
+
+.header-drawer__contact {
+    margin: 0;
+}
+
+.header-drawer__title {
+    margin: 0 0 16px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.2;
+
+    color: #30295f;
+}
+
+.header-drawer__contact-row {
+    display: grid;
+    grid-template-columns:
+        20px minmax(0, 1fr);
+
+    gap: 10px;
+
+    margin: 0 0 18px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    line-height: 1.5;
+
+    color: #696687;
+    text-decoration: none;
+}
+
+.header-drawer__contact-icon {
+    color: #623de8;
+}
+
+
+/* ==========================================
+   REDES DEL PANEL
+========================================== */
+
+.header-drawer__social {
+    display: flex;
+    align-items: center;
+    gap: 19px;
+
+    margin-top: 35px;
+}
+
+.header-drawer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 18px;
+    min-height: 18px;
+
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #aaa4c3;
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.header-drawer__social a:hover {
+    color: #623de8;
+
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   BLOQUEO DE SCROLL
+========================================== */
+
+body.header-drawer-open {
+    overflow: hidden;
+}
+
+
 /* ==========================================
    RESPONSIVE - PANTALLAS GRANDES
 ========================================== */
@@ -865,10 +1180,14 @@
         max-width: 155px;
     }
 
+    .header__menu {
+        column-gap: 17px;
+    }
+
     .header__menu-item>a,
     .header__dropdown-toggle {
-        padding-right: 11px;
-        padding-left: 11px;
+        padding-right: 0;
+        padding-left: 0;
 
         font-size: 13px;
     }
@@ -894,10 +1213,14 @@
         max-width: 145px;
     }
 
+    .header__menu {
+        column-gap: 13px;
+    }
+
     .header__menu-item>a,
     .header__dropdown-toggle {
-        padding-right: 8px;
-        padding-left: 8px;
+        padding-right: 0;
+        padding-left: 0;
 
         font-size: 12px;
     }
@@ -952,7 +1275,9 @@
         padding: 10px 22px 25px;
 
         background-color: #ffffff;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+        box-shadow:
+            0 10px 20px rgba(0, 0, 0, 0.1);
 
         overflow-x: hidden;
         overflow-y: auto;
@@ -981,6 +1306,8 @@
         flex-direction: column;
         align-items: stretch;
 
+        column-gap: 0;
+
         width: 100%;
         height: auto;
     }
@@ -991,7 +1318,8 @@
         width: 100%;
         height: auto;
 
-        border-bottom: 1px solid rgba(59, 54, 99, 0.08);
+        border-bottom:
+            1px solid rgba(59, 54, 99, 0.08);
     }
 
     .header__menu-item>a,
@@ -1073,6 +1401,10 @@
     .header__search {
         display: none;
     }
+
+    .header-drawer {
+        width: min(400px, 88vw);
+    }
 }
 
 
@@ -1117,7 +1449,25 @@
         padding-right: 16px;
         padding-left: 16px;
     }
+
+    .header-drawer {
+        width: min(405px,
+                calc(100% - 42px));
+    }
+
+    .header-drawer__inner {
+        padding: 36px 30px 45px;
+    }
+
+    .header-drawer__logo {
+        max-width: 155px;
+    }
 }
+
+
+/* ==========================================
+   MÓVILES MUY PEQUEÑOS
+========================================== */
 
 @media (max-width: 380px) {
     .header__container {
@@ -1128,6 +1478,11 @@
     .header__logo img {
         width: 120px;
         max-width: 120px;
+    }
+
+    .header-drawer__inner {
+        padding-right: 22px;
+        padding-left: 22px;
     }
 }
 
@@ -1142,7 +1497,10 @@
     .header__submenu,
     .header__language-menu,
     .header__search-panel,
-    .header__mobile-toggle span {
+    .header__mobile-toggle span,
+    .header-drawer,
+    .header-drawer__backdrop,
+    .header-drawer__social a {
         transition: none;
     }
 }
