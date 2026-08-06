@@ -12,6 +12,8 @@ import { initFooterSearch } from './modules/footer-search.js';
 import { initFloatingContact } from './modules/floating-contact.js';
 import { initAboutLocationsProgress } from './modules/about-locations-progress.js';
 import { initFaqAccordion } from './modules/faq-accordion.js';
+import { initForeignCoursesTabs } from './modules/foreign-courses-tabs.js';
+import { initForeignFlagsCarousel } from './modules/foreign-flags-carousel.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
@@ -23,4 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initFloatingContact();
     initAboutLocationsProgress();
     initFaqAccordion();
+    initForeignCoursesTabs();
+    initForeignFlagsCarousel();
 });
