@@ -1,0 +1,1503 @@
+/* ====================================================
+   ABOUT PAGE
+   Archivo: src/css/pages/about-page.css
+
+   Página:
+   Nosotros
+==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.about-page,
+.about-page *,
+.about-page *::before,
+.about-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.about-page {
+    width: 100%;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   HERO
+==================================================== */
+
+.about-page-hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 360px;
+
+    padding: 70px 0;
+
+    background-image:
+        url("/images/local-courses/pic_paralax_2.jpg");
+
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   OVERLAY DEL HERO
+========================================== */
+
+.about-page-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(90deg,
+            rgba(15, 18, 54, 0.28) 0%,
+            rgba(15, 18, 54, 0.38) 50%,
+            rgba(15, 18, 54, 0.28) 100%);
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
+
+.about-page-hero__container {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
+.about-page-hero__title {
+    width: 100%;
+
+    margin: 0 auto 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(38px, 3.5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #ff7a2f;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.62);
+}
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
+
+.about-page-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.about-page-hero__breadcrumb a {
+    color: #ff7a2f;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.about-page-hero__breadcrumb a:hover,
+.about-page-hero__breadcrumb a:focus-visible {
+    color: #ffffff;
+}
+
+.about-page-hero__separator {
+    display: block;
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+}
+
+
+/* ====================================================
+   HISTORIA Y GLOBAL EXCHANGE
+==================================================== */
+
+.about-history {
+    position: relative;
+
+    width: 100%;
+
+    padding: 80px 0 100px;
+
+    background-color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTENEDOR DE HISTORIA
+========================================== */
+
+.about-history__container {
+    width: 100%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   BLOQUES DE HISTORIA
+========================================== */
+
+.about-history__block {
+    width: 100%;
+
+    margin-bottom: 100px;
+}
+
+.about-history__block:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   CABECERA DE HISTORIA
+========================================== */
+
+.about-history__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 42px;
+
+    text-align: center;
+}
+
+.about-history__title {
+    margin: 0 0 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(32px, 3vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+}
+
+.about-history__divider {
+    display: block;
+
+    width: 72px;
+    height: 3px;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border-radius: 999px;
+}
+
+
+/* ==========================================
+   FILAS DE HISTORIA
+========================================== */
+
+.about-history__row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 0.95fr) minmax(0, 1.05fr);
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: clamp(45px, 6vw, 80px);
+}
+
+.about-history__row--reverse {
+    grid-template-columns:
+        minmax(0, 1.05fr) minmax(0, 0.95fr);
+}
+
+
+/* ==========================================
+   IMÁGENES DE HISTORIA
+========================================== */
+
+.about-history__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+}
+
+.about-history__image {
+    display: block;
+
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+
+    border-radius: 24px;
+
+    object-fit: cover;
+
+    box-shadow:
+        0 16px 38px rgba(59, 54, 99, 0.14),
+        0 5px 14px rgba(59, 54, 99, 0.07);
+}
+
+.about-history__image--square {
+    max-width: 430px;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+}
+
+
+/* ==========================================
+   TEXTO DE HISTORIA
+========================================== */
+
+.about-history__content {
+    min-width: 0;
+}
+
+.about-history__content p {
+    margin: 0 0 20px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.75;
+
+    color: #696687;
+}
+
+.about-history__content p:last-of-type {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   FRASE DESTACADA DE HISTORIA
+========================================== */
+
+.about-history__quote {
+    position: relative;
+
+    margin: 32px 0 0;
+    padding: 24px 28px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(20px, 2vw, 26px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.4;
+
+    color: #30295f;
+    background-color: #f8f7fd;
+
+    border-left: 4px solid #ff7a2f;
+    border-radius: 0 12px 12px 0;
+}
+
+
+/* ====================================================
+   QUIÉNES SOMOS Y QUÉ HACEMOS
+==================================================== */
+
+.about-identity {
+    position: relative;
+
+    width: 100%;
+
+    padding: 75px 0 100px;
+
+    background-color: #f8f7fd;
+}
+
+
+/* ==========================================
+   CONTENEDOR DE IDENTIDAD
+========================================== */
+
+.about-identity__container {
+    width: 100%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   ENCABEZADO PRINCIPAL
+========================================== */
+
+.about-identity__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    max-width: 1080px;
+
+    margin: 0 auto 72px;
+
+    text-align: center;
+}
+
+.about-identity__eyebrow {
+    margin: 0 0 8px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+
+    color: #696687;
+
+    letter-spacing: 0.15px;
+    text-transform: uppercase;
+}
+
+.about-identity__main-title {
+    width: 100%;
+
+    margin: 0 0 28px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(30px, 3vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.about-identity__intro-divider {
+    display: block;
+
+    width: 100%;
+    max-width: 940px;
+    height: 1px;
+
+    margin: 0 auto;
+
+    background-color: rgba(48, 41, 95, 0.34);
+}
+
+
+/* ==========================================
+   SECCIONES INTERNAS
+========================================== */
+
+.about-identity__section {
+    width: 100%;
+}
+
+.about-identity__section+.about-identity__section {
+    margin-top: 90px;
+}
+
+
+/* ==========================================
+   CABECERAS INTERNAS
+========================================== */
+
+.about-identity__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 45px;
+
+    text-align: center;
+}
+
+.about-identity__title {
+    margin: 0 0 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(32px, 3vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+}
+
+.about-identity__divider {
+    display: block;
+
+    width: 72px;
+    height: 3px;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border-radius: 999px;
+}
+
+
+/* ==========================================
+   QUIÉNES SOMOS
+========================================== */
+
+.about-identity__row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 0.95fr) minmax(0, 1.05fr);
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: clamp(45px, 6vw, 85px);
+}
+
+
+/* ==========================================
+   IMAGEN DE QUIÉNES SOMOS
+========================================== */
+
+.about-identity__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+}
+
+.about-identity__image {
+    display: block;
+
+    width: 100%;
+    max-width: 520px;
+    height: 390px;
+
+    border-radius: 24px;
+
+    object-fit: cover;
+    object-position: center;
+
+    box-shadow:
+        0 16px 38px rgba(59, 54, 99, 0.14),
+        0 5px 14px rgba(59, 54, 99, 0.07);
+}
+
+
+/* ==========================================
+   TEXTO DE QUIÉNES SOMOS
+========================================== */
+
+.about-identity__content {
+    min-width: 0;
+}
+
+.about-identity__content p {
+    margin: 0 0 18px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.75;
+
+    color: #696687;
+}
+
+.about-identity__content p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   TEXTO DESTACADO
+========================================== */
+
+.about-identity__highlight {
+    margin-top: 28px !important;
+    padding: 22px 24px;
+
+    font-family: "Nunito", sans-serif !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    font-style: italic;
+    line-height: 1.6 !important;
+
+    color: #30295f !important;
+    background-color: #ffffff;
+
+    border-left: 4px solid #ff7a2f;
+    border-radius: 0 12px 12px 0;
+
+    box-shadow:
+        0 10px 24px rgba(59, 54, 99, 0.08);
+}
+
+
+/* ==========================================
+   CUADRÍCULA DE SERVICIOS
+========================================== */
+
+.about-identity__services-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    align-items: stretch;
+
+    gap: 34px;
+}
+
+
+/* ==========================================
+   TARJETAS DE SERVICIOS
+========================================== */
+
+.about-identity__service-card {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    background-color: #ffffff;
+
+    border: 1px solid rgba(48, 41, 95, 0.08);
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 16px 38px rgba(59, 54, 99, 0.10),
+        0 5px 14px rgba(59, 54, 99, 0.05);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.about-identity__service-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 22px 45px rgba(59, 54, 99, 0.15),
+        0 7px 18px rgba(59, 54, 99, 0.07);
+}
+
+
+/* ==========================================
+   IMÁGENES DE SERVICIOS
+========================================== */
+
+.about-identity__service-visual {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    background-color: #f2f1f8;
+
+    overflow: hidden;
+}
+
+.about-identity__service-image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition: transform 0.4s ease;
+}
+
+.about-identity__service-card:hover .about-identity__service-image {
+    transform: scale(1.05);
+}
+
+
+/* ==========================================
+   CONTENIDO DE SERVICIOS
+========================================== */
+
+.about-identity__service-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 30px 30px 34px;
+
+    text-align: center;
+}
+
+.about-identity__service-title {
+    margin: 0 0 14px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1.25;
+
+    color: #30295f;
+}
+
+.about-identity__service-description {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.7;
+
+    color: #696687;
+}
+
+.about-identity__service-description+.about-identity__service-description {
+    margin-top: 12px;
+}
+
+/* ====================================================
+   ESCUELA DE IDIOMAS Y SEDES
+==================================================== */
+
+.about-locations {
+    position: relative;
+
+    width: 100%;
+
+    padding: 70px 0 55px;
+
+    background-color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.about-locations__container {
+    width: 100%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   ESCUELA DE IDIOMAS
+========================================== */
+
+.about-locations__school {
+    width: 100%;
+
+    margin-bottom: 72px;
+}
+
+.about-locations__school-header {
+    width: 100%;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+}
+
+.about-locations__main-title {
+    margin: 0;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(24px, 2.2vw, 31px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   COLUMNAS DE ESCUELA
+========================================== */
+
+.about-locations__school-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    align-items: start;
+
+    gap: clamp(60px, 8vw, 115px);
+
+    width: 100%;
+}
+
+.about-locations__school-column {
+    min-width: 0;
+
+    text-align: center;
+}
+
+.about-locations__school-title {
+    margin: 0 0 20px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.25;
+
+    color: #30295f;
+}
+
+.about-locations__school-text {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    color: #696687;
+}
+
+.about-locations__school-highlight {
+    width: 100%;
+    max-width: 570px;
+
+    margin: 16px auto 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+
+    color: #696687;
+
+    text-align: center;
+}
+
+.about-locations__school-description {
+    width: 100%;
+
+    text-align: left;
+}
+
+.about-locations__school-description p {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+
+    color: #696687;
+}
+
+.about-locations__school-description p+p {
+    margin-top: 2px;
+}
+
+
+/* ==========================================
+   SEDES
+========================================== */
+
+.about-locations__locations {
+    width: 100%;
+}
+
+.about-locations__locations-title {
+    margin: 0 0 25px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(31px, 3vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #30295f;
+}
+
+
+/* ==========================================
+   DISTRIBUCIÓN DE SEDES
+========================================== */
+
+.about-locations__locations-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.2fr) minmax(270px, 0.8fr);
+
+    align-items: center;
+
+    gap: clamp(38px, 5vw, 70px);
+
+    width: 100%;
+}
+
+
+/* ==========================================
+   IMAGEN DE SEDES
+========================================== */
+
+.about-locations__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+}
+
+.about-locations__image {
+    display: block;
+
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+
+    border-radius: 34px;
+
+    object-fit: contain;
+
+    box-shadow:
+        0 15px 34px rgba(59, 54, 99, 0.17),
+        0 5px 14px rgba(59, 54, 99, 0.08);
+}
+
+
+/* ==========================================
+   ESTADÍSTICAS
+========================================== */
+
+.about-locations__stats {
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.about-locations__stat {
+    display: flex;
+    align-items: center;
+
+    gap: 22px;
+
+    width: 100%;
+}
+
+
+/* ==========================================
+   CÍRCULOS DE PORCENTAJE
+========================================== */
+
+.about-locations__progress {
+    --progress: 0deg;
+    --progress-color: #6254e7;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(var(--progress-color) 0deg var(--progress),
+            #e6e6e7 var(--progress) 360deg);
+}
+
+.about-locations__progress::after {
+    content: "";
+
+    position: absolute;
+    inset: 4px;
+
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+.about-locations__progress--national {
+    --progress-color: #6254e7;
+}
+
+.about-locations__progress--international {
+    --progress-color: #f56616;
+}
+
+.about-locations__progress-value {
+    position: relative;
+    z-index: 2;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.about-locations__progress--national .about-locations__progress-value {
+    color: #6254e7;
+}
+
+.about-locations__progress--international .about-locations__progress-value {
+    color: #f56616;
+}
+
+
+/* ==========================================
+   TEXTO DE ESTADÍSTICAS
+========================================== */
+
+.about-locations__stat-content {
+    min-width: 0;
+}
+
+.about-locations__stat-title {
+    margin: 0 0 10px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.about-locations__stat-title--national {
+    color: #6254e7;
+}
+
+.about-locations__stat-title--international {
+    color: #f56616;
+}
+
+.about-locations__stat-text {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+
+/* ==========================================
+   LOGOS Y CERTIFICACIONES
+========================================== */
+
+.about-locations__partners {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 76px;
+}
+
+.about-locations__partners-image {
+    display: block;
+
+    width: 100%;
+    max-width: 870px;
+    height: auto;
+
+    object-fit: contain;
+}
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+
+    /* Historia */
+
+    .about-history {
+        padding: 65px 0 80px;
+    }
+
+    .about-history__container {
+        max-width: 760px;
+    }
+
+    .about-history__block {
+        margin-bottom: 80px;
+    }
+
+    .about-history__row,
+    .about-history__row--reverse {
+        grid-template-columns: 1fr;
+
+        gap: 38px;
+    }
+
+    .about-history__row--reverse .about-history__visual {
+        order: 1;
+    }
+
+    .about-history__row--reverse .about-history__content {
+        order: 2;
+    }
+
+    .about-history__content {
+        text-align: center;
+    }
+
+    .about-history__image {
+        max-width: 560px;
+    }
+
+    .about-history__image--square {
+        max-width: 430px;
+    }
+
+    .about-history__quote {
+        text-align: left;
+    }
+
+
+    /* Identidad */
+
+    .about-identity {
+        padding: 65px 0 80px;
+    }
+
+    .about-identity__container {
+        max-width: 760px;
+    }
+
+    .about-identity__intro {
+        margin-bottom: 58px;
+    }
+
+    .about-identity__main-title {
+        font-size: 34px;
+    }
+
+    .about-identity__section+.about-identity__section {
+        margin-top: 75px;
+    }
+
+    .about-identity__row {
+        grid-template-columns: 1fr;
+
+        gap: 38px;
+    }
+
+    .about-identity__image {
+        max-width: 580px;
+        height: auto;
+
+        aspect-ratio: 3 / 2;
+    }
+
+    .about-identity__content {
+        text-align: center;
+    }
+
+    .about-identity__highlight {
+        text-align: left;
+    }
+
+    .about-identity__services-grid {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+    .about-identity__service-card {
+        width: 100%;
+        max-width: 620px;
+
+        margin: 0 auto;
+    }
+
+    /* ======================================
+       ESCUELA Y SEDES
+    ====================================== */
+
+    .about-locations {
+        padding: 65px 0 50px;
+    }
+
+    .about-locations__container {
+        max-width: 760px;
+    }
+
+    .about-locations__school {
+        margin-bottom: 60px;
+    }
+
+    .about-locations__school-grid {
+        grid-template-columns: 1fr;
+
+        gap: 42px;
+    }
+
+    .about-locations__school-description {
+        text-align: center;
+    }
+
+    .about-locations__locations-title {
+        text-align: center;
+    }
+
+    .about-locations__locations-grid {
+        grid-template-columns: 1fr;
+
+        gap: 44px;
+    }
+
+    .about-locations__image {
+        max-width: 620px;
+    }
+
+    .about-locations__stats {
+        width: 100%;
+        max-width: 420px;
+
+        margin: 0 auto;
+    }
+
+    .about-locations__partners {
+        margin-top: 58px;
+    }
+}
+
+
+/* ==========================================
+   TABLET PEQUEÑA
+========================================== */
+
+@media (max-width: 768px) {
+    .about-page-hero {
+        min-height: 300px;
+
+        padding: 55px 0;
+    }
+
+    .about-page-hero__container {
+        padding: 0 22px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+
+    /* Historia */
+
+    .about-history {
+        padding: 50px 0 65px;
+    }
+
+    .about-history__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .about-history__block {
+        margin-bottom: 65px;
+    }
+
+    .about-history__header {
+        margin-bottom: 32px;
+    }
+
+    .about-history__title {
+        font-size: 30px;
+    }
+
+    .about-history__row,
+    .about-history__row--reverse {
+        gap: 28px;
+    }
+
+    .about-history__image {
+        border-radius: 18px;
+    }
+
+    .about-history__content p {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .about-history__quote {
+        padding: 20px;
+
+        font-size: 20px;
+    }
+
+
+    /* Identidad */
+
+    .about-identity {
+        padding: 50px 0 65px;
+    }
+
+    .about-identity__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .about-identity__intro {
+        margin-bottom: 48px;
+    }
+
+    .about-identity__eyebrow {
+        font-size: 11px;
+    }
+
+    .about-identity__main-title {
+        margin-bottom: 22px;
+
+        font-size: 27px;
+    }
+
+    .about-identity__section+.about-identity__section {
+        margin-top: 60px;
+    }
+
+    .about-identity__header {
+        margin-bottom: 32px;
+    }
+
+    .about-identity__title {
+        font-size: 30px;
+    }
+
+    .about-identity__row {
+        gap: 28px;
+    }
+
+    .about-identity__image {
+        border-radius: 18px;
+    }
+
+    .about-identity__content p {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .about-identity__highlight {
+        padding: 20px;
+
+        font-size: 17px !important;
+    }
+
+    .about-identity__service-card {
+        border-radius: 16px;
+    }
+
+    .about-identity__service-content {
+        padding: 24px 20px 28px;
+    }
+
+    .about-identity__service-title {
+        font-size: 21px;
+    }
+
+    .about-identity__service-description {
+        font-size: 14px;
+    }
+
+    /* ======================================
+       ESCUELA Y SEDES
+    ====================================== */
+
+    .about-locations {
+        padding: 50px 0 45px;
+    }
+
+    .about-locations__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .about-locations__school {
+        margin-bottom: 50px;
+    }
+
+    .about-locations__school-grid {
+        gap: 35px;
+    }
+
+    .about-locations__main-title {
+        font-size: 27px;
+    }
+
+    .about-locations__school-title {
+        font-size: 19px;
+    }
+
+    .about-locations__school-text,
+    .about-locations__school-description p,
+    .about-locations__school-highlight {
+        font-size: 13px;
+    }
+
+    .about-locations__locations-title {
+        font-size: 30px;
+    }
+
+    .about-locations__locations-grid {
+        gap: 35px;
+    }
+
+    .about-locations__image {
+        border-radius: 22px;
+    }
+
+    .about-locations__stat {
+        gap: 18px;
+    }
+
+    .about-locations__progress {
+        width: 88px;
+        height: 88px;
+    }
+
+    .about-locations__progress-value {
+        font-size: 18px;
+    }
+
+    .about-locations__partners {
+        margin-top: 48px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+    .about-page-hero {
+        min-height: 250px;
+
+        padding: 45px 0;
+    }
+
+    .about-page-hero__container {
+        padding: 0 16px;
+    }
+
+    .about-page-hero__title {
+        font-size: 32px;
+    }
+
+    .about-page-hero__breadcrumb {
+        flex-wrap: wrap;
+
+        font-size: 12px;
+    }
+
+    .about-identity__main-title {
+        font-size: 25px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .about-page-hero__breadcrumb a,
+    .about-identity__service-card,
+    .about-identity__service-image {
+        transition: none;
+    }
+}
