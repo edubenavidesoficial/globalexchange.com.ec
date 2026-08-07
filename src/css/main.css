@@ -24,8 +24,6 @@
 
 @import './legacy/theme/base.css';
 @import './legacy/theme/wpda.css';
-@import './legacy/elementor/frontend.min.css';
-@import './legacy/elementor/animations.min.css';
 @import './legacy/icons/font-awesome.min.css';
 
 /* ==========================================
