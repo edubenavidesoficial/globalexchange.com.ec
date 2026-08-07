@@ -423,7 +423,8 @@
     height: 100%;
     min-height: 0;
 
-    margin-left: 0;
+    /* Separa Contactos del selector de idioma ES */
+    margin-left: 14px;
 }
 
 
@@ -476,6 +477,24 @@
 
 .header__language-toggle:hover {
     color: #f47514;
+}
+
+
+/* ==========================================
+   TIPOGRAFÍA UNIFICADA DEL MENÚ SUPERIOR
+========================================== */
+
+.header__menu-item>a,
+.header__dropdown-toggle,
+.header__language-toggle {
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    white-space: nowrap;
 }
 
 .header__language-menu {
@@ -1185,15 +1204,17 @@ body.header-drawer-open {
     }
 
     .header__menu-item>a,
-    .header__dropdown-toggle {
+    .header__dropdown-toggle,
+    .header__language-toggle {
         padding-right: 0;
         padding-left: 0;
 
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .header__actions {
         gap: 14px;
+        margin-left: 12px;
     }
 }
 
@@ -1218,7 +1239,8 @@ body.header-drawer-open {
     }
 
     .header__menu-item>a,
-    .header__dropdown-toggle {
+    .header__dropdown-toggle,
+    .header__language-toggle {
         padding-right: 0;
         padding-left: 0;
 
@@ -1227,6 +1249,7 @@ body.header-drawer-open {
 
     .header__actions {
         gap: 10px;
+        margin-left: 10px;
     }
 
     .header__contact-button {
