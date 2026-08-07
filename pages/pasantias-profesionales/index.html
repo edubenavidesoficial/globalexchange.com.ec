@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Pasantías profesionales en el exterior | Global Exchange
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Rubik:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/src/css/main.css">
+
+    <!-- Reutilizamos los estilos de las pestañas -->
+    <link rel="stylesheet" href="/src/css/pages/foreign-courses.css">
+
+    <!-- Estilos propios de esta página -->
+    <link rel="stylesheet" href="/src/css/pages/professional-internships.css">
+</head>
+
+<body>
+
+    @@include('../../src/components/floating-dots/Floating_Dots.html')
+
+    @@include('../../src/components/header/Header.html')
+
+    <main class="professional-internships-page">
+
+        @@include('../../src/components/pages/pasantias-profesionales/Professional_Internships_Hero.html')
+
+        @@include('../../src/components/pages/pasantias-profesionales/Professional_Internships_Details.html')
+
+        @@include('../../src/components/pages/pasantias-profesionales/Professional_Internships_Overview.html')
+
+    </main>
+
+    @@include('../../src/components/footer/Footer.html')
+
+    @@include('../../src/components/floating-contact/Floating_Contact.html')
+
+    <script type="module" src="/src/js/main.js">
+    </script>
+
+</body>
+
+</html>

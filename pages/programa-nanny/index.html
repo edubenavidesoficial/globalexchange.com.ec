@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Programa Nanny de Global Exchange para realizar un intercambio cultural con una familia anfitriona en el exterior.">
+
+    <title>
+        Programa Nanny | Global Exchange
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Rubik:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Estilos generales del proyecto -->
+    <link rel="stylesheet" href="/src/css/main.css">
+
+    <!-- Estilos del carrusel reutilizado -->
+    <link rel="stylesheet" href="/src/css/pages/foreign-courses.css">
+
+    <!-- Estilos propios de Programa Nanny -->
+    <link rel="stylesheet" href="/src/css/pages/nanny-program.css">
+</head>
+
+<body>
+
+    @@include('../../src/components/floating-dots/Floating_Dots.html')
+
+    @@include('../../src/components/header/Header.html')
+
+    <main class="nanny-program-page">
+
+        @@include('../../src/components/pages/programa-nanny/Nanny_Program_Hero.html')
+
+        @@include('../../src/components/pages/programa-nanny/Nanny_Program_Content.html')
+
+    </main>
+
+    @@include('../../src/components/footer/Footer.html')
+
+    @@include('../../src/components/floating-contact/Floating_Contact.html')
+
+    <script type="module" src="/src/js/main.js">
+    </script>
+
+</body>
+
+</html>
