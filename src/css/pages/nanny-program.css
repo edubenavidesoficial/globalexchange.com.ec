@@ -1,0 +1,953 @@
+/* ====================================================
+   NANNY PROGRAM
+   Archivo: src/css/pages/nanny-program.css
+
+   Página:
+   Programa Nanny
+==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.nanny-program-page,
+.nanny-program-page *,
+.nanny-program-page *::before,
+.nanny-program-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.nanny-program-page {
+    width: 100%;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   HERO
+==================================================== */
+
+.nanny-program-hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 360px;
+
+    padding: 70px 0;
+
+    background-image:
+        url("/images/local-courses/pic_paralax_2.jpg");
+
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   CAPA DEL HERO
+========================================== */
+
+.nanny-program-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(90deg,
+            rgba(15, 18, 54, 0.28) 0%,
+            rgba(15, 18, 54, 0.38) 50%,
+            rgba(15, 18, 54, 0.28) 100%);
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
+
+.nanny-program-hero__container {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
+.nanny-program-hero__title {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(36px, 3.5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #ff7a2f;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.62);
+}
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
+
+.nanny-program-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.nanny-program-hero__breadcrumb a {
+    color: #ff7a2f;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.nanny-program-hero__breadcrumb a:hover,
+.nanny-program-hero__breadcrumb a:focus-visible {
+    color: #ffffff;
+}
+
+.nanny-program-hero__breadcrumb a:focus-visible {
+    outline:
+        2px solid rgba(255, 122, 47, 0.45);
+
+    outline-offset: 4px;
+}
+
+.nanny-program-hero__separator {
+    display: block;
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+}
+
+
+/* ====================================================
+   CONTENIDO PRINCIPAL
+==================================================== */
+
+.nanny-program-content {
+    position: relative;
+
+    width: 100%;
+
+    padding: 75px 0 90px;
+
+    background:
+        linear-gradient(180deg,
+            #ffffff 0%,
+            #ffffff 72%,
+            #faf9ff 100%);
+
+    overflow: hidden;
+}
+
+.nanny-program-content::before {
+    content: "";
+
+    position: absolute;
+    top: 35%;
+    right: -145px;
+
+    width: 360px;
+    height: 360px;
+
+    border:
+        1px solid rgba(124, 105, 238, 0.10);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.nanny-program-content__container {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ====================================================
+   CABECERA E INTRODUCCIÓN
+==================================================== */
+
+.nanny-program-content__header {
+    width: 100%;
+
+    margin-bottom: 70px;
+}
+
+.nanny-program-content__main-title {
+    position: relative;
+
+    margin: 0 0 40px;
+    padding-bottom: 16px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(31px, 3vw, 42px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.nanny-program-content__main-title::after {
+    content: "";
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+
+    width: 78px;
+    height: 4px;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border-radius: 999px;
+
+    transform: translateX(-50%);
+}
+
+.nanny-program-content__intro {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.05fr) minmax(0, 0.95fr);
+
+    align-items: center;
+
+    gap: clamp(45px, 6vw, 80px);
+
+    width: 100%;
+}
+
+
+/* ==========================================
+   GALERÍA SUPERIOR
+========================================== */
+
+.nanny-program-content__intro-gallery {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    min-width: 0;
+
+    padding: 16px;
+
+    background-color: #f8f7fd;
+
+    border:
+        1px solid rgba(48, 41, 95, 0.05);
+    border-radius: 24px;
+
+    box-shadow:
+        0 18px 42px rgba(48, 41, 95, 0.10);
+}
+
+.nanny-program-content__intro-gallery img {
+    display: block;
+
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    border:
+        4px solid #ffffff;
+    border-radius: 18px;
+
+    object-fit: cover;
+    object-position: center;
+
+    box-shadow:
+        0 8px 20px rgba(48, 41, 95, 0.12);
+
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.nanny-program-content__intro-gallery img:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 14px 26px rgba(48, 41, 95, 0.18);
+}
+
+
+/* ==========================================
+   TEXTO SUPERIOR
+========================================== */
+
+.nanny-program-content__intro-copy {
+    min-width: 0;
+}
+
+.nanny-program-content__quote {
+    margin: 0 0 20px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 800;
+    line-height: 1.25;
+
+    color: #30295f;
+}
+
+.nanny-program-content__description {
+    margin: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.75;
+
+    color: #696687;
+}
+
+.nanny-program-content__description+.nanny-program-content__description {
+    margin-top: 12px;
+}
+
+
+/* ====================================================
+   PROGRAMA PRINCIPAL
+==================================================== */
+
+.nanny-program-content__program {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 0.8fr) minmax(0, 1.2fr);
+
+    align-items: center;
+
+    gap: clamp(45px, 6vw, 80px);
+
+    width: 100%;
+
+    margin-bottom: 70px;
+    padding: 38px;
+
+    background-color: #ffffff;
+
+    border:
+        1px solid rgba(48, 41, 95, 0.05);
+    border-radius: 22px;
+
+    box-shadow:
+        0 18px 45px rgba(48, 41, 95, 0.08);
+}
+
+
+/* ==========================================
+   PAÍSES Y EDADES
+========================================== */
+
+.nanny-program-content__countries-age {
+    min-width: 0;
+}
+
+.nanny-program-content__section-title {
+    margin: 0 0 18px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.25;
+
+    color: #30295f;
+}
+
+.nanny-program-content__countries-age ul {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.nanny-program-content__countries-age li {
+    position: relative;
+
+    margin-bottom: 12px;
+    padding-left: 22px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+.nanny-program-content__countries-age li:last-child {
+    margin-bottom: 0;
+}
+
+.nanny-program-content__countries-age li::before {
+    content: "";
+
+    position: absolute;
+    top: 0.7em;
+    left: 0;
+
+    width: 7px;
+    height: 7px;
+
+    background-color: #e3cf31;
+    border-radius: 50%;
+
+    transform: translateY(-50%);
+}
+
+
+/* ==========================================
+   TARJETA PRINCIPAL
+========================================== */
+
+.nanny-program-content__program-card {
+    min-width: 0;
+
+    text-align: center;
+}
+
+.nanny-program-content__program-title {
+    margin: 0 0 18px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(28px, 2.8vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+
+    text-transform: uppercase;
+}
+
+.nanny-program-content__program-image {
+    display: block;
+
+    width: 100%;
+    height: 410px;
+
+    border-radius: 26px;
+
+    object-fit: cover;
+    object-position: center;
+
+    box-shadow:
+        0 16px 34px rgba(48, 41, 95, 0.18);
+}
+
+
+/* ====================================================
+   INCLUYE / NO INCLUYE
+==================================================== */
+
+.nanny-program-content__conditions {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 28px;
+
+    width: 100%;
+
+    margin-bottom: 75px;
+}
+
+.nanny-program-content__condition {
+    min-width: 0;
+
+    padding: 30px;
+
+    background-color: #faf9ff;
+
+    border:
+        1px solid rgba(48, 41, 95, 0.055);
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 32px rgba(48, 41, 95, 0.05);
+}
+
+.nanny-program-content__condition h2 {
+    position: relative;
+
+    margin: 0 0 22px;
+    padding-bottom: 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+}
+
+.nanny-program-content__condition h2::after {
+    content: "";
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 54px;
+    height: 3px;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border-radius: 999px;
+}
+
+.nanny-program-content__condition ul {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.nanny-program-content__condition li {
+    position: relative;
+
+    margin-bottom: 11px;
+    padding-left: 22px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+
+    color: #696687;
+}
+
+.nanny-program-content__condition li:last-child {
+    margin-bottom: 0;
+}
+
+.nanny-program-content__condition li::before {
+    content: "✓";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    font-weight: 700;
+
+    color: #ff7a2f;
+}
+
+
+/* ====================================================
+   PAÍSES DEL PROGRAMA
+==================================================== */
+
+.nanny-program-content__destinations {
+    width: 100%;
+
+    padding-top: 38px;
+
+    border-top:
+        1px solid rgba(48, 41, 95, 0.18);
+}
+
+.nanny-program-content__destinations-header {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+.nanny-program-content__destinations-header h2 {
+    margin: 0 0 25px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(28px, 2.8vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+
+    color: #30295f;
+
+    text-transform: uppercase;
+}
+
+.nanny-program-content__destinations-list {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 22px;
+
+    max-width: 780px;
+
+    margin: 0 auto;
+
+    text-align: left;
+}
+
+.nanny-program-content__destinations-list ul {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.nanny-program-content__destinations-list li {
+    position: relative;
+
+    margin-bottom: 9px;
+    padding-left: 18px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+.nanny-program-content__destinations-list li::before {
+    content: "";
+
+    position: absolute;
+    top: 0.7em;
+    left: 0;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #e3cf31;
+    border-radius: 50%;
+
+    transform: translateY(-50%);
+}
+
+
+/* ====================================================
+   CARRUSEL DE BANDERAS
+==================================================== */
+
+.nanny-program-content__carousel {
+    position: relative;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+    padding: 0 38px;
+}
+
+.nanny-program-content__carousel .foreign-flags-carousel__slide img {
+    height: 120px;
+}
+
+.nanny-program-content__carousel .foreign-flags-carousel__button {
+    width: 38px;
+    height: 120px;
+
+    font-size: 25px;
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   TABLET GRANDE
+========================================== */
+
+@media (max-width: 900px) {
+
+    .nanny-program-content__intro,
+    .nanny-program-content__program {
+        grid-template-columns: 1fr;
+    }
+
+    .nanny-program-content__intro {
+        gap: 42px;
+    }
+
+    .nanny-program-content__program {
+        max-width: 760px;
+
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .nanny-program-content__program-image {
+        height: auto;
+
+        aspect-ratio: 16 / 10;
+    }
+
+    .nanny-program-content__countries-age {
+        text-align: center;
+    }
+
+    .nanny-program-content__countries-age ul {
+        display: inline-block;
+
+        text-align: left;
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 768px) {
+    .nanny-program-hero {
+        min-height: 300px;
+
+        padding: 55px 0;
+    }
+
+    .nanny-program-hero__container {
+        padding: 0 22px;
+    }
+
+    .nanny-program-content {
+        padding: 60px 0 75px;
+    }
+
+    .nanny-program-content__conditions {
+        gap: 22px;
+    }
+
+    .nanny-program-content__condition {
+        padding: 24px;
+    }
+
+    .nanny-program-content__destinations-list {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+    .nanny-program-hero {
+        min-height: 250px;
+
+        padding: 45px 0;
+    }
+
+    .nanny-program-hero__container,
+    .nanny-program-content__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .nanny-program-hero__title {
+        font-size: 30px;
+    }
+
+    .nanny-program-hero__breadcrumb {
+        flex-wrap: wrap;
+
+        font-size: 12px;
+    }
+
+    .nanny-program-content {
+        padding: 50px 0 65px;
+    }
+
+    .nanny-program-content__main-title {
+        margin-bottom: 30px;
+
+        font-size: 29px;
+    }
+
+    .nanny-program-content__intro-gallery {
+        grid-template-columns: 1fr;
+
+        max-width: 430px;
+
+        margin: 0 auto;
+    }
+
+    .nanny-program-content__quote {
+        font-size: 26px;
+
+        text-align: center;
+    }
+
+    .nanny-program-content__description {
+        font-size: 15px;
+
+        text-align: center;
+    }
+
+    .nanny-program-content__program {
+        gap: 30px;
+
+        margin-bottom: 55px;
+        padding: 24px 18px;
+
+        border-radius: 16px;
+    }
+
+    .nanny-program-content__program-title {
+        font-size: 29px;
+    }
+
+    .nanny-program-content__conditions {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+        margin-bottom: 55px;
+    }
+
+    .nanny-program-content__condition {
+        padding: 24px 20px;
+    }
+
+    .nanny-program-content__condition h2 {
+        font-size: 25px;
+    }
+
+    .nanny-program-content__condition li {
+        font-size: 14px;
+    }
+
+    .nanny-program-content__destinations-header h2 {
+        font-size: 28px;
+    }
+
+    .nanny-program-content__destinations-list {
+        grid-template-columns: 1fr;
+
+        max-width: 300px;
+    }
+
+    .nanny-program-content__carousel {
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+
+    .nanny-program-content__carousel .foreign-flags-carousel__slide img {
+        height: 115px;
+    }
+
+    .nanny-program-content__carousel .foreign-flags-carousel__button {
+        width: 30px;
+        height: 115px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+    .nanny-program-hero__title {
+        font-size: 28px;
+    }
+
+    .nanny-program-content__main-title {
+        font-size: 27px;
+    }
+
+    .nanny-program-content__program-title {
+        font-size: 27px;
+    }
+
+    .nanny-program-content__quote {
+        font-size: 24px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .nanny-program-hero__breadcrumb a,
+    .nanny-program-content__intro-gallery img {
+        transition: none;
+    }
+}

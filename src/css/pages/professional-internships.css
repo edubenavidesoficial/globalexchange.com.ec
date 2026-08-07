@@ -1,0 +1,831 @@
+/* ====================================================
+   PROFESSIONAL INTERNSHIPS
+   Archivo:
+   src/css/pages/professional-internships.css
+
+   Página:
+   Pasantías profesionales en el exterior
+==================================================== */
+
+
+/* ==========================================
+   NORMALIZACIÓN
+========================================== */
+
+.professional-internships-page,
+.professional-internships-page *,
+.professional-internships-page *::before,
+.professional-internships-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.professional-internships-page {
+    width: 100%;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   HERO
+==================================================== */
+
+.professional-internships-hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 360px;
+
+    padding: 70px 0;
+
+    background-image:
+        url("/images/local-courses/pic_paralax_2.jpg");
+
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   CAPA DEL HERO
+========================================== */
+
+.professional-internships-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(90deg,
+            rgba(15, 18, 54, 0.28) 0%,
+            rgba(15, 18, 54, 0.38) 50%,
+            rgba(15, 18, 54, 0.28) 100%);
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR DEL HERO
+========================================== */
+
+.professional-internships-hero__container {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   TÍTULO DEL HERO
+========================================== */
+
+.professional-internships-hero__title {
+    width: 100%;
+    max-width: 1150px;
+
+    margin: 0 auto 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(34px, 3.3vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+
+    color: #ff7a2f;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 10px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.62);
+}
+
+
+/* ==========================================
+   BREADCRUMB
+========================================== */
+
+.professional-internships-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.professional-internships-hero__breadcrumb a {
+    color: #ff7a2f;
+
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+.professional-internships-hero__breadcrumb a:hover,
+.professional-internships-hero__breadcrumb a:focus-visible {
+    color: #ffffff;
+}
+
+.professional-internships-hero__breadcrumb a:focus-visible {
+    outline:
+        2px solid rgba(255, 122, 47, 0.45);
+
+    outline-offset: 4px;
+}
+
+.professional-internships-hero__separator {
+    display: block;
+
+    flex: 0 0 auto;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #ff7a2f;
+    border-radius: 50%;
+}
+
+
+/* ====================================================
+   DETALLES DE LAS PASANTÍAS
+==================================================== */
+
+.professional-internships-details {
+    position: relative;
+
+    width: 100%;
+
+    padding: 80px 0 35px;
+
+    background-color: #ffffff;
+
+    overflow: hidden;
+}
+
+.professional-internships-details::before {
+    content: "";
+
+    position: absolute;
+    top: 35%;
+    right: -140px;
+
+    width: 340px;
+    height: 340px;
+
+    border:
+        1px solid rgba(124, 105, 238, 0.10);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.professional-internships-details__container {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 1220px;
+
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+
+/* ==========================================
+   FILAS
+========================================== */
+
+.professional-internships-details__row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr) minmax(0, 0.92fr);
+
+    align-items: center;
+
+    gap: clamp(50px, 6vw, 85px);
+
+    width: 100%;
+
+    margin-bottom: 85px;
+}
+
+.professional-internships-details__row:last-child {
+    margin-bottom: 0;
+}
+
+.professional-internships-details__row--reverse .professional-internships-details__visual {
+    order: 2;
+}
+
+.professional-internships-details__row--reverse .professional-internships-details__content {
+    order: 1;
+}
+
+
+/* ==========================================
+   IMÁGENES
+========================================== */
+
+.professional-internships-details__visual {
+    min-width: 0;
+}
+
+.professional-internships-details__image {
+    display: block;
+
+    width: 100%;
+    height: 470px;
+
+    border-radius: 36px;
+
+    object-fit: cover;
+    object-position: center;
+
+    box-shadow:
+        0 16px 34px rgba(48, 41, 95, 0.18);
+}
+
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+
+.professional-internships-details__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+}
+
+.professional-internships-details__eyebrow {
+    margin: 0 0 10px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+
+    color: #ff7426;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.professional-internships-details__title {
+    margin: 0 0 22px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: clamp(29px, 2.6vw, 38px);
+    font-weight: 800;
+    line-height: 1.16;
+
+    color: #30295f;
+}
+
+.professional-internships-details__description {
+    margin: 0 0 8px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+
+    color: #696687;
+}
+
+
+/* ==========================================
+   GRUPOS
+========================================== */
+
+.professional-internships-details__group {
+    width: 100%;
+
+    margin-bottom: 22px;
+}
+
+.professional-internships-details__subtitle {
+    margin: 0 0 10px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.35;
+
+    color: #30295f;
+}
+
+
+/* ==========================================
+   LISTA HORIZONTAL DE IDIOMAS
+========================================== */
+
+.professional-internships-details__inline-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 5px 18px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.professional-internships-details__inline-list li {
+    position: relative;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+.professional-internships-details__inline-list li:not(:last-child)::after {
+    content: "·";
+
+    position: absolute;
+    right: -12px;
+
+    color: #ff7a2f;
+}
+
+
+/* ==========================================
+   LISTA DE OPCIONES
+========================================== */
+
+.professional-internships-details__list {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px 18px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.professional-internships-details__list li {
+    position: relative;
+
+    padding-left: 18px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+.professional-internships-details__list li::before {
+    content: "";
+
+    position: absolute;
+    top: 0.7em;
+    left: 0;
+
+    width: 6px;
+    height: 6px;
+
+    background-color: #e3cf31;
+    border-radius: 50%;
+
+    transform: translateY(-50%);
+}
+
+
+/* ==========================================
+   DURACIÓN
+========================================== */
+
+.professional-internships-details__duration {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    width: 100%;
+
+    margin-bottom: 24px;
+    padding: 16px 18px;
+
+    background-color: #f8f7fd;
+
+    border-radius: 12px;
+}
+
+.professional-internships-details__duration span {
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.3;
+
+    color: #30295f;
+
+    text-transform: uppercase;
+}
+
+.professional-internships-details__duration strong {
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+
+    color: #696687;
+}
+
+
+/* ==========================================
+   REQUISITOS
+========================================== */
+
+.professional-internships-details__requirements {
+    display: grid;
+    grid-template-columns:
+        minmax(150px, 0.45fr) minmax(0, 1fr);
+
+    gap: 16px;
+
+    width: 100%;
+
+    margin: 24px 0 18px;
+}
+
+.professional-internships-details__requirement {
+    padding: 18px;
+
+    background-color: #f8f7fd;
+
+    border:
+        1px solid rgba(48, 41, 95, 0.04);
+    border-radius: 12px;
+}
+
+.professional-internships-details__requirement h3 {
+    margin: 0 0 10px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.3;
+
+    color: #30295f;
+}
+
+.professional-internships-details__requirement p,
+.professional-internships-details__requirement li {
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+
+    color: #696687;
+}
+
+.professional-internships-details__requirement p {
+    margin: 0;
+}
+
+.professional-internships-details__requirement ul {
+    margin: 0;
+    padding-left: 19px;
+}
+
+.professional-internships-details__requirement li+li {
+    margin-top: 5px;
+}
+
+
+/* ==========================================
+   AVISO
+========================================== */
+
+.professional-internships-details__notice {
+    margin: 0 0 24px;
+    padding-left: 15px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+
+    color: #696687;
+
+    border-left:
+        3px solid #ff7a2f;
+}
+
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.professional-internships-details__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 200px;
+    min-height: 50px;
+
+    padding: 13px 24px;
+
+    font-family: "Rubik", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(90deg,
+            #ff5f67 0%,
+            #ff8b3d 100%);
+
+    border: 0;
+    border-radius: 5px;
+
+    text-decoration: none;
+    text-transform: uppercase;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        filter 0.3s ease;
+}
+
+.professional-internships-details__button:hover,
+.professional-internships-details__button:focus-visible {
+    color: #ffffff;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 26px rgba(255, 95, 103, 0.30);
+
+    filter: brightness(1.05);
+}
+
+.professional-internships-details__button:focus-visible {
+    outline:
+        3px solid rgba(255, 122, 47, 0.28);
+
+    outline-offset: 3px;
+}
+
+
+/* ====================================================
+   AJUSTES DE LA SECCIÓN REUTILIZADA
+==================================================== */
+
+.professional-internships-overview {
+    padding-top: 70px;
+}
+
+.professional-internships-overview .foreign-courses-tabs__eyebrow {
+    margin-bottom: 12px;
+
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+
+    color: #30295f;
+
+    text-transform: uppercase;
+}
+
+.professional-internships-overview .foreign-course-panel__image {
+    object-position: center;
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   TABLET GRANDE
+========================================== */
+
+@media (max-width: 900px) {
+    .professional-internships-details__row {
+        grid-template-columns: 1fr;
+
+        gap: 42px;
+
+        max-width: 750px;
+
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .professional-internships-details__row--reverse .professional-internships-details__visual,
+    .professional-internships-details__row--reverse .professional-internships-details__content {
+        order: initial;
+    }
+
+    .professional-internships-details__image {
+        height: auto;
+
+        aspect-ratio: 16 / 10;
+    }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 768px) {
+    .professional-internships-hero {
+        min-height: 300px;
+
+        padding: 55px 0;
+    }
+
+    .professional-internships-hero__container {
+        padding: 0 22px;
+    }
+
+    .professional-internships-details {
+        padding: 65px 0 25px;
+    }
+
+    .professional-internships-overview {
+        padding-top: 50px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+    .professional-internships-hero {
+        min-height: 250px;
+
+        padding: 45px 0;
+    }
+
+    .professional-internships-hero__container,
+    .professional-internships-details__container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .professional-internships-hero__title {
+        font-size: 29px;
+    }
+
+    .professional-internships-hero__breadcrumb {
+        flex-wrap: wrap;
+
+        font-size: 12px;
+    }
+
+    .professional-internships-details {
+        padding: 55px 0 20px;
+    }
+
+    .professional-internships-details__row {
+        gap: 32px;
+
+        margin-bottom: 60px;
+    }
+
+    .professional-internships-details__image {
+        border-radius: 24px;
+    }
+
+    .professional-internships-details__content {
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .professional-internships-details__title {
+        font-size: 28px;
+    }
+
+    .professional-internships-details__description {
+        font-size: 15px;
+    }
+
+    .professional-internships-details__inline-list {
+        justify-content: center;
+    }
+
+    .professional-internships-details__list,
+    .professional-internships-details__requirements {
+        grid-template-columns: 1fr;
+    }
+
+    .professional-internships-details__list {
+        text-align: left;
+    }
+
+    .professional-internships-details__duration,
+    .professional-internships-details__requirement,
+    .professional-internships-details__notice {
+        text-align: left;
+    }
+
+    .professional-internships-details__button {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .professional-internships-overview {
+        padding-top: 35px;
+    }
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 480px) {
+    .professional-internships-hero__title {
+        font-size: 27px;
+    }
+
+    .professional-internships-details__title {
+        font-size: 26px;
+    }
+
+    .professional-internships-details__requirement {
+        padding: 16px;
+    }
+}
+
+
+/* ==========================================
+   ACCESIBILIDAD
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .professional-internships-hero__breadcrumb a,
+    .professional-internships-details__button {
+        transition: none;
+    }
+}
