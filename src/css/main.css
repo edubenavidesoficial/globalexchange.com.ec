@@ -3,7 +3,7 @@
    ==================================================== */
 
 /* ==========================================
-   BASE (variables, reset, tipografía)
+   BASE 
 ========================================== */
 
 @import './base/variables.css';
@@ -11,21 +11,15 @@
 @import './base/typography.css';
 
 /* ==========================================
-   LAYOUTS (grid)
-========================================== */
-
-@import './layouts/grid.css';
-
-/* ==========================================
    LAYOUTS 
 ========================================== */
 
+@import './layouts/grid.css';
 @import './layouts/header.css';
 @import './layouts/footer.css';
 
 /* ==========================================
-   COMPONENTS (estilos propios)
-   Deben ir después del legacy para tener prioridad
+   COMPONENTS 
 ========================================== */
 
 @import './components/buttons.css';
@@ -48,10 +42,3 @@
 
 @import './pages/home.css';
 
-/* ==========================================
-   UTILITIES (helpers, spacing, responsive)
-========================================== */
-
-@import './utilities/helpers.css';
-@import './utilities/spacing.css';
-@import './utilities/responsive.css';
