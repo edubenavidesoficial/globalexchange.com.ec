@@ -1,21 +1,19 @@
-/* ====================================================
+﻿/* ====================================================
    PORTFOLIO
    Archivo: src/css/components/portfolio.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Sin GT3
+         - Sin GT3
    - Carrusel responsive
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .portfolio {
@@ -96,7 +94,7 @@
 
 
 /* ==========================================
-   DECORACIÓN
+   DECORACIÃ“N
 ========================================== */
 
 .portfolio__background {
@@ -357,7 +355,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÓVIL
+   RESPONSIVE - MÃ“VIL
 ========================================== */
 
 @media (max-width: 600px) {

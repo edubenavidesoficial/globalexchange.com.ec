@@ -1,20 +1,18 @@
-/* ====================================================
+﻿/* ====================================================
    MAP
    Archivo: src/css/components/map.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Mapa y partners unidos
+         - Mapa y partners unidos
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .map {
@@ -146,7 +144,7 @@
 
 
 /* ==========================================
-   MÓVIL
+   MÃ“VIL
 ========================================== */
 
 @media (max-width: 600px) {

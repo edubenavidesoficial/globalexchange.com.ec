@@ -1,21 +1,19 @@
-/* ====================================================
+﻿/* ====================================================
    STATS
    Archivo: src/css/components/stats.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Sin GT3
+         - Sin GT3
    - Contadores animados con JavaScript propio
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .stats {
@@ -44,7 +42,7 @@
 
 
 /* ==========================================
-   DISTRIBUCIÓN GENERAL
+   DISTRIBUCIÃ“N GENERAL
 ========================================== */
 
 .stats__layout {
@@ -149,7 +147,7 @@
 
 
 /* ==========================================
-   NÚMEROS
+   NÃšMEROS
 ========================================== */
 
 .stats__number {
@@ -458,7 +456,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÓVILES
+   RESPONSIVE - MÃ“VILES
 ========================================== */
 
 @media (max-width: 600px) {
@@ -521,7 +519,7 @@
 
 
 /* ==========================================
-   MÓVILES PEQUEÑOS
+   MÃ“VILES PEQUEÃ‘OS
 ========================================== */
 
 @media (max-width: 380px) {

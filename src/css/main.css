@@ -17,16 +17,7 @@
 @import './layouts/grid.css';
 
 /* ==========================================
-   LEGACY (estilos originales de WordPress/Elementor)
-   ¡Importante! Todo el CSS legacy debe ir ANTES
-   de los estilos propios para poder sobrescribirlo.
-========================================== */
-
-
-
-/* ==========================================
-   LAYOUTS (componentes propios)
-   Ahora sí, después del legacy para sobrescribir
+   LAYOUTS 
 ========================================== */
 
 @import './layouts/header.css';

@@ -1,20 +1,18 @@
-/* ====================================================
+﻿/* ====================================================
    PROGRAMS
    Archivo: src/css/components/programs.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Sin GT3
+         - Sin GT3
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .programs {
@@ -49,7 +47,7 @@
 
 
 /* ==========================================
-   TÍTULO
+   TÃTULO
 ========================================== */
 
 .programs__title {
@@ -73,8 +71,8 @@
 
 /* ==========================================
    COMPATIBILIDAD CON PROGRAMS TITLE
-   Mantener únicamente si Programs_Title.html
-   todavía forma parte del proyecto.
+   Mantener Ãºnicamente si Programs_Title.html
+   todavÃ­a forma parte del proyecto.
 ========================================== */
 
 .programs-title__text {
@@ -163,7 +161,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÓVILES
+   RESPONSIVE - MÃ“VILES
 ========================================== */
 
 @media (max-width: 650px) {
@@ -190,7 +188,7 @@
 
 
 /* ==========================================
-   MÓVILES PEQUEÑOS
+   MÃ“VILES PEQUEÃ‘OS
 ========================================== */
 
 @media (max-width: 400px) {

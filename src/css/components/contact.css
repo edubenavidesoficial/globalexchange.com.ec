@@ -1,20 +1,18 @@
-/* ====================================================
+﻿/* ====================================================
    CONTACT
    Archivo: src/css/components/contact.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Sin Contact Form 7
+         - Sin Contact Form 7
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .contact {
@@ -43,7 +41,7 @@
 
 
 /* ==========================================
-   DISTRIBUCIÓN GENERAL
+   DISTRIBUCIÃ“N GENERAL
 ========================================== */
 
 .contact__layout {
@@ -283,7 +281,7 @@
 
 
 /* ==========================================
-   BOTÓN
+   BOTÃ“N
 ========================================== */
 
 .contact__actions {
@@ -499,7 +497,7 @@
 
 
 /* ==========================================
-   MÓVIL
+   MÃ“VIL
 ========================================== */
 
 @media (max-width: 600px) {

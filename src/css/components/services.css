@@ -1,22 +1,20 @@
-/* ====================================================
+﻿/* ====================================================
    SERVICES
    Archivo: src/css/components/services.css
 
    Proyecto:
-   Global Exchange - Migración a Vite
+   Global Exchange - MigraciÃ³n a Vite
 
    Estado:
    - CSS propio
-   - Sin Elementor
-   - Sin WordPress
-   - Sin GT3
+         - Sin GT3
    - Grid responsive de tres columnas
    - Hover animado propio
    ==================================================== */
 
 
 /* ==========================================
-   SECCIÓN PRINCIPAL
+   SECCIÃ“N PRINCIPAL
 ========================================== */
 
 .services {
@@ -311,7 +309,7 @@
 
 
 /* ==========================================
-   TÍTULOS DE TARJETAS
+   TÃTULOS DE TARJETAS
 ========================================== */
 
 .services__card-title {
@@ -584,7 +582,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÓVIL
+   RESPONSIVE - MÃ“VIL
 ========================================== */
 
 @media (max-width: 650px) {
@@ -670,7 +668,7 @@
 
 
 /* ==========================================
-   MÓVILES PEQUEÑOS
+   MÃ“VILES PEQUEÃ‘OS
 ========================================== */
 
 @media (max-width: 400px) {
