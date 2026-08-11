@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    FOOTER
    Archivo: src/css/layouts/footer.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -12,7 +12,7 @@
 
 
 /* ==========================================
-   NORMALIZACIÃ“N
+   NORMALIZACIÓN
 ========================================== */
 
 .footer,
@@ -326,7 +326,7 @@
 
 
 /* ==========================================
-   GALERÃA
+   GALERÍA
 ========================================== */
 
 .footer__gallery {
@@ -562,7 +562,7 @@
     opacity: 1;
 }
 
-/* BotÃ³n de bÃºsqueda dentro del panel */
+/* Botón de búsqueda dentro del panel */
 
 .footer__search-button {
     display: inline-flex;
@@ -684,7 +684,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÃ“VILES
+   RESPONSIVE - MÓVILES
 ========================================== */
 
 @media (max-width: 640px) {
@@ -743,7 +743,7 @@
 
 
 /* ==========================================
-   MÃ“VILES MUY PEQUEÃ‘OS
+   MÓVILES MUY PEQUEÑOS
 ========================================== */
 
 @media (max-width: 380px) {

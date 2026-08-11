@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    PORTFOLIO
    Archivo: src/css/components/portfolio.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -13,7 +13,7 @@
 
 
 /* ==========================================
-   SECCIÃ“N PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .portfolio {
@@ -94,7 +94,7 @@
 
 
 /* ==========================================
-   DECORACIÃ“N
+   DECORACIÓN
 ========================================== */
 
 .portfolio__background {
@@ -355,7 +355,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÃ“VIL
+   RESPONSIVE - MÓVIL
 ========================================== */
 
 @media (max-width: 600px) {

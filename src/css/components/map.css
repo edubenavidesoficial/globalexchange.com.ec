@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    MAP
    Archivo: src/css/components/map.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -12,7 +12,7 @@
 
 
 /* ==========================================
-   SECCIÃ“N PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .map {
@@ -144,7 +144,7 @@
 
 
 /* ==========================================
-   MÃ“VIL
+   MÓVIL
 ========================================== */
 
 @media (max-width: 600px) {

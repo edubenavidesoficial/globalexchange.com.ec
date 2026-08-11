@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    SERVICES
    Archivo: src/css/components/services.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -14,7 +14,7 @@
 
 
 /* ==========================================
-   SECCIÃ“N PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .services {
@@ -309,7 +309,7 @@
 
 
 /* ==========================================
-   TÃTULOS DE TARJETAS
+   TÍTULOS DE TARJETAS
 ========================================== */
 
 .services__card-title {
@@ -582,7 +582,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÃ“VIL
+   RESPONSIVE - MÓVIL
 ========================================== */
 
 @media (max-width: 650px) {
@@ -668,7 +668,7 @@
 
 
 /* ==========================================
-   MÃ“VILES PEQUEÃ‘OS
+   MÓVILES PEQUEÑOS
 ========================================== */
 
 @media (max-width: 400px) {

@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    STATS
    Archivo: src/css/components/stats.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -13,7 +13,7 @@
 
 
 /* ==========================================
-   SECCIÃ“N PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .stats {
@@ -42,7 +42,7 @@
 
 
 /* ==========================================
-   DISTRIBUCIÃ“N GENERAL
+   DISTRIBUCIÓN GENERAL
 ========================================== */
 
 .stats__layout {
@@ -147,7 +147,7 @@
 
 
 /* ==========================================
-   NÃšMEROS
+   NÚMEROS
 ========================================== */
 
 .stats__number {
@@ -456,7 +456,7 @@
 
 
 /* ==========================================
-   RESPONSIVE - MÃ“VILES
+   RESPONSIVE - MÓVILES
 ========================================== */
 
 @media (max-width: 600px) {
@@ -519,7 +519,7 @@
 
 
 /* ==========================================
-   MÃ“VILES PEQUEÃ‘OS
+   MÓVILES PEQUEÑOS
 ========================================== */
 
 @media (max-width: 380px) {

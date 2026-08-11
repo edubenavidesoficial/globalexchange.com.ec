@@ -1,9 +1,9 @@
-﻿/* ====================================================
+/* ====================================================
    PROGRAMS GRID
    Archivo: src/css/components/programs-grid.css
 
    Proyecto:
-   Global Exchange - MigraciÃ³n a Vite
+   Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
@@ -13,7 +13,7 @@
 
 
 /* ==========================================
-   SECCIÃ“N PRINCIPAL
+   SECCIÓN PRINCIPAL
 ========================================== */
 
 .programs-grid {
@@ -67,7 +67,7 @@
 
     /*
        Permite que el mapa sobresalga hacia las tarjetas,
-       como ocurre en la pÃ¡gina original.
+       como ocurre en la página original.
     */
     overflow: visible;
 }
@@ -92,7 +92,7 @@
     background-repeat: no-repeat;
 
     /*
-       El PNG tiene mÃ¡rgenes transparentes.
+       El PNG tiene márgenes transparentes.
        Aumentamos solo el dibujo del fondo sin recortarlo
        agresivamente con cover.
     */
@@ -157,7 +157,7 @@
 
 
 /* ==========================================
-   BOTÃ“N
+   BOTÓN
 ========================================== */
 
 .programs-grid__button {
@@ -222,7 +222,7 @@
     gap: 30px;
 
     /*
-       No aÃ±adimos margin-left porque separaba demasiado
+       No añadimos margin-left porque separaba demasiado
        las tarjetas del mapa.
     */
     margin: 0;
@@ -328,7 +328,7 @@
 
 
 /* ==========================================
-   IMÃGENES DE LAS TARJETAS
+   IMÁGENES DE LAS TARJETAS
 ========================================== */
 
 .programs-grid__card-image {
@@ -361,7 +361,7 @@
 
 
 /* ==========================================
-   TÃTULOS DE TARJETA
+   TÍTULOS DE TARJETA
 ========================================== */
 
 .programs-grid__card-title {
@@ -558,7 +558,7 @@
 
 
 /* ==========================================
-   MÃ“VILES
+   MÓVILES
 ========================================== */
 
 @media (max-width: 650px) {
@@ -632,7 +632,7 @@
 
 
 /* ==========================================
-   MÃ“VILES PEQUEÃ‘OS
+   MÓVILES PEQUEÑOS
 ========================================== */
 
 @media (max-width: 400px) {
