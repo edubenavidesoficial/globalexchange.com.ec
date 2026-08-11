@@ -1,6 +1,6 @@
-/* ====================================================
+﻿/* ====================================================
    VARIABLES CSS - Global Exchange
-   Basado en legacy/theme/base.css
+   Estilos base del proyecto Global Exchange
    ==================================================== */
 
 :root {
@@ -52,7 +52,6 @@
    /* Antes era Nunito */
    --font-heading: 'Rubik', sans-serif;
    /* Antes era Nunito */
-   --font-icons: 'FontAwesome', sans-serif;
 
    /* ==========================================
      TYPOGRAPHY - Font Sizes

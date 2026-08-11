@@ -22,9 +22,7 @@
    de los estilos propios para poder sobrescribirlo.
 ========================================== */
 
-@import './legacy/theme/base.css';
-@import './legacy/theme/wpda.css';
-@import './legacy/icons/font-awesome.min.css';
+
 
 /* ==========================================
    LAYOUTS (componentes propios)

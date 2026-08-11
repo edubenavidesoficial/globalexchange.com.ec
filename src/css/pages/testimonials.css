@@ -655,7 +655,16 @@ blockquote.testimonials__quote {
     transform: scale(1);
 }
 
+.testimonials-gallery__zoom-icon {
+    width: 22px;
+    height: 22px;
 
+    display: block;
+
+    color: currentColor;
+
+    pointer-events: none;
+}
 /* ====================================================
    RESPONSIVE
 ==================================================== */
