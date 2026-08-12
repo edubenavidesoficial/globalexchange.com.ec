@@ -509,7 +509,7 @@ blockquote.testimonials__quote {
             #ff5f67 0%,
             #ff8b3d 100%);
 
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 .testimonials-gallery__description {

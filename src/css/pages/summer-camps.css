@@ -195,7 +195,7 @@
 
     overflow: hidden;
 
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
 
     box-shadow:
         0 16px 35px rgba(59, 54, 99, .12);

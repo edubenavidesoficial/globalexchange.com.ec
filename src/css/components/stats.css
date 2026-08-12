@@ -513,7 +513,7 @@
     }
 
     .stats__image img {
-        border-radius: 20px;
+        border-radius: var(--radius-2xl);
     }
 }
 

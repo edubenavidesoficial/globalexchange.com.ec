@@ -320,7 +320,7 @@
 
     background-color: #8d8aa7;
 
-    border-radius: 20px;
+    border-radius: var(--radius-2xl);
 }
 
 

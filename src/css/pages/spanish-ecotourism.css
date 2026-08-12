@@ -597,7 +597,7 @@
     }
 
     .spanish-ecotourism-content__image {
-        border-radius: 24px;
+        border-radius: var(--radius-3xl);
     }
 
     .spanish-ecotourism-content__title {

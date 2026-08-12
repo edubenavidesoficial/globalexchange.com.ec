@@ -275,7 +275,7 @@
             #ff5f67 0%,
             #ff8b3d 100%);
 
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 
@@ -305,7 +305,7 @@
 
     background-color: #f8f7fd;
 
-    border-radius: 20px;
+    border-radius: var(--radius-2xl);
 
     box-shadow:
         0 15px 35px rgba(48, 41, 95, 0.07);

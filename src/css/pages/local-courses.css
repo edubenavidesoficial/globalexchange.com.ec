@@ -815,7 +815,7 @@
    }
 
    .local-courses-intro__image {
-      border-radius: 24px;
+      border-radius: var(--radius-3xl);
    }
 
    .local-courses-intro__title {

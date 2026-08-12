@@ -248,7 +248,7 @@
             #ff5f67 0%,
             #ff8b3d 100%);
 
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
 }
 
 
@@ -461,7 +461,7 @@
     background-color: var(--white);
 
     border: 1px solid rgba(48, 41, 95, 0.06);
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
 
     overflow: hidden;
 
