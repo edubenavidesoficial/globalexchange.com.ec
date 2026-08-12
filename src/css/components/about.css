@@ -129,7 +129,7 @@
     padding: 12px 28px;
 
     font-family: inherit;
-    font-size: 14px;
+    font-size: var(--font-sm);
     font-weight: var(--font-medium);
     line-height: 1;
 
@@ -231,7 +231,7 @@
     }
 
     .about__highlight strong {
-        font-size: 20px;
+        font-size: var(--font-lg);
     }
 
     .about__button {

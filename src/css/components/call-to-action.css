@@ -70,9 +70,9 @@
 
     margin: 0 auto 28px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(38px, 4vw, 58px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.05;
     letter-spacing: -0.6px;
 
@@ -128,9 +128,9 @@
 .cta__stat-item {
     margin: 0;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(27px, 2.5vw, 40px);
-    font-weight: 700;
+    font-weight: var(--font-bold);
     line-height: 1.2;
 
     color: #ff6600;
@@ -151,9 +151,9 @@
 
     padding: 13px 26px;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
+    font-family: var(--font-primary);
+    font-size: var(--font-xs);
+    font-weight: var(--font-semibold);
     line-height: 1;
 
     color: var(--white);
@@ -345,7 +345,7 @@
     }
 
     .cta__title {
-        font-size: 30px;
+        font-size: var(--font-2xl);
         line-height: 1.12;
         letter-spacing: -0.2px;
 

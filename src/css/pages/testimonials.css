@@ -110,9 +110,9 @@
 
     margin: 0 auto 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(38px, 3.5vw, 48px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.15;
 
     color: var(--brand-orange);
@@ -141,9 +141,9 @@
     margin: 0;
     padding: 0;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
     line-height: 1.4;
 
     color: var(--white);
@@ -248,9 +248,9 @@
     margin: 0;
     padding: 0 18px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(22px, 2vw, 28px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -405,9 +405,9 @@
 .testimonials__name {
     margin: 0 0 7px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: 21px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -426,9 +426,9 @@
 
     margin: 0 auto;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1.55;
 
     color: var(--text);
@@ -488,9 +488,9 @@ blockquote.testimonials__quote {
 .testimonials-gallery__title {
     margin: 0 0 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(32px, 3vw, 44px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.15;
 
     color: var(--brand-purple);
@@ -515,7 +515,7 @@ blockquote.testimonials__quote {
 .testimonials-gallery__description {
     margin: 0;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 16px;
     line-height: 1.6;
 
@@ -633,7 +633,7 @@ blockquote.testimonials__quote {
     width: 54px;
     height: 54px;
 
-    font-size: 20px;
+    font-size: var(--font-lg);
 
     color: var(--white);
     background-color: rgba(48, 41, 95, 0.82);
@@ -773,7 +773,7 @@ blockquote.testimonials__quote {
     .testimonials__quote {
         max-width: 470px;
 
-        font-size: 14px;
+        font-size: var(--font-sm);
     }
 }
 
@@ -870,13 +870,13 @@ blockquote.testimonials__quote {
     }
 
     .testimonials__name {
-        font-size: 20px;
+        font-size: var(--font-lg);
     }
 
     .testimonials__quote {
         max-width: 100%;
 
-        font-size: 14px;
+        font-size: var(--font-sm);
     }
 }
 
@@ -903,7 +903,7 @@ blockquote.testimonials__quote {
     .testimonials-hero__breadcrumb {
         flex-wrap: wrap;
 
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 }
 

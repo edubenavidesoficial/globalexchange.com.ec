@@ -1,4 +1,4 @@
-/* ====================================================
+﻿/* ====================================================
    VARIABLES CSS - Global Exchange
    Estilos base del proyecto Global Exchange
    ==================================================== */
@@ -55,8 +55,9 @@
    --font-secondary: 'Rubik', sans-serif;
    /* Antes era Nunito */
    --font-heading: 'Rubik', sans-serif;
-   /* Antes era Nunito */
 
+   /* Fuente secundaria utilizada en varios componentes */
+   --font-nunito: "Nunito", sans-serif;
    /* ==========================================
      TYPOGRAPHY - Font Sizes
   ========================================== */

@@ -28,11 +28,11 @@
 ========================================== */
 
 body {
-    font-family: 'Rubik', sans-serif;
+    font-family: var(--font-primary);
 
-    font-size: 18px;
+    font-size: var(--font-base);
     line-height: 27px;
-    font-weight: 400;
+    font-weight: var(--font-normal);
 
     color: var(--text, var(--text));
     background-color: var(--white, var(--white));
@@ -55,7 +55,7 @@ h6 {
     margin: 0;
     padding: 0;
 
-    font-family: 'Rubik', sans-serif;
+    font-family: var(--font-primary);
 
     color: var(--heading, #3b3663);
 
@@ -63,39 +63,39 @@ h6 {
 }
 
 h1 {
-    font-size: 40px;
+    font-size: var(--font-3xl);
     line-height: 43px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 }
 
 h2 {
-    font-size: 30px;
+    font-size: var(--font-2xl);
     line-height: 40px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 }
 
 h3 {
-    font-size: 24px;
+    font-size: var(--font-xl);
     line-height: 30px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 }
 
 h4 {
-    font-size: 20px;
+    font-size: var(--font-lg);
     line-height: 33px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 }
 
 h5 {
-    font-size: 18px;
+    font-size: var(--font-base);
     line-height: 30px;
-    font-weight: 700;
+    font-weight: var(--font-bold);
 }
 
 h6 {
     font-size: 16px;
     line-height: 24px;
-    font-weight: 600;
+    font-weight: var(--font-semibold);
 }
 
 
@@ -187,9 +187,9 @@ blockquote cite {
 
     margin-top: 5px;
 
-    font-size: 18px;
+    font-size: var(--font-base);
     line-height: 1.5;
-    font-weight: 700;
+    font-weight: var(--font-bold);
     font-style: normal;
 
     color: var(--heading, #3b3663);
@@ -241,12 +241,12 @@ blockquote cite {
     }
 
     h3 {
-        font-size: 20px;
+        font-size: var(--font-lg);
         line-height: 26px;
     }
 
     h4 {
-        font-size: 18px;
+        font-size: var(--font-base);
         line-height: 28px;
     }
 
@@ -256,7 +256,7 @@ blockquote cite {
     }
 
     h6 {
-        font-size: 14px;
+        font-size: var(--font-sm);
         line-height: 22px;
     }
 
@@ -270,17 +270,17 @@ blockquote cite {
 @media (max-width: 480px) {
 
     h1 {
-        font-size: 24px;
+        font-size: var(--font-xl);
         line-height: 30px;
     }
 
     h2 {
-        font-size: 20px;
+        font-size: var(--font-lg);
         line-height: 28px;
     }
 
     h3 {
-        font-size: 18px;
+        font-size: var(--font-base);
         line-height: 24px;
     }
 

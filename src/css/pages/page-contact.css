@@ -119,9 +119,9 @@
 
     margin: 0 auto 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(36px, 3.5vw, 48px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.15;
 
     color: var(--brand-orange);
@@ -150,9 +150,9 @@
     margin: 0;
     padding: 0;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
     line-height: 1.4;
 
     color: var(--white);
@@ -242,9 +242,9 @@
 .page-contact-info__eyebrow {
     margin: 0 0 9px;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 700;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-bold);
     line-height: 1.4;
 
     color: #ff7426;
@@ -256,9 +256,9 @@
 .page-contact-info__title {
     margin: 0;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(32px, 3vw, 42px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -314,9 +314,9 @@
 .page-contact-info__subtitle {
     margin: 0 0 20px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: 29px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.25;
 
     color: var(--brand-purple);
@@ -328,9 +328,9 @@
     margin: 0 0 14px;
     padding-left: 21px;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 17px;
-    font-weight: 400;
+    font-weight: var(--font-normal);
     line-height: 1.65;
 
     color: var(--text);
@@ -384,9 +384,9 @@
 .page-contact-info__block h3 {
     margin: 0 0 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: 23px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.25;
 
     color: var(--brand-purple);
@@ -406,9 +406,9 @@
 }
 
 .page-contact-info__links a {
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 17px;
-    font-weight: 400;
+    font-weight: var(--font-normal);
     line-height: 1.6;
 
     color: var(--text);
@@ -449,9 +449,9 @@
 .page-contact-info__addresses p {
     margin: 0;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 17px;
-    font-weight: 400;
+    font-weight: var(--font-normal);
     line-height: 1.7;
 
     color: var(--text);
@@ -462,7 +462,7 @@
 }
 
 .page-contact-info__addresses strong {
-    font-weight: 700;
+    font-weight: var(--font-bold);
 
     color: var(--brand-purple);
 }
@@ -574,13 +574,13 @@
     }
 
     .page-contact-hero__title {
-        font-size: 30px;
+        font-size: var(--font-2xl);
     }
 
     .page-contact-hero__breadcrumb {
         flex-wrap: wrap;
 
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 
 
@@ -600,7 +600,7 @@
     }
 
     .page-contact-info__eyebrow {
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 
     .page-contact-info__title {
@@ -668,7 +668,7 @@
     }
 
     .page-contact-info__subtitle {
-        font-size: 24px;
+        font-size: var(--font-xl);
     }
 
     .page-contact-info__intro {

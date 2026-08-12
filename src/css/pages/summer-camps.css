@@ -83,9 +83,9 @@
 
     margin: 0 0 14px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(36px, 3vw, 48px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 
     color: var(--brand-orange);
 
@@ -102,8 +102,8 @@
 
     gap: 12px;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
 
     color: #fff;
 }
@@ -158,9 +158,9 @@
 
     margin: 0 0 18px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(31px, 3vw, 42px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 
     color: var(--brand-purple);
 }
@@ -169,7 +169,7 @@
 
     margin: 0;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 16px;
     line-height: 1.75;
 
@@ -240,7 +240,7 @@
 
     color: var(--brand-purple);
 
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
 
     text-transform: uppercase;
 }
@@ -309,14 +309,14 @@
 
     .summer-camps-hero__title {
 
-        font-size: 30px;
+        font-size: var(--font-2xl);
     }
 
     .summer-camps-hero__breadcrumb {
 
         flex-wrap: wrap;
 
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 
     .summer-camps-intro__title {

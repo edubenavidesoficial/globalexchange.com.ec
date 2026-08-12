@@ -188,7 +188,7 @@
     padding: 9px 15px;
 
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: var(--font-sm);
     line-height: 1.2;
 
     color: #222222;

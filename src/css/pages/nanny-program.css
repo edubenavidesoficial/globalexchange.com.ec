@@ -111,9 +111,9 @@
 
     margin: 0 auto 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(36px, 3.5vw, 48px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.15;
 
     color: var(--brand-orange);
@@ -142,9 +142,9 @@
     margin: 0;
     padding: 0;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-medium);
     line-height: 1.4;
 
     color: var(--white);
@@ -253,9 +253,9 @@
     margin: 0 0 40px;
     padding-bottom: 16px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(31px, 3vw, 42px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -362,9 +362,9 @@
 .nanny-program-content__quote {
     margin: 0 0 20px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(24px, 2.4vw, 32px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.25;
 
     color: var(--brand-purple);
@@ -373,9 +373,9 @@
 .nanny-program-content__description {
     margin: 0;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 16px;
-    font-weight: 400;
+    font-weight: var(--font-normal);
     line-height: 1.75;
 
     color: var(--text);
@@ -426,9 +426,9 @@
 .nanny-program-content__section-title {
     margin: 0 0 18px;
 
-    font-family: "Nunito", sans-serif;
-    font-size: 24px;
-    font-weight: 800;
+    font-family: var(--font-nunito);
+    font-size: var(--font-xl);
+    font-weight: var(--font-extrabold);
     line-height: 1.25;
 
     color: var(--brand-purple);
@@ -447,7 +447,7 @@
     margin-bottom: 12px;
     padding-left: 22px;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 15px;
     line-height: 1.5;
 
@@ -488,9 +488,9 @@
 .nanny-program-content__program-title {
     margin: 0 0 18px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(28px, 2.8vw, 38px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -551,9 +551,9 @@
     margin: 0 0 22px;
     padding-bottom: 12px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: 27px;
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -590,7 +590,7 @@
     margin-bottom: 11px;
     padding-left: 22px;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 15px;
     line-height: 1.55;
 
@@ -608,7 +608,7 @@
     top: 0;
     left: 0;
 
-    font-weight: 700;
+    font-weight: var(--font-bold);
 
     color: var(--brand-orange);
 }
@@ -636,9 +636,9 @@
 .nanny-program-content__destinations-header h2 {
     margin: 0 0 25px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: clamp(28px, 2.8vw, 38px);
-    font-weight: 800;
+    font-weight: var(--font-extrabold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -673,8 +673,8 @@
     margin-bottom: 9px;
     padding-left: 18px;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
     line-height: 1.5;
 
     color: var(--text);
@@ -819,13 +819,13 @@
     }
 
     .nanny-program-hero__title {
-        font-size: 30px;
+        font-size: var(--font-2xl);
     }
 
     .nanny-program-hero__breadcrumb {
         flex-wrap: wrap;
 
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 
     .nanny-program-content {
@@ -888,7 +888,7 @@
     }
 
     .nanny-program-content__condition li {
-        font-size: 14px;
+        font-size: var(--font-sm);
     }
 
     .nanny-program-content__destinations-header h2 {
@@ -935,7 +935,7 @@
     }
 
     .nanny-program-content__quote {
-        font-size: 24px;
+        font-size: var(--font-xl);
     }
 }
 

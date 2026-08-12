@@ -35,7 +35,7 @@
 .header input,
 .header-drawer a,
 .header-drawer button {
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
 }
 
 .header button,
@@ -189,9 +189,9 @@
     */
     padding: 2px 0 0;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1;
 
     color: #3b3663;
@@ -354,8 +354,8 @@
     padding: 10px 20px;
 
     font-family: inherit;
-    font-size: 14px;
-    font-weight: 400;
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1.4;
 
     color: #3b3663;
@@ -452,9 +452,9 @@
     margin: 0;
     padding: 2px 4px 0;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1;
 
     color: #3b3663;
@@ -484,9 +484,9 @@
 .header__menu-item>a,
 .header__dropdown-toggle,
 .header__language-toggle {
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1;
 
     text-transform: none !important;
@@ -541,7 +541,7 @@
 
     padding: 8px 16px;
 
-    font-size: 14px;
+    font-size: var(--font-sm);
     line-height: 1.4;
 
     color: #3b3663;
@@ -575,8 +575,8 @@
 
     padding: 2px 4px 0;
 
-    font-size: 14px;
-    font-weight: 700;
+    font-size: var(--font-sm);
+    font-weight: var(--font-bold);
     line-height: 1;
 
     color: var(--white);
@@ -616,7 +616,7 @@
     padding: 10px 12px;
 
     font-size: 9px;
-    font-weight: 700;
+    font-weight: var(--font-bold);
     line-height: 1;
 
     color: var(--white);
@@ -774,7 +774,7 @@
     padding: 8px 12px;
 
     font-family: inherit;
-    font-size: 14px;
+    font-size: var(--font-sm);
 
     color: var(--text);
     background-color: var(--white);
@@ -796,8 +796,8 @@
     padding: 8px 15px;
 
     font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--font-xs);
+    font-weight: var(--font-medium);
 
     color: var(--white);
 
@@ -1047,9 +1047,9 @@
 .header-drawer__description {
     margin: 0 0 34px;
 
-    font-family: "Rubik", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-primary);
+    font-size: var(--font-sm);
+    font-weight: var(--font-normal);
     line-height: 1.55;
 
     color: var(--text);
@@ -1080,7 +1080,7 @@
 
     margin-bottom: 42px;
 
-    font-size: 14px;
+    font-size: var(--font-sm);
 
     color: var(--text);
     text-decoration: none;
@@ -1102,9 +1102,9 @@
 .header-drawer__title {
     margin: 0 0 16px;
 
-    font-family: "Nunito", sans-serif;
+    font-family: var(--font-nunito);
     font-size: 21px;
-    font-weight: 700;
+    font-weight: var(--font-bold);
     line-height: 1.2;
 
     color: var(--brand-purple);
@@ -1119,7 +1119,7 @@
 
     margin: 0 0 18px;
 
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-primary);
     font-size: 13px;
     font-style: normal;
     line-height: 1.5;
@@ -1155,7 +1155,7 @@
 
     font-family: Arial, sans-serif;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: var(--font-bold);
 
     color: #aaa4c3;
     text-decoration: none;
@@ -1206,7 +1206,7 @@ body.header-drawer-open {
         padding-right: 0;
         padding-left: 0;
 
-        font-size: 14px;
+        font-size: var(--font-sm);
     }
 
     .header__actions {
@@ -1241,7 +1241,7 @@ body.header-drawer-open {
         padding-right: 0;
         padding-left: 0;
 
-        font-size: 12px;
+        font-size: var(--font-xs);
     }
 
     .header__actions {
