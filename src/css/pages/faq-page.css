@@ -26,7 +26,7 @@
 .faq-page {
     width: 100%;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -118,7 +118,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-align: center;
 
@@ -150,7 +150,7 @@
     font-weight: 500;
     line-height: 1.4;
 
-    color: #ffffff;
+    color: var(--white);
 
     text-align: center;
 
@@ -159,7 +159,7 @@
 }
 
 .faq-page-hero__breadcrumb a {
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-decoration: none;
 
@@ -168,7 +168,7 @@
 
 .faq-page-hero__breadcrumb a:hover,
 .faq-page-hero__breadcrumb a:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 }
 
 .faq-page-hero__separator {
@@ -179,7 +179,7 @@
     width: 6px;
     height: 6px;
 
-    background-color: #ff7a2f;
+    background-color: var(--brand-orange);
     border-radius: 50%;
 }
 
@@ -195,7 +195,7 @@
 
     padding: 75px 0 85px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 
@@ -234,7 +234,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .faq-questions__divider {
@@ -287,7 +287,7 @@
     font-weight: 800;
     line-height: 1.35;
 
-    color: #30295f;
+    color: var(--brand-purple);
     background-color: transparent;
 
     border: 0;
@@ -395,7 +395,7 @@
     font-weight: 400;
     line-height: 1.75;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .faq-questions__answer p {
@@ -425,7 +425,7 @@
 
     padding: 70px 0 90px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 
@@ -458,7 +458,7 @@
 
     min-width: 0;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     border: 1px solid rgba(48, 41, 95, 0.06);
     border-radius: 18px;
@@ -555,7 +555,7 @@
     font-weight: 600;
     line-height: 1;
 
-    color: #ffffff;
+    color: var(--white);
 
     background:
         linear-gradient(90deg,
@@ -575,7 +575,7 @@
 
 .faq-post__button:hover,
 .faq-post__button:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 
     transform: translateY(-3px);
 

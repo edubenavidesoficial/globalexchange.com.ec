@@ -22,7 +22,7 @@
 
     padding: 38px 24px 30px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     text-align: center;
 
@@ -84,7 +84,7 @@
     line-height: 1.2;
     letter-spacing: 1.5px;
 
-    color: #696687;
+    color: var(--text);
 
     text-align: center;
     text-transform: uppercase;

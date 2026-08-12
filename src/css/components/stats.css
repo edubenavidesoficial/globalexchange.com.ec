@@ -22,7 +22,7 @@
     width: 100%;
     padding: 90px 0;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -135,7 +135,7 @@
 
     padding: 28px 22px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
     border-radius: 10px;
 
     box-shadow:

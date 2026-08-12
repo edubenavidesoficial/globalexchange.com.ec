@@ -26,7 +26,7 @@
 .about-page {
     width: 100%;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -115,7 +115,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-align: center;
 
@@ -146,7 +146,7 @@
     font-weight: 500;
     line-height: 1.4;
 
-    color: #ffffff;
+    color: var(--white);
 
     text-align: center;
 
@@ -155,7 +155,7 @@
 }
 
 .about-page-hero__breadcrumb a {
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-decoration: none;
 
@@ -164,7 +164,7 @@
 
 .about-page-hero__breadcrumb a:hover,
 .about-page-hero__breadcrumb a:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 }
 
 .about-page-hero__separator {
@@ -175,7 +175,7 @@
     width: 6px;
     height: 6px;
 
-    background-color: #ff7a2f;
+    background-color: var(--brand-orange);
     border-radius: 50%;
 }
 
@@ -191,7 +191,7 @@
 
     padding: 80px 0 100px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 
@@ -245,7 +245,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .about-history__divider {
@@ -338,7 +338,7 @@
     font-weight: 400;
     line-height: 1.75;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .about-history__content p:last-of-type {
@@ -362,10 +362,10 @@
     font-style: italic;
     line-height: 1.4;
 
-    color: #30295f;
+    color: var(--brand-purple);
     background-color: #f8f7fd;
 
-    border-left: 4px solid #ff7a2f;
+    border-left: 4px solid var(--brand-orange);
     border-radius: 0 12px 12px 0;
 }
 
@@ -423,7 +423,7 @@
     font-weight: 700;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 
     letter-spacing: 0.15px;
     text-transform: uppercase;
@@ -439,7 +439,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 
     text-align: center;
     text-transform: uppercase;
@@ -493,7 +493,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .about-identity__divider {
@@ -574,7 +574,7 @@
     font-weight: 400;
     line-height: 1.75;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .about-identity__content p:last-child {
@@ -596,10 +596,10 @@
     font-style: italic;
     line-height: 1.6 !important;
 
-    color: #30295f !important;
-    background-color: #ffffff;
+    color: var(--brand-purple) !important;
+    background-color: var(--white);
 
-    border-left: 4px solid #ff7a2f;
+    border-left: 4px solid var(--brand-orange);
     border-radius: 0 12px 12px 0;
 
     box-shadow:
@@ -632,7 +632,7 @@
 
     min-width: 0;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     border: 1px solid rgba(48, 41, 95, 0.08);
     border-radius: 20px;
@@ -713,7 +713,7 @@
     font-weight: 800;
     line-height: 1.25;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .about-identity__service-description {
@@ -724,7 +724,7 @@
     font-weight: 400;
     line-height: 1.7;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .about-identity__service-description+.about-identity__service-description {
@@ -742,7 +742,7 @@
 
     padding: 70px 0 55px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 
@@ -785,7 +785,7 @@
     font-weight: 800;
     line-height: 1.2;
 
-    color: #30295f;
+    color: var(--brand-purple);
 
     text-align: center;
 }
@@ -821,7 +821,7 @@
     font-weight: 800;
     line-height: 1.25;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .about-locations__school-text {
@@ -832,7 +832,7 @@
     font-weight: 400;
     line-height: 1.6;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .about-locations__school-highlight {
@@ -846,7 +846,7 @@
     font-weight: 700;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 
     text-align: center;
 }
@@ -865,7 +865,7 @@
     font-weight: 400;
     line-height: 1.55;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .about-locations__school-description p+p {
@@ -889,7 +889,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 
@@ -995,7 +995,7 @@
     position: absolute;
     inset: 4px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
     border-radius: 50%;
 }
 
@@ -1059,7 +1059,7 @@
     font-weight: 400;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 }
 
 

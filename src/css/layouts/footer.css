@@ -36,8 +36,8 @@
 
     width: 100%;
 
-    color: #696687;
-    background-color: #ffffff;
+    color: var(--text);
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -111,11 +111,11 @@
     font-style: normal;
     line-height: 1.7;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .footer__contact-text a {
-    color: #696687;
+    color: var(--text);
 
     transition: color 0.2s ease;
 }
@@ -132,7 +132,7 @@
     font-size: 13px;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 
     word-break: break-word;
 
@@ -205,7 +205,7 @@
     font-size: 14px;
     line-height: 1.8;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .footer__about-text strong {
@@ -234,7 +234,7 @@
     width: 38px;
     height: 38px;
 
-    color: #ffffff;
+    color: var(--white);
 
     background-color: #5f56a7;
     border-radius: 5px;
@@ -246,7 +246,7 @@
 }
 
 .footer__social-link:hover {
-    color: #ffffff;
+    color: var(--white);
 
     background-color: #f47514;
 
@@ -296,7 +296,7 @@
     font-size: 14px;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 
     transition:
         color 0.2s ease,
@@ -413,7 +413,7 @@
     font-size: 14px;
     line-height: 1.7;
 
-    color: #696687;
+    color: var(--text);
 }
 
 
@@ -522,7 +522,7 @@
 
     margin: 0;
 
-    background-color: #ffffff;
+    background-color: var(--white);
     border-radius: 4px;
 
     box-shadow:
@@ -551,7 +551,7 @@
     font-size: 15px;
 
     color: #3b3663;
-    background-color: #ffffff;
+    background-color: var(--white);
 
     border: 0;
     outline: 0;
@@ -578,7 +578,7 @@
     padding: 0;
 
     color: #3b3663;
-    background-color: #ffffff;
+    background-color: var(--white);
 
     border: 0;
 

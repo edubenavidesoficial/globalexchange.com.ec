@@ -1,4 +1,4 @@
-﻿/* ====================================================
+/* ====================================================
    VARIABLES CSS - Global Exchange
    Estilos base del proyecto Global Exchange
    ==================================================== */
@@ -12,6 +12,10 @@
    --primary-dark: #c4b03a;
    --secondary: #ff7426;
    --accent: #3ccfe0;
+
+   /* Colores principales utilizados en las páginas */
+   --brand-orange: #ff7a2f;
+   --brand-purple: #30295f;
 
    /* ==========================================
      COLORS - Text

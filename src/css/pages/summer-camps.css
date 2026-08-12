@@ -26,7 +26,7 @@
 
 .summer-camps-page {
     width: 100%;
-    background: #ffffff;
+    background: var(--white);
     overflow: hidden;
 }
 
@@ -87,7 +87,7 @@
     font-size: clamp(36px, 3vw, 48px);
     font-weight: 800;
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-shadow:
         0 2px 10px rgba(255, 255, 255, .9),
@@ -110,7 +110,7 @@
 
 .summer-camps-hero__breadcrumb a {
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
     text-decoration: none;
 }
 
@@ -121,7 +121,7 @@
 
     border-radius: 50%;
 
-    background: #ff7a2f;
+    background: var(--brand-orange);
 }
 
 
@@ -162,7 +162,7 @@
     font-size: clamp(31px, 3vw, 42px);
     font-weight: 800;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .summer-camps-intro__description {
@@ -173,7 +173,7 @@
     font-size: 16px;
     line-height: 1.75;
 
-    color: #696687;
+    color: var(--text);
 }
 
 
@@ -238,7 +238,7 @@
 
     margin-bottom: 12px;
 
-    color: #30295f;
+    color: var(--brand-purple);
 
     font-weight: 800;
 

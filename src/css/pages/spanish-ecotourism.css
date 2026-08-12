@@ -26,7 +26,7 @@
 .spanish-ecotourism-page {
     width: 100%;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -117,7 +117,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
     text-align: center;
 
     text-shadow:
@@ -148,7 +148,7 @@
     font-weight: 500;
     line-height: 1.4;
 
-    color: #ffffff;
+    color: var(--white);
     text-align: center;
 
     text-shadow:
@@ -156,7 +156,7 @@
 }
 
 .spanish-ecotourism-hero__breadcrumb a {
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-decoration: none;
 
@@ -165,7 +165,7 @@
 
 .spanish-ecotourism-hero__breadcrumb a:hover,
 .spanish-ecotourism-hero__breadcrumb a:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 }
 
 .spanish-ecotourism-hero__separator {
@@ -176,7 +176,7 @@
     width: 6px;
     height: 6px;
 
-    background-color: #ff7a2f;
+    background-color: var(--brand-orange);
     border-radius: 50%;
 }
 
@@ -196,7 +196,7 @@
 
     padding: 60px 0 80px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 
@@ -292,7 +292,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #30295f;
+    color: var(--brand-purple);
 
     text-align: center;
     text-transform: uppercase;
@@ -317,7 +317,7 @@
     font-weight: 400;
     line-height: 1.62;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .spanish-ecotourism-content__intro {
@@ -360,7 +360,7 @@
     font-weight: 800;
     line-height: 1.35;
 
-    color: #696687;
+    color: var(--text);
 
     text-align: center;
 }
@@ -388,7 +388,7 @@
     font-weight: 400;
     line-height: 1.5;
 
-    color: #696687;
+    color: var(--text);
 
     text-align: center;
 }
@@ -447,7 +447,7 @@
     font-weight: 600;
     line-height: 1;
 
-    color: #ffffff;
+    color: var(--white);
 
     background:
         linear-gradient(90deg,
@@ -468,7 +468,7 @@
 
 .spanish-ecotourism-content__button:hover,
 .spanish-ecotourism-content__button:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 
     transform: translateY(-3px);
 

@@ -22,7 +22,7 @@
     width: 100%;
     padding: 55px 0 95px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -68,7 +68,7 @@
     font-weight: 600;
     line-height: 1;
 
-    color: #696687;
+    color: var(--text);
 
     text-transform: uppercase;
 }
@@ -172,7 +172,7 @@
 
     border-radius: 10px;
 
-    color: #ffffff;
+    color: var(--white);
     text-decoration: none;
 
     box-shadow:
@@ -267,7 +267,7 @@
     font-weight: 800;
     line-height: 1.2;
 
-    color: #ffffff;
+    color: var(--white);
 }
 
 .portfolio__category {

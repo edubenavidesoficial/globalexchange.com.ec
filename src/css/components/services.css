@@ -23,7 +23,7 @@
     width: 100%;
     padding: 0 0 100px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -203,7 +203,7 @@
 
     padding: 28px 24px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
     border: 1px solid rgba(59, 54, 99, 0.05);
     border-radius: 10px;
 
@@ -345,7 +345,7 @@
 .services__card:hover .services__card-title a,
 .services__card:focus-within .services__card-title,
 .services__card:focus-within .services__card-title a {
-    color: #ffffff;
+    color: var(--white);
 }
 
 
@@ -361,7 +361,7 @@
     font-weight: 400;
     line-height: 1.65;
 
-    color: #696687;
+    color: var(--text);
 
     transition: color 0.35s ease;
 }
@@ -386,7 +386,7 @@
     font-weight: 400;
     line-height: 1.55;
 
-    color: #696687;
+    color: var(--text);
 
     text-align: center;
 
@@ -406,7 +406,7 @@
     font-weight: 400;
     line-height: 1.6;
 
-    color: #696687;
+    color: var(--text);
 
     transition: color 0.35s ease;
 }
@@ -472,7 +472,7 @@
 .services__card:focus-within .services__card-description strong,
 .services__card:hover .services__details strong,
 .services__card:focus-within .services__details strong {
-    color: #ffffff;
+    color: var(--white);
 }
 
 

@@ -22,7 +22,7 @@
     width: 100%;
     padding: 65px 0 90px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }
@@ -193,7 +193,7 @@
 
 .programs-grid__button:hover,
 .programs-grid__button:focus-visible {
-    color: #ffffff;
+    color: var(--white);
     background-color: #f7ad43;
 
     transform: translateY(-3px);
@@ -241,7 +241,7 @@
     min-width: 0;
     min-height: 250px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
     border: 1px solid transparent;
     border-radius: 10px;
 
@@ -258,7 +258,7 @@
 }
 
 .programs-grid__card--outlined {
-    border: 1px dashed #696687;
+    border: 1px dashed var(--text);
     box-shadow: none;
 }
 
@@ -388,7 +388,7 @@
 
 .programs-grid__card:hover .programs-grid__card-title,
 .programs-grid__card:focus-within .programs-grid__card-title {
-    color: #ffffff;
+    color: var(--white);
 }
 
 

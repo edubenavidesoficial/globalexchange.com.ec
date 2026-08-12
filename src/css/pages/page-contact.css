@@ -22,7 +22,7 @@
 .page-contact {
     width: 100%;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow-x: hidden;
 }
@@ -124,7 +124,7 @@
     font-weight: 800;
     line-height: 1.15;
 
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-align: center;
 
@@ -155,7 +155,7 @@
     font-weight: 500;
     line-height: 1.4;
 
-    color: #ffffff;
+    color: var(--white);
 
     text-align: center;
 
@@ -164,7 +164,7 @@
 }
 
 .page-contact-hero__breadcrumb a {
-    color: #ff7a2f;
+    color: var(--brand-orange);
 
     text-decoration: none;
 
@@ -175,7 +175,7 @@
 
 .page-contact-hero__breadcrumb a:hover,
 .page-contact-hero__breadcrumb a:focus-visible {
-    color: #ffffff;
+    color: var(--white);
 
     text-shadow:
         0 1px 8px rgba(0, 0, 0, 0.5);
@@ -197,7 +197,7 @@
     width: 6px;
     height: 6px;
 
-    background-color: #ff7a2f;
+    background-color: var(--brand-orange);
 
     border-radius: 50%;
 }
@@ -214,7 +214,7 @@
 
     padding: 80px 0 75px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 .page-contact-info__container {
@@ -261,7 +261,7 @@
     font-weight: 800;
     line-height: 1.2;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .page-contact-info__divider {
@@ -319,7 +319,7 @@
     font-weight: 800;
     line-height: 1.25;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 .page-contact-info__intro p {
@@ -333,7 +333,7 @@
     font-weight: 400;
     line-height: 1.65;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .page-contact-info__intro p:last-child {
@@ -389,7 +389,7 @@
     font-weight: 800;
     line-height: 1.25;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 
@@ -411,7 +411,7 @@
     font-weight: 400;
     line-height: 1.6;
 
-    color: #696687;
+    color: var(--text);
 
     text-decoration: none;
 
@@ -454,7 +454,7 @@
     font-weight: 400;
     line-height: 1.7;
 
-    color: #696687;
+    color: var(--text);
 }
 
 .page-contact-info__addresses p+p {
@@ -464,7 +464,7 @@
 .page-contact-info__addresses strong {
     font-weight: 700;
 
-    color: #30295f;
+    color: var(--brand-purple);
 }
 
 

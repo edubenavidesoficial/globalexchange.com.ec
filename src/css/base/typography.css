@@ -34,8 +34,8 @@ body {
     line-height: 27px;
     font-weight: 400;
 
-    color: var(--text, #696687);
-    background-color: var(--white, #ffffff);
+    color: var(--text, var(--text));
+    background-color: var(--white, var(--white));
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

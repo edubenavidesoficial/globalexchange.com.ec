@@ -21,7 +21,7 @@
     width: 100%;
     padding: 30px 0 55px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     overflow: hidden;
 }

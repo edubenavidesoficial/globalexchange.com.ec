@@ -29,7 +29,7 @@
 .local-courses-page {
    width: 100%;
 
-   background-color: #ffffff;
+   background-color: var(--white);
 
    overflow: hidden;
 }
@@ -110,7 +110,7 @@
    font-weight: 800;
    line-height: 1.08;
 
-   color: #ff7a2f;
+   color: var(--brand-orange);
 
    text-shadow:
       0 2px 10px rgba(255, 255, 255, 0.85),
@@ -135,14 +135,14 @@
    font-weight: 500;
    line-height: 1.4;
 
-   color: #ffffff;
+   color: var(--white);
 
    text-shadow:
       0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
 .local-courses-hero__breadcrumb a {
-   color: #ff7a2f;
+   color: var(--brand-orange);
 
    text-decoration: none;
 
@@ -151,7 +151,7 @@
 
 .local-courses-hero__breadcrumb a:hover,
 .local-courses-hero__breadcrumb a:focus-visible {
-   color: #ffffff;
+   color: var(--white);
 }
 
 
@@ -165,7 +165,7 @@
    width: 100%;
    padding: 60px 0 80px;
 
-   background-color: #ffffff;
+   background-color: var(--white);
 
    overflow: hidden;
 }
@@ -244,7 +244,7 @@
    font-weight: 800;
    line-height: 1.15;
 
-   color: #30295f;
+   color: var(--brand-purple);
 }
 
 .local-courses-intro__description {
@@ -258,7 +258,7 @@
    font-weight: 400;
    line-height: 1.65;
 
-   color: #696687;
+   color: var(--text);
 }
 
 
@@ -282,7 +282,7 @@
    font-weight: 600;
    line-height: 1;
 
-   color: #ffffff;
+   color: var(--white);
 
    background:
       linear-gradient(90deg,
@@ -303,7 +303,7 @@
 
 .local-courses-intro__button:hover,
 .local-courses-intro__button:focus-visible {
-   color: #ffffff;
+   color: var(--white);
 
    transform: translateY(-3px);
 
@@ -326,7 +326,7 @@
    font-weight: 800;
    line-height: 1.2;
 
-   color: #30295f;
+   color: var(--brand-purple);
 }
 
 
@@ -341,7 +341,7 @@
 
    padding: 0;
 
-   background-color: #ffffff;
+   background-color: var(--white);
 
    overflow: hidden;
 }
@@ -488,7 +488,7 @@
    font-weight: 400;
    line-height: 1.45;
 
-   color: #696687;
+   color: var(--text);
 }
 
 .local-courses-details__languages {
@@ -506,7 +506,7 @@
    font-weight: 700;
    line-height: 1.35;
 
-   color: #696687;
+   color: var(--text);
 }
 
 .local-courses-details__schedule {
@@ -520,7 +520,7 @@
    font-weight: 400;
    line-height: 1.55;
 
-   color: #696687;
+   color: var(--text);
 }
 
 
@@ -597,7 +597,7 @@
    font-weight: 400;
    line-height: 1.55;
 
-   color: #696687;
+   color: var(--text);
 }
 
 
@@ -618,7 +618,7 @@
 
    padding: 10px 25px;
 
-   background-color: #ffffff;
+   background-color: var(--white);
 }
 
 .local-courses-details__partners img {

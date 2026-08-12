@@ -46,7 +46,7 @@
 .floating-contact__toggle {
     position: relative;
 
-    color: #ffffff;
+    color: var(--white);
     background-color: #ff6255;
 }
 
@@ -150,7 +150,7 @@
 }
 
 .floating-contact__action {
-    color: #ffffff;
+    color: var(--white);
     text-decoration: none;
 
     transform: scale(0.75);
@@ -192,7 +192,7 @@
     line-height: 1.2;
 
     color: #222222;
-    background-color: #ffffff;
+    background-color: var(--white);
 
     border-radius: 4px;
 
@@ -217,7 +217,7 @@
     width: 14px;
     height: 14px;
 
-    background-color: #ffffff;
+    background-color: var(--white);
 
     transform:
         translateY(-50%) rotate(45deg);
