@@ -38,7 +38,7 @@
     max-width: 1500px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 }
 
 
@@ -282,7 +282,7 @@
     }
 
     .cta__container {
-        padding: 0 30px;
+        padding: 0 var(--page-gutter-md);
     }
 
     .cta__title {
@@ -305,7 +305,7 @@
     }
 
     .cta__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .cta__title {
@@ -341,7 +341,7 @@
     }
 
     .cta__container {
-        padding: 0 16px;
+        padding: 0 var(--page-gutter-2xs);
     }
 
     .cta__title {

@@ -37,7 +37,7 @@
     max-width: 1200px;
 
     margin: 0 auto;
-    padding: 0 30px;
+    padding: 0 var(--page-gutter-md);
 }
 
 
@@ -182,7 +182,7 @@
     }
 
     .about__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .about__title {
@@ -217,7 +217,7 @@
     }
 
     .about__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .about__title {

@@ -95,7 +95,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -220,7 +220,7 @@
     width: 100%;
     max-width: 1220px;
     margin: 0 auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 .school-program-intro__content {
@@ -285,7 +285,7 @@
 .school-program-intro__subtitle {
     position: relative;
     margin: 0 0 17px;
-    padding-left: 18px;
+    padding-left: var(--page-gutter-xs);
     font-family: var(--font-nunito);
     font-size: var(--font-lg);
     font-weight: var(--font-extrabold);
@@ -436,8 +436,8 @@
     }
 
     .school-program-intro__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .school-program-intro__header {
@@ -550,7 +550,7 @@
     max-width: 950px;
 
     margin: 0 auto;
-    padding: 0 30px;
+    padding: 0 var(--page-gutter-md);
 }
 
 
@@ -813,7 +813,7 @@
     }
 
     .school-program-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .school-program-features {
@@ -848,8 +848,8 @@
     .school-program-hero__container,
     .school-program-intro__container,
     .school-program-features__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .school-program-hero__title {
@@ -919,8 +919,8 @@
     }
 
     .school-program-feature {
-        padding-right: 16px;
-        padding-left: 16px;
+        padding-right: var(--page-gutter-2xs);
+        padding-left: var(--page-gutter-2xs);
     }
 
     .school-program-feature__details li {

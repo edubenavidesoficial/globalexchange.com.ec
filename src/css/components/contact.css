@@ -446,7 +446,7 @@
     }
 
     .contact__container {
-        padding: 0 30px;
+        padding: 0 var(--page-gutter-md);
     }
 
     .contact__layout {
@@ -506,7 +506,7 @@
     }
 
     .contact__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .contact__layout {

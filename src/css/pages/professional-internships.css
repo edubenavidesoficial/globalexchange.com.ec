@@ -96,7 +96,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -235,7 +235,7 @@
     max-width: 1220px;
 
     margin: 0 auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 
@@ -422,7 +422,7 @@
 .professional-internships-details__list li {
     position: relative;
 
-    padding-left: 18px;
+    padding-left: var(--page-gutter-xs);
 
     font-family: var(--font-primary);
     font-size: 15px;
@@ -701,7 +701,7 @@
     }
 
     .professional-internships-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .professional-internships-details {
@@ -727,8 +727,8 @@
 
     .professional-internships-hero__container,
     .professional-internships-details__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .professional-internships-hero__title {

@@ -158,7 +158,7 @@
     max-width: 1240px;
 
     margin: 0 auto;
-    padding: 0 30px;
+    padding: 0 var(--page-gutter-md);
 }
 
 
@@ -437,7 +437,7 @@
 
 .services__details ul {
     margin: 4px 0 0;
-    padding-left: 18px;
+    padding-left: var(--page-gutter-xs);
 
     list-style: disc;
 }
@@ -607,7 +607,7 @@
     }
 
     .services__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .services__columns {

@@ -94,7 +94,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -381,7 +381,7 @@
 .spanish-ecotourism-content__languages li {
     position: relative;
 
-    padding-left: 18px;
+    padding-left: var(--page-gutter-xs);
 
     font-family: var(--font-primary);
     font-size: 16px;
@@ -530,7 +530,7 @@
         width: 100%;
         max-width: 720px;
 
-        padding: 0 30px;
+        padding: 0 var(--page-gutter-md);
     }
 
     .spanish-ecotourism-content__image {
@@ -571,7 +571,7 @@
     }
 
     .spanish-ecotourism-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .spanish-ecotourism-hero__title {
@@ -592,8 +592,8 @@
     .spanish-ecotourism-content__container {
         gap: 35px;
 
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .spanish-ecotourism-content__image {
@@ -636,7 +636,7 @@
     }
 
     .spanish-ecotourism-hero__container {
-        padding: 0 16px;
+        padding: 0 var(--page-gutter-2xs);
     }
 
     .spanish-ecotourism-hero__title {

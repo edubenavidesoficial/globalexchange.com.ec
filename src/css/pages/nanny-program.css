@@ -95,7 +95,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -233,7 +233,7 @@
     max-width: 1180px;
 
     margin: 0 auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 
@@ -445,7 +445,7 @@
     position: relative;
 
     margin-bottom: 12px;
-    padding-left: 22px;
+    padding-left: var(--page-gutter-sm);
 
     font-family: var(--font-primary);
     font-size: 15px;
@@ -588,7 +588,7 @@
     position: relative;
 
     margin-bottom: 11px;
-    padding-left: 22px;
+    padding-left: var(--page-gutter-sm);
 
     font-family: var(--font-primary);
     font-size: 15px;
@@ -671,7 +671,7 @@
     position: relative;
 
     margin-bottom: 9px;
-    padding-left: 18px;
+    padding-left: var(--page-gutter-xs);
 
     font-family: var(--font-primary);
     font-size: var(--font-sm);
@@ -779,7 +779,7 @@
     }
 
     .nanny-program-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .nanny-program-content {
@@ -814,8 +814,8 @@
 
     .nanny-program-hero__container,
     .nanny-program-content__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .nanny-program-hero__title {
@@ -902,8 +902,8 @@
     }
 
     .nanny-program-content__carousel {
-        padding-right: 30px;
-        padding-left: 30px;
+        padding-right: var(--page-gutter-md);
+        padding-left: var(--page-gutter-md);
     }
 
     .nanny-program-content__carousel .foreign-flags-carousel__slide img {

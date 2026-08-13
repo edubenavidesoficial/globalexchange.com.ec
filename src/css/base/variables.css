@@ -98,6 +98,16 @@
    --spacing-4xl: 80px;
 
    /* ==========================================
+   LAYOUT - Page Gutters
+========================================== */
+
+   --page-gutter-xl: 40px;
+   --page-gutter-lg: 35px;
+   --page-gutter-md: 30px;
+   --page-gutter-sm: 22px;
+   --page-gutter-xs: 18px;
+   --page-gutter-2xs: 16px;
+   /* ==========================================
      BORDERS
   ========================================== */
 

@@ -85,7 +85,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -498,7 +498,7 @@
     position: relative;
 
     margin: 7px 0;
-    padding-left: 16px;
+    padding-left: var(--page-gutter-2xs);
 
     font-family: var(--font-primary);
     font-size: 16px;
@@ -807,7 +807,7 @@
 
 .university-access-europe-detail__content ul {
     margin: 0;
-    padding-left: 22px;
+    padding-left: var(--page-gutter-sm);
 }
 
 .university-access-europe-detail__content li {
@@ -1173,7 +1173,7 @@
     }
 
     .university-access-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .university-access-hero__title {

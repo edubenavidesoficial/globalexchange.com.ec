@@ -92,7 +92,7 @@
    max-width: 1380px;
 
    margin: 0 auto;
-   padding: 0 40px;
+   padding: 0 var(--page-gutter-xl);
 
    text-align: center;
 }
@@ -188,7 +188,7 @@
    max-width: 1240px;
 
    margin: 0 auto;
-   padding: 0 35px;
+   padding: 0 var(--page-gutter-lg);
 }
 
 
@@ -655,7 +655,7 @@
    }
 
    .local-courses-details__description {
-      padding-left: 18px;
+      padding-left: var(--page-gutter-xs);
    }
 
    .local-courses-details__info-title,
@@ -790,7 +790,7 @@
    }
 
    .local-courses-hero__container {
-      padding: 0 22px;
+      padding: 0 var(--page-gutter-sm);
    }
 
    .local-courses-hero__title {
@@ -811,7 +811,7 @@
    .local-courses-intro__container {
       gap: 35px;
 
-      padding: 0 18px;
+      padding: 0 var(--page-gutter-xs);
    }
 
    .local-courses-intro__image {
@@ -870,8 +870,8 @@
    }
 
    .local-courses-details__partners {
-      padding-right: 16px;
-      padding-left: 16px;
+      padding-right: var(--page-gutter-2xs);
+      padding-left: var(--page-gutter-2xs);
    }
 }
 
@@ -888,7 +888,7 @@
    }
 
    .local-courses-hero__container {
-      padding: 0 16px;
+      padding: 0 var(--page-gutter-2xs);
    }
 
    .local-courses-hero__title {

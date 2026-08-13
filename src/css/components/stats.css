@@ -374,7 +374,7 @@
     }
 
     .stats__container {
-        padding: 0 35px;
+        padding: 0 var(--page-gutter-lg);
     }
 
     .stats__layout {
@@ -465,7 +465,7 @@
     }
 
     .stats__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .stats__layout {

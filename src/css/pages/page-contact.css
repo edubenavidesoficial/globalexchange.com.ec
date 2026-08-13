@@ -103,7 +103,7 @@
     max-width: 1380px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -222,7 +222,7 @@
     max-width: 1180px;
 
     margin: 0 auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 
@@ -530,7 +530,7 @@
     }
 
     .page-contact-hero__container {
-        padding: 0 22px;
+        padding: 0 var(--page-gutter-sm);
     }
 
     .page-contact-hero__title {
@@ -569,8 +569,8 @@
     }
 
     .page-contact-hero__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .page-contact-hero__title {
@@ -591,8 +591,8 @@
     }
 
     .page-contact-info__container {
-        padding-right: 18px;
-        padding-left: 18px;
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .page-contact-info__header {

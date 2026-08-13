@@ -39,7 +39,7 @@
     max-width: 1320px;
 
     margin: 0 auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 
@@ -364,7 +364,7 @@
     }
 
     .portfolio__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .portfolio__header {

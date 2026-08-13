@@ -74,7 +74,7 @@
     max-width: 1380px;
 
     margin: auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 
     text-align: center;
 }
@@ -142,7 +142,7 @@
     max-width: 1180px;
 
     margin: auto;
-    padding: 0 35px;
+    padding: 0 var(--page-gutter-lg);
 }
 
 .summer-camps-intro__header {
@@ -303,8 +303,8 @@
     .summer-camps-hero__container,
     .summer-camps-intro__container {
 
-        padding-left: 18px;
-        padding-right: 18px;
+        padding-left: var(--page-gutter-xs);
+        padding-right: var(--page-gutter-xs);
     }
 
     .summer-camps-hero__title {

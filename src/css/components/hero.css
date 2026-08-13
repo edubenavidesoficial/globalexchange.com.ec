@@ -29,7 +29,7 @@
     max-width: 1500px;
 
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-gutter-xl);
 }
 
 .hero__layout {
@@ -548,7 +548,7 @@
     }
 
     .hero__container {
-        padding: 0 30px;
+        padding: 0 var(--page-gutter-md);
     }
 
     .hero__layout {
@@ -640,7 +640,7 @@
     }
 
     .hero__container {
-        padding: 0 18px;
+        padding: 0 var(--page-gutter-xs);
     }
 
     .hero__layout {
