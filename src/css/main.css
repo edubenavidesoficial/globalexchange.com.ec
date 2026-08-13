@@ -24,6 +24,7 @@
 
 @import './components/buttons.css';
 @import './components/hero.css';
+@import './components/page-hero.css';
 @import './components/about.css';
 @import './components/services.css';
 @import './components/programs.css';
@@ -41,4 +42,3 @@
 ========================================== */
 
 @import './pages/home.css';
-
