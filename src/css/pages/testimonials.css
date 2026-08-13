@@ -708,7 +708,7 @@ blockquote.testimonials__quote {
    GALERÍA EN TABLET HORIZONTAL
 ========================================== */
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
     .testimonials-gallery__grid {
         grid-template-columns:
             repeat(3, minmax(0, 1fr));
@@ -720,7 +720,7 @@ blockquote.testimonials__quote {
    TABLET
 ========================================== */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
     .testimonials {
         padding: 55px 0 70px;
     }

@@ -165,15 +165,25 @@
    --gutter: 30px;
 
    /* ==========================================
-     LAYOUT - Breakpoints
-  ========================================== */
+   BREAKPOINTS DE REFERENCIA
+
+   Estrategia responsive:
+   Desktop-first mediante @media (max-width).
+
+   IMPORTANTE:
+   Estas variables sirven como documentación
+   del sistema de diseño.
+
+   CSS custom properties no pueden utilizarse
+   directamente dentro de @media en CSS nativo.
+========================================== */
 
    --breakpoint-xl: 1200px;
    --breakpoint-lg: 1024px;
+   --breakpoint-tablet: 900px;
    --breakpoint-md: 768px;
    --breakpoint-sm: 600px;
    --breakpoint-xs: 480px;
-
    /* ==========================================
      TRANSITIONS
   ========================================== */

@@ -1232,7 +1232,7 @@
    RESPONSIVE GENERAL
 ==================================================== */
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
     .foreign-course-panel {
         grid-template-columns: 1fr;
         gap: 38px;

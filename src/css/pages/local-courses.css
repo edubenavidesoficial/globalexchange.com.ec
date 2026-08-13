@@ -672,6 +672,11 @@
 ========================================== */
 
 @media (max-width: 900px) {
+
+   /* ======================================
+       INTRO
+    ====================================== */
+
    .local-courses-intro {
       padding: 55px 0 70px;
    }
@@ -708,14 +713,12 @@
    .local-courses-intro__button {
       margin-bottom: 28px;
    }
-}
 
 
-/* ==========================================
-   TABLET VERTICAL
-========================================== */
+   /* ======================================
+       DETALLES
+    ====================================== */
 
-@media (max-width: 850px) {
    .local-courses-details {
       padding-top: 45px;
    }
@@ -771,12 +774,7 @@
    .local-courses-details__description p {
       max-width: 520px;
    }
-
-   .local-courses-details__partners {
-      min-height: 70px;
-   }
 }
-
 
 /* ==========================================
    TABLET PEQUEÑA

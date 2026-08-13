@@ -391,7 +391,7 @@
     height: 265px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
     .school-program-intro__container {
         grid-template-columns: minmax(0, 1.2fr) minmax(270px, 0.8fr);
         gap: 48px;
@@ -402,7 +402,7 @@
     }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
     .school-program-intro {
         padding: 65px 0;
     }
