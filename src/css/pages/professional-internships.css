@@ -34,92 +34,38 @@
 
 
 /* ====================================================
-   HERO
+   HERO - VARIACIONES DE PROFESSIONAL INTERNSHIPS
 ==================================================== */
 
 .professional-internships-hero {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    min-height: 360px;
-
-    padding: 70px 0;
-
     background-image:
         url("/images/shared/pic_paralax_2.jpg");
 
-    background-repeat: no-repeat;
     background-position: center 52%;
-    background-size: cover;
-
-    overflow: hidden;
 }
 
 
 /* ==========================================
-   CAPA DEL HERO
+   OVERLAY
 ========================================== */
 
 .professional-internships-hero__overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-
     background:
         linear-gradient(90deg,
             rgba(15, 18, 54, 0.28) 0%,
             rgba(15, 18, 54, 0.38) 50%,
             rgba(15, 18, 54, 0.28) 100%);
-
-    pointer-events: none;
 }
 
 
 /* ==========================================
-   CONTENEDOR DEL HERO
-========================================== */
-
-.professional-internships-hero__container {
-    position: relative;
-    z-index: 2;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    max-width: 1380px;
-
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-xl);
-
-    text-align: center;
-}
-
-
-/* ==========================================
-   TÍTULO DEL HERO
+   TÍTULO
 ========================================== */
 
 .professional-internships-hero__title {
-    width: 100%;
     max-width: 1150px;
 
-    margin: 0 auto 12px;
-
-    font-family: var(--font-nunito);
     font-size: clamp(34px, 3.3vw, 48px);
-    font-weight: var(--font-extrabold);
-    line-height: 1.15;
-
-    color: var(--brand-orange);
-
-    text-align: center;
 
     text-shadow:
         0 2px 10px rgba(255, 255, 255, 0.9),
@@ -132,62 +78,11 @@
 ========================================== */
 
 .professional-internships-hero__breadcrumb {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 12px;
-
-    width: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    font-family: var(--font-primary);
-    font-size: var(--font-sm);
-    font-weight: var(--font-medium);
     line-height: 1.4;
-
-    color: var(--white);
-
-    text-align: center;
 
     text-shadow:
         0 1px 6px rgba(0, 0, 0, 0.4);
 }
-
-.professional-internships-hero__breadcrumb a {
-    color: var(--brand-orange);
-
-    text-decoration: none;
-
-    transition: color 0.3s ease;
-}
-
-.professional-internships-hero__breadcrumb a:hover,
-.professional-internships-hero__breadcrumb a:focus-visible {
-    color: var(--white);
-}
-
-.professional-internships-hero__breadcrumb a:focus-visible {
-    outline:
-        2px solid rgba(255, 122, 47, 0.45);
-
-    outline-offset: 4px;
-}
-
-.professional-internships-hero__separator {
-    display: block;
-
-    flex: 0 0 auto;
-
-    width: 6px;
-    height: 6px;
-
-    background-color: var(--brand-orange);
-    border-radius: 50%;
-}
-
 
 /* ====================================================
    DETALLES DE LAS PASANTÍAS
@@ -694,16 +589,6 @@
 ========================================== */
 
 @media (max-width: 768px) {
-    .professional-internships-hero {
-        min-height: 300px;
-
-        padding: 55px 0;
-    }
-
-    .professional-internships-hero__container {
-        padding: 0 var(--page-gutter-sm);
-    }
-
     .professional-internships-details {
         padding: 65px 0 25px;
     }
@@ -719,13 +604,7 @@
 ========================================== */
 
 @media (max-width: 600px) {
-    .professional-internships-hero {
-        min-height: 250px;
 
-        padding: 45px 0;
-    }
-
-    .professional-internships-hero__container,
     .professional-internships-details__container {
         padding-right: var(--page-gutter-xs);
         padding-left: var(--page-gutter-xs);
@@ -824,7 +703,6 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    .professional-internships-hero__breadcrumb a,
     .professional-internships-details__button {
         transition: none;
     }
