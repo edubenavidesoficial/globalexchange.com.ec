@@ -126,13 +126,8 @@
     position: relative;
     z-index: 1;
 
-    width: 100%;
     max-width: 1180px;
-
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
 }
-
 
 /* ====================================================
    CABECERA E INTRODUCCIÓN

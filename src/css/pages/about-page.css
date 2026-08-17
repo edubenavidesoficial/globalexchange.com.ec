@@ -102,11 +102,8 @@
 ========================================== */
 
 .about-history__container {
-    width: 100%;
-    max-width: 1240px;
 
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
+    max-width: 1240px;
 }
 
 
@@ -292,13 +289,9 @@
 ========================================== */
 
 .about-identity__container {
-    width: 100%;
+
     max-width: 1240px;
-
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
 }
-
 
 /* ==========================================
    ENCABEZADO PRINCIPAL
@@ -653,11 +646,8 @@
 ========================================== */
 
 .about-locations__container {
-    width: 100%;
-    max-width: 1240px;
 
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
+    max-width: 1240px;
 }
 
 

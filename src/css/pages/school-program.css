@@ -116,10 +116,7 @@
     grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.72fr);
     align-items: center;
     gap: clamp(58px, 7vw, 105px);
-    width: 100%;
     max-width: 1220px;
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
 }
 
 .school-program-intro__content {
@@ -730,7 +727,6 @@
 
 @media (max-width: 600px) {
 
-    .school-program-intro__container,
     .school-program-features__container {
         padding-right: var(--page-gutter-xs);
         padding-left: var(--page-gutter-xs);

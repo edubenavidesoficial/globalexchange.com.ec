@@ -171,11 +171,8 @@
 ========================================== */
 
 .foreign-courses-tabs__container {
-    width: 100%;
-    max-width: 1240px;
 
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
+    max-width: 1240px;
 }
 
 .foreign-courses-tabs__eyebrow {

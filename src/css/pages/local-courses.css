@@ -121,11 +121,8 @@
 
    gap: clamp(55px, 6vw, 90px);
 
-   width: 100%;
    max-width: 1240px;
 
-   margin: 0 auto;
-   padding: 0 var(--page-gutter-lg);
 }
 
 

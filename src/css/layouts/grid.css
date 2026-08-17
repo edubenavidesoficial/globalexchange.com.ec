@@ -10,11 +10,42 @@
 .container {
     width: var(--container-width);
     max-width: 100%;
+
     margin-right: auto;
     margin-left: auto;
+
     padding-right: var(--container-padding);
     padding-left: var(--container-padding);
 }
+
+
+/* ==========================================
+   PAGE CONTAINER
+========================================== */
+
+/*
+Contenedor estructural reutilizable para
+las páginas internas modernas.
+
+Responsabilidades:
+- ocupar todo el ancho disponible;
+- centrar horizontalmente el contenido;
+- aplicar el gutter horizontal global.
+
+El max-width se mantiene en el componente
+específico de cada sección.
+*/
+
+.page-container {
+    width: 100%;
+
+    margin-right: auto;
+    margin-left: auto;
+
+    padding-right: var(--page-gutter-lg);
+    padding-left: var(--page-gutter-lg);
+}
+
 
 /* ==========================================
    ROW
@@ -23,6 +54,7 @@
 .row {
     display: flex;
     flex-wrap: wrap;
+
     margin-right: calc(var(--container-padding) * -1);
     margin-left: calc(var(--container-padding) * -1);
 }
@@ -30,13 +62,16 @@
 .row:after,
 .row:before {
     display: table;
+
     content: "";
+
     line-height: 0;
 }
 
 .row:after {
     clear: both;
 }
+
 
 /* ==========================================
    COLUMNS
@@ -45,12 +80,16 @@
 [class*="col-"] {
     display: block;
     float: left;
+
+    width: 100%;
     min-height: 1px;
+
     padding-right: var(--container-padding);
     padding-left: var(--container-padding);
+
     box-sizing: border-box;
-    width: 100%;
 }
+
 
 /* ==========================================
    COLUMN WIDTHS
@@ -104,6 +143,7 @@
     width: 8.333333333333332%;
 }
 
+
 /* ==========================================
    ALIASES (Span classes)
 ========================================== */
@@ -156,55 +196,29 @@
     width: 8.333333333333332%;
 }
 
-/* ==========================================
-   CLEARFIX
-========================================== */
-
-.clearfix:after,
-.clearfix:before {
-    display: table;
-    content: "";
-    line-height: 0;
-}
-
-.clearfix:after {
-    clear: both;
-}
-
-.clear {
-    display: table;
-    clear: both;
-    height: 0;
-    font-size: 0;
-}
-
-.gt3_clear:after,
-.gt3_clear:before {
-    display: table;
-    content: " ";
-}
-
-.gt3_clear:after {
-    clear: both;
-}
 
 /* ==========================================
    RESPONSIVE GRID
 ========================================== */
 
 @media (max-width: 1200px) {
+
     .container {
         width: 998px;
     }
 }
 
+
 @media (max-width: 1024px) {
+
     .container {
         width: 740px;
     }
 }
 
+
 @media (max-width: 768px) {
+
     .container {
         width: 560px;
     }
@@ -219,13 +233,17 @@
     }
 }
 
+
 @media (max-width: 600px) {
+
     .container {
         width: 420px;
     }
 }
 
+
 @media (max-width: 480px) {
+
     .container {
         width: 90%;
     }
