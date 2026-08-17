@@ -230,52 +230,47 @@
 }
 
 
-@media (max-width:600px) {
-    @media (max-width: 600px) {
+/* ==========================================
+   MÓVIL
+========================================== */
 
-        .summer-camps-hero {
-            min-height: 250px;
+@media (max-width: 600px) {
 
-            padding: 45px 0;
-        }
+    .summer-camps-hero {
+        min-height: 250px;
 
-        .summer-camps-hero__container {
-            padding-right: var(--page-gutter-xs);
-            padding-left: var(--page-gutter-xs);
-        }
+        padding: 45px 0;
+    }
 
-        .summer-camps-hero__title {
-            font-size: var(--font-2xl);
-        }
+    .summer-camps-hero__container {
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
+    }
 
-        .summer-camps-hero__breadcrumb {
-            flex-wrap: wrap;
+    .summer-camps-hero__title {
+        font-size: var(--font-2xl);
+    }
 
-            font-size: var(--font-xs);
-        }
+    .summer-camps-hero__breadcrumb {
+        flex-wrap: wrap;
 
-        /* Aquí continúan las reglas existentes
-       de .summer-camps-intro... */
+        font-size: var(--font-xs);
     }
 
     .summer-camps-intro__container {
-        padding-left: var(--page-gutter-xs);
         padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
     }
 
     .summer-camps-intro__title {
-
         font-size: 29px;
     }
 
     .summer-camps-intro__description {
-
         font-size: 15px;
     }
 
     .summer-camps-intro__item img {
-
         height: 240px;
     }
-
 }
