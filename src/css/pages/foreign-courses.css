@@ -33,41 +33,22 @@
 
 
 /* ====================================================
-   HERO
+   HERO - VARIACIONES DE FOREIGN COURSES
 ==================================================== */
 
 .foreign-courses-hero {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    min-height: 360px;
-
-    padding: 70px 0;
-
     background-image:
         url("/images/shared/pic_paralax_2.jpg");
 
-    background-repeat: no-repeat;
     background-position: center 52%;
-    background-size: cover;
-
-    overflow: hidden;
 }
 
 
 /* ==========================================
-   CAPA SOBRE EL HERO
+   OVERLAY
 ========================================== */
 
 .foreign-courses-hero__overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-
     background:
         linear-gradient(90deg,
             rgba(15, 18, 54, 0.28) 0%,
@@ -79,46 +60,13 @@
 
 
 /* ==========================================
-   CONTENEDOR DEL HERO
-========================================== */
-
-.foreign-courses-hero__container {
-    position: relative;
-    z-index: 2;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    max-width: 1380px;
-
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-xl);
-
-    text-align: center;
-}
-
-
-/* ==========================================
-   TÍTULO DEL HERO
+   TÍTULO
 ========================================== */
 
 .foreign-courses-hero__title {
-    width: 100%;
     max-width: 1150px;
 
-    margin: 0 auto 12px;
-
-    font-family: var(--font-nunito);
     font-size: clamp(35px, 3.3vw, 48px);
-    font-weight: var(--font-extrabold);
-    line-height: 1.15;
-
-    color: var(--brand-orange);
-
-    text-align: center;
 
     text-shadow:
         0 2px 10px rgba(255, 255, 255, 0.9),
@@ -131,53 +79,10 @@
 ========================================== */
 
 .foreign-courses-hero__breadcrumb {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 12px;
-
-    width: 100%;
-
-    margin: 0;
-    padding: 0;
-
-    font-family: var(--font-primary);
-    font-size: var(--font-sm);
-    font-weight: var(--font-medium);
     line-height: 1.4;
-
-    color: var(--white);
-
-    text-align: center;
 
     text-shadow:
         0 1px 6px rgba(0, 0, 0, 0.4);
-}
-
-.foreign-courses-hero__breadcrumb a {
-    color: var(--brand-orange);
-
-    text-decoration: none;
-
-    transition: color 0.3s ease;
-}
-
-.foreign-courses-hero__breadcrumb a:hover,
-.foreign-courses-hero__breadcrumb a:focus-visible {
-    color: var(--white);
-}
-
-.foreign-courses-hero__separator {
-    display: block;
-
-    flex: 0 0 auto;
-
-    width: 6px;
-    height: 6px;
-
-    background-color: var(--brand-orange);
-    border-radius: 50%;
 }
 
 
@@ -1272,14 +1177,6 @@
 }
 
 @media (max-width: 768px) {
-    .foreign-courses-hero {
-        min-height: 300px;
-        padding: 55px 0;
-    }
-
-    .foreign-courses-hero__container {
-        padding: 0 var(--page-gutter-sm);
-    }
 
     .foreign-courses-intro {
         padding: 55px 0 45px;
@@ -1341,7 +1238,6 @@
         padding: 45px 0;
     }
 
-    .foreign-courses-hero__container,
     .foreign-courses-intro__container,
     .foreign-courses-tabs__container,
     .foreign-courses-program__container {
@@ -1515,7 +1411,6 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    .foreign-courses-hero__breadcrumb a,
     .foreign-courses-tabs__button,
     .foreign-courses-tabs__panel,
     .foreign-course-panel__button,
