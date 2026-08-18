@@ -1458,9 +1458,18 @@ body.header-drawer-open {
         margin-left: auto;
     }
 
-    .header__virtual,
+    .header__virtual {
+        display: flex;
+
+        height: 64px;
+        min-height: 64px;
+    }
+
     .header__language {
-        display: none;
+        display: flex;
+
+        height: 64px;
+        min-height: 64px;
     }
 
     .header__nav {
