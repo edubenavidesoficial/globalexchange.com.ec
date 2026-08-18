@@ -83,11 +83,7 @@
 
 .summer-camps-intro__container {
 
-    width: 100%;
     max-width: 1180px;
-
-    margin: auto;
-    padding: 0 var(--page-gutter-lg);
 }
 
 .summer-camps-intro__header {

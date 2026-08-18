@@ -104,11 +104,7 @@
 ========================================== */
 
 .foreign-courses-intro__container {
-    width: 100%;
     max-width: 1100px;
-
-    margin: 0 auto;
-    padding: 0 var(--page-gutter-lg);
 
     text-align: center;
 }
