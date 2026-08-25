@@ -1,0 +1,472 @@
+/* ====================================================
+   PROGRAM FINDER
+
+   Archivo:
+   src/css/components/program-finder.css
+
+   Descripción:
+   Buscador compacto de programas de Global Exchange.
+==================================================== */
+
+
+/* ==========================================
+   SECCIÓN
+========================================== */
+
+.program-finder {
+    position: relative;
+
+    width: 100%;
+
+    padding: 90px 0;
+
+    background:
+        linear-gradient(135deg,
+            rgba(255, 248, 250, 0.96),
+            rgba(247, 246, 255, 0.96));
+
+    overflow: hidden;
+
+    scroll-margin-top: 100px;
+}
+
+
+/* ==========================================
+   CONTENEDOR
+========================================== */
+
+.program-finder__container {
+    max-width: 1180px;
+}
+
+
+/* ==========================================
+   ENCABEZADO
+========================================== */
+
+.program-finder__header {
+    max-width: 800px;
+
+    margin: 0 auto 42px;
+
+    text-align: center;
+}
+
+
+.program-finder__eyebrow {
+    margin: 0 0 10px;
+
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: var(--font-extrabold);
+
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+
+    color: var(--brand-orange);
+}
+
+
+.program-finder__title {
+    margin: 0 0 14px;
+
+    font-family: var(--font-nunito);
+    font-size: clamp(32px, 3vw, 42px);
+    font-weight: var(--font-extrabold);
+    line-height: 1.15;
+
+    color: var(--brand-purple);
+}
+
+
+.program-finder__description {
+    max-width: 680px;
+
+    margin: 0 auto;
+
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 1.7;
+
+    color: var(--text);
+}
+
+
+/* ====================================================
+   FORMULARIO
+==================================================== */
+
+.program-finder__form {
+    width: 100%;
+
+    padding: 34px;
+
+    background: var(--white);
+
+    border:
+        1px solid rgba(59, 54, 99, 0.1);
+
+    border-radius: var(--radius-xl);
+
+    box-shadow:
+        0 20px 45px rgba(59, 54, 99, 0.1);
+}
+
+
+/* ==========================================
+   CAMPOS
+========================================== */
+
+.program-finder__fields {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr) auto;
+
+    gap: 18px;
+
+    align-items: end;
+}
+
+
+.program-finder__field {
+    min-width: 0;
+}
+
+
+/* ==========================================
+   LABEL
+========================================== */
+
+.program-finder__label {
+    display: block;
+
+    min-height: 42px;
+
+    margin-bottom: 9px;
+
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: var(--font-semibold);
+    line-height: 1.3;
+
+    color: var(--brand-purple);
+}
+
+
+/* ==========================================
+   SELECT
+========================================== */
+
+.program-finder__select-wrapper {
+    position: relative;
+}
+
+
+.program-finder__select {
+    display: block;
+
+    width: 100%;
+    min-height: 52px;
+
+    padding:
+        0 42px 0 16px;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    font-family: var(--font-primary);
+    font-size: 15px;
+    font-weight: var(--font-normal);
+
+    color: var(--brand-purple);
+
+    background: #fbfbfc;
+
+    border:
+        1px solid rgba(59, 54, 99, 0.15);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.25s ease;
+}
+
+
+/* Flecha personalizada */
+
+.program-finder__select-wrapper::after {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    right: 18px;
+
+    width: 8px;
+    height: 8px;
+
+    border-right: 2px solid var(--brand-purple);
+    border-bottom: 2px solid var(--brand-purple);
+
+    pointer-events: none;
+
+    transform:
+        translateY(-70%) rotate(45deg);
+}
+
+
+/* Focus */
+
+.program-finder__select:focus {
+    background: var(--white);
+
+    border-color: var(--brand-orange);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 111, 53, 0.12);
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.program-finder__select.is-invalid {
+    border-color: #d94141;
+
+    box-shadow:
+        0 0 0 3px rgba(217, 65, 65, 0.08);
+}
+
+
+.program-finder__error {
+    display: block;
+
+    min-height: 17px;
+
+    margin-top: 5px;
+
+    font-family: var(--font-primary);
+    font-size: 11px;
+    line-height: 1.3;
+
+    color: #c53636;
+}
+
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.program-finder__actions {
+    padding-bottom: 22px;
+}
+
+
+.program-finder__button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    min-width: 190px;
+    min-height: 52px;
+
+    padding:
+        0 24px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background:
+        var(--gradient-primary);
+
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: var(--font-bold);
+
+    color: var(--white);
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.program-finder__button:hover,
+.program-finder__button:focus-visible {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(243, 145, 37, 0.25);
+}
+
+
+.program-finder__button-arrow {
+    transition:
+        transform 0.25s ease;
+}
+
+
+.program-finder__button:hover .program-finder__button-arrow {
+    transform:
+        translateX(4px);
+}
+
+
+/* ==========================================
+   ESTADO
+========================================== */
+
+.program-finder__status {
+    min-height: 22px;
+
+    margin:
+        12px 0 0;
+
+    font-family: var(--font-primary);
+    font-size: 13px;
+    line-height: 1.5;
+
+    text-align: center;
+
+    color: var(--brand-purple);
+}
+
+
+.program-finder__status.is-error {
+    color: #c53636;
+}
+
+
+.program-finder__status.is-success {
+    color: #247a47;
+}
+
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1050px) {
+
+    .program-finder__fields {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .program-finder__actions {
+        display: flex;
+
+        align-items: flex-end;
+
+        padding-bottom: 22px;
+    }
+
+
+    .program-finder__button {
+        width: 100%;
+    }
+
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 768px) {
+
+    .program-finder {
+        padding: 70px 0;
+    }
+
+
+    .program-finder__form {
+        padding: 26px;
+    }
+
+
+    .program-finder__fields {
+        grid-template-columns: 1fr;
+    }
+
+
+    .program-finder__label {
+        min-height: auto;
+    }
+
+
+    .program-finder__actions {
+        padding-bottom: 0;
+    }
+
+}
+
+
+/* ==========================================
+   MÓVIL
+========================================== */
+
+@media (max-width: 600px) {
+
+    .program-finder {
+        padding: 55px 0;
+    }
+
+
+    .program-finder__container {
+        padding-right: var(--page-gutter-xs);
+        padding-left: var(--page-gutter-xs);
+    }
+
+
+    .program-finder__header {
+        margin-bottom: 30px;
+    }
+
+
+    .program-finder__title {
+        font-size: 29px;
+    }
+
+
+    .program-finder__description {
+        font-size: 15px;
+    }
+
+
+    .program-finder__form {
+        padding: 20px;
+
+        border-radius: 16px;
+    }
+
+
+    .program-finder__button {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+}

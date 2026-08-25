@@ -1,0 +1,229 @@
+<!--
+====================================================
+COMPONENTE: PROGRAM FINDER
+
+Ubicación:
+src/components/program-finder/ProgramFinder.html
+
+Descripción:
+Buscador inicial de programas de Global Exchange.
+
+Funcionamiento:
+- Solicita edad.
+- Solicita ciudad actual.
+- Solicita destino de interés.
+- Valida que el usuario complete los tres campos.
+====================================================
+-->
+
+<section class="program-finder" id="programas">
+
+    <div class="page-container program-finder__container">
+
+        <!-- ==========================================
+             ENCABEZADO
+        ========================================== -->
+
+        <header class="program-finder__header">
+
+            <p class="program-finder__eyebrow">
+                Global Exchange
+            </p>
+
+            <h2 class="program-finder__title">
+                Encuentra tu programa ideal
+            </h2>
+
+            <p class="program-finder__description">
+                Cuéntanos un poco sobre ti y descubre las opciones
+                que mejor se adapten a tu próxima experiencia internacional.
+            </p>
+
+        </header>
+
+
+        <!-- ==========================================
+             FORMULARIO
+        ========================================== -->
+
+        <form class="program-finder__form" data-program-finder-form novalidate>
+
+            <div class="program-finder__fields">
+
+
+                <!-- ==================================
+                     EDAD
+                =================================== -->
+
+                <div class="program-finder__field">
+
+                    <label class="program-finder__label" for="program-age">
+                        ¿Qué edad tienes?
+                    </label>
+
+                    <div class="program-finder__select-wrapper">
+
+                        <select class="program-finder__select" id="program-age" name="age" required>
+
+                            <option value="" selected disabled>
+                                Selecciona tu edad
+                            </option>
+
+                            <option value="14-16">
+                                14–16 años
+                            </option>
+
+                            <option value="16-18">
+                                16–18 años
+                            </option>
+
+                            <option value="18-25">
+                                18–25 años
+                            </option>
+
+                            <option value="25-plus">
+                                25+ años
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <small class="program-finder__error" data-error-for="program-age"></small>
+
+                </div>
+
+
+                <!-- ==================================
+                     CIUDAD ACTUAL
+                =================================== -->
+
+                <div class="program-finder__field">
+
+                    <label class="program-finder__label" for="program-city">
+                        ¿En qué ciudad te encuentras?
+                    </label>
+
+                    <div class="program-finder__select-wrapper">
+
+                        <select class="program-finder__select" id="program-city" name="city" required>
+
+                            <option value="" selected disabled>
+                                Selecciona tu ciudad
+                            </option>
+
+                            <option value="quito">
+                                Quito
+                            </option>
+
+                            <option value="guayaquil">
+                                Guayaquil
+                            </option>
+
+                            <option value="cuenca">
+                                Cuenca
+                            </option>
+
+                            <option value="otra">
+                                Otra ciudad
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <small class="program-finder__error" data-error-for="program-city"></small>
+
+                </div>
+
+
+                <!-- ==================================
+                     DESTINO
+                =================================== -->
+
+                <div class="program-finder__field">
+
+                    <label class="program-finder__label" for="program-destination">
+                        ¿Qué lugar te interesa?
+                    </label>
+
+                    <div class="program-finder__select-wrapper">
+
+                        <select class="program-finder__select" id="program-destination" name="destination" required>
+
+                            <option value="" selected disabled>
+                                Selecciona un destino
+                            </option>
+
+                            <option value="estados-unidos">
+                                Estados Unidos
+                            </option>
+
+                            <option value="canada">
+                                Canadá
+                            </option>
+
+                            <option value="reino-unido">
+                                Reino Unido
+                            </option>
+
+                            <option value="espana">
+                                España
+                            </option>
+
+                            <option value="alemania">
+                                Alemania
+                            </option>
+
+                            <option value="francia">
+                                Francia
+                            </option>
+
+                            <option value="italia">
+                                Italia
+                            </option>
+
+                            <option value="australia">
+                                Australia
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <small class="program-finder__error" data-error-for="program-destination"></small>
+
+                </div>
+
+
+                <!-- ==================================
+                     BOTÓN
+                =================================== -->
+
+                <div class="program-finder__actions">
+
+                    <button class="program-finder__button" type="submit">
+                        Encontrar mi programa
+
+                        <span class="program-finder__button-arrow" aria-hidden="true">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 ESTADO
+            ======================================= -->
+
+            <p class="program-finder__status" data-program-finder-status role="status" aria-live="polite"></p>
+
+        </form>
+
+    </div>
+
+</section>

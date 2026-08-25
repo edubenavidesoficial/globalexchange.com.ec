@@ -14,6 +14,7 @@ import { initAboutLocationsProgress } from './modules/about-locations-progress.j
 import { initFaqAccordion } from './modules/faq-accordion.js';
 import { initForeignCoursesTabs } from './modules/foreign-courses-tabs.js';
 import { initForeignFlagsCarousel } from './modules/foreign-flags-carousel.js';
+import { initProgramFinder } from './modules/program-finder.js'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
@@ -27,4 +28,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initFaqAccordion();
     initForeignCoursesTabs();
     initForeignFlagsCarousel();
+    initProgramFinder();
 });
