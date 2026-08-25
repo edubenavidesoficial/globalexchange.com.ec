@@ -348,7 +348,7 @@
 .hero__contact-email {
     font-size: clamp(12px, 1vw, 15px);
     line-height: 1.4;
-    text-transform: uppercase;
+    
 
     color: var(--heading);
 }
