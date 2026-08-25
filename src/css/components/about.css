@@ -67,7 +67,7 @@
     margin: 0 0 24px;
 
     font-family: var(--font-heading);
-    font-size: clamp(36px, 4vw, 58px);
+    font-size: clamp(20px, 3vw, 38px);
     font-weight: var(--font-extrabold);
     line-height: 1.1;
     letter-spacing: -1px;
