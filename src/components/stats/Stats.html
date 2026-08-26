@@ -9,134 +9,196 @@ Estado:
 - HTML propio y semántico
 - Sin GT3
 - Contadores animados con JavaScript propio
+- Internacionalización con i18next
 - Decoraciones controladas con CSS propio
 
 Archivos relacionados:
 - src/css/components/stats.css
 - src/js/modules/counters.js
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
 <section class="stats" id="estadisticas">
+
     <div class="stats__container">
 
         <div class="stats__layout">
 
-            <!-- ==========================================
+            <!-- ======================================
                  COLUMNA IZQUIERDA - CONTADORES
-            ========================================== -->
+            ====================================== -->
 
             <div class="stats__data">
 
                 <!-- Fondo decorativo -->
+
                 <div class="stats__background" aria-hidden="true">
+
                     <img src="/images/stats/home10_ellipse.png" alt="">
+
                 </div>
 
-                <!-- Grid de contadores -->
+
+                <!-- ==================================
+                     GRID DE CONTADORES
+                ================================== -->
+
                 <div class="stats__grid">
 
-                    <!-- Estudiantes -->
-                    <article class="stats__item stats__item--students" data-counter data-start="10" data-end="8000"
-                        data-duration="900" data-separator=",">
+                    <!-- ==============================
+                         ESTUDIANTES
+                    ============================== -->
 
-                        <span class="stats__number" aria-label="8000 estudiantes viajados">
+                    <article class="stats__item stats__item--students" data-counter data-start="10" data-end="8000"
+                        data-duration="900" data-separator="true">
+
+                        <span class="stats__number" aria-label="8000 estudiantes viajados"
+                            data-i18n-aria-label="stats.students.ariaLabel">
                             10
                         </span>
 
                         <p class="stats__label">
-                            Estudiantes
+
+                            <span data-i18n="stats.students.line1">
+                                Estudiantes
+                            </span>
+
                             <br>
-                            viajados
+
+                            <span data-i18n="stats.students.line2">
+                                viajados
+                            </span>
+
                         </p>
+
                     </article>
 
-                    <!-- Experiencia -->
+
+                    <!-- ==============================
+                         EXPERIENCIA
+                    ============================== -->
+
                     <article class="stats__item stats__item--experience" data-counter data-start="10" data-end="21"
                         data-duration="900" data-separator="">
 
-                        <span class="stats__number" aria-label="21 años de experiencia">
+                        <span class="stats__number" aria-label="21 años de experiencia"
+                            data-i18n-aria-label="stats.experience.ariaLabel">
                             10
                         </span>
 
-                        <p class="stats__label">
+                        <p class="stats__label" data-i18n="stats.experience.label">
                             Años de Experiencia
                         </p>
+
                     </article>
 
-                    <!-- Destinos -->
+
+                    <!-- ==============================
+                         DESTINOS
+                    ============================== -->
+
                     <article class="stats__item stats__item--destinations" data-counter data-start="10" data-end="76"
                         data-duration="900" data-separator="">
 
-                        <span class="stats__number" aria-label="76 destinos">
+                        <span class="stats__number" aria-label="76 destinos"
+                            data-i18n-aria-label="stats.destinations.ariaLabel">
                             10
                         </span>
 
-                        <p class="stats__label">
+                        <p class="stats__label" data-i18n="stats.destinations.label">
                             Destinos
                         </p>
+
                     </article>
 
-                    <!-- Disponibilidad -->
+
+                    <!-- ==============================
+                         DISPONIBILIDAD
+                    ============================== -->
+
                     <article class="stats__item stats__item--support" data-counter data-start="10" data-end="100"
                         data-duration="900" data-separator="" data-suffix="%">
 
-                        <span class="stats__number" aria-label="100 por ciento de disponibilidad">
+                        <span class="stats__number" aria-label="100 por ciento de disponibilidad"
+                            data-i18n-aria-label="stats.support.ariaLabel">
                             10%
                         </span>
 
-                        <p class="stats__label">
+                        <p class="stats__label" data-i18n="stats.support.label">
                             24h / 7 días a la semana
                         </p>
+
                     </article>
 
                 </div>
 
-                <!-- Decoraciones columna izquierda -->
+
+                <!-- ==================================
+                     DECORACIONES COLUMNA IZQUIERDA
+                ================================== -->
 
                 <div class="stats__shape stats__shape--left-plus" aria-hidden="true">
 
                     <img src="/images/decorations/home_06_icon_23.png" alt="">
+
                 </div>
+
 
                 <div class="stats__shape stats__shape--left-cross" aria-hidden="true">
 
                     <img src="/images/decorations/home_06_icon_22.png" alt="">
+
                 </div>
+
 
                 <div class="stats__shape stats__shape--left-triangle" aria-hidden="true">
 
                     <img src="/images/decorations/triangle_blue.png" alt="">
+
                 </div>
 
             </div>
 
-            <!-- ==========================================
+
+            <!-- ======================================
                  COLUMNA DERECHA - IMAGEN
-            ========================================== -->
+            ====================================== -->
 
             <div class="stats__visual">
 
                 <div class="stats__image">
+
                     <img src="/images/stats/111.jpg" alt="Estudiante de Global Exchange en el extranjero"
-                        loading="lazy">
+                        data-i18n-alt="stats.imageAlt" loading="lazy">
+
                 </div>
 
-                <!-- Decoraciones columna derecha -->
+
+                <!-- ==================================
+                     DECORACIONES COLUMNA DERECHA
+                ================================== -->
 
                 <div class="stats__shape stats__shape--right-circle" aria-hidden="true">
 
                     <img src="/images/decorations/circle.png" alt="">
+
                 </div>
+
 
                 <div class="stats__shape stats__shape--right-triangle" aria-hidden="true">
 
                     <img src="/images/decorations/triangle_orange.png" alt="">
+
                 </div>
+
 
                 <div class="stats__shape stats__shape--right-cross" aria-hidden="true">
 
                     <img src="/images/decorations/home_06_icon_22.png" alt="">
+
                 </div>
 
             </div>
@@ -144,5 +206,5 @@ Archivos relacionados:
         </div>
 
     </div>
-</section>
 
+</section>

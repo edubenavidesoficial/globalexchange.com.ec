@@ -1,96 +1,133 @@
 // ====================================================
-// TYPED-EFFECT.JS
-// Inicialización del texto animado del Hero
+// TYPED EFFECT
+//
+// Archivo:
+// src/js/modules/typed-effect.js
+//
+// Responsabilidad:
+// - Inicializar Typed.js en el Hero.
+// - Obtener el texto desde i18next.
+// - Reiniciar la animación cuando cambia el idioma.
 // ====================================================
 
 import Typed from 'typed.js';
 
-export function initTyped() {
+import i18next from '../../languages/i18n.js';
 
-    console.log('==============================');
-    console.log('🚀 initTyped() iniciado');
-    console.log('==============================');
 
-    // Buscar elementos
-    const typedElement = document.getElementById('typed_937c14f');
-    const settingsElement = document.getElementById('settings--937c14f');
+// ====================================================
+// CONFIGURACIÓN
+// ====================================================
 
-    console.log('Elemento Typed:', typedElement);
-    console.log('Elemento JSON:', settingsElement);
+const TYPED_CONFIG = {
 
-    if (!typedElement) {
-        console.error('❌ No existe #typed_937c14f');
+    typeSpeed: 100,
+
+    startDelay: 0,
+
+    backSpeed: 50,
+
+    smartBackspace: false,
+
+    backDelay: 700,
+
+    loop: true,
+
+    showCursor: true,
+
+    cursorChar: '|',
+
+    fadeOut: false,
+
+    fadeOutDelay: 700
+
+};
+
+
+// ====================================================
+// INSTANCIA
+// ====================================================
+
+let typedInstance = null;
+
+
+// ====================================================
+// CREAR ANIMACIÓN
+// ====================================================
+
+function createTyped(element) {
+
+    if (!element) {
         return;
     }
 
-    // Configuración por defecto
-    let config = {
-        strings: ['Hola', 'Mundo'],
-        typeSpeed: 60,
-        startDelay: 0,
-        backSpeed: 40,
-        smartBackspace: false,
-        backDelay: 700,
-        loop: true,
-        loopCount: 0,
-        showCursor: true,
-        cursorChar: '|',
-        fadeOut: false,
-        fadeOutDelay: 700,
-    };
 
-    // Leer JSON del Hero
-    if (settingsElement && settingsElement.textContent.trim() !== '') {
+    // Destruir instancia anterior
+    if (typedInstance) {
 
-        try {
+        typedInstance.destroy();
 
-            const json = JSON.parse(settingsElement.textContent);
-
-            console.log('✅ JSON leído correctamente');
-            console.log(json);
-
-            config = {
-                ...config,
-                ...json,
-                cursorChar: '|'
-            };
-
-        } catch (error) {
-
-            console.error('❌ Error leyendo JSON');
-            console.error(error);
-
-        }
-
-    } else {
-
-        console.warn('⚠️ No existe JSON o está vacío');
-
+        typedInstance = null;
     }
 
-    console.log('==============================');
-    console.log('Configuración final');
-    console.log(config);
-    console.log('==============================');
 
-    try {
+    // Obtener el texto desde i18next
+    const translatedText =
+        i18next.t('hero.typed');
 
-        const typed = new Typed(
-            typedElement,
-            config
+
+    typedInstance = new Typed(
+        element,
+        {
+            ...TYPED_CONFIG,
+
+            strings: [
+                translatedText
+            ]
+        }
+    );
+}
+
+
+// ====================================================
+// INICIALIZACIÓN
+// ====================================================
+
+export function initTyped() {
+
+    const typedElement =
+        document.querySelector(
+            '[data-hero-typed]'
         );
 
-        console.log('✅ Typed creado correctamente');
-        console.log(typed);
 
-        // Guardar para depuración
-        window.__typed = typed;
-
-    } catch (error) {
-
-        console.error('❌ Error creando Typed');
-        console.error(error);
-
+    if (!typedElement) {
+        return;
     }
+
+
+    // ================================================
+    // IDIOMA INICIAL
+    // ================================================
+
+    createTyped(
+        typedElement
+    );
+
+
+    // ================================================
+    // CAMBIO DE IDIOMA
+    // ================================================
+
+    i18next.on(
+        'languageChanged',
+        () => {
+
+            createTyped(
+                typedElement
+            );
+
+        }
+    );
 
 }

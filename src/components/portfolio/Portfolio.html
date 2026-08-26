@@ -9,151 +9,232 @@ Estado:
 - HTML propio y semántico
 - Sin GT3
 - Carrusel propio con JavaScript
+- Internacionalización con i18next
+
+Archivos relacionados:
+- src/css/components/portfolio.css
+- src/js/modules/portfolio-carousel.js
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
 <section class="portfolio" id="programas-destacados">
+
     <div class="portfolio__container">
 
-        <!-- Encabezado -->
+
+        <!-- ==========================================
+             ENCABEZADO
+        ========================================== -->
+
         <header class="portfolio__header">
-            <p class="portfolio__eyebrow">
+
+            <p class="portfolio__eyebrow" data-i18n="portfolio.eyebrow">
                 PROGRAMAS
             </p>
 
-            <h2 class="portfolio__title">
+
+            <h2 class="portfolio__title" data-i18n="portfolio.title">
                 Nacionales &amp; internacionales
             </h2>
 
+
             <img class="portfolio__logo" src="/images/logo-1.png" alt="Global Exchange">
+
         </header>
 
-        <!-- Decoración de fondo -->
+
+        <!-- ==========================================
+             DECORACIÓN DE FONDO
+        ========================================== -->
+
         <div class="portfolio__background" aria-hidden="true">
+
             <img src="/images/portfolio/home10_ellipse2.png" alt="">
+
         </div>
 
-        <!-- Carrusel -->
-        <div class="portfolio__carousel" data-portfolio-carousel aria-roledescription="carrusel">
+
+        <!-- ==========================================
+             CARRUSEL
+        ========================================== -->
+
+        <div class="portfolio__carousel" data-portfolio-carousel>
 
             <div class="portfolio__viewport">
 
                 <div class="portfolio__track">
 
-                    <!-- Curso local -->
+
+                    <!-- ==================================
+                         CURSO LOCAL
+                    ================================== -->
+
                     <article class="portfolio__slide">
+
                         <a class="portfolio__card" href="/pages/cursos-idioma-local/">
 
                             <img class="portfolio__image" src="/images/portfolio/idioma-local.jpg"
-                                alt="Estudiantes en cursos de idioma local" loading="lazy">
+                                alt="Estudiantes en cursos de idioma local"
+                                data-i18n-alt="portfolio.cards.localLanguage.imageAlt" loading="lazy">
 
-                            <span class="portfolio__overlay"></span>
+
+                            <span class="portfolio__overlay" aria-hidden="true"></span>
+
 
                             <div class="portfolio__content">
-                                <h3 class="portfolio__card-title">
+
+                                <h3 class="portfolio__card-title" data-i18n="portfolio.cards.localLanguage.title">
                                     Cursos de idioma local
                                 </h3>
 
-                                <p class="portfolio__category">
+
+                                <p class="portfolio__category" data-i18n="portfolio.categories.national">
                                     Programas Nacionales
                                 </p>
+
                             </div>
 
                         </a>
+
                     </article>
 
-                    <!-- Español para extranjeros -->
+
+                    <!-- ==================================
+                         ESPAÑOL PARA EXTRANJEROS
+                    ================================== -->
+
                     <article class="portfolio__slide">
+
                         <a class="portfolio__card" href="/pages/espanol-para-extranjeros-ecoturismo/">
 
                             <img class="portfolio__image" src="/images/portfolio/espanol-extranjeros.jpg"
-                                alt="Estudiantes de español para extranjeros" loading="lazy">
+                                alt="Estudiantes de español para extranjeros"
+                                data-i18n-alt="portfolio.cards.spanishForeigners.imageAlt" loading="lazy">
 
-                            <span class="portfolio__overlay"></span>
+
+                            <span class="portfolio__overlay" aria-hidden="true"></span>
+
 
                             <div class="portfolio__content">
-                                <h3 class="portfolio__card-title">
+
+                                <h3 class="portfolio__card-title" data-i18n="portfolio.cards.spanishForeigners.title">
                                     Español para extranjeros
                                 </h3>
 
-                                <p class="portfolio__category">
+
+                                <p class="portfolio__category" data-i18n="portfolio.categories.national">
                                     Programas Nacionales
                                 </p>
+
                             </div>
 
                         </a>
+
                     </article>
 
-                    <!-- Idiomas en el extranjero -->
+
+                    <!-- ==================================
+                         IDIOMAS EN EL EXTRANJERO
+                    ================================== -->
+
                     <article class="portfolio__slide">
+
                         <a class="portfolio__card" href="/pages/cursos-de-idiomas-en-el-extranjero-2/">
 
                             <img class="portfolio__image" src="/images/portfolio/idiomas-extranjero.jpg"
-                                alt="Cursos de idiomas en el extranjero" loading="lazy">
+                                alt="Cursos de idiomas en el extranjero"
+                                data-i18n-alt="portfolio.cards.languagesAbroad.imageAlt" loading="lazy">
 
-                            <span class="portfolio__overlay"></span>
+
+                            <span class="portfolio__overlay" aria-hidden="true"></span>
+
 
                             <div class="portfolio__content">
-                                <h3 class="portfolio__card-title">
+
+                                <h3 class="portfolio__card-title" data-i18n="portfolio.cards.languagesAbroad.title">
                                     Cursos de idiomas en el extranjero
                                 </h3>
 
-                                <p class="portfolio__category">
+
+                                <p class="portfolio__category" data-i18n="portfolio.categories.international">
                                     Programas Internacionales
                                 </p>
+
                             </div>
 
                         </a>
+
                     </article>
 
-                    <!-- Pasantías -->
+
+                    <!-- ==================================
+                         PASANTÍAS
+                    ================================== -->
+
                     <article class="portfolio__slide">
+
                         <a class="portfolio__card" href="/pasantias-profesionales-en-el-exterior/">
 
                             <img class="portfolio__image" src="/images/portfolio/pasantias-exterior.jpg"
-                                alt="Pasantías profesionales en el exterior" loading="lazy">
+                                alt="Pasantías profesionales en el exterior"
+                                data-i18n-alt="portfolio.cards.internships.imageAlt" loading="lazy">
 
-                            <span class="portfolio__overlay"></span>
+
+                            <span class="portfolio__overlay" aria-hidden="true"></span>
+
 
                             <div class="portfolio__content">
-                                <h3 class="portfolio__card-title">
+
+                                <h3 class="portfolio__card-title" data-i18n="portfolio.cards.internships.title">
                                     Pasantías profesionales en el exterior
                                 </h3>
 
-                                <p class="portfolio__category">
+
+                                <p class="portfolio__category" data-i18n="portfolio.categories.international">
                                     Programas Internacionales
                                 </p>
+
                             </div>
 
                         </a>
+
                     </article>
 
                 </div>
+
             </div>
 
-            <!-- Puntos -->
-            <div class="portfolio__dots" role="tablist" aria-label="Seleccionar programa">
+
+            <!-- ==========================================
+                 PUNTOS DEL CARRUSEL
+            ========================================== -->
+
+            <div class="portfolio__dots" role="tablist" aria-label="Seleccionar programa"
+                data-i18n-aria-label="portfolio.carousel.selectProgram">
 
                 <button class="portfolio__dot is-active" type="button" data-carousel-dot="0"
-                    aria-label="Mostrar primer grupo" aria-selected="true">
-                </button>
+                    aria-label="Mostrar primer grupo" data-i18n-aria-label="portfolio.carousel.firstGroup"
+                    aria-selected="true"></button>
+
 
                 <button class="portfolio__dot" type="button" data-carousel-dot="1" aria-label="Mostrar segundo grupo"
-                    aria-selected="false">
-                </button>
+                    data-i18n-aria-label="portfolio.carousel.secondGroup" aria-selected="false"></button>
+
 
                 <button class="portfolio__dot" type="button" data-carousel-dot="2" aria-label="Mostrar tercer grupo"
-                    aria-selected="false">
-                </button>
+                    data-i18n-aria-label="portfolio.carousel.thirdGroup" aria-selected="false"></button>
+
 
                 <button class="portfolio__dot" type="button" data-carousel-dot="3" aria-label="Mostrar cuarto grupo"
-                    aria-selected="false">
-                </button>
+                    data-i18n-aria-label="portfolio.carousel.fourthGroup" aria-selected="false"></button>
 
             </div>
 
         </div>
 
     </div>
-</section>
 
+</section>

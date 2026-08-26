@@ -1,151 +1,439 @@
 // ====================================================
-// COUNTERS.JS
-// Contadores animados para la sección Stats
+// COUNTERS
+//
+// Archivo:
+// src/js/modules/counters.js
+//
+// Responsabilidad:
+// - Animar los contadores de la sección Stats.
+// - Formatear números según el idioma activo.
+// - Actualizar el formato cuando cambia el idioma.
 // ====================================================
 
-/**
- * Convierte un valor numérico en el formato solicitado.
- *
- * @param {number} value
- * @param {string} separator
- * @param {string} suffix
- * @returns {string}
- */
-function formatCounterValue(value, separator, suffix) {
-    const roundedValue = Math.round(value);
+import i18next from '../../languages/i18n.js';
 
-    let formattedValue = String(roundedValue);
 
-    if (separator) {
-        formattedValue = roundedValue.toLocaleString('en-US', {
-            maximumFractionDigits: 0
-        });
-    }
+// ====================================================
+// CONFIGURACIÓN DE LOCALES
+// ====================================================
 
-    return `${formattedValue}${suffix}`;
+const LOCALES = {
+
+    es: 'es-EC',
+
+    en: 'en-US',
+
+    de: 'de-DE'
+
+};
+
+
+// ====================================================
+// OBTENER LOCALE ACTUAL
+// ====================================================
+
+function getCurrentLocale() {
+
+    const language =
+        i18next.language || 'es';
+
+
+    return LOCALES[language] || LOCALES.es;
+
 }
 
-/**
- * Anima un contador.
- *
- * @param {HTMLElement} item
- */
-function animateCounter(item) {
-    const numberElement = item.querySelector('.stats__number');
+
+// ====================================================
+// FORMATEAR VALOR
+// ====================================================
+
+function formatCounterValue(
+    value,
+    useSeparator,
+    suffix
+) {
+
+    const roundedValue =
+        Math.round(value);
+
+
+    let formattedValue =
+        String(roundedValue);
+
+
+    if (useSeparator) {
+
+        const formatter =
+            new Intl.NumberFormat(
+                getCurrentLocale(),
+                {
+                    maximumFractionDigits: 0
+                }
+            );
+
+
+        formattedValue =
+            formatter.format(
+                roundedValue
+            );
+
+    }
+
+
+    return `${formattedValue}${suffix}`;
+
+}
+
+
+// ====================================================
+// OBTENER CONFIGURACIÓN DEL CONTADOR
+// ====================================================
+
+function getCounterConfig(item) {
+
+    return {
+
+        start:
+            Number(
+                item.dataset.start ?? 0
+            ),
+
+        end:
+            Number(
+                item.dataset.end ?? 0
+            ),
+
+        duration:
+            Number(
+                item.dataset.duration ?? 900
+            ),
+
+        useSeparator:
+            item.dataset.separator === 'true',
+
+        suffix:
+            item.dataset.suffix ?? ''
+
+    };
+
+}
+
+
+// ====================================================
+// MOSTRAR VALOR FINAL
+// ====================================================
+
+function renderFinalValue(item) {
+
+    const numberElement =
+        item.querySelector(
+            '.stats__number'
+        );
+
 
     if (!numberElement) {
         return;
     }
 
-    const start = Number(item.dataset.start ?? 0);
-    const end = Number(item.dataset.end ?? 0);
-    const duration = Number(item.dataset.duration ?? 900);
 
-    const separator = item.dataset.separator ?? '';
-    const suffix = item.dataset.suffix ?? '';
+    const {
+        end,
+        useSeparator,
+        suffix
+    } = getCounterConfig(item);
+
+
+    if (!Number.isFinite(end)) {
+        return;
+    }
+
+
+    numberElement.textContent =
+        formatCounterValue(
+            end,
+            useSeparator,
+            suffix
+        );
+
+}
+
+
+// ====================================================
+// ANIMAR CONTADOR
+// ====================================================
+
+function animateCounter(item) {
+
+    const numberElement =
+        item.querySelector(
+            '.stats__number'
+        );
+
+
+    if (!numberElement) {
+        return;
+    }
+
+
+    const {
+        start,
+        end,
+        duration,
+        useSeparator,
+        suffix
+    } = getCounterConfig(item);
+
 
     if (
         !Number.isFinite(start) ||
         !Number.isFinite(end) ||
         !Number.isFinite(duration)
     ) {
-        console.warn('⚠️ Configuración inválida en contador:', item);
         return;
     }
 
-    const prefersReducedMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-    ).matches;
 
-    if (prefersReducedMotion || duration <= 0) {
-        numberElement.textContent = formatCounterValue(
-            end,
-            separator,
-            suffix
-        );
+    const prefersReducedMotion =
+        window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+
+    if (
+        prefersReducedMotion ||
+        duration <= 0
+    ) {
+
+        renderFinalValue(item);
 
         return;
     }
 
-    const startTime = performance.now();
 
-    /**
-     * Actualiza el valor en cada fotograma.
-     *
-     * @param {number} currentTime
-     */
+    const startTime =
+        performance.now();
+
+
+    // ================================================
+    // ACTUALIZAR FOTOGRAMA
+    // ================================================
+
     function updateCounter(currentTime) {
-        const elapsed = currentTime - startTime;
 
-        const progress = Math.min(
-            elapsed / duration,
-            1
-        );
+        const elapsed =
+            currentTime - startTime;
+
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
 
         const currentValue =
-            start + (end - start) * progress;
+            start +
+            (end - start) * progress;
 
-        numberElement.textContent = formatCounterValue(
-            currentValue,
-            separator,
-            suffix
-        );
+
+        numberElement.textContent =
+            formatCounterValue(
+                currentValue,
+                useSeparator,
+                suffix
+            );
+
 
         if (progress < 1) {
-            window.requestAnimationFrame(updateCounter);
+
+            window.requestAnimationFrame(
+                updateCounter
+            );
+
+            return;
         }
+
+
+        // ============================================
+        // ASEGURAR VALOR FINAL EXACTO
+        // ============================================
+
+        renderFinalValue(item);
+
     }
 
-    window.requestAnimationFrame(updateCounter);
+
+    window.requestAnimationFrame(
+        updateCounter
+    );
+
 }
 
-/**
- * Inicializa todos los contadores de la página.
- */
+
+// ====================================================
+// ACTUALIZAR FORMATO AL CAMBIAR IDIOMA
+// ====================================================
+
+function updateCountersLanguage(
+    counterItems
+) {
+
+    counterItems.forEach((item) => {
+
+        /*
+         * Solo actualizamos directamente los
+         * contadores cuya animación ya comenzó.
+         *
+         * Si todavía no son visibles, seguirán
+         * esperando al IntersectionObserver.
+         */
+
+        if (
+            item.dataset.counterStarted !==
+            'true'
+        ) {
+            return;
+        }
+
+
+        renderFinalValue(item);
+
+    });
+
+}
+
+
+// ====================================================
+// INICIALIZAR CONTADORES
+// ====================================================
+
 export function initCounters() {
-    const counterItems = document.querySelectorAll(
-        '[data-counter]'
-    );
+
+    const counterItems =
+        document.querySelectorAll(
+            '[data-counter]'
+        );
+
 
     if (!counterItems.length) {
         return;
     }
 
-    if (!('IntersectionObserver' in window)) {
+
+    // ================================================
+    // CAMBIO DE IDIOMA
+    // ================================================
+
+    i18next.on(
+        'languageChanged',
+        () => {
+
+            updateCountersLanguage(
+                counterItems
+            );
+
+        }
+    );
+
+
+    // ================================================
+    // FALLBACK SIN INTERSECTION OBSERVER
+    // ================================================
+
+    if (
+        !(
+            'IntersectionObserver'
+            in window
+        )
+    ) {
+
         counterItems.forEach((item) => {
+
+            item.dataset.counterStarted =
+                'true';
+
+
             animateCounter(item);
+
         });
+
 
         return;
     }
 
-    const observer = new IntersectionObserver(
-        (entries, currentObserver) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) {
-                    return;
-                }
 
-                const item = entry.target;
+    // ================================================
+    // OBSERVADOR
+    // ================================================
 
-                if (item.dataset.counterStarted === 'true') {
-                    currentObserver.unobserve(item);
-                    return;
-                }
+    const observer =
+        new IntersectionObserver(
 
-                item.dataset.counterStarted = 'true';
+            (
+                entries,
+                currentObserver
+            ) => {
 
-                animateCounter(item);
+                entries.forEach(
+                    (entry) => {
 
-                currentObserver.unobserve(item);
-            });
-        },
-        {
-            threshold: 0.35
-        }
-    );
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
+                        }
+
+
+                        const item =
+                            entry.target;
+
+
+                        if (
+                            item.dataset
+                                .counterStarted ===
+                            'true'
+                        ) {
+
+                            currentObserver
+                                .unobserve(item);
+
+                            return;
+                        }
+
+
+                        item.dataset
+                            .counterStarted =
+                            'true';
+
+
+                        animateCounter(
+                            item
+                        );
+
+
+                        currentObserver
+                            .unobserve(item);
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0.35
+            }
+
+        );
+
+
+    // ================================================
+    // OBSERVAR CONTADORES
+    // ================================================
 
     counterItems.forEach((item) => {
+
         observer.observe(item);
+
     });
+
 }

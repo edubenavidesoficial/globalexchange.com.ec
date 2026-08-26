@@ -9,42 +9,71 @@ Estado:
 - HTML propio y semántico
 - Sin GT3
 - Botón propio
-- Animación propia
+- Internacionalización con i18next
+
+Archivos relacionados:
+- src/css/components/about.css
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
 <section class="about" id="global">
+
     <div class="about__container">
 
         <div class="about__content">
 
-            <h2 class="about__title">
+
+            <!-- ======================================
+                 TÍTULO
+            ====================================== -->
+
+            <h2 class="about__title" data-i18n="about.title">
                 GLOBAL EXCHANGE
             </h2>
 
+
+            <!-- ======================================
+                 CONTENIDO
+            ====================================== -->
+
             <div class="about__text">
+
                 <p class="about__highlight">
-                    <strong>21 años de experiencia</strong>
+
+                    <strong data-i18n="about.experience">
+                        21 años de experiencia
+                    </strong>
+
                 </p>
 
-                <p>
+
+                <p data-i18n="about.description1">
                     Somos una organización internacional, dedicada a la asesoría
                     migratoria y programas de estudio en el exterior;
                 </p>
 
-                <p>
+
+                <p data-i18n="about.description2">
                     nuestro personal calificado y multilingüe, entablará cálidas
                     comunicaciones con nuestros estudiantes.
                 </p>
+
             </div>
 
-            <a class="about__button" href="/pages/nuestra-historia/">
 
+            <!-- ======================================
+                 BOTÓN
+            ====================================== -->
+
+            <a class="about__button" href="/pages/nuestra-historia/" data-i18n="about.button">
                 Conoce más
             </a>
 
         </div>
 
     </div>
-</section>
 
+</section>
