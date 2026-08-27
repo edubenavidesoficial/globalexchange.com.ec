@@ -8,6 +8,13 @@ Global Exchange - Migración a Vite
 Estado:
 - HTML propio y semántico
 - Mapa y partners unidos
+- Internacionalización con i18next
+
+Archivos relacionados:
+- src/css/components/map.css
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
@@ -15,31 +22,54 @@ Estado:
 
     <div class="map__container">
 
-        <!-- Título -->
+
+        <!-- ==========================================
+             TÍTULO
+        ========================================== -->
 
         <header class="map__header">
+
             <h2 class="map__title">
-                ¡Te invitamos a conocer nuestro Mundo Global!
+
+                <span data-i18n="map.title.line1">
+                    ¡Te invitamos a conocer nuestro Mundo Global!
+                </span>
+
                 <br>
-                ¡Consulta también nuestros destinos en Ecuador!
+
+                <span data-i18n="map.title.line2">
+                    ¡Consulta también nuestros destinos en Ecuador!
+                </span>
+
             </h2>
+
         </header>
 
-        <!-- Imagen principal -->
+
+        <!-- ==========================================
+             IMAGEN PRINCIPAL
+        ========================================== -->
 
         <div class="map__image">
+
             <img src="/images/map/mapafinal-1-2048x862.jpg" alt="Mapa de destinos internacionales de Global Exchange"
-                loading="lazy">
+                data-i18n-alt="map.imageAlt" loading="lazy">
+
         </div>
 
-        <!-- Partners y certificaciones -->
+
+        <!-- ==========================================
+             PARTNERS Y CERTIFICACIONES
+        ========================================== -->
 
         <div class="map__partners">
+
             <img src="/images/partners/logosExtras-1.png"
-                alt="Certificaciones y aliados internacionales de Global Exchange" loading="lazy">
+                alt="Certificaciones y aliados internacionales de Global Exchange" data-i18n-alt="map.partnersAlt"
+                loading="lazy">
+
         </div>
 
     </div>
 
 </section>
-

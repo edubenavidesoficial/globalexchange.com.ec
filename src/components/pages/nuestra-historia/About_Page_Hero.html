@@ -12,6 +12,7 @@ Responsabilidad:
 - Mostrar el encabezado principal de la página Nosotros.
 - Utilizar la estructura visual compartida de page-hero.
 - Mantener únicamente las variaciones propias de esta página.
+- Internacionalización mediante i18next.
 ====================================================
 -->
 
@@ -20,22 +21,27 @@ Responsabilidad:
     <div class="page-hero__overlay about-page-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container about-page-hero__container">
 
-        <h1 class="page-hero__title about-page-hero__title">
+        <h1 class="page-hero__title about-page-hero__title" data-i18n="aboutPage.hero.title">
             Nosotros
         </h1>
 
-        <nav class="page-hero__breadcrumb about-page-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb about-page-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="aboutPage.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="aboutPage.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator about-page-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="aboutPage.hero.breadcrumb.current">
                 Nosotros
             </span>
 

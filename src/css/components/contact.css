@@ -1,14 +1,17 @@
 /* ====================================================
    CONTACT
-   Archivo: src/css/components/contact.css
+
+   Archivo:
+   src/css/components/contact.css
 
    Proyecto:
    Global Exchange - Migración a Vite
 
    Estado:
    - CSS propio
-         - Sin Contact Form 7
-   ==================================================== */
+   - Sin Contact Form 7
+   - Formulario responsive de dos columnas
+==================================================== */
 
 
 /* ==========================================
@@ -46,6 +49,7 @@
 
 .contact__layout {
     display: grid;
+
     grid-template-columns:
         minmax(0, 1fr) minmax(0, 1fr);
 
@@ -63,6 +67,7 @@
     position: relative;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -85,6 +90,7 @@
         contact-fade-left 0.9s ease both;
 }
 
+
 .contact__image img {
     display: block;
 
@@ -93,6 +99,7 @@
     height: auto;
 
     border-radius: 0;
+
     box-shadow: none;
 }
 
@@ -117,16 +124,22 @@
     margin-bottom: 26px;
 }
 
+
 .contact__title {
     margin: 0 0 14px;
 
     font-family: var(--font-nunito);
-    font-size: clamp(27px, 2.3vw, 34px);
+
+    font-size:
+        clamp(27px, 2.3vw, 34px);
+
     font-weight: var(--font-extrabold);
+
     line-height: 1.15;
 
     color: #3b3663;
 }
+
 
 .contact__description {
     max-width: 580px;
@@ -134,8 +147,10 @@
     margin: 0;
 
     font-family: var(--font-primary);
+
     font-size: 17px;
     font-weight: var(--font-normal);
+
     line-height: 1.55;
 
     color: var(--text);
@@ -148,6 +163,7 @@
 
 .contact__form {
     display: grid;
+
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
@@ -167,9 +183,15 @@
     min-width: 0;
 }
 
+
 .contact__field--message {
     grid-column: 1 / -1;
 }
+
+
+/* ==========================================
+   LABEL ACCESIBLE
+========================================== */
 
 .contact__label {
     position: absolute;
@@ -183,10 +205,16 @@
     overflow: hidden;
 
     clip: rect(0, 0, 0, 0);
+
     white-space: nowrap;
 
     border: 0;
 }
+
+
+/* ==========================================
+   INPUTS Y TEXTAREA
+========================================== */
 
 .contact__input,
 .contact__textarea {
@@ -195,13 +223,17 @@
     width: 100%;
 
     font-family: var(--font-primary);
+
     font-size: var(--font-sm);
     font-weight: var(--font-normal);
 
     color: #3b3663;
+
     background-color: #fafafa;
 
-    border: 2px solid #e7e8eb;
+    border:
+        2px solid #e7e8eb;
+
     border-radius: 5px;
 
     outline: none;
@@ -212,11 +244,13 @@
         box-shadow 0.25s ease;
 }
 
+
 .contact__input {
     min-height: 50px;
 
     padding: 13px 18px;
 }
+
 
 .contact__textarea {
     min-height: 120px;
@@ -246,6 +280,7 @@
 .contact__input:focus,
 .contact__textarea:focus {
     background-color: var(--white);
+
     border-color: #f3ad37;
 
     box-shadow:
@@ -265,6 +300,7 @@
         0 0 0 3px rgba(217, 65, 65, 0.1);
 }
 
+
 .contact__error {
     display: block;
 
@@ -273,7 +309,9 @@
     margin-top: 5px;
 
     font-family: var(--font-primary);
+
     font-size: 11px;
+
     line-height: 1.3;
 
     color: #c53636;
@@ -290,8 +328,10 @@
     margin-top: 3px;
 }
 
+
 .contact__submit {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
 
@@ -301,8 +341,10 @@
     padding: 13px 25px;
 
     font-family: var(--font-primary);
+
     font-size: var(--font-xs);
     font-weight: var(--font-semibold);
+
     line-height: 1;
 
     color: var(--white);
@@ -313,6 +355,7 @@
             #ff6f35 100%);
 
     border: 0;
+
     border-radius: 5px;
 
     cursor: pointer;
@@ -325,13 +368,16 @@
         opacity 0.25s ease;
 }
 
+
 .contact__submit:hover,
 .contact__submit:focus-visible {
-    transform: translateY(-3px);
+    transform:
+        translateY(-3px);
 
     box-shadow:
         0 12px 24px rgba(243, 145, 37, 0.28);
 }
+
 
 .contact__submit:disabled {
     cursor: wait;
@@ -354,15 +400,19 @@
     margin: 0;
 
     font-family: var(--font-primary);
+
     font-size: 13px;
+
     line-height: 1.5;
 
     color: #3b3663;
 }
 
+
 .contact__status.is-success {
     color: #247a47;
 }
+
 
 .contact__status.is-error {
     color: #c53636;
@@ -390,12 +440,14 @@
         contact-float 3s ease-in-out infinite;
 }
 
+
 .contact__decoration--dot-top {
     top: 2%;
     right: 12%;
 
     background-color: #ef4d55;
 }
+
 
 .contact__decoration--dot-bottom {
     right: 34%;
@@ -412,27 +464,37 @@
 ========================================== */
 
 @keyframes contact-fade-left {
+
     from {
         opacity: 0;
-        transform: translateX(-45px);
+
+        transform:
+            translateX(-45px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
     }
+
 }
+
 
 @keyframes contact-float {
 
     0%,
     100% {
-        transform: translateY(0);
+        transform:
+            translateY(0);
     }
 
     50% {
-        transform: translateY(-8px);
+        transform:
+            translateY(-8px);
     }
+
 }
 
 
@@ -441,21 +503,27 @@
 ========================================== */
 
 @media (max-width: 1100px) {
+
     .contact {
         padding: 75px 0;
     }
 
+
     .contact__container {
-        padding: 0 var(--page-gutter-md);
+        padding:
+            0 var(--page-gutter-md);
     }
+
 
     .contact__layout {
         gap: 50px;
     }
 
+
     .contact__image {
         max-width: 560px;
     }
+
 }
 
 
@@ -464,9 +532,11 @@
 ========================================== */
 
 @media (max-width: 900px) {
+
     .contact {
         padding: 65px 0;
     }
+
 
     .contact__layout {
         grid-template-columns: 1fr;
@@ -474,9 +544,11 @@
         gap: 50px;
     }
 
+
     .contact__image {
         max-width: 620px;
     }
+
 
     .contact__content {
         width: 100%;
@@ -485,14 +557,17 @@
         margin: 0 auto;
     }
 
+
     .contact__header {
         text-align: center;
     }
+
 
     .contact__description {
         margin-right: auto;
         margin-left: auto;
     }
+
 }
 
 
@@ -501,17 +576,22 @@
 ========================================== */
 
 @media (max-width: 600px) {
+
     .contact {
         padding: 50px 0;
     }
 
+
     .contact__container {
-        padding: 0 var(--page-gutter-xs);
+        padding:
+            0 var(--page-gutter-xs);
     }
+
 
     .contact__layout {
         gap: 40px;
     }
+
 
     .contact__form {
         grid-template-columns: 1fr;
@@ -519,23 +599,28 @@
         gap: 15px;
     }
 
+
     .contact__field--message,
     .contact__actions,
     .contact__status {
         grid-column: auto;
     }
 
+
     .contact__title {
         font-size: 27px;
     }
+
 
     .contact__description {
         font-size: 15px;
     }
 
+
     .contact__submit {
         width: 100%;
     }
+
 }
 
 
@@ -549,6 +634,8 @@
     .contact__decoration,
     .contact__submit {
         animation: none;
+
         transition: none;
     }
+
 }

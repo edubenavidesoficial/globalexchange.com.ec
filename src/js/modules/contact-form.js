@@ -1,178 +1,529 @@
 // ====================================================
 // CONTACT FORM
-// Validación propia para Vite
+//
+// Archivo:
+// src/js/modules/contact-form.js
+//
+// Proyecto:
+// Global Exchange - Migración a Vite
+//
+// Responsabilidad:
+// - Validar el formulario de contacto.
+// - Mostrar errores por campo.
+// - Internacionalizar mensajes dinámicos.
+// - Simular temporalmente el envío.
+// - Preparar la integración futura con backend.
 // ====================================================
 
+import i18next from '../../languages/i18n.js';
+
+
 export function initContactForm() {
-    const form = document.querySelector('[data-contact-form]');
+
+    const form =
+        document.querySelector(
+            '[data-contact-form]'
+        );
+
 
     if (!form) {
         return;
     }
 
-    const status = form.querySelector('[data-contact-status]');
-    const submitButton = form.querySelector('.contact__submit');
+
+    const status =
+        form.querySelector(
+            '[data-contact-status]'
+        );
+
+
+    const submitButton =
+        form.querySelector(
+            '.contact__submit'
+        );
+
+
+    // =================================================
+    // CAMPOS
+    // =================================================
 
     const fields = {
-        name: form.querySelector('#contact-name'),
-        email: form.querySelector('#contact-email'),
-        phone: form.querySelector('#contact-phone'),
-        website: form.querySelector('#contact-website'),
-        message: form.querySelector('#contact-message')
+
+        firstName:
+            form.querySelector(
+                '#contact-name'
+            ),
+
+        lastName:
+            form.querySelector(
+                '#contact-last-name'
+            ),
+
+        email:
+            form.querySelector(
+                '#contact-email'
+            ),
+
+        phone:
+            form.querySelector(
+                '#contact-phone'
+            ),
+
+        message:
+            form.querySelector(
+                '#contact-message'
+            )
+
     };
 
-    function showError(field, message) {
+
+    // =================================================
+    // MOSTRAR ERROR
+    // =================================================
+
+    function showError(
+        field,
+        translationKey
+    ) {
+
         if (!field) {
             return;
         }
 
-        field.classList.add('is-invalid');
-        field.setAttribute('aria-invalid', 'true');
 
-        const error = form.querySelector(
-            `[data-error-for="${field.id}"]`
+        field.classList.add(
+            'is-invalid'
         );
 
-        if (error) {
-            error.textContent = message;
+
+        field.setAttribute(
+            'aria-invalid',
+            'true'
+        );
+
+
+        const error =
+            form.querySelector(
+                `[data-error-for="${field.id}"]`
+            );
+
+
+        if (!error) {
+            return;
         }
+
+
+        error.dataset.i18nErrorKey =
+            translationKey;
+
+
+        error.textContent =
+            i18next.t(
+                translationKey
+            );
+
     }
+
+
+    // =================================================
+    // LIMPIAR ERROR
+    // =================================================
 
     function clearError(field) {
+
         if (!field) {
             return;
         }
 
-        field.classList.remove('is-invalid');
-        field.setAttribute('aria-invalid', 'false');
 
-        const error = form.querySelector(
-            `[data-error-for="${field.id}"]`
+        field.classList.remove(
+            'is-invalid'
         );
 
-        if (error) {
-            error.textContent = '';
+
+        field.setAttribute(
+            'aria-invalid',
+            'false'
+        );
+
+
+        const error =
+            form.querySelector(
+                `[data-error-for="${field.id}"]`
+            );
+
+
+        if (!error) {
+            return;
         }
+
+
+        error.textContent = '';
+
+        delete error.dataset.i18nErrorKey;
+
     }
+
+
+    // =================================================
+    // ESTADO DEL FORMULARIO
+    // =================================================
+
+    function setStatus(
+        translationKey,
+        type = ''
+    ) {
+
+        if (!status) {
+            return;
+        }
+
+
+        status.textContent =
+            translationKey
+                ? i18next.t(translationKey)
+                : '';
+
+
+        status.className =
+            'contact__status';
+
+
+        if (type) {
+
+            status.classList.add(
+                type
+            );
+
+        }
+
+
+        if (translationKey) {
+
+            status.dataset.i18nStatusKey =
+                translationKey;
+
+        } else {
+
+            delete status.dataset.i18nStatusKey;
+
+        }
+
+    }
+
+
+    // =================================================
+    // VALIDAR CORREO
+    // =================================================
 
     function isValidEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            .test(value);
+
     }
 
-    function isValidUrl(value) {
-        if (!value) {
-            return true;
-        }
 
-        try {
-            new URL(value);
-            return true;
-        } catch {
-            return false;
-        }
-    }
+    // =================================================
+    // VALIDAR FORMULARIO
+    // =================================================
 
     function validateForm() {
+
         let isValid = true;
 
-        Object.values(fields).forEach(clearError);
 
-        if (!fields.name.value.trim()) {
-            showError(
-                fields.name,
-                'Escribe tu nombre.'
-            );
+        Object
+            .values(fields)
+            .forEach(clearError);
 
-            isValid = false;
-        }
 
-        if (!fields.email.value.trim()) {
-            showError(
-                fields.email,
-                'Escribe tu correo electrónico.'
-            );
-
-            isValid = false;
-        } else if (!isValidEmail(fields.email.value.trim())) {
-            showError(
-                fields.email,
-                'Escribe un correo electrónico válido.'
-            );
-
-            isValid = false;
-        }
+        // =============================================
+        // NOMBRE
+        // =============================================
 
         if (
-            fields.website.value.trim() &&
-            !isValidUrl(fields.website.value.trim())
+            !fields.firstName
+                .value
+                .trim()
         ) {
+
             showError(
-                fields.website,
-                'Incluye una dirección completa, por ejemplo https://sitio.com.'
+                fields.firstName,
+                'contact.validation.firstNameRequired'
             );
 
             isValid = false;
+
         }
 
-        if (!fields.message.value.trim()) {
+
+        // =============================================
+        // APELLIDO
+        // =============================================
+
+        if (
+            !fields.lastName
+                .value
+                .trim()
+        ) {
+
+            showError(
+                fields.lastName,
+                'contact.validation.lastNameRequired'
+            );
+
+            isValid = false;
+
+        }
+
+
+        // =============================================
+        // CORREO
+        // =============================================
+
+        const email =
+            fields.email
+                .value
+                .trim();
+
+
+        if (!email) {
+
+            showError(
+                fields.email,
+                'contact.validation.emailRequired'
+            );
+
+            isValid = false;
+
+        } else if (
+            !isValidEmail(email)
+        ) {
+
+            showError(
+                fields.email,
+                'contact.validation.emailInvalid'
+            );
+
+            isValid = false;
+
+        }
+
+
+        // =============================================
+        // MENSAJE
+        // =============================================
+
+        if (
+            !fields.message
+                .value
+                .trim()
+        ) {
+
             showError(
                 fields.message,
-                'Escribe un mensaje.'
+                'contact.validation.messageRequired'
             );
 
             isValid = false;
+
         }
+
 
         return isValid;
     }
 
-    Object.values(fields).forEach((field) => {
-        if (!field) {
-            return;
+
+    // =================================================
+    // ACTUALIZAR MENSAJES DINÁMICOS AL CAMBIAR IDIOMA
+    // =================================================
+
+    function updateDynamicMessages() {
+
+        form
+            .querySelectorAll(
+                '[data-i18n-error-key]'
+            )
+            .forEach((error) => {
+
+                const key =
+                    error.dataset.i18nErrorKey;
+
+
+                if (!key) {
+                    return;
+                }
+
+
+                error.textContent =
+                    i18next.t(key);
+
+            });
+
+
+        if (
+            status &&
+            status.dataset.i18nStatusKey
+        ) {
+
+            status.textContent =
+                i18next.t(
+                    status.dataset.i18nStatusKey
+                );
+
         }
 
-        field.addEventListener('input', () => {
-            clearError(field);
+
+        if (submitButton) {
+
+            submitButton.textContent =
+                submitButton.disabled
+                    ? i18next.t(
+                        'contact.form.sending'
+                    )
+                    : i18next.t(
+                        'contact.form.submit'
+                    );
+
+        }
+
+    }
+
+
+    // =================================================
+    // LIMPIAR ERROR AL ESCRIBIR
+    // =================================================
+
+    Object
+        .values(fields)
+        .forEach((field) => {
+
+            if (!field) {
+                return;
+            }
+
+
+            field.addEventListener(
+                'input',
+                () => {
+
+                    clearError(field);
+
+                }
+            );
+
         });
-    });
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
 
-        status.textContent = '';
-        status.className = 'contact__status';
+    // =================================================
+    // CAMBIO DE IDIOMA
+    // =================================================
 
-        if (!validateForm()) {
-            status.textContent =
-                'Revisa los campos marcados antes de continuar.';
+    i18next.on(
+        'languageChanged',
+        updateDynamicMessages
+    );
 
-            status.classList.add('is-error');
 
-            form.querySelector('.is-invalid')?.focus();
+    // =================================================
+    // ENVÍO
+    // =================================================
 
-            return;
+    form.addEventListener(
+        'submit',
+        (event) => {
+
+            event.preventDefault();
+
+
+            setStatus('');
+
+
+            // =========================================
+            // VALIDACIÓN
+            // =========================================
+
+            if (!validateForm()) {
+
+                setStatus(
+                    'contact.status.invalid',
+                    'is-error'
+                );
+
+
+                form
+                    .querySelector(
+                        '.is-invalid'
+                    )
+                    ?.focus();
+
+
+                return;
+            }
+
+
+            // =========================================
+            // ESTADO ENVIANDO
+            // =========================================
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.textContent =
+                    i18next.t(
+                        'contact.form.sending'
+                    );
+
+            }
+
+
+            /*
+             * Simulación temporal.
+             *
+             * Aquí se conectará posteriormente
+             * el formulario con un backend,
+             * API o servicio de correo.
+             */
+
+            window.setTimeout(
+                () => {
+
+                    setStatus(
+                        'contact.status.success',
+                        'is-success'
+                    );
+
+
+                    form.reset();
+
+
+                    Object
+                        .values(fields)
+                        .forEach(clearError);
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+
+                        submitButton.textContent =
+                            i18next.t(
+                                'contact.form.submit'
+                            );
+
+                    }
+
+                },
+                600
+            );
+
         }
+    );
 
-        submitButton.disabled = true;
-        submitButton.textContent = 'Enviando…';
-
-        /*
-         * Simulación temporal.
-         *
-         * Aquí se conectará después el formulario
-         * con un backend, API o servicio de correo.
-         */
-
-        window.setTimeout(() => {
-            status.textContent =
-                'Formulario validado correctamente. El envío real se conectará en la fase de integración.';
-
-            status.classList.add('is-success');
-
-            form.reset();
-
-            submitButton.disabled = false;
-            submitButton.textContent = 'Enviar mensaje';
-        }, 600);
-    });
 }

@@ -10,6 +10,7 @@ Estado:
 - Sin GT3
 - Sin imágenes duplicadas
 - Grid responsive de tres columnas
+- Internacionalización con i18next
 
 Archivo relacionado:
 - src/css/components/services.css
@@ -24,42 +25,43 @@ Archivo relacionado:
 
     <header class="services__header">
 
-        <p class="services__eyebrow">
+        <p class="services__eyebrow" data-i18n="services.eyebrow">
             GLOBAL EXCHANGE
         </p>
 
-        <h2 class="services__title">
+        <h2 class="services__title" data-i18n="services.title">
             Nuestros Servicios
         </h2>
+
 
         <!-- Decoraciones -->
 
         <span class="services__decoration services__decoration--cross-left" aria-hidden="true">
-
             <img src="/images/decorations/home_06_icon_22.png" alt="">
         </span>
 
-        <span class="services__decoration services__decoration--triangle-orange" aria-hidden="true">
 
+        <span class="services__decoration services__decoration--triangle-orange" aria-hidden="true">
             <img src="/images/decorations/triangle_orange.png" alt="">
         </span>
 
-        <span class="services__decoration services__decoration--triangle-blue" aria-hidden="true">
 
+        <span class="services__decoration services__decoration--triangle-blue" aria-hidden="true">
             <img src="/images/decorations/triangle_blue.png" alt="">
         </span>
 
-        <span class="services__decoration services__decoration--cross-right" aria-hidden="true">
 
+        <span class="services__decoration services__decoration--cross-right" aria-hidden="true">
             <img src="/images/decorations/home_06_icon_22.png" alt="">
         </span>
 
-        <span class="services__decoration services__decoration--plus" aria-hidden="true">
 
+        <span class="services__decoration services__decoration--plus" aria-hidden="true">
             <img src="/images/decorations/home_06_icon_23.png" alt="">
         </span>
 
     </header>
+
 
     <!-- ==========================================
          CONTENIDO
@@ -69,62 +71,89 @@ Archivo relacionado:
 
         <div class="services__columns">
 
+
             <!-- ======================================
                  COLUMNA 1
             ======================================= -->
 
             <div class="services__column">
 
-                <!-- Programa idiomático -->
+
+                <!-- ==================================
+                     PROGRAMA IDIOMÁTICO
+                ================================== -->
+
                 <article class="services__card">
 
                     <a class="services__icon" href="/pages/cursos-de-idiomas-en-el-extranjero-2/"
-                        aria-label="Programa idiomático">
-
+                        aria-label="Programa idiomático" data-i18n-aria-label="services.languageProgram.ariaLabel">
                         <img src="/images/services/idiomas.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/cursos-de-idiomas-en-el-extranjero-2/">
+
+                            <a href="/pages/cursos-de-idiomas-en-el-extranjero-2/"
+                                data-i18n="services.languageProgram.title">
                                 Programa idiomático
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.languageProgram.description">
                             Aprende o perfecciona una lengua con Global Exchange
                             en 76 destinos del mundo. Disfruta de un ambiente
                             exclusivo en nuestras academias de lengua.
                         </p>
 
+
                         <p class="services__card-note">
-                            No hay límite de edad
+
+                            <span data-i18n="services.languageProgram.ageLine1">
+                                No hay límite de edad
+                            </span>
+
                             <br>
-                            “18 años en adelante”
+
+                            <span data-i18n="services.languageProgram.ageLine2">
+                                “18 años en adelante”
+                            </span>
+
                         </p>
 
                     </div>
 
                 </article>
 
-                <!-- Universidad en el exterior -->
+
+                <!-- ==================================
+                     UNIVERSIDAD EN EL EXTERIOR
+                ================================== -->
+
                 <article class="services__card">
 
-                    <a class="services__icon" href="/pages/educacion-en-el-exterior/" aria-label="Universidad en el exterior">
-
+                    <a class="services__icon" href="/pages/educacion-en-el-exterior/"
+                        aria-label="Universidad en el exterior"
+                        data-i18n-aria-label="services.universityAbroad.ariaLabel">
                         <img src="/images/services/studying.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/educacion-en-el-exterior/">
+
+                            <a href="/pages/educacion-en-el-exterior/" data-i18n="services.universityAbroad.title">
                                 Universidad en el exterior
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.universityAbroad.description">
                             Las mejores universidades del mundo esperan por ti.
                             Te ayudamos a aplicar a universidades internacionales
                             en países como Francia, Italia, Alemania, Bélgica,
@@ -136,23 +165,31 @@ Archivo relacionado:
 
                 </article>
 
-                <!-- Summer Camp -->
+
+                <!-- ==================================
+                     SUMMER CAMP
+                ================================== -->
+
                 <article class="services__card">
 
-                    <a class="services__icon" href="/pages/summer-camps/" aria-label="Summer Camp">
-
+                    <a class="services__icon" href="/pages/summer-camps/" aria-label="Summer Camp"
+                        data-i18n-aria-label="services.summerCamp.ariaLabel">
                         <img src="/images/services/tent.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/summer-camps/">
+
+                            <a href="/pages/summer-camps/" data-i18n="services.summerCamp.title">
                                 Summer Camp
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.summerCamp.description">
                             Las escuelas normalmente ofrecen excursiones y
                             eventos especiales en los días festivos como
                             Navidad, spring break, graduación, entre otros.
@@ -162,37 +199,59 @@ Archivo relacionado:
 
                 </article>
 
-                <!-- Nanny -->
+
+                <!-- ==================================
+                     NANNY
+                ================================== -->
+
                 <article class="services__card">
 
-                    <a class="services__icon" href="/pages/programa-nanny/"
-                        aria-label="Programa Nanny">
-
+                    <a class="services__icon" href="/pages/programa-nanny/" aria-label="Programa Nanny"
+                        data-i18n-aria-label="services.nanny.ariaLabel">
                         <img src="/images/services/cot.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/programa-nanny/">
+
+                            <a href="/pages/programa-nanny/" data-i18n="services.nanny.title">
                                 Nanny
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.nanny.description">
                             Haz un intercambio cultural durante un año, mientras
                             trabajas como Nanny en el seno de una familia
                             anfitriona.
                         </p>
 
+
                         <div class="services__details">
-                            <strong>No incluye</strong>
+
+                            <strong data-i18n="services.nanny.notIncluded">
+                                No incluye
+                            </strong>
 
                             <ul>
-                                <li>Pasajes aéreos</li>
-                                <li>Presentación consular</li>
-                                <li>Traducciones y apostillado de documentos</li>
+
+                                <li data-i18n="services.nanny.items.airfare">
+                                    Pasajes aéreos
+                                </li>
+
+                                <li data-i18n="services.nanny.items.consular">
+                                    Presentación consular
+                                </li>
+
+                                <li data-i18n="services.nanny.items.documents">
+                                    Traducciones y apostillado de documentos
+                                </li>
+
                             </ul>
+
                         </div>
 
                     </div>
@@ -201,60 +260,82 @@ Archivo relacionado:
 
             </div>
 
+
             <!-- ======================================
                  COLUMNA 2
             ======================================= -->
 
             <div class="services__column">
 
-                <!-- Educación dual -->
+
+                <!-- ==================================
+                     EDUCACIÓN DUAL
+                ================================== -->
+
                 <article class="services__card">
 
                     <div class="services__icon">
+
                         <img src="/images/services/educacion-a-distancia.png" alt="" loading="lazy">
+
                     </div>
+
 
                     <div class="services__card-content">
 
-                        <h3 class="services__card-title">
+                        <h3 class="services__card-title" data-i18n="services.dualEducation.title">
                             Educación dual
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.dualEducation.description">
                             El componente básico de un programa de estudio dual
                             es la combinación de trabajo práctico en una empresa
                             y clases teóricas en una universidad o centro de
                             formación cooperativa.
                         </p>
 
-                        <div class="services__details">
-                            <strong>Países</strong>
 
-                            <p>
+                        <div class="services__details">
+
+                            <strong data-i18n="services.dualEducation.countriesTitle">
+                                Países
+                            </strong>
+
+                            <p data-i18n="services.dualEducation.countries">
                                 Alemania, Bélgica, Francia, Holanda, Austria,
                                 China, Suiza, Australia, Liechtenstein, Noruega
                                 e Italia.
                             </p>
+
                         </div>
 
                     </div>
 
                 </article>
 
-                <!-- Ausbildung -->
+
+                <!-- ==================================
+                     AUSBILDUNG
+                ================================== -->
+
                 <article class="services__card">
 
                     <div class="services__icon">
+
                         <img src="/images/services/educacion.png" alt="" loading="lazy">
+
                     </div>
+
 
                     <div class="services__card-content">
 
-                        <h3 class="services__card-title">
+                        <h3 class="services__card-title" data-i18n="services.ausbildung.title">
                             Ausbildung
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.ausbildung.description">
                             La formación Ausbildung es una medida educativa en
                             la que se imparten o desarrollan conocimientos y
                             habilidades de trabajo. Al finalizar la capacitación,
@@ -266,27 +347,36 @@ Archivo relacionado:
 
                 </article>
 
-                <!-- Sistema de educación europeo -->
+
+                <!-- ==================================
+                     SISTEMA DE EDUCACIÓN EUROPEO
+                ================================== -->
+
                 <article class="services__card">
 
                     <div class="services__icon">
+
                         <img src="/images/services/airplane-1.png" alt="" loading="lazy">
+
                     </div>
+
 
                     <div class="services__card-content">
 
-                        <h3 class="services__card-title">
+                        <h3 class="services__card-title" data-i18n="services.europeanEducation.title">
                             Sistema de educación europeo
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.europeanEducation.description1">
                             Bachelor o licenciatura en seis semestres. Maestrías
                             de dos a tres años, tercer nivel gratuito. Doctorado
                             de dos años gratuito y posdoctorado de dos años
                             gratuito.
                         </p>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.europeanEducation.description2">
                             Nivel educacional de alto reconocimiento, ubicando
                             sus universidades dentro de las cien mejores del
                             mundo.
@@ -298,92 +388,142 @@ Archivo relacionado:
 
             </div>
 
+
             <!-- ======================================
                  COLUMNA 3
             ======================================= -->
 
             <div class="services__column">
 
-                <!-- Pasantías universitarias -->
+
+                <!-- ==================================
+                     PASANTÍAS UNIVERSITARIAS
+                ================================== -->
+
                 <article class="services__card">
 
                     <a class="services__icon" href="/pages/pasantias-profesionales/"
-                        aria-label="Pasantías universitarias">
-
+                        aria-label="Pasantías universitarias" data-i18n-aria-label="services.internships.ariaLabel">
                         <img src="/images/services/businessman.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/pasantias-profesionales/">
+
+                            <a href="/pages/pasantias-profesionales/" data-i18n="services.internships.title">
                                 Pasantías universitarias
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.internships.description">
                             Desarrolla tu capacidad lingüística y tus habilidades
                             laborales en un entorno de trabajo real.
                         </p>
 
-                        <div class="services__details">
-                            <strong>Programas</strong>
 
-                            <p>
+                        <div class="services__details">
+
+                            <strong data-i18n="services.internships.programsTitle">
+                                Programas
+                            </strong>
+
+                            <p data-i18n="services.internships.languages">
                                 Alemán, francés, italiano e inglés.
                             </p>
 
-                            <strong>Opciones en el exterior</strong>
+
+                            <strong data-i18n="services.internships.optionsTitle">
+                                Opciones en el exterior
+                            </strong>
 
                             <ul>
-                                <li>Prácticas profesionales</li>
-                                <li>Plazas de trabajo</li>
-                                <li>Maestrías gratuitas</li>
+
+                                <li data-i18n="services.internships.options.professional">
+                                    Prácticas profesionales
+                                </li>
+
+                                <li data-i18n="services.internships.options.jobs">
+                                    Plazas de trabajo
+                                </li>
+
+                                <li data-i18n="services.internships.options.masters">
+                                    Maestrías gratuitas
+                                </li>
+
                             </ul>
 
-                            <strong>Tiempo</strong>
+
+                            <strong data-i18n="services.internships.timeTitle">
+                                Tiempo
+                            </strong>
+
 
                             <p>
-                                4, 8 o 12 semanas
+
+                                <span data-i18n="services.internships.timeWeeks">
+                                    4, 8 o 12 semanas
+                                </span>
+
                                 <br>
-                                1 a 3 años
+
+                                <span data-i18n="services.internships.timeYears">
+                                    1 a 3 años
+                                </span>
+
                             </p>
+
                         </div>
 
                     </div>
 
                 </article>
 
-                <!-- Escolaridad -->
+
+                <!-- ==================================
+                     ESCOLARIDAD
+                ================================== -->
+
                 <article class="services__card">
 
-                    <a class="services__icon" href="/pages/programa-escolar/" aria-label="Escolaridad">
-
+                    <a class="services__icon" href="/pages/programa-escolar/" aria-label="Escolaridad"
+                        data-i18n-aria-label="services.school.ariaLabel">
                         <img src="/images/services/idiomas-2.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/programa-escolar/">
+
+                            <a href="/pages/programa-escolar/" data-i18n="services.school.title">
                                 Escolaridad
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
-                            <strong>
-                                Programa de Escolaridad Global Exchange
-                            </strong>
-                        </p>
 
                         <p class="services__card-description">
+
+                            <strong data-i18n="services.school.programName">
+                                Programa de Escolaridad Global Exchange
+                            </strong>
+
+                        </p>
+
+
+                        <p class="services__card-description" data-i18n="services.school.description1">
                             La oportunidad de sumergirte en la cultura y el
                             idioma del país de destino está en tus manos. En este
                             proceso, nuestro estudiante vivirá en el exterior
                             durante un trimestre o un año escolar.
                         </p>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.school.description2">
                             Cursos de primero, segundo y tercero de bachillerato
                             en el exterior.
                         </p>
@@ -392,29 +532,38 @@ Archivo relacionado:
 
                 </article>
 
-                <!-- Cursos especiales -->
+
+                <!-- ==================================
+                     CURSOS ESPECIALES
+                ================================== -->
+
                 <article class="services__card">
 
-                    <a class="services__icon" href="/pages/cursos-idioma-local/" aria-label="Cursos especiales">
-
+                    <a class="services__icon" href="/pages/cursos-idioma-local/" aria-label="Cursos especiales"
+                        data-i18n-aria-label="services.specialCourses.ariaLabel">
                         <img src="/images/hero/idiomas-1.png" alt="" loading="lazy">
                     </a>
+
 
                     <div class="services__card-content">
 
                         <h3 class="services__card-title">
-                            <a href="/pages/cursos-idioma-local/">
+
+                            <a href="/pages/cursos-idioma-local/" data-i18n="services.specialCourses.title">
                                 Cursos especiales
                             </a>
+
                         </h3>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.specialCourses.description1">
                             Además de nuestros programas en el exterior,
                             Global Exchange te ofrece asesoría para el ingreso y
                             aplicación a las mejores universidades del mundo.
                         </p>
 
-                        <p class="services__card-description">
+
+                        <p class="services__card-description" data-i18n="services.specialCourses.description2">
                             Estaremos gustosos de ofrecerte las mejores
                             alternativas y servicios para tus estudios
                             superiores en el exterior.
@@ -431,4 +580,3 @@ Archivo relacionado:
     </div>
 
 </section>
-

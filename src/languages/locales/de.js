@@ -676,6 +676,588 @@ export const de = {
 
             }
 
+        },
+
+
+        // ============================================
+        // CONTACT
+        // ============================================
+
+        contact: {
+
+            title:
+                'GLOBAL EXCHANGE',
+
+            description:
+                'Wir machen aus Studierenden Weltbürger mit mehr Möglichkeiten.',
+
+            imageAlt:
+                'Beraterin von Global Exchange im Gespräch mit Studierenden',
+
+
+            form: {
+
+                firstName: {
+
+                    label:
+                        'Vorname',
+
+                    placeholder:
+                        'Vorname*'
+
+                },
+
+
+                lastName: {
+
+                    label:
+                        'Nachname',
+
+                    placeholder:
+                        'Nachname*'
+
+                },
+
+
+                email: {
+
+                    label:
+                        'E-Mail-Adresse',
+
+                    placeholder:
+                        'E-Mail-Adresse*'
+
+                },
+
+
+                phone: {
+
+                    label:
+                        'Telefon',
+
+                    placeholder:
+                        'Telefon'
+
+                },
+
+
+                message: {
+
+                    label:
+                        'Nachricht',
+
+                    placeholder:
+                        'Nachricht*'
+
+                },
+
+
+                submit:
+                    'Nachricht senden',
+
+                sending:
+                    'Wird gesendet…'
+
+            },
+
+
+            validation: {
+
+                firstNameRequired:
+                    'Gib deinen Vornamen ein.',
+
+                lastNameRequired:
+                    'Gib deinen Nachnamen ein.',
+
+                emailRequired:
+                    'Gib deine E-Mail-Adresse ein.',
+
+                emailInvalid:
+                    'Gib eine gültige E-Mail-Adresse ein.',
+
+                messageRequired:
+                    'Gib eine Nachricht ein.'
+
+            },
+
+
+            status: {
+
+                invalid:
+                    'Überprüfe die markierten Felder, bevor du fortfährst.',
+
+                success:
+                    'Das Formular wurde erfolgreich validiert. Der tatsächliche Versand wird in der Integrationsphase angebunden.'
+
+            }
+
+        },
+
+
+        // ============================================
+        // CALL TO ACTION
+        // ============================================
+
+        cta: {
+
+            title:
+                'Vor 21 Jahren begann unser Abenteuer – und seitdem sind wir gewachsen!',
+
+
+            stats: {
+
+                students:
+                    '8.000 junge Menschen sind rund um die Welt gereist.',
+
+                destinations:
+                    '76 Reiseziele warten auf dich'
+
+            },
+
+
+            button:
+                'Kontaktiere uns'
+
+        },
+
+
+        // ============================================
+        // MAP
+        // ============================================
+
+        map: {
+
+            title: {
+
+                line1:
+                    'Wir laden dich ein, unsere globale Welt zu entdecken!',
+
+                line2:
+                    'Entdecke auch unsere Reiseziele in Ecuador!'
+
+            },
+
+
+            imageAlt:
+                'Karte der internationalen Reiseziele von Global Exchange',
+
+            partnersAlt:
+                'Zertifizierungen und internationale Partner von Global Exchange'
+
+        },
+
+
+        // ============================================
+        // FOOTER
+        // ============================================
+
+        footer: {
+
+            contact: {
+
+                quito: {
+
+                    title:
+                        'Quito',
+
+                    address: {
+
+                        line1:
+                            'Juan Severino E8-38 und Diego de Almagro,',
+
+                        line2:
+                            'Gebäude Argentina Plaza,',
+
+                        line3:
+                            'Büro 805, Quito, Ecuador.'
+
+                    }
+
+                },
+
+
+                guayaquil: {
+
+                    title:
+                        'Guayaquil',
+
+                    address: {
+
+                        line1:
+                            'Km 1,5 Via Samborondón,',
+
+                        line2:
+                            'Gebäude Xima, dritter Stock,',
+
+                        line3:
+                            'Büro 322, Guayaquil, Ecuador.'
+
+                    }
+
+                },
+
+
+                details: {
+
+                    title:
+                        'Kontakt'
+
+                }
+
+            },
+
+
+            about: {
+
+                title:
+                    'Über uns',
+
+                description:
+                    'Agentur für internationales Studium, Sprachschule und Austauschprogramme.'
+
+            },
+
+
+            social: {
+
+                ariaLabel:
+                    'Soziale Netzwerke'
+
+            },
+
+
+            sitemap: {
+
+                ariaLabel:
+                    'Sitemap',
+
+                title:
+                    'Sitemap',
+
+                home:
+                    'Startseite',
+
+                about:
+                    'Über uns',
+
+                questions:
+                    'Fragen',
+
+                nationalPrograms:
+                    'Nationale Programme',
+
+                internationalPrograms:
+                    'Internationale Programme',
+
+                testimonials:
+                    'Erfahrungsberichte',
+
+                contact:
+                    'Kontakt'
+
+            },
+
+
+            community: {
+
+                title:
+                    'Community',
+
+                openImage:
+                    'Community-Bild öffnen',
+
+                imageAlt:
+                    'Global-Exchange-Community'
+
+            },
+
+
+            brand: {
+
+                homeAriaLabel:
+                    'Zur Startseite',
+
+                description:
+                    'Deine Zukunft im Ausland beginnt mit einer großartigen Erfahrung.'
+
+            },
+
+
+            search: {
+
+                label:
+                    'Website durchsuchen',
+
+                placeholder:
+                    'Wonach suchst du?',
+
+                button:
+                    'Suchen'
+
+            },
+
+
+            bottom: {
+
+                by:
+                    'von',
+
+                rights:
+                    'Alle Rechte vorbehalten.'
+
+            }
+
+        },
+
+
+        // ============================================
+        // ABOUT PAGE
+        // Seite: Über uns
+        // ============================================
+
+        aboutPage: {
+
+            // ========================================
+            // HERO
+            // ========================================
+
+            hero: {
+
+                title:
+                    'Über uns',
+
+
+                breadcrumb: {
+
+                    ariaLabel:
+                        'Brotkrümelnavigation',
+
+                    home:
+                        'Startseite',
+
+                    current:
+                        'Über uns'
+
+                }
+
+            },
+
+
+            // ========================================
+            // GESCHICHTE
+            // ========================================
+
+            history: {
+
+                founder: {
+
+                    title:
+                        'Unsere Geschichte',
+
+                    imageAlt:
+                        'Dr. Jorge Pazmiño, Gründer und Inspiration von Global Exchange',
+
+                    paragraph1:
+                        'Paris, die Stadt des Lichts, hieß meinen Vater Dr. Jorge Pazmiño willkommen, einen Ecuadorianer, der an der Sorbonne in Paris studierte und lehrte.',
+
+                    paragraph2:
+                        'Er zeigte uns den Weg, eine der exklusivsten Sprachakademien, eine Agentur für internationales Studium und eine Organisation für Schüler- und Studierendenaustausch mit Standorten in Deutschland, China, Ecuador und den Vereinigten Staaten aufzubauen.'
+
+                },
+
+
+                globalExchange: {
+
+                    paragraph1:
+                        'Als auf Migrationsrecht und Versicherungen spezialisierte Direktorin kann ich Ihnen versichern, dass Sie bei uns in guten Händen sind. Unser Team ist fest davon überzeugt, Studierende zu Weltbürgern mit besseren Chancen für ihr Berufsleben zu machen und ihnen den Weg zu einem erfolgreichen und glücklichen Leben zu eröffnen.',
+
+                    paragraph2:
+                        'Vor 21 Jahren haben wir dieses Abenteuer begonnen und sind seitdem gewachsen. Mehr als 8.000 junge Menschen sind rund um die Welt gereist und 76 Reiseziele warten auf dich. Ich reise persönlich, um unseren Studierenden die Schönheit der Welt zu zeigen, und prüfe jedes Detail, damit ihr Aufenthalt komfortabel und sicher ist und die besten Erinnerungen hinterlässt.',
+
+                    quote:
+                        '„Liebe, lebe, reise, träume, denn die Welt von GLOBALEXCHANGE liegt jetzt in deiner Reichweite.“',
+
+                    imageAlt:
+                        'Global Exchange und seine internationalen Programme'
+
+                }
+
+            },
+
+
+            // ========================================
+            // IDENTITÄT
+            // ========================================
+
+            identity: {
+
+                intro: {
+
+                    locations:
+                        'Unsere Standorte befinden sich in Miami, USA, Duisburg, Deutschland, und Quito, Ecuador.',
+
+                    title:
+                        'Wir laden dich ein, unsere Welt zu entdecken!'
+
+                },
+
+
+                whoWeAre: {
+
+                    title:
+                        'Wer wir sind',
+
+                    imageAlt:
+                        'Studierende von Global Exchange',
+
+                    paragraph1:
+                        'Wir sind eine internationale Organisation, die sich auf Migrationsberatung und Studienprogramme im Ausland spezialisiert hat; unser qualifiziertes und mehrsprachiges Team pflegt eine herzliche und persönliche Kommunikation mit unseren Studierenden.',
+
+                    paragraph2:
+                        'Unser Service ist in jedem ausgewählten Zielland 24 Stunden am Tag und 7 Tage die Woche erreichbar. Dadurch können wir auf jedes Anliegen sofort reagieren.',
+
+                    highlight:
+                        'Wir arbeiten mit Leidenschaft und mit dem einzigen Ziel, die erfolgreiche Zukunft jedes einzelnen Bewerbers zu unterstützen!'
+
+                },
+
+
+                whatWeDo: {
+
+                    title:
+                        'Was machen wir?',
+
+
+                    agency: {
+
+                        imageAlt:
+                            'Agentur für internationales Studium',
+
+                        title:
+                            'Agentur für internationales Studium',
+
+                        description:
+                            'Wir vermitteln ecuadorianische und internationale Studierende in internationale Austauschprogramme an 76 Reisezielen.'
+
+                    },
+
+
+                    exchange: {
+
+                        imageAlt:
+                            'Schüler- und Studierendenaustausch',
+
+                        title:
+                            'Schüler- und Studierendenaustausch',
+
+                        paragraph1:
+                            'Wir entsenden und empfangen junge Menschen zwischen 12 und 29 Jahren und vermitteln sie an Gastfamilien und Studentenwohnheime in verschiedenen Ländern.',
+
+                        paragraph2:
+                            'Die Sicherheit, Zertifizierung und Zuverlässigkeit der Gastfamilien basiert auf unserer langjährigen Arbeitserfahrung.'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // STANDORTE
+            // ========================================
+
+            locations: {
+
+                school: {
+
+                    title:
+                        'Sprachschule',
+
+
+                    world: {
+
+                        title:
+                            'Weltweit',
+
+                        description:
+                            'Sprachschulen in 76 Ländern mit folgenden Sprachen:',
+
+                        languages:
+                            'Französisch, Deutsch, Englisch, Italienisch, Japanisch, Chinesisch, Mandarin, Portugiesisch, Russisch und Arabisch.'
+
+                    },
+
+
+                    ecuador: {
+
+                        title:
+                            'In Ecuador',
+
+                        paragraph1:
+                            'Wir laden junge Menschen aus aller Welt dazu ein, eine kulturelle Erfahrung in Ecuador zu erleben und Spanisch zu lernen, während sie Ökotourismus und abwechslungsreiche Reiseaktivitäten genießen.',
+
+                        paragraph2Before:
+                            'Unser Studentenwohnheim empfängt internationale Studierende in',
+
+                        schoolProgram:
+                            'SCHULPROGRAMMEN',
+
+                        paragraph2After:
+                            'und Spanischkursen.',
+
+                        paragraph3:
+                            'Unsere Online-Sprachschule bietet:',
+
+                        languages:
+                            'Französisch, Englisch, Italienisch, Deutsch und Spanisch.'
+
+                    }
+
+                },
+
+
+                offices: {
+
+                    title:
+                        'Standorte',
+
+                    imageAlt:
+                        'Nationale und internationale Standorte von Global Exchange',
+
+
+                    national: {
+
+                        ariaLabel:
+                            'Nationale Abdeckung: 76 Prozent',
+
+                        title:
+                            'National'
+
+                    },
+
+
+                    international: {
+
+                        ariaLabel:
+                            'Internationale Abdeckung: 89 Prozent',
+
+                        title:
+                            'International',
+
+                        germany:
+                            'Deutschland'
+
+                    }
+
+                },
+
+
+                partnersAlt:
+                    'Zertifizierungen und internationale Partner von Global Exchange'
+
+            }
+
         }
 
     }

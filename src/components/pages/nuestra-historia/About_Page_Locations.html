@@ -11,12 +11,14 @@ Contenido:
 - En Ecuador
 - Sedes nacionales e internacionales
 - Certificaciones y aliados
+- Internacionalización mediante i18next
 ====================================================
 -->
 
 <section class="about-locations">
 
     <div class="page-container about-locations__container">
+
 
         <!-- ==========================================
              ESCUELA DE IDIOMAS
@@ -26,67 +28,86 @@ Contenido:
 
             <header class="about-locations__school-header">
 
-                <h2 class="about-locations__main-title">
+                <h2 class="about-locations__main-title" data-i18n="aboutPage.locations.school.title">
                     Escuela de Idiomas
                 </h2>
 
             </header>
 
+
             <div class="about-locations__school-grid">
+
 
                 <!-- ==================================
                      EN EL MUNDO
-                =================================== -->
+                ================================== -->
 
                 <article class="about-locations__school-column">
 
-                    <h3 class="about-locations__school-title">
+                    <h3 class="about-locations__school-title" data-i18n="aboutPage.locations.school.world.title">
                         En el Mundo
                     </h3>
 
-                    <p class="about-locations__school-text">
+
+                    <p class="about-locations__school-text" data-i18n="aboutPage.locations.school.world.description">
                         76 países, escuelas de lengua en:
                     </p>
 
-                    <p class="about-locations__school-highlight">
+
+                    <p class="about-locations__school-highlight" data-i18n="aboutPage.locations.school.world.languages">
                         Francés, Alemán, Inglés, Italiano, Japonés,
                         Chino, Mandarín, Portugués, Ruso, Árabe.
                     </p>
 
                 </article>
 
+
                 <!-- ==================================
                      EN ECUADOR
-                =================================== -->
+                ================================== -->
 
                 <article class="about-locations__school-column">
 
-                    <h3 class="about-locations__school-title">
+                    <h3 class="about-locations__school-title" data-i18n="aboutPage.locations.school.ecuador.title">
                         En Ecuador
                     </h3>
 
+
                     <div class="about-locations__school-description">
 
-                        <p>
+                        <p data-i18n="aboutPage.locations.school.ecuador.paragraph1">
                             Invitamos a chicos de todo el mundo a tener una
                             experiencia cultural en Ecuador y aprender el
                             español mientras realizan turismo ecológico y
                             divertidos planes de viaje.
                         </p>
 
-                        <p>
-                            Nuestra residencia estudiantil acoge a estudiantes
-                            internacionales en programas de
-                            <strong>ESCOLARIDAD</strong> y estudio de español.
-                        </p>
 
                         <p>
+                            <span data-i18n="aboutPage.locations.school.ecuador.paragraph2Before">
+                                Nuestra residencia estudiantil acoge a estudiantes
+                                internacionales en programas de
+                            </span>
+
+                            <strong data-i18n="aboutPage.locations.school.ecuador.schoolProgram">
+                                ESCOLARIDAD
+                            </strong>
+
+                            <span data-i18n="aboutPage.locations.school.ecuador.paragraph2After">
+                                y estudio de español.
+                            </span>
+                        </p>
+
+
+                        <p data-i18n="aboutPage.locations.school.ecuador.paragraph3">
                             Nuestra escuela de idiomas online ofrecemos:
                         </p>
 
                     </div>
 
-                    <p class="about-locations__school-highlight">
+
+                    <p class="about-locations__school-highlight"
+                        data-i18n="aboutPage.locations.school.ecuador.languages">
                         Francés, Inglés, Italiano, Alemán, Español.
                     </p>
 
@@ -103,36 +124,43 @@ Contenido:
 
         <div class="about-locations__locations">
 
-            <h2 class="about-locations__locations-title">
+            <h2 class="about-locations__locations-title" data-i18n="aboutPage.locations.offices.title">
                 Sedes
             </h2>
 
+
             <div class="about-locations__locations-grid">
+
 
                 <!-- ==================================
                      IMAGEN PRINCIPAL
-                =================================== -->
+                ================================== -->
 
                 <div class="about-locations__visual">
 
                     <img class="about-locations__image" src="/images/pages/nuestra-historia/Sin-titulo.png"
-                        alt="Sedes nacionales e internacionales de Global Exchange" loading="lazy">
+                        alt="Sedes nacionales e internacionales de Global Exchange"
+                        data-i18n-alt="aboutPage.locations.offices.imageAlt" loading="lazy">
 
                 </div>
 
 
                 <!-- ==================================
                      INDICADORES
-                =================================== -->
+                ================================== -->
 
                 <div class="about-locations__stats">
 
-                    <!-- Nacional -->
+
+                    <!-- ==================================
+                         NACIONAL
+                    ================================== -->
 
                     <article class="about-locations__stat">
 
                         <div class="about-locations__progress about-locations__progress--national" data-progress="76"
-                            role="img" aria-label="Cobertura nacional: 76 por ciento">
+                            role="img" aria-label="Cobertura nacional: 76 por ciento"
+                            data-i18n-aria-label="aboutPage.locations.offices.national.ariaLabel">
 
                             <span class="about-locations__progress-value">
                                 0%
@@ -140,13 +168,14 @@ Contenido:
 
                         </div>
 
+
                         <div class="about-locations__stat-content">
 
-                            <h3 class="about-locations__stat-title
-                                about-locations__stat-title--national">
-
+                            <h3 class="about-locations__stat-title about-locations__stat-title--national"
+                                data-i18n="aboutPage.locations.offices.national.title">
                                 Nacional
                             </h3>
+
 
                             <p class="about-locations__stat-text">
                                 Ecuador
@@ -157,12 +186,15 @@ Contenido:
                     </article>
 
 
-                    <!-- Internacional -->
+                    <!-- ==================================
+                         INTERNACIONAL
+                    ================================== -->
 
                     <article class="about-locations__stat">
 
                         <div class="about-locations__progress about-locations__progress--international"
-                            data-progress="89" role="img" aria-label="Cobertura internacional: 89 por ciento">
+                            data-progress="89" role="img" aria-label="Cobertura internacional: 89 por ciento"
+                            data-i18n-aria-label="aboutPage.locations.offices.international.ariaLabel">
 
                             <span class="about-locations__progress-value">
                                 0%
@@ -170,23 +202,27 @@ Contenido:
 
                         </div>
 
+
                         <div class="about-locations__stat-content">
 
-                            <h3 class="about-locations__stat-title
-                                about-locations__stat-title--international">
-
+                            <h3 class="about-locations__stat-title about-locations__stat-title--international"
+                                data-i18n="aboutPage.locations.offices.international.title">
                                 Internacional
                             </h3>
+
 
                             <p class="about-locations__stat-text">
                                 USA
                             </p>
 
+
                             <p class="about-locations__stat-text">
                                 China
                             </p>
 
-                            <p class="about-locations__stat-text">
+
+                            <p class="about-locations__stat-text"
+                                data-i18n="aboutPage.locations.offices.international.germany">
                                 Alemania
                             </p>
 
@@ -208,7 +244,8 @@ Contenido:
         <div class="about-locations__partners">
 
             <img class="about-locations__partners-image" src="/images/partners/logosExtras-1.png"
-                alt="Certificaciones y aliados internacionales de Global Exchange" loading="lazy">
+                alt="Certificaciones y aliados internacionales de Global Exchange"
+                data-i18n-alt="aboutPage.locations.partnersAlt" loading="lazy">
 
         </div>
 

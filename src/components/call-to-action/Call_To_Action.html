@@ -9,59 +9,89 @@ Estado:
 - HTML propio y semántico
 - Sin GT3
 - Responsive
+- Internacionalización con i18next
+
+Archivos relacionados:
+- src/css/components/call-to-action.css
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
 <section class="cta" id="llamada-a-la-accion">
+
     <div class="cta__container">
 
         <div class="cta__content">
 
-            <h2 class="cta__title">
+
+            <!-- ======================================
+                 TÍTULO
+            ====================================== -->
+
+            <h2 class="cta__title" data-i18n="cta.title">
                 Hace 21 años iniciamos la aventura y hemos crecido!!
             </h2>
 
+
+            <!-- ======================================
+                 DIVISOR
+            ====================================== -->
+
             <span class="cta__divider" aria-hidden="true"></span>
+
+
+            <!-- ======================================
+                 ESTADÍSTICAS
+            ====================================== -->
 
             <div class="cta__stats">
 
-                <p class="cta__stat-item">
+                <p class="cta__stat-item" data-i18n="cta.stats.students">
                     8.000 chicos viajados alrededor del mundo.
                 </p>
 
-                <p class="cta__stat-item">
+
+                <p class="cta__stat-item" data-i18n="cta.stats.destinations">
                     76 destinos esperan por ti
                 </p>
 
             </div>
 
-            <a class="cta__button" href="#contacto">
 
+            <!-- ======================================
+                 BOTÓN
+            ====================================== -->
+
+            <a class="cta__button" href="#contacto" data-i18n="cta.button">
                 Contáctanos
             </a>
 
         </div>
 
-        <!-- Decoraciones -->
 
-        <span class="cta__decoration cta__decoration--green" aria-hidden="true">
-        </span>
+        <!-- ==========================================
+             DECORACIONES
+        ========================================== -->
 
-        <span class="cta__decoration cta__decoration--pink" aria-hidden="true">
-        </span>
+        <span class="cta__decoration cta__decoration--green" aria-hidden="true"></span>
 
-        <span class="cta__decoration cta__decoration--blue" aria-hidden="true">
-        </span>
 
-        <span class="cta__decoration cta__decoration--purple" aria-hidden="true">
-        </span>
+        <span class="cta__decoration cta__decoration--pink" aria-hidden="true"></span>
 
-        <span class="cta__decoration cta__decoration--yellow" aria-hidden="true">
-        </span>
 
-        <span class="cta__decoration cta__decoration--red" aria-hidden="true">
-        </span>
+        <span class="cta__decoration cta__decoration--blue" aria-hidden="true"></span>
+
+
+        <span class="cta__decoration cta__decoration--purple" aria-hidden="true"></span>
+
+
+        <span class="cta__decoration cta__decoration--yellow" aria-hidden="true"></span>
+
+
+        <span class="cta__decoration cta__decoration--red" aria-hidden="true"></span>
 
     </div>
-</section>
 
+</section>

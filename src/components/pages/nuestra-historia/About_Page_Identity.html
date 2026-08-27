@@ -11,6 +11,7 @@ Contenido:
 - Qué hacemos
 - Agencia de Estudios Internacionales
 - Intercambio Estudiantil
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -18,20 +19,23 @@ Contenido:
 
     <div class="page-container about-identity__container">
 
+
         <!-- ==========================================
              ENCABEZADO
         ========================================== -->
 
         <header class="about-identity__intro">
 
-            <p class="about-identity__eyebrow">
+            <p class="about-identity__eyebrow" data-i18n="aboutPage.identity.intro.locations">
                 Nuestras sedes están en USA-Miami,
                 Duisburgo-Alemania y Quito-Ecuador.
             </p>
 
-            <h2 class="about-identity__main-title">
+
+            <h2 class="about-identity__main-title" data-i18n="aboutPage.identity.intro.title">
                 ¡Te invitamos a conocer nuestro mundo!
             </h2>
+
 
             <span class="about-identity__intro-divider" aria-hidden="true">
             </span>
@@ -47,27 +51,31 @@ Contenido:
 
             <header class="about-identity__header">
 
-                <h2 class="about-identity__title">
+                <h2 class="about-identity__title" data-i18n="aboutPage.identity.whoWeAre.title">
                     Quiénes Somos
                 </h2>
+
 
                 <span class="about-identity__divider" aria-hidden="true">
                 </span>
 
             </header>
 
+
             <div class="about-identity__row">
 
                 <div class="about-identity__visual">
 
                     <img class="about-identity__image" src="/images/pages/nuestra-historia/clases-local.jpg"
-                        alt="Estudiantes de Global Exchange" loading="lazy">
+                        alt="Estudiantes de Global Exchange" data-i18n-alt="aboutPage.identity.whoWeAre.imageAlt"
+                        loading="lazy">
 
                 </div>
 
+
                 <div class="about-identity__content">
 
-                    <p>
+                    <p data-i18n="aboutPage.identity.whoWeAre.paragraph1">
                         Somos una organización internacional dedicada a la
                         asesoría migratoria y programas de estudio en el
                         exterior; nuestro personal calificado y multilingüe
@@ -75,14 +83,16 @@ Contenido:
                         estudiantes.
                     </p>
 
-                    <p>
+
+                    <p data-i18n="aboutPage.identity.whoWeAre.paragraph2">
                         Nuestro servicio está atento 24h00, 7 días a la
                         semana en cada país de destino seleccionado; esto
                         hace posible una atención inmediata a cada
                         necesidad.
                     </p>
 
-                    <p class="about-identity__highlight">
+
+                    <p class="about-identity__highlight" data-i18n="aboutPage.identity.whoWeAre.highlight">
                         ¡Trabajamos con pasión, con el único fin de apoyar
                         el futuro exitoso de cada uno de nuestros
                         postulantes!
@@ -103,18 +113,23 @@ Contenido:
 
             <header class="about-identity__header">
 
-                <h2 class="about-identity__title">
+                <h2 class="about-identity__title" data-i18n="aboutPage.identity.whatWeDo.title">
                     ¿Qué hacemos?
                 </h2>
+
 
                 <span class="about-identity__divider" aria-hidden="true">
                 </span>
 
             </header>
 
+
             <div class="about-identity__services-grid">
 
-                <!-- Agencia -->
+
+                <!-- ==================================
+                     AGENCIA
+                ================================== -->
 
                 <article class="about-identity__service-card">
 
@@ -122,17 +137,21 @@ Contenido:
 
                         <img class="about-identity__service-image"
                             src="/images/pages/nuestra-historia/estudiar-extranjero.jpg"
-                            alt="Agencia de estudios internacionales" loading="lazy">
+                            alt="Agencia de estudios internacionales"
+                            data-i18n-alt="aboutPage.identity.whatWeDo.agency.imageAlt" loading="lazy">
 
                     </div>
 
+
                     <div class="about-identity__service-content">
 
-                        <h3 class="about-identity__service-title">
+                        <h3 class="about-identity__service-title" data-i18n="aboutPage.identity.whatWeDo.agency.title">
                             Agencia de Estudios Internacionales
                         </h3>
 
-                        <p class="about-identity__service-description">
+
+                        <p class="about-identity__service-description"
+                            data-i18n="aboutPage.identity.whatWeDo.agency.description">
                             Ubicamos estudiantes ecuatorianos y extranjeros
                             en programas de intercambio internacionales
                             en 76 destinos.
@@ -143,30 +162,39 @@ Contenido:
                 </article>
 
 
-                <!-- Intercambio -->
+                <!-- ==================================
+                     INTERCAMBIO
+                ================================== -->
 
                 <article class="about-identity__service-card">
 
                     <div class="about-identity__service-visual">
 
                         <img class="about-identity__service-image" src="/images/pages/nuestra-historia/intercambio.jpg"
-                            alt="Intercambio estudiantil" loading="lazy">
+                            alt="Intercambio estudiantil" data-i18n-alt="aboutPage.identity.whatWeDo.exchange.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="about-identity__service-content">
 
-                        <h3 class="about-identity__service-title">
+                        <h3 class="about-identity__service-title"
+                            data-i18n="aboutPage.identity.whatWeDo.exchange.title">
                             Intercambio Estudiantil
                         </h3>
 
-                        <p class="about-identity__service-description">
+
+                        <p class="about-identity__service-description"
+                            data-i18n="aboutPage.identity.whatWeDo.exchange.paragraph1">
                             Enviamos y recibimos jóvenes entre 12 y 29 años
                             a familias de acogida y residencias
                             estudiantiles en diferentes países.
                         </p>
 
-                        <p class="about-identity__service-description">
+
+                        <p class="about-identity__service-description"
+                            data-i18n="aboutPage.identity.whatWeDo.exchange.paragraph2">
                             La seguridad, certificación y probidad de las
                             familias se basa en la experiencia de nuestro
                             trabajo.

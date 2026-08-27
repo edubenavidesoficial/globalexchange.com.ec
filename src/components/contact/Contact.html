@@ -9,142 +9,199 @@ Estado:
 - HTML propio y semántico
 - Sin Contact Form 7
 - Formulario con validación propia
+- Campo Sitio web eliminado
+- Campos Nombre y Apellido separados
+- Internacionalización con i18next
+
+Archivos relacionados:
+- src/css/components/contact.css
+- src/js/modules/contact-form.js
+- src/languages/locales/es.js
+- src/languages/locales/en.js
+- src/languages/locales/de.js
 ====================================================
 -->
 
 <section class="contact" id="contacto">
+
     <div class="contact__container">
 
         <div class="contact__layout">
 
-            <!-- ==========================================
+
+            <!-- ======================================
                  COLUMNA IZQUIERDA - IMAGEN
-            ========================================== -->
+            ====================================== -->
 
             <div class="contact__visual">
 
                 <div class="contact__image">
+
                     <img src="/images/contact/home10_img5.jpg" alt="Asesora de Global Exchange atendiendo a estudiantes"
-                        loading="lazy">
+                        data-i18n-alt="contact.imageAlt" loading="lazy">
+
                 </div>
+
 
                 <!-- Decoraciones -->
 
-                <span class="contact__decoration contact__decoration--dot-top" aria-hidden="true">
-                </span>
+                <span class="contact__decoration contact__decoration--dot-top" aria-hidden="true"></span>
 
-                <span class="contact__decoration contact__decoration--dot-bottom" aria-hidden="true">
-                </span>
+                <span class="contact__decoration contact__decoration--dot-bottom" aria-hidden="true"></span>
 
             </div>
 
-            <!-- ==========================================
+
+            <!-- ======================================
                  COLUMNA DERECHA - FORMULARIO
-            ========================================== -->
+            ====================================== -->
 
             <div class="contact__content">
 
                 <header class="contact__header">
-                    <h2 class="contact__title">
+
+                    <h2 class="contact__title" data-i18n="contact.title">
                         GLOBAL EXCHANGE
                     </h2>
 
-                    <p class="contact__description">
+
+                    <p class="contact__description" data-i18n="contact.description">
                         Convertimos a estudiantes en ciudadanos del mundo con
                         más oportunidades.
                     </p>
+
                 </header>
+
+
+                <!-- ==================================
+                     FORMULARIO
+                ================================== -->
 
                 <form class="contact__form" data-contact-form novalidate>
 
-                    <!-- Nombre -->
+
+                    <!-- ==============================
+                         NOMBRE
+                    ============================== -->
 
                     <div class="contact__field">
-                        <label class="contact__label" for="contact-name">
 
+                        <label class="contact__label" for="contact-name" data-i18n="contact.form.firstName.label">
                             Nombre
                         </label>
 
-                        <input id="contact-name" class="contact__input" type="text" name="name" placeholder="Tu nombre*"
-                            autocomplete="name" required>
 
-                        <small class="contact__error" data-error-for="contact-name">
-                        </small>
+                        <input id="contact-name" class="contact__input" type="text" name="firstName"
+                            placeholder="Nombre*" data-i18n-placeholder="contact.form.firstName.placeholder"
+                            autocomplete="given-name" required>
+
+
+                        <small class="contact__error" data-error-for="contact-name"></small>
+
                     </div>
 
-                    <!-- Email -->
+
+                    <!-- ==============================
+                         APELLIDO
+                    ============================== -->
 
                     <div class="contact__field">
-                        <label class="contact__label" for="contact-email">
 
+                        <label class="contact__label" for="contact-last-name" data-i18n="contact.form.lastName.label">
+                            Apellido
+                        </label>
+
+
+                        <input id="contact-last-name" class="contact__input" type="text" name="lastName"
+                            placeholder="Apellido*" data-i18n-placeholder="contact.form.lastName.placeholder"
+                            autocomplete="family-name" required>
+
+
+                        <small class="contact__error" data-error-for="contact-last-name"></small>
+
+                    </div>
+
+
+                    <!-- ==============================
+                         CORREO ELECTRÓNICO
+                    ============================== -->
+
+                    <div class="contact__field">
+
+                        <label class="contact__label" for="contact-email" data-i18n="contact.form.email.label">
                             Correo electrónico
                         </label>
 
-                        <input id="contact-email" class="contact__input" type="email" name="email"
-                            placeholder="Correo electrónico*" autocomplete="email" required>
 
-                        <small class="contact__error" data-error-for="contact-email">
-                        </small>
+                        <input id="contact-email" class="contact__input" type="email" name="email"
+                            placeholder="Correo electrónico*" data-i18n-placeholder="contact.form.email.placeholder"
+                            autocomplete="email" required>
+
+
+                        <small class="contact__error" data-error-for="contact-email"></small>
+
                     </div>
 
-                    <!-- Teléfono -->
+
+                    <!-- ==============================
+                         TELÉFONO
+                    ============================== -->
 
                     <div class="contact__field">
-                        <label class="contact__label" for="contact-phone">
 
+                        <label class="contact__label" for="contact-phone" data-i18n="contact.form.phone.label">
                             Teléfono
                         </label>
 
+
                         <input id="contact-phone" class="contact__input" type="tel" name="phone" placeholder="Teléfono"
-                            autocomplete="tel">
+                            data-i18n-placeholder="contact.form.phone.placeholder" autocomplete="tel">
 
-                        <small class="contact__error" data-error-for="contact-phone">
-                        </small>
+
+                        <small class="contact__error" data-error-for="contact-phone"></small>
+
                     </div>
 
-                    <!-- Sitio web -->
 
-                    <div class="contact__field">
-                        <label class="contact__label" for="contact-website">
-
-                            Sitio web
-                        </label>
-
-                        <input id="contact-website" class="contact__input" type="url" name="website"
-                            placeholder="Sitio web" autocomplete="url">
-
-                        <small class="contact__error" data-error-for="contact-website">
-                        </small>
-                    </div>
-
-                    <!-- Mensaje -->
+                    <!-- ==============================
+                         MENSAJE
+                    ============================== -->
 
                     <div class="contact__field contact__field--message">
-                        <label class="contact__label" for="contact-message">
 
+                        <label class="contact__label" for="contact-message" data-i18n="contact.form.message.label">
                             Mensaje
                         </label>
 
-                        <textarea id="contact-message" class="contact__textarea" name="message" rows="6"
-                            placeholder="Mensaje*" required></textarea>
 
-                        <small class="contact__error" data-error-for="contact-message">
-                        </small>
+                        <textarea id="contact-message" class="contact__textarea" name="message" rows="6"
+                            placeholder="Mensaje*" data-i18n-placeholder="contact.form.message.placeholder"
+                            required></textarea>
+
+
+                        <small class="contact__error" data-error-for="contact-message"></small>
+
                     </div>
 
-                    <!-- Botón -->
+
+                    <!-- ==============================
+                         BOTÓN
+                    ============================== -->
 
                     <div class="contact__actions">
-                        <button class="contact__submit" type="submit">
 
+                        <button class="contact__submit" type="submit" data-i18n="contact.form.submit">
                             Enviar mensaje
                         </button>
+
                     </div>
 
-                    <!-- Estado -->
 
-                    <p class="contact__status" data-contact-status role="status" aria-live="polite">
-                    </p>
+                    <!-- ==============================
+                         ESTADO DEL FORMULARIO
+                    ============================== -->
+
+                    <p class="contact__status" data-contact-status role="status" aria-live="polite"></p>
 
                 </form>
 
@@ -153,5 +210,5 @@ Estado:
         </div>
 
     </div>
-</section>
 
+</section>
