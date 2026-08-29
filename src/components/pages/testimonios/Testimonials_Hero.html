@@ -4,6 +4,11 @@ COMPONENTE: TESTIMONIALS HERO
 
 Página:
 Testimonios
+
+Responsabilidad:
+- Mostrar encabezado principal
+- Mostrar breadcrumb
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -12,22 +17,27 @@ Testimonios
     <div class="page-hero__overlay testimonials-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container testimonials-hero__container">
 
-        <h1 class="page-hero__title testimonials-hero__title">
+        <h1 class="page-hero__title testimonials-hero__title" data-i18n="testimonialsPage.hero.title">
             Testimonios
         </h1>
 
-        <nav class="page-hero__breadcrumb testimonials-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb testimonials-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="testimonialsPage.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="testimonialsPage.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator testimonials-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="testimonialsPage.hero.breadcrumb.current">
                 Testimonios
             </span>
 

@@ -7,6 +7,11 @@ page-hero
 
 Página:
 Preguntas
+
+Responsabilidad:
+- Mostrar encabezado principal
+- Mostrar breadcrumb
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -15,22 +20,27 @@ Preguntas
     <div class="page-hero__overlay faq-page-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container faq-page-hero__container">
 
-        <h1 class="page-hero__title faq-page-hero__title">
+        <h1 class="page-hero__title faq-page-hero__title" data-i18n="questionsPage.hero.title">
             Preguntas
         </h1>
 
-        <nav class="page-hero__breadcrumb faq-page-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb faq-page-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="questionsPage.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="questionsPage.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator faq-page-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="questionsPage.hero.breadcrumb.current">
                 Preguntas
             </span>
 

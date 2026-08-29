@@ -4,6 +4,11 @@ COMPONENTE: TESTIMONIALS GALLERY
 
 Página:
 Testimonios
+
+Contenido:
+- Galería de experiencias
+- 11 fotografías
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -13,202 +18,295 @@ Testimonios
 
         <header class="testimonials-gallery__header">
 
-            <h2 class="testimonials-gallery__title">
+            <h2 class="testimonials-gallery__title" data-i18n="testimonialsPage.gallery.title">
                 Galería
             </h2>
+
 
             <span class="testimonials-gallery__divider" aria-hidden="true">
             </span>
 
-            <p class="testimonials-gallery__description">
+
+            <p class="testimonials-gallery__description" data-i18n="testimonialsPage.gallery.description">
                 Experiencias de nuestros estudiantes alrededor del mundo.
             </p>
 
         </header>
 
+
         <div class="testimonials-gallery__grid">
 
-            <a class="testimonials-gallery__item" href="/images/pages/testimonios/vi.jpg"
-                aria-label="Abrir fotografía de estudiante en París">
 
-                <img src="/images/pages/testimonios/vi.jpg" alt="Estudiante de Global Exchange en París" loading="lazy">
+            <!-- ======================================
+                 IMAGEN 1
+            ====================================== -->
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/vi.jpg"
+                aria-label="Abrir fotografía de estudiante en París"
+                data-i18n-aria-label="testimonialsPage.gallery.items.paris.open">
+
+                <img src="/images/pages/testimonios/vi.jpg" alt="Estudiante de Global Exchange en París"
+                    data-i18n-alt="testimonialsPage.gallery.items.paris.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 2
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/a.jpeg"
-                aria-label="Abrir fotografía de estudiante en la nieve">
+                aria-label="Abrir fotografía de estudiante en la nieve"
+                data-i18n-aria-label="testimonialsPage.gallery.items.snow.open">
 
                 <img src="/images/pages/testimonios/a.jpeg" alt="Estudiante de Global Exchange en la nieve"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.snow.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 3
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/8.jpg"
-                aria-label="Abrir fotografía de estudiante durante su viaje">
+                aria-label="Abrir fotografía de estudiante durante su viaje"
+                data-i18n-aria-label="testimonialsPage.gallery.items.trip.open">
 
                 <img src="/images/pages/testimonios/8.jpg" alt="Estudiante de Global Exchange durante su viaje"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.trip.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 4
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/g34.jpeg"
-                aria-label="Abrir fotografía de estudiante en Berlín">
+                aria-label="Abrir fotografía de estudiante en Berlín"
+                data-i18n-aria-label="testimonialsPage.gallery.items.berlin.open">
 
                 <img src="/images/pages/testimonios/g34.jpeg" alt="Estudiante de Global Exchange en Berlín"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.berlin.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 5
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/10.jpg"
-                aria-label="Abrir fotografía de familia anfitriona">
+                aria-label="Abrir fotografía de familia anfitriona"
+                data-i18n-aria-label="testimonialsPage.gallery.items.hostFamily.open">
 
-                <img src="/images/pages/testimonios/10.jpg" alt="Estudiante con su familia anfitriona" loading="lazy">
+                <img src="/images/pages/testimonios/10.jpg" alt="Estudiante con su familia anfitriona"
+                    data-i18n-alt="testimonialsPage.gallery.items.hostFamily.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 6
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/g21.jpg"
-                aria-label="Abrir fotografía de estudiantes durante una excursión">
+                aria-label="Abrir fotografía de estudiantes durante una excursión"
+                data-i18n-aria-label="testimonialsPage.gallery.items.excursion.open">
 
                 <img src="/images/pages/testimonios/g21.jpg" alt="Estudiantes de Global Exchange durante una excursión"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.excursion.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 7
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/12.jpg"
-                aria-label="Abrir fotografía de experiencia internacional">
+                aria-label="Abrir fotografía de experiencia internacional"
+                data-i18n-aria-label="testimonialsPage.gallery.items.international.open">
 
                 <img src="/images/pages/testimonios/12.jpg" alt="Experiencia internacional de Global Exchange"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.international.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 8
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/111.jpg"
-                aria-label="Abrir fotografía de estudiantes viajando">
+                aria-label="Abrir fotografía de estudiantes viajando"
+                data-i18n-aria-label="testimonialsPage.gallery.items.traveling.open">
 
                 <img src="/images/pages/testimonios/111.jpg" alt="Estudiantes de Global Exchange viajando"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.traveling.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 9
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/11.jpg"
-                aria-label="Abrir fotografía de estudiante en Europa">
+                aria-label="Abrir fotografía de estudiante en Europa"
+                data-i18n-aria-label="testimonialsPage.gallery.items.europe.open">
 
                 <img src="/images/pages/testimonios/11.jpg" alt="Estudiante de Global Exchange en Europa"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.europe.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
+
+
+            <!-- ======================================
+                 IMAGEN 10
+            ====================================== -->
 
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/9.jpg"
-                aria-label="Abrir fotografía de experiencia cultural">
+                aria-label="Abrir fotografía de experiencia cultural"
+                data-i18n-aria-label="testimonialsPage.gallery.items.cultural.open">
 
                 <img src="/images/pages/testimonios/9.jpg" alt="Experiencia cultural con Global Exchange"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.cultural.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>
 
+
+            <!-- ======================================
+                 IMAGEN 11
+            ====================================== -->
+
             <a class="testimonials-gallery__item" href="/images/pages/testimonios/g33.jpeg"
-                aria-label="Abrir fotografía de estudiante durante su intercambio">
+                aria-label="Abrir fotografía de estudiante durante su intercambio"
+                data-i18n-aria-label="testimonialsPage.gallery.items.exchange.open">
 
                 <img src="/images/pages/testimonios/g33.jpeg" alt="Estudiante durante su intercambio internacional"
-                    loading="lazy">
+                    data-i18n-alt="testimonialsPage.gallery.items.exchange.alt" loading="lazy">
 
                 <span class="testimonials-gallery__overlay">
+
                     <svg class="testimonials-gallery__zoom-icon" viewBox="0 0 24 24" aria-hidden="true"
                         focusable="false">
                         <path
                             d="M10.5 4a6.5 6.5 0 1 0 4.04 11.59L20.95 22 22 20.95l-6.41-6.41A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm-.75 1.75v2h-2v1.5h2v2h1.5v-2h2v-1.5h-2v-2h-1.5Z"
                             fill="currentColor" />
                     </svg>
+
                 </span>
 
             </a>

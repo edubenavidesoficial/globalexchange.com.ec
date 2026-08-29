@@ -1228,6 +1228,446 @@ export const es = {
 
             }
 
+        },
+
+
+        // ============================================
+        // QUESTIONS PAGE
+        // Página: Preguntas
+        // ============================================
+
+        questionsPage: {
+
+            // ========================================
+            // HERO
+            // ========================================
+
+            hero: {
+
+                title:
+                    'Preguntas',
+
+
+                breadcrumb: {
+
+                    ariaLabel:
+                        'Migas de pan',
+
+                    home:
+                        'Inicio',
+
+                    current:
+                        'Preguntas'
+
+                }
+
+            },
+
+
+            // ========================================
+            // POSTS
+            // ========================================
+
+            posts: {
+
+                readMore:
+                    'Leer más',
+
+
+                languageCourses: {
+
+                    title:
+                        'Consejos para planificar cursos de idiomas en el exterior',
+
+                    imageAlt:
+                        'Consejos para planificar cursos de idiomas'
+
+                },
+
+
+                english15: {
+
+                    title:
+                        'English for 15+',
+
+                    imageAlt:
+                        'English for 15 plus'
+
+                },
+
+
+                studySpain: {
+
+                    title:
+                        'Requisitos para estudiar en España',
+
+                    imageAlt:
+                        'Requisitos para estudiar en España'
+
+                }
+
+            },
+
+
+            // ========================================
+            // QUESTIONS
+            // ========================================
+
+            questions: {
+
+                title:
+                    'Preguntas más populares',
+
+
+                // ====================================
+                // ACELERAR APRENDIZAJE
+                // ====================================
+
+                learningSpeed: {
+
+                    question:
+                        '¿Puedo acelerar mi proceso de aprendizaje?',
+
+                    paragraph1:
+                        'Es normal que cuando iniciamos nuestro aprendizaje del inglés queramos dominar el idioma de manera rápida, pero lo cierto es que esto no es una tarea fácil.',
+
+                    paragraph2:
+                        'Existen algunas técnicas que pueden ayudarte:',
+
+
+                    items: {
+
+                        devices:
+                            'Configura tus dispositivos en inglés para acostumbrarte a estar rodeado del idioma.',
+
+                        reading:
+                            'Lee en inglés tanto como puedas para aprender vocabulario, comprensión y gramática.',
+
+                        activities:
+                            'Involucra el idioma en actividades que te interesen para mantener la motivación.'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // PELÍCULAS Y CANCIONES
+                // ====================================
+
+                moviesMusic: {
+
+                    question:
+                        '¿Se puede aprender inglés con películas y canciones?',
+
+                    paragraph1:
+                        'La mejor opción para aprender inglés de forma exitosa es realizar un curso. Sin embargo, también puedes reforzar tu aprendizaje viendo series, películas y escuchando canciones en inglés.'
+
+                },
+
+
+                // ====================================
+                // MOTIVACIÓN
+                // ====================================
+
+                motivation: {
+
+                    question:
+                        '¿Cómo mantener la motivación?',
+
+                    paragraph1:
+                        'La motivación es el motor del aprendizaje de idiomas. Es esencial para comenzar y también para continuar.',
+
+
+                    items: {
+
+                        progress:
+                            'Haz balance de tu progreso.',
+
+                        steps:
+                            'Divide el proceso de aprendizaje y avanza poco a poco.',
+
+                        shareGoals:
+                            'Comparte tus objetivos con otras personas, profesores o compañeros de intercambio.',
+
+                        breaks:
+                            'Tómate descansos para retomar el estudio con más energía.'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // UNIVERSIDADES
+                // ====================================
+
+                universities: {
+
+                    question:
+                        '¿A qué universidades puedo aplicar en el exterior?',
+
+                    paragraph1:
+                        'Las mejores universidades del mundo esperan por ti.',
+
+                    paragraph2:
+                        'Te ayudamos a aplicar a universidades internacionales en países como Francia, Italia, Alemania, Bélgica, Australia, Austria, Holanda y Suiza.',
+
+                    paragraph3:
+                        'Algunos de estos países ofrecen educación pública casi gratuita, con valores aproximados de entre 100 y 700 euros por semestre.'
+
+                },
+
+
+                // ====================================
+                // ALOJAMIENTO
+                // ====================================
+
+                accommodation: {
+
+                    question:
+                        '¿Cómo es el alojamiento residencial estudiantil?',
+
+                    paragraph1:
+                        'Este tipo de alojamiento normalmente se ofrece en colegios privados, con áreas separadas para chicos y chicas, alimentación y cuidado durante las 24 horas.',
+
+                    paragraph2:
+                        'Durante los fines de semana, las familias de acogida suelen compartir paseos, almuerzos y viajes con los estudiantes para ofrecerles una estancia cómoda y enriquecedora.'
+
+                }
+
+            }
+
+        },
+
+
+        // ============================================
+        // TESTIMONIALS PAGE
+        // Página: Testimonios
+        // ============================================
+
+        testimonialsPage: {
+
+            // ========================================
+            // HERO
+            // ========================================
+
+            hero: {
+
+                title:
+                    'Testimonios',
+
+
+                breadcrumb: {
+
+                    ariaLabel:
+                        'Migas de pan',
+
+                    home:
+                        'Inicio',
+
+                    current:
+                        'Testimonios'
+
+                }
+
+            },
+
+
+            // ========================================
+            // TESTIMONIOS
+            // ========================================
+
+            testimonials: {
+
+                studentTitle:
+                    'Testimonio Estudiante',
+
+
+                first: {
+
+                    imageAlt:
+                        'Estudiante de Global Exchange',
+
+                    quote:
+                        '“Quiero agradecer a Global Exchange por esta oportunidad. La verdad es una experiencia sumamente enriquecedora que pienso que todos deberíamos tener: la oportunidad de viajar e intercambiar cultura con otros países.”'
+
+                },
+
+
+                amir: {
+
+                    quote:
+                        'Hola, soy Amir Carrera y he sido participante del programa Global Exchange para viajar en el programa Nanny. Al fin podré realizar mi sueño de viajar a Alemania y emprender un nuevo camino para mi vida y mi futuro.'
+
+                },
+
+
+                aylin: {
+
+                    quote:
+                        'Hola, qué tal. Mi nombre es Aylin Burbano. Voy a viajar a Alemania y estoy muy emocionada. Gracias a Global Exchange porque me ha ayudado con todos los documentos necesarios.'
+
+                },
+
+
+                amanda: {
+
+                    quote:
+                        'Hola, mi nombre es Amanda Valencia. Pertenezco al programa Nanny Alemania y agradezco a Global Exchange por su apoyo durante todo el programa, en mis estudios de alemán y para encontrar una hermosa familia en Alemania.'
+
+                },
+
+
+                maria: {
+
+                    quote:
+                        'Mi nombre es María Emilia Bravo. Voy a viajar de intercambio a Colonia, Alemania, con el programa de Global Exchange. Es un programa muy asertivo y hoy recibí la visa para mi viaje.'
+
+                }
+
+            },
+
+
+            // ========================================
+            // GALERÍA
+            // ========================================
+
+            gallery: {
+
+                title:
+                    'Galería',
+
+                description:
+                    'Experiencias de nuestros estudiantes alrededor del mundo.',
+
+
+                items: {
+
+                    paris: {
+
+                        open:
+                            'Abrir fotografía de estudiante en París',
+
+                        alt:
+                            'Estudiante de Global Exchange en París'
+
+                    },
+
+
+                    snow: {
+
+                        open:
+                            'Abrir fotografía de estudiante en la nieve',
+
+                        alt:
+                            'Estudiante de Global Exchange en la nieve'
+
+                    },
+
+
+                    trip: {
+
+                        open:
+                            'Abrir fotografía de estudiante durante su viaje',
+
+                        alt:
+                            'Estudiante de Global Exchange durante su viaje'
+
+                    },
+
+
+                    berlin: {
+
+                        open:
+                            'Abrir fotografía de estudiante en Berlín',
+
+                        alt:
+                            'Estudiante de Global Exchange en Berlín'
+
+                    },
+
+
+                    hostFamily: {
+
+                        open:
+                            'Abrir fotografía de familia anfitriona',
+
+                        alt:
+                            'Estudiante con su familia anfitriona'
+
+                    },
+
+
+                    excursion: {
+
+                        open:
+                            'Abrir fotografía de estudiantes durante una excursión',
+
+                        alt:
+                            'Estudiantes de Global Exchange durante una excursión'
+
+                    },
+
+
+                    international: {
+
+                        open:
+                            'Abrir fotografía de experiencia internacional',
+
+                        alt:
+                            'Experiencia internacional de Global Exchange'
+
+                    },
+
+
+                    traveling: {
+
+                        open:
+                            'Abrir fotografía de estudiantes viajando',
+
+                        alt:
+                            'Estudiantes de Global Exchange viajando'
+
+                    },
+
+
+                    europe: {
+
+                        open:
+                            'Abrir fotografía de estudiante en Europa',
+
+                        alt:
+                            'Estudiante de Global Exchange en Europa'
+
+                    },
+
+
+                    cultural: {
+
+                        open:
+                            'Abrir fotografía de experiencia cultural',
+
+                        alt:
+                            'Experiencia cultural con Global Exchange'
+
+                    },
+
+
+                    exchange: {
+
+                        open:
+                            'Abrir fotografía de estudiante durante su intercambio',
+
+                        alt:
+                            'Estudiante durante su intercambio internacional'
+
+                    }
+
+                }
+
+            }
+
         }
 
     }
