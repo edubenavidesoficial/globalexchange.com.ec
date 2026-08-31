@@ -9,6 +9,21 @@
 export const de = {
 
     translation: {
+        // ============================================
+        // COMMON
+        // Wiederverwendbare Elemente
+        // ============================================
+
+        common: {
+
+            carousel: {
+
+                position:
+                    'Position {{position}} anzeigen'
+
+            }
+
+        },
 
 
         // ============================================
@@ -2370,6 +2385,1226 @@ export const de = {
 
                             certificate:
                                 'Du erhältst ein Zertifikat über dein Sprachniveau'
+
+                        },
+
+
+                        button:
+                            'Meine Erfahrung starten'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // SCHULPROGRAMM
+            // ========================================
+
+            schoolProgram: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Schulprogramm',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Schulprogramm'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'Global Exchange Schulprogramme',
+
+                    paragraph1:
+                        'Die Möglichkeit, in die Kultur und Sprache deines Ziellandes einzutauchen, liegt in deinen Händen. Während dieser Erfahrung leben unsere Schülerinnen und Schüler ein Trimester oder ein ganzes Schuljahr im Ausland.',
+
+                    paragraph2:
+                        'Programme für verschiedene Jahrgangsstufen der Oberstufe im Ausland.',
+
+
+                    activities: {
+
+                        title:
+                            'Clubs und Aktivitäten',
+
+                        paragraph1:
+                            'Die Schülerinnen und Schüler haben eine große Auswahl an Möglichkeiten, wenn sie ihre außerschulischen Aktivitäten für die Nachmittage nach dem Unterricht auswählen.',
+
+                        paragraph2:
+                            'Zu den Sportangeboten gehören unter anderem Fußball, Basketball, Volleyball und Schwimmen sowie Clubs für Journalismus, Musik, Theater, Gesang, Zeichnen und Literatur.',
+
+                        paragraph3:
+                            'Die Schulen bieten normalerweise Ausflüge und besondere Veranstaltungen während Feiertagen und Festen wie Weihnachten, Spring Break und Abschlussfeiern an.'
+
+                    },
+
+
+                    hostFamily: {
+
+                        title:
+                            'Wechsel der Gastfamilie',
+
+                        description:
+                            'In unseren Programmen hast du die Möglichkeit, bei Bedarf bis zu dreimal die Gastfamilie zu wechseln.'
+
+                    },
+
+
+                    support: {
+
+                        title:
+                            '24/7-Betreuung',
+
+                        description:
+                            'Unsere Schülerinnen und Schüler werden während ihres gesamten Aufenthalts von einer Betreuungsperson begleitet.'
+
+                    },
+
+
+                    gallery: {
+
+                        studentAlt:
+                            'Global-Exchange-Schüler im Ausland',
+
+                        hostFamilyAlt:
+                            'Schüler gemeinsam mit seiner Gastfamilie'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // PROGRAMMLEISTUNGEN
+                // ====================================
+
+                features: {
+
+                    // =================================
+                    // ÖFFENTLICHE SCHULE
+                    // =================================
+
+                    publicSchool: {
+
+                        title:
+                            'Schulbesuch an einer öffentlichen Schule',
+
+                        paragraph1:
+                            'Deine Familie im Ausland wird zu deinem zweiten Zuhause, während ihr den Alltag miteinander teilt. Für deinen Komfort steht dir ein Einzel- oder Mehrbettzimmer zur Verfügung.',
+
+                        paragraph2:
+                            'Je nach Saison kannst du deine Erfahrung mit einem weiteren Schüler oder einer weiteren Schülerin aus einem anderen Teil der Welt teilen. Deine Gastfamilie kümmert sich um Unterkunft, Verpflegung und Unterstützung.',
+
+                        paragraph3:
+                            'Du verbesserst deine Sprachkenntnisse im Zielland und besuchst renommierte öffentliche Schulen. Zusätzlich stehen dir eine Beratungsstelle und eine verantwortliche Betreuung rund um die Uhr zur Verfügung.'
+
+                    },
+
+
+                    // =================================
+                    // SCHÜLERWOHNHEIM
+                    // =================================
+
+                    studentResidence: {
+
+                        title:
+                            'Unterbringung im Schülerwohnheim',
+
+                        paragraph1:
+                            'Diese Art der Unterkunft wird normalerweise an Privatschulen innerhalb des Schulgeländes angeboten, mit getrennten Bereichen für Jungen und Mädchen.',
+
+                        paragraph2:
+                            'Die Wohnheime erfüllen Qualitätsstandards und bieten Verpflegung durch einen Catering-Service sowie eine Betreuung unserer Schülerinnen und Schüler rund um die Uhr.',
+
+                        paragraph3:
+                            'An den Wochenenden unternehmen Gastfamilien gemeinsam mit den Schülerinnen und Schülern Ausflüge, essen zusammen oder reisen, um einen komfortablen, angenehmen und persönlich bereichernden Aufenthalt zu ermöglichen.'
+
+                    },
+
+
+                    // =================================
+                    // MEHRWERT
+                    // =================================
+
+                    addedValue: {
+
+                        title:
+                            'Mehrwert des Schulprogramms',
+
+                        paragraph1:
+                            'Die Schülerinnen und Schüler lernen und beherrschen die Sprache ihres Ziellandes und erhalten die Möglichkeit, eine Sprachprüfung abzulegen.',
+
+                        paragraph2:
+                            'Das Programm bietet kulturellen Austausch, ein tiefes Verständnis neuer Bräuche, eine breitere Perspektive bei der Wahl des beruflichen Weges und Besuche faszinierender Reiseziele.'
+
+                    },
+
+
+                    // =================================
+                    // AKTIVITÄTEN
+                    // =================================
+
+                    activities: {
+
+                        title:
+                            'Außerschulische Aktivitäten',
+
+                        paragraph1:
+                            'Den Schülerinnen und Schülern steht eine große Auswahl an Aktivitäten für die Nachmittage nach dem Unterricht zur Verfügung.',
+
+                        paragraph2:
+                            'Dazu gehören Fußball, Basketball, Volleyball, Schwimmen, Journalismus, Musik, Theater, Gesang, Zeichnen und Literatur.',
+
+                        paragraph3:
+                            'Die Schulen organisieren außerdem Ausflüge und besondere Veranstaltungen während Weihnachten, Spring Break, Abschlussfeiern und anderen Festlichkeiten.'
+
+                    },
+
+
+                    // =================================
+                    // SCHULEN
+                    // =================================
+
+                    schools: {
+
+                        title:
+                            'Global Exchange Schulen',
+
+
+                        section1: {
+
+                            title:
+                                'Abschnitt 1',
+
+                            argentina:
+                                'Argentinien: privat',
+
+                            germany:
+                                'Deutschland: öffentlich und privat',
+
+                            australia:
+                                'Australien: privat',
+
+                            austria:
+                                'Österreich: öffentlich',
+
+                            belgium:
+                                'Belgien: öffentlich',
+
+                            brazil:
+                                'Brasilien: privat',
+
+                            canada:
+                                'Kanada: öffentlich und privat',
+
+                            chile:
+                                'Chile: privat',
+
+                            china:
+                                'China: öffentlich und privat',
+
+                            northKorea:
+                                'Nordkorea: privat',
+
+                            southKorea:
+                                'Südkorea: privat',
+
+                            denmark:
+                                'Dänemark: öffentlich und privat',
+
+                            unitedStates:
+                                'Vereinigte Staaten: öffentlich und privat',
+
+                            france:
+                                'Frankreich: öffentlich und privat',
+
+                            hungary:
+                                'Ungarn: öffentlich',
+
+                            netherlands:
+                                'Niederlande: öffentlich'
+
+                        },
+
+
+                        section2: {
+
+                            title:
+                                'Abschnitt 2',
+
+                            england:
+                                'England: öffentlich',
+
+                            indonesia:
+                                'Indonesien: privat',
+
+                            italy:
+                                'Italien: öffentlich',
+
+                            japan:
+                                'Japan: privat',
+
+                            liechtenstein:
+                                'Liechtenstein: öffentlich',
+
+                            luxembourg:
+                                'Luxemburg: öffentlich',
+
+                            malaysia:
+                                'Malaysia: öffentlich',
+
+                            malta:
+                                'Malta: privat',
+
+                            mexico:
+                                'Mexiko: privat',
+
+                            newZealand:
+                                'Neuseeland: öffentlich',
+
+                            portugal:
+                                'Portugal: öffentlich',
+
+                            czechRepublic:
+                                'Tschechische Republik: öffentlich',
+
+                            russia:
+                                'Russland: öffentlich',
+
+                            singapore:
+                                'Singapur: öffentlich',
+
+                            switzerland:
+                                'Schweiz: öffentlich und privat'
+
+                        }
+
+                    },
+
+
+                    // =================================
+                    // GASTFAMILIE
+                    // =================================
+
+                    hostFamily: {
+
+                        title:
+                            'Wechsel der Gastfamilie',
+
+                        paragraph1:
+                            'In unseren Programmen hast du die Möglichkeit, bei Bedarf bis zu dreimal die Gastfamilie zu wechseln.',
+
+                        paragraph2:
+                            'Außerdem erhältst du rund um die Uhr Unterstützung und eine Betreuungsperson, die während des gesamten Aufenthalts für unsere Schülerinnen und Schüler da ist.'
+
+                    },
+
+
+                    partnersAlt:
+                        'Zertifizierungen und Partnerorganisationen'
+
+                }
+            },
+
+
+            // ========================================
+            // BERUFSPRAKTIKA IM AUSLAND
+            // ========================================
+
+            internships: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Berufspraktika im Ausland',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Berufspraktika im Ausland'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // DETAILS
+                // ====================================
+
+                details: {
+
+                    // =================================
+                    // VERGÜTETE PRAKTIKA
+                    // =================================
+
+                    paid: {
+
+                        imageAlt:
+                            'Internationale Arbeits- und Ausbildungserfahrung',
+
+                        eyebrow:
+                            'Internationale Erfahrung',
+
+                        title:
+                            'Vergütete Praktika im Ausland',
+
+
+                        languages: {
+
+                            title:
+                                'Programme auf:',
+
+                            german:
+                                'Deutsch',
+
+                            french:
+                                'Französisch',
+
+                            italian:
+                                'Italienisch',
+
+                            english:
+                                'Englisch'
+
+                        },
+
+
+                        options: {
+
+                            title:
+                                'Unsere Online-Sprachschule bietet:',
+
+                            abroad:
+                                'Möglichkeiten im Ausland',
+
+                            internships:
+                                'Berufspraktika',
+
+                            jobs:
+                                'Arbeitsmöglichkeiten',
+
+                            masters:
+                                'Gebührenfreie Masterstudiengänge'
+
+                        },
+
+
+                        duration: {
+
+                            label:
+                                'Dauer',
+
+                            value:
+                                '4, 8 oder 12 Wochen · Von 1 bis 3 Jahren'
+
+                        },
+
+
+                        button:
+                            'Kontakt aufnehmen'
+
+                    },
+
+
+                    // =================================
+                    // BERUFLICHE FÄHIGKEITEN
+                    // =================================
+
+                    skills: {
+
+                        imageAlt:
+                            'Junge Menschen beim Sammeln beruflicher Erfahrung',
+
+                        eyebrow:
+                            'Berufliche Entwicklung',
+
+                        title:
+                            'Stelle deine beruflichen Fähigkeiten unter Beweis und zeige, was du kannst',
+
+                        paragraph1:
+                            'Entwickle deine Sprachkenntnisse und beruflichen Fähigkeiten in einem realen Arbeitsumfeld.',
+
+                        paragraph2:
+                            'Dieses Programm ist ideal für Studierende und junge Berufstätige, die ihre Erfahrung erweitern und ihr Wissen in der Praxis anwenden möchten.',
+
+
+                        includes: {
+
+                            title:
+                                'Enthalten',
+
+                            accommodation:
+                                'Unterkunft'
+
+                        },
+
+
+                        requirements: {
+
+                            title:
+                                'Voraussetzungen',
+
+                            highSchool:
+                                'Abgeschlossene Schulausbildung',
+
+                            language:
+                                'Sprachniveau B2',
+
+                            workExperience:
+                                'Berufserfahrung',
+
+                            sectorExperience:
+                                'Vorherige Erfahrung im jeweiligen Bereich, abhängig von der Position',
+
+                            certificate:
+                                'Arbeitszeugnis über das Praktikum'
+
+                        },
+
+
+                        notice:
+                            'Die Anmeldung muss mindestens sechs Monate vor dem geplanten Reisedatum erfolgen.',
+
+                        button:
+                            'Kontakt aufnehmen'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // ÜBERSICHT MIT TABS
+                // ====================================
+
+                overview: {
+
+                    navigationAriaLabel:
+                        'Informationen zu Berufspraktika',
+
+
+                    labels: {
+
+                        destinations:
+                            'Reiseziele',
+
+                        requirements:
+                            'Voraussetzungen',
+
+                        services:
+                            'Leistungen',
+
+                        benefits:
+                            'Vorteile'
+
+                    },
+
+
+                    // =================================
+                    // REISEZIELE
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'Internationale Reise für ein Berufspraktikum',
+
+                        eyebrow:
+                            'Internationale Praktika',
+
+                        title:
+                            'Lerne eine neue Sprache mit Global Exchange',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'Vereinigte Staaten',
+
+                            canada:
+                                'Kanada',
+
+                            england:
+                                'England',
+
+                            germany:
+                                'Deutschland',
+
+                            belgium:
+                                'Belgien',
+
+                            france:
+                                'Frankreich',
+
+                            italy:
+                                'Italien',
+
+                            netherlands:
+                                'Niederlande',
+
+                            austria:
+                                'Österreich',
+
+                            switzerland:
+                                'Schweiz'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange begleitet dich bei der Vorbereitung deiner beruflichen Erfahrung im Ausland.',
+
+                        button:
+                            'Mehr erfahren'
+
+                    },
+
+
+                    // =================================
+                    // VORAUSSETZUNGEN
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Voraussetzungen für ein Praktikum im Ausland',
+
+                        eyebrow:
+                            'Voraussetzungen',
+
+                        title:
+                            'Bereite dich auf deine berufliche Erfahrung vor',
+
+                        description:
+                            'In diesem Abschnitt werden wir die genauen Voraussetzungen der ursprünglichen Seite ergänzen.',
+
+                        feature:
+                            'Dokumente, akademische Ausbildung, Sprachkenntnisse und Reisebereitschaft.',
+
+                        button:
+                            'Informationen anfordern'
+
+                    },
+
+
+                    // =================================
+                    // LEISTUNGEN
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Leistungen für internationale Studierende',
+
+                        eyebrow:
+                            'Leistungen',
+
+                        title:
+                            'Betreuung während des gesamten Programms',
+
+                        description:
+                            'In diesem Abschnitt werden wir die genauen Leistungen des ursprünglichen Programms ergänzen.',
+
+
+                        features: {
+
+                            professionalGuidance:
+                                'Berufliche Beratung',
+
+                            accommodation:
+                                'Unterstützung bei der Unterkunft',
+
+                            internationalAssistance:
+                                'Internationale Unterstützung',
+
+                            followUp:
+                                'Begleitung der Teilnehmenden'
+
+                        },
+
+
+                        button:
+                            'Leistungen kennenlernen'
+
+                    },
+
+
+                    // =================================
+                    // VORTEILE
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Vorteile von Berufspraktika',
+
+                        eyebrow:
+                            'Vorteile',
+
+                        title:
+                            'Bringe deine berufliche Karriere voran',
+
+                        description:
+                            'Eine internationale Erfahrung stärkt dein Wissen, dein Selbstvertrauen und deinen Lebenslauf.',
+
+
+                        features: {
+
+                            professionalExperience:
+                                'Berufserfahrung',
+
+                            language:
+                                'Verbesserung der Sprachkenntnisse',
+
+                            internationalExperience:
+                                'Internationale Erfahrung',
+
+                            personalGrowth:
+                                'Persönliche Entwicklung'
+
+                        },
+
+
+                        button:
+                            'Meine Erfahrung starten'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // NANNY-PROGRAMM
+            // ========================================
+
+            nanny: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Nanny-Programm – Austausch in Deutschland, den USA und den Niederlanden',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Nanny-Programm'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INHALT
+                // ====================================
+
+                content: {
+
+                    // =================================
+                    // EINLEITUNG
+                    // =================================
+
+                    intro: {
+
+                        title:
+                            'Austauschprogramm',
+
+                        quote:
+                            '„Wenn du gerne mit Kindern arbeitest, ist dieses Programm genau das Richtige für dich.“',
+
+                        paragraph1:
+                            'Nimm an einem kulturellen Austausch teil und arbeite als Nanny bei einer Gastfamilie im Ausland.',
+
+                        paragraph2:
+                            'Du hast die Möglichkeit, eine Sprache zu lernen oder deine Kenntnisse zu verbessern, selbstständiger zu werden und den Alltag mit einer neuen Familie zu teilen.',
+
+
+                        gallery: {
+
+                            ariaLabel:
+                                'Erfahrungen im Nanny-Programm',
+
+                            educationalActivitiesAlt:
+                                'Kinder bei pädagogischen Aktivitäten',
+
+                            childcareAlt:
+                                'Betreuung und Begleitung von Kindern',
+
+                            readingAlt:
+                                'Mädchen beim Lesenlernen',
+
+                            learningAlt:
+                                'Lernprozess eines Kindes'
+
+                        }
+
+                    },
+
+
+                    // =================================
+                    // LÄNDER UND ALTER
+                    // =================================
+
+                    ages: {
+
+                        title:
+                            'Länder und Altersgruppen',
+
+                        germany:
+                            'Deutschland: 18 bis 26 Jahre',
+
+                        belgium:
+                            'Belgien: 18 bis 26 Jahre',
+
+                        unitedStates:
+                            'Vereinigte Staaten: 18 bis 25 Jahre',
+
+                        france:
+                            'Frankreich: 18 bis 28 Jahre',
+
+                        netherlands:
+                            'Niederlande: 18 bis 28 Jahre'
+
+                    },
+
+
+                    // =================================
+                    // PROGRAMM
+                    // =================================
+
+                    program: {
+
+                        title:
+                            'Nanny-Programm',
+
+                        imageAlt:
+                            'Teilnehmerin des Nanny-Programms mit einer Gastfamilie'
+
+                    },
+
+
+                    // =================================
+                    // ENTHALTEN
+                    // =================================
+
+                    includes: {
+
+                        title:
+                            'Enthalten',
+
+                        meals:
+                            'Verpflegung',
+
+                        accommodation:
+                            'Unterkunft',
+
+                        medicalInsurance:
+                            'Krankenversicherung',
+
+                        transportation:
+                            'Transport',
+
+                        monthlyAllowance:
+                            'Monatliches Taschengeld',
+
+                        support:
+                            'Betreuung während des Programms',
+
+                        familyChange:
+                            'Wechsel der Gastfamilie, falls erforderlich',
+
+                        languageCourse:
+                            'Möglichkeit, einen Sprachkurs zu besuchen und die Sprachkenntnisse zertifizieren zu lassen',
+
+                        support247:
+                            'Betreuung 24 Stunden am Tag, 7 Tage die Woche'
+
+                    },
+
+
+                    // =================================
+                    // NICHT ENTHALTEN
+                    // =================================
+
+                    notIncluded: {
+
+                        title:
+                            'Nicht enthalten',
+
+                        airfare:
+                            'Flugtickets',
+
+                        consular:
+                            'Konsularische Antragstellung',
+
+                        documents:
+                            'Übersetzungen und Apostillen von Dokumenten'
+
+                    },
+
+
+                    // =================================
+                    // REISEZIELE
+                    // =================================
+
+                    destinations: {
+
+                        title:
+                            'Länder des Austauschprogramms'
+
+                    },
+
+
+                    countries: {
+
+                        germany:
+                            'Deutschland',
+
+                        belgium:
+                            'Belgien',
+
+                        unitedStates:
+                            'Vereinigte Staaten',
+
+                        france:
+                            'Frankreich',
+
+                        netherlands:
+                            'Niederlande',
+
+                        austria:
+                            'Österreich',
+
+                        switzerland:
+                            'Schweiz',
+
+                        china:
+                            'China',
+
+                        australia:
+                            'Australien',
+
+                        liechtenstein:
+                            'Liechtenstein',
+
+                        norway:
+                            'Norwegen'
+
+                    },
+
+
+                    // =================================
+                    // KARUSSELL
+                    // =================================
+
+                    carousel: {
+
+                        previous:
+                            'Vorherige Flaggen anzeigen',
+
+                        next:
+                            'Nächste Flaggen anzeigen',
+
+                        navigation:
+                            'Karussellnavigation'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // SOMMERCAMPS
+            // ========================================
+
+            summerCamps: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Sommercamps',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Sommercamps'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // EINLEITUNG
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'Internationale Sommercamps',
+
+                    description:
+                        'Sie bieten dir die Möglichkeit, aktive und bereichernde Ferien zu verbringen und dabei eine dynamische, gesunde und unterhaltsame Erfahrung mit dem Erlernen von Fremdsprachen zu verbinden.',
+
+
+                    gallery: {
+
+                        cabinsAlt:
+                            'Hütten in einem internationalen Camp',
+
+                        studentsAlt:
+                            'Junge Menschen bei der Teilnahme an einem Sommercamp',
+
+                        facilitiesAlt:
+                            'Einrichtungen für Teilnehmende der Sommercamps'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // ÜBERSICHT MIT TABS
+                // ====================================
+
+                overview: {
+
+                    navigationAriaLabel:
+                        'Informationen zu Sommercamps',
+
+
+                    labels: {
+
+                        destinations:
+                            'Reiseziele',
+
+                        requirements:
+                            'Voraussetzungen',
+
+                        services:
+                            'Leistungen',
+
+                        benefits:
+                            'Vorteile'
+
+                    },
+
+
+                    // =================================
+                    // REISEZIELE
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'Internationale Schülerinnen und Schüler in einem Sommercamp',
+
+                        eyebrow:
+                            'Internationale Sommercamps',
+
+                        title:
+                            'Lerne eine Sprache und genieße gleichzeitig deine Ferien',
+
+                        description:
+                            'Nimm an internationalen Camps teil, die das Erlernen von Sprachen mit neuen kulturellen und abwechslungsreichen Freizeitaktivitäten verbinden.',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'Vereinigte Staaten',
+
+                            canada:
+                                'Kanada',
+
+                            england:
+                                'England',
+
+                            germany:
+                                'Deutschland',
+
+                            france:
+                                'Frankreich',
+
+                            italy:
+                                'Italien',
+
+                            netherlands:
+                                'Niederlande',
+
+                            austria:
+                                'Österreich'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange begleitet dich bei der Organisation deiner internationalen Erfahrung.',
+
+                        button:
+                            'Mehr erfahren'
+
+                    },
+
+
+                    // =================================
+                    // VORAUSSETZUNGEN
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Voraussetzungen für die Teilnahme an Sommercamps',
+
+                        eyebrow:
+                            'Voraussetzungen',
+
+                        title:
+                            'Bereite dich auf eine unvergessliche Erfahrung vor',
+
+                        description:
+                            'Die Voraussetzungen können je nach Land, Alter der teilnehmenden Person und Dauer des Camps unterschiedlich sein.',
+
+                        feature:
+                            'Du erhältst Unterstützung bei der Vorbereitung der notwendigen Dokumente vor deiner Reise.',
+
+                        button:
+                            'Informationen anfordern'
+
+                    },
+
+
+                    // =================================
+                    // LEISTUNGEN
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Leistungen der Sommercamps',
+
+                        eyebrow:
+                            'Leistungen',
+
+                        title:
+                            'Aktivitäten, Lernen und Betreuung',
+
+
+                        features: {
+
+                            languageClasses:
+                                'Sprachunterricht',
+
+                            accommodation:
+                                'Unterkunft',
+
+                            sports:
+                                'Sportliche Aktivitäten',
+
+                            culturalExchange:
+                                'Kultureller Austausch'
+
+                        },
+
+
+                        button:
+                            'Programm kennenlernen'
+
+                    },
+
+
+                    // =================================
+                    // VORTEILE
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Vorteile der Teilnahme an Sommercamps',
+
+                        eyebrow:
+                            'Vorteile',
+
+                        title:
+                            'Lerne, teile Erfahrungen und werde selbstständiger',
+
+
+                        features: {
+
+                            independence:
+                                'Mehr Selbstständigkeit',
+
+                            language:
+                                'Verbesserung der Sprachkenntnisse',
+
+                            friendships:
+                                'Neue Freundschaften',
+
+                            culturalExperience:
+                                'Kulturelle Erfahrung'
 
                         },
 

@@ -1,6 +1,21 @@
 <!--
 ====================================================
 COMPONENTE: SUMMER CAMPS OVERVIEW
+
+Página:
+Summer Camps
+
+Reutiliza:
+- foreign-courses-tabs
+- foreign-course-panel
+- foreign-courses-tabs.js
+
+Contenido:
+- Destinos
+- Requisitos
+- Servicios
+- Beneficios
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -12,7 +27,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
             Global Exchange
         </p>
 
-        <div class="foreign-courses-tabs__navigation" role="tablist" aria-label="Información de Summer Camps">
+
+        <!-- ==========================================
+             PESTAÑAS
+        ========================================== -->
+
+        <div class="foreign-courses-tabs__navigation" role="tablist" aria-label="Información de Summer Camps"
+            data-i18n-aria-label="internationalProgramsPage.summerCamps.overview.navigationAriaLabel">
+
+            <!-- ======================================
+                 DESTINOS
+            ======================================= -->
 
             <button class="foreign-courses-tabs__button is-active" id="summer-tab-destinations" type="button" role="tab"
                 aria-selected="true" aria-controls="summer-panel-destinations" data-foreign-tab="summer-destinations">
@@ -20,11 +45,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_29_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.summerCamps.overview.labels.destinations">
                     Destinos
                 </span>
 
             </button>
+
+
+            <!-- ======================================
+                 REQUISITOS
+            ======================================= -->
 
             <button class="foreign-courses-tabs__button" id="summer-tab-requirements" type="button" role="tab"
                 aria-selected="false" aria-controls="summer-panel-requirements" data-foreign-tab="summer-requirements"
@@ -33,11 +64,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_30_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.summerCamps.overview.labels.requirements">
                     Requisitos
                 </span>
 
             </button>
+
+
+            <!-- ======================================
+                 SERVICIOS
+            ======================================= -->
 
             <button class="foreign-courses-tabs__button" id="summer-tab-services" type="button" role="tab"
                 aria-selected="false" aria-controls="summer-panel-services" data-foreign-tab="summer-services"
@@ -46,11 +83,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_32_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.summerCamps.overview.labels.services">
                     Servicios
                 </span>
 
             </button>
+
+
+            <!-- ======================================
+                 BENEFICIOS
+            ======================================= -->
 
             <button class="foreign-courses-tabs__button" id="summer-tab-benefits" type="button" role="tab"
                 aria-selected="false" aria-controls="summer-panel-benefits" data-foreign-tab="summer-benefits"
@@ -59,7 +102,8 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_31_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.summerCamps.overview.labels.benefits">
                     Beneficios
                 </span>
 
@@ -67,7 +111,16 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
         </div>
 
+
+        <!-- ==========================================
+             PANELES
+        ========================================== -->
+
         <div class="foreign-courses-tabs__panels">
+
+            <!-- ======================================
+                 DESTINOS
+            ======================================= -->
 
             <div class="foreign-courses-tabs__panel is-active" id="summer-panel-destinations" role="tabpanel"
                 aria-labelledby="summer-tab-destinations" data-foreign-panel="summer-destinations">
@@ -78,36 +131,78 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/summer-camps/summer-camp-destinations.jpg"
-                            alt="Estudiantes internacionales en un campamento de verano" loading="lazy">
+                            alt="Estudiantes internacionales en un campamento de verano"
+                            data-i18n-alt="internationalProgramsPage.summerCamps.overview.destinations.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.destinations.eyebrow">
                             Summer Camps internacionales
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.destinations.title">
                             Aprende un idioma mientras disfrutas tus vacaciones
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.destinations.description">
                             Participa en campamentos internacionales diseñados
                             para combinar el aprendizaje de idiomas con nuevas
                             experiencias culturales y recreativas.
                         </p>
 
+
                         <ul class="foreign-course-panel__country-list">
-                            <li>Estados Unidos</li>
-                            <li>Canadá</li>
-                            <li>Inglaterra</li>
-                            <li>Alemania</li>
-                            <li>Francia</li>
-                            <li>Italia</li>
-                            <li>Holanda</li>
-                            <li>Austria</li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.unitedStates">
+                                Estados Unidos
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.canada">
+                                Canadá
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.england">
+                                Inglaterra
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.germany">
+                                Alemania
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.france">
+                                Francia
+                            </li>
+
+                            <li data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.italy">
+                                Italia
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.netherlands">
+                                Holanda
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.summerCamps.overview.destinations.countries.austria">
+                                Austria
+                            </li>
+
                         </ul>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -115,17 +210,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/airplane-1.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.summerCamps.overview.destinations.feature">
                                 Global Exchange te acompaña en la organización
                                 de tu experiencia internacional.
                             </p>
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.destinations.button">
                             Leer más
-
                         </a>
 
                     </div>
@@ -133,6 +228,11 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 </article>
 
             </div>
+
+
+            <!-- ======================================
+                 REQUISITOS
+            ======================================= -->
 
             <div class="foreign-courses-tabs__panel" id="summer-panel-requirements" role="tabpanel"
                 aria-labelledby="summer-tab-requirements" data-foreign-panel="summer-requirements" hidden>
@@ -143,25 +243,34 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/Requisitos-para-estudiar-en-Esapana-1080x675-1.jpg"
-                            alt="Requisitos para participar en Summer Camps" loading="lazy">
+                            alt="Requisitos para participar en Summer Camps"
+                            data-i18n-alt="internationalProgramsPage.summerCamps.overview.requirements.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.requirements.eyebrow">
                             Requisitos
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.requirements.title">
                             Prepárate para una experiencia inolvidable
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.requirements.description">
                             Los requisitos pueden variar según el país,
                             la edad del participante y la duración del
                             campamento.
                         </p>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -169,17 +278,17 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/reading.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.summerCamps.overview.requirements.feature">
                                 Contarás con orientación para preparar los
                                 documentos necesarios antes del viaje.
                             </p>
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.requirements.button">
                             Solicitar información
-
                         </a>
 
                     </div>
@@ -187,6 +296,11 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 </article>
 
             </div>
+
+
+            <!-- ======================================
+                 SERVICIOS
+            ======================================= -->
 
             <div class="foreign-courses-tabs__panel" id="summer-panel-services" role="tabpanel"
                 aria-labelledby="summer-tab-services" data-foreign-panel="summer-services" hidden>
@@ -197,19 +311,26 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/clases-local.jpg"
-                            alt="Servicios incluidos en Summer Camps" loading="lazy">
+                            alt="Servicios incluidos en Summer Camps"
+                            data-i18n-alt="internationalProgramsPage.summerCamps.overview.services.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.services.eyebrow">
                             Servicios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.services.title">
                             Actividades, aprendizaje y acompañamiento
                         </h2>
+
 
                         <div class="foreign-course-panel__features-grid">
 
@@ -218,40 +339,47 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/read.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.services.features.languageClasses">
                                     Clases de idiomas
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/house-1.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.services.features.accommodation">
                                     Alojamiento
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/sport.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.services.features.sports">
                                     Actividades deportivas
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/world.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.services.features.culturalExchange">
                                     Intercambio cultural
                                 </span>
 
@@ -259,10 +387,10 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.services.button">
                             Conocer el programa
-
                         </a>
 
                     </div>
@@ -270,6 +398,11 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                 </article>
 
             </div>
+
+
+            <!-- ======================================
+                 BENEFICIOS
+            ======================================= -->
 
             <div class="foreign-courses-tabs__panel" id="summer-panel-benefits" role="tabpanel"
                 aria-labelledby="summer-tab-benefits" data-foreign-panel="summer-benefits" hidden>
@@ -280,19 +413,26 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/escuelasde-ingles-en-veracruz.jpg"
-                            alt="Beneficios de participar en Summer Camps" loading="lazy">
+                            alt="Beneficios de participar en Summer Camps"
+                            data-i18n-alt="internationalProgramsPage.summerCamps.overview.benefits.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.benefits.eyebrow">
                             Beneficios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.benefits.title">
                             Aprende, comparte y desarrolla tu independencia
                         </h2>
+
 
                         <div class="foreign-course-panel__features-grid">
 
@@ -301,40 +441,47 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/businessman.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.benefits.features.independence">
                                     Mayor autonomía
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idioma.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.benefits.features.language">
                                     Mejora del idioma
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idiomas.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.benefits.features.friendships">
                                     Nuevas amistades
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/world.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.summerCamps.overview.benefits.features.culturalExperience">
                                     Experiencia cultural
                                 </span>
 
@@ -342,10 +489,10 @@ COMPONENTE: SUMMER CAMPS OVERVIEW
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.summerCamps.overview.benefits.button">
                             Empezar mi experiencia
-
                         </a>
 
                     </div>

@@ -4,6 +4,17 @@ COMPONENTE: NANNY PROGRAM CONTENT
 
 Página:
 Programa Nanny
+
+Contenido:
+- Introducción
+- Galería
+- Países y edades
+- Información del programa
+- Incluye
+- No incluye
+- Destinos
+- Carrusel de banderas
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -17,40 +28,59 @@ Programa Nanny
 
         <header class="nanny-program-content__header">
 
-            <h2 class="nanny-program-content__main-title">
+            <h2 class="nanny-program-content__main-title"
+                data-i18n="internationalProgramsPage.nanny.content.intro.title">
                 Programa de intercambio
             </h2>
 
+
             <div class="nanny-program-content__intro">
 
-                <div class="nanny-program-content__intro-gallery" aria-label="Experiencias del programa Nanny">
+                <!-- ==================================
+                     GALERÍA INTRODUCTORIA
+                =================================== -->
+
+                <div class="nanny-program-content__intro-gallery" aria-label="Experiencias del programa Nanny"
+                    data-i18n-aria-label="internationalProgramsPage.nanny.content.intro.gallery.ariaLabel">
 
                     <img src="/images/pages/programa-nanny/nanny-intro-1.jpg"
-                        alt="Niños participando en actividades educativas" loading="lazy">
+                        alt="Niños participando en actividades educativas"
+                        data-i18n-alt="internationalProgramsPage.nanny.content.intro.gallery.educationalActivitiesAlt"
+                        loading="lazy">
 
                     <img src="/images/pages/programa-nanny/nanny-intro-2.jpg" alt="Acompañamiento y cuidado infantil"
+                        data-i18n-alt="internationalProgramsPage.nanny.content.intro.gallery.childcareAlt"
                         loading="lazy">
 
                     <img src="/images/pages/programa-nanny/nanny-intro-3.jpg" alt="Niña aprendiendo a leer"
-                        loading="lazy">
+                        data-i18n-alt="internationalProgramsPage.nanny.content.intro.gallery.readingAlt" loading="lazy">
 
                     <img src="/images/pages/programa-nanny/nanny-intro-4.jpg" alt="Proceso de aprendizaje infantil"
+                        data-i18n-alt="internationalProgramsPage.nanny.content.intro.gallery.learningAlt"
                         loading="lazy">
 
                 </div>
 
+
+                <!-- ==================================
+                     TEXTO INTRODUCTORIO
+                =================================== -->
+
                 <div class="nanny-program-content__intro-copy">
 
-                    <p class="nanny-program-content__quote">
+                    <p class="nanny-program-content__quote"
+                        data-i18n="internationalProgramsPage.nanny.content.intro.quote">
                         “Si te gustan los niños, este programa es para ti.”
                     </p>
 
-                    <p class="nanny-program-content__description">
+                    <p class="nanny-program-content__description"
+                        data-i18n="internationalProgramsPage.nanny.content.intro.paragraph1">
                         Realiza un intercambio cultural mientras trabajas
                         como nanny con una familia anfitriona en el exterior.
                     </p>
 
-                    <p class="nanny-program-content__description">
+                    <p class="nanny-program-content__description"
+                        data-i18n="internationalProgramsPage.nanny.content.intro.paragraph2">
                         Tendrás la oportunidad de aprender o perfeccionar
                         un idioma, desarrollar tu independencia y compartir
                         la vida cotidiana con una nueva familia.
@@ -62,40 +92,70 @@ Programa Nanny
 
         </header>
 
+
         <!-- ==========================================
              PROGRAMA PRINCIPAL
         ========================================== -->
 
         <div class="nanny-program-content__program">
 
+            <!-- ======================================
+                 PAÍSES Y EDADES
+            ======================================= -->
+
             <div class="nanny-program-content__countries-age">
 
-                <h3 class="nanny-program-content__section-title">
+                <h3 class="nanny-program-content__section-title"
+                    data-i18n="internationalProgramsPage.nanny.content.ages.title">
                     Países y edades
                 </h3>
 
                 <ul>
-                    <li>Alemania: 18 a 26 años</li>
-                    <li>Bélgica: 18 a 26 años</li>
-                    <li>Estados Unidos: 18 a 25 años</li>
-                    <li>Francia: 18 a 28 años</li>
-                    <li>Holanda: 18 a 28 años</li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.ages.germany">
+                        Alemania: 18 a 26 años
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.ages.belgium">
+                        Bélgica: 18 a 26 años
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.ages.unitedStates">
+                        Estados Unidos: 18 a 25 años
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.ages.france">
+                        Francia: 18 a 28 años
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.ages.netherlands">
+                        Holanda: 18 a 28 años
+                    </li>
+
                 </ul>
 
             </div>
 
+
+            <!-- ======================================
+                 PROGRAMA NANNY
+            ======================================= -->
+
             <div class="nanny-program-content__program-card">
 
-                <h2 class="nanny-program-content__program-title">
+                <h2 class="nanny-program-content__program-title"
+                    data-i18n="internationalProgramsPage.nanny.content.program.title">
                     Programa Nanny
                 </h2>
 
                 <img class="nanny-program-content__program-image" src="/images/pages/programa-nanny/nanny-program.jpeg"
-                    alt="Participante del programa Nanny con una familia anfitriona" loading="lazy">
+                    alt="Participante del programa Nanny con una familia anfitriona"
+                    data-i18n-alt="internationalProgramsPage.nanny.content.program.imageAlt" loading="lazy">
 
             </div>
 
         </div>
+
 
         <!-- ==========================================
              INCLUYE / NO INCLUYE
@@ -103,48 +163,90 @@ Programa Nanny
 
         <div class="nanny-program-content__conditions">
 
+            <!-- ======================================
+                 INCLUYE
+            ======================================= -->
+
             <section class="nanny-program-content__condition">
 
-                <h2>
+                <h2 data-i18n="internationalProgramsPage.nanny.content.includes.title">
                     Incluye
                 </h2>
 
                 <ul>
-                    <li>Alimentación</li>
-                    <li>Alojamiento</li>
-                    <li>Seguro médico</li>
-                    <li>Transportación</li>
-                    <li>Propina mensual</li>
-                    <li>Apoyo durante el programa</li>
-                    <li>Cambio de familia, si se requiere</li>
 
-                    <li>
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.meals">
+                        Alimentación
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.accommodation">
+                        Alojamiento
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.medicalInsurance">
+                        Seguro médico
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.transportation">
+                        Transportación
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.monthlyAllowance">
+                        Propina mensual
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.support">
+                        Apoyo durante el programa
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.familyChange">
+                        Cambio de familia, si se requiere
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.languageCourse">
                         Oportunidad de realizar un curso de idioma
                         y certificar la suficiencia lingüística
                     </li>
 
-                    <li>
+                    <li data-i18n="internationalProgramsPage.nanny.content.includes.support247">
                         Soporte las 24 horas, los 7 días de la semana
                     </li>
+
                 </ul>
 
             </section>
 
+
+            <!-- ======================================
+                 NO INCLUYE
+            ======================================= -->
+
             <section class="nanny-program-content__condition">
 
-                <h2>
+                <h2 data-i18n="internationalProgramsPage.nanny.content.notIncluded.title">
                     No incluye
                 </h2>
 
                 <ul>
-                    <li>Pasajes aéreos</li>
-                    <li>Presentación consular</li>
-                    <li>Traducciones y apostillado de documentos</li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.notIncluded.airfare">
+                        Pasajes aéreos
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.notIncluded.consular">
+                        Presentación consular
+                    </li>
+
+                    <li data-i18n="internationalProgramsPage.nanny.content.notIncluded.documents">
+                        Traducciones y apostillado de documentos
+                    </li>
+
                 </ul>
 
             </section>
 
         </div>
+
 
         <!-- ==========================================
              PAÍSES
@@ -154,95 +256,168 @@ Programa Nanny
 
             <div class="nanny-program-content__destinations-header">
 
-                <h2>
+                <h2 data-i18n="internationalProgramsPage.nanny.content.destinations.title">
                     Países del programa de intercambio
                 </h2>
+
 
                 <div class="nanny-program-content__destinations-list">
 
                     <ul>
-                        <li>Alemania</li>
-                        <li>Bélgica</li>
-                        <li>Estados Unidos</li>
-                        <li>Francia</li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.germany">
+                            Alemania
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.belgium">
+                            Bélgica
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.unitedStates">
+                            Estados Unidos
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.france">
+                            Francia
+                        </li>
+
                     </ul>
 
-                    <ul>
-                        <li>Holanda</li>
-                        <li>Austria</li>
-                        <li>Suiza</li>
-                        <li>China</li>
-                    </ul>
 
                     <ul>
-                        <li>Australia</li>
-                        <li>Liechtenstein</li>
-                        <li>Noruega</li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.netherlands">
+                            Holanda
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.austria">
+                            Austria
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.switzerland">
+                            Suiza
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.china">
+                            China
+                        </li>
+
+                    </ul>
+
+
+                    <ul>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.australia">
+                            Australia
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.liechtenstein">
+                            Liechtenstein
+                        </li>
+
+                        <li data-i18n="internationalProgramsPage.nanny.content.countries.norway">
+                            Noruega
+                        </li>
+
                     </ul>
 
                 </div>
 
             </div>
 
+
+            <!-- ======================================
+                 CARRUSEL DE BANDERAS
+            ======================================= -->
+
             <div class="foreign-flags-carousel nanny-program-content__carousel" data-flags-carousel
                 data-desktop-visible="3" data-tablet-visible="2" data-mobile-visible="1">
 
-                <button class="foreign-flags-carousel__button
-                           foreign-flags-carousel__button--previous" type="button"
-                    aria-label="Mostrar banderas anteriores" data-flags-previous>
+                <button class="foreign-flags-carousel__button foreign-flags-carousel__button--previous" type="button"
+                    aria-label="Mostrar banderas anteriores"
+                    data-i18n-aria-label="internationalProgramsPage.nanny.content.carousel.previous"
+                    data-flags-previous>
                     ‹
                 </button>
+
 
                 <div class="foreign-flags-carousel__viewport">
 
                     <div class="foreign-flags-carousel__track" data-flags-track>
 
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/holanda.png" alt="Holanda"
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.netherlands"
                                 loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/noruega.png" alt="Noruega"
-                                loading="lazy">
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.norway" loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/1.jpg" alt="Alemania"
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.germany"
                                 loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/Francia.gif" alt="Francia"
-                                loading="lazy">
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.france" loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/china.png" alt="China"
-                                loading="lazy">
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.china" loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/Austria.png" alt="Austria"
+                                data-i18n-alt="internationalProgramsPage.nanny.content.countries.austria"
                                 loading="lazy">
+
                         </figure>
 
+
                         <figure class="foreign-flags-carousel__slide">
+
                             <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/bandera-de-belgica.png"
-                                alt="Bélgica" loading="lazy">
+                                alt="Bélgica" data-i18n-alt="internationalProgramsPage.nanny.content.countries.belgium"
+                                loading="lazy">
+
                         </figure>
 
                     </div>
 
                 </div>
 
-                <button class="foreign-flags-carousel__button
-                           foreign-flags-carousel__button--next" type="button" aria-label="Mostrar siguientes banderas"
-                    data-flags-next>
+
+                <button class="foreign-flags-carousel__button foreign-flags-carousel__button--next" type="button"
+                    aria-label="Mostrar siguientes banderas"
+                    data-i18n-aria-label="internationalProgramsPage.nanny.content.carousel.next" data-flags-next>
                     ›
                 </button>
 
-                <div class="foreign-flags-carousel__dots" data-flags-dots aria-label="Navegación del carrusel">
+
+                <div class="foreign-flags-carousel__dots" data-flags-dots aria-label="Navegación del carrusel"
+                    data-i18n-aria-label="internationalProgramsPage.nanny.content.carousel.navigation">
                 </div>
 
             </div>

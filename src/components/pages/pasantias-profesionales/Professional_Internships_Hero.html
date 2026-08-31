@@ -13,6 +13,7 @@ Responsabilidades:
   estructura, layout, breadcrumb, responsive y accesibilidad.
 - professional-internships.css:
   imagen, overlay y ajustes visuales propios de esta página.
+- Internacionalización mediante i18next.
 ====================================================
 -->
 
@@ -21,22 +22,28 @@ Responsabilidades:
     <div class="page-hero__overlay professional-internships-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container professional-internships-hero__container">
 
-        <h1 class="page-hero__title professional-internships-hero__title">
+        <h1 class="page-hero__title professional-internships-hero__title"
+            data-i18n="internationalProgramsPage.internships.hero.title">
             Pasantías profesionales en el exterior
         </h1>
 
-        <nav class="page-hero__breadcrumb professional-internships-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb professional-internships-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="internationalProgramsPage.internships.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="internationalProgramsPage.internships.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator professional-internships-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="internationalProgramsPage.internships.hero.breadcrumb.current">
                 Pasantías profesionales en el exterior
             </span>
 

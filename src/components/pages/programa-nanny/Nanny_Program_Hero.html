@@ -2,16 +2,17 @@
 ====================================================
 COMPONENTE: NANNY PROGRAM HERO
 
-Componente base:
-page-hero
-
 Página:
 Programa Nanny
+
+Componente base:
+page-hero
 
 Variaciones:
 - Imagen de fondo propia de la página
 - Overlay oscuro
 - Ancho y tamaño específicos del título
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -22,20 +23,21 @@ Variaciones:
 
     <div class="page-hero__container nanny-program-hero__container">
 
-        <h1 class="page-hero__title nanny-program-hero__title">
+        <h1 class="page-hero__title nanny-program-hero__title" data-i18n="internationalProgramsPage.nanny.hero.title">
             Programa Nanny Intercambios Alemania – USA – Holanda
         </h1>
 
-        <nav class="page-hero__breadcrumb nanny-program-hero__breadcrumb" aria-label="Migas de pan">
+        <nav class="page-hero__breadcrumb nanny-program-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="internationalProgramsPage.nanny.hero.breadcrumb.ariaLabel">
 
-            <a href="/">
+            <a href="/" data-i18n="internationalProgramsPage.nanny.hero.breadcrumb.home">
                 Inicio
             </a>
 
             <span class="page-hero__separator nanny-program-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+            <span aria-current="page" data-i18n="internationalProgramsPage.nanny.hero.breadcrumb.current">
                 Programa Nanny
             </span>
 

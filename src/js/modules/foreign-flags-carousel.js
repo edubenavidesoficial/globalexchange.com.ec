@@ -5,7 +5,7 @@
 // src/js/modules/foreign-flags-carousel.js
 //
 // Descripción:
-// Carruseles de banderas del programa idiomático.
+// Carrusel reutilizable de banderas.
 //
 // Responsabilidades:
 // - Gestionar navegación anterior y siguiente.
@@ -14,6 +14,11 @@
 // - Adaptar cantidad de elementos visibles.
 // - Respetar prefers-reduced-motion.
 // - Internacionalizar etiquetas accesibles dinámicas.
+//
+// Reutilizado por:
+// - Cursos de idiomas en el extranjero.
+// - Programa Nanny.
+// - Otros programas que utilicen data-flags-carousel.
 // ====================================================
 
 
@@ -21,7 +26,7 @@
 // INTERNACIONALIZACIÓN
 // ====================================================
 
-import i18next from 'i18next';
+import i18next from '../../languages/i18n.js';
 
 
 // ====================================================
@@ -207,7 +212,7 @@ function createFlagsCarousel(carousel) {
     function getDotAriaLabel(position) {
 
         return i18next.t(
-            'internationalProgramsPage.languageCoursesAbroad.program.carousel.position',
+            'common.carousel.position',
             {
                 position
             }

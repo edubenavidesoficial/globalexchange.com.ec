@@ -1,6 +1,15 @@
 <!--
 ====================================================
 COMPONENTE: SUMMER CAMPS INTRO
+
+Página:
+Summer Camps
+
+Contenido:
+- Introducción
+- Descripción
+- Galería
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -8,13 +17,19 @@ COMPONENTE: SUMMER CAMPS INTRO
 
     <div class="page-container summer-camps-intro__container">
 
+        <!-- ==========================================
+             ENCABEZADO
+        ========================================== -->
+
         <header class="summer-camps-intro__header">
 
-            <h2 class="summer-camps-intro__title">
+            <h2 class="summer-camps-intro__title" data-i18n="internationalProgramsPage.summerCamps.intro.title">
                 Campamentos internacionales de verano
             </h2>
 
-            <p class="summer-camps-intro__description">
+
+            <p class="summer-camps-intro__description"
+                data-i18n="internationalProgramsPage.summerCamps.intro.description">
                 Te brindan la oportunidad de pasar unas vacaciones
                 inteligentes y activas que constituirán una alternativa
                 dinámica, sana y divertida junto al aprendizaje de
@@ -23,26 +38,35 @@ COMPONENTE: SUMMER CAMPS INTRO
 
         </header>
 
+
+        <!-- ==========================================
+             GALERÍA
+        ========================================== -->
+
         <div class="summer-camps-intro__gallery">
 
             <figure class="summer-camps-intro__item">
 
                 <img src="/images/pages/summer-camps/summer-camp-1.jpg" alt="Cabañas de un campamento internacional"
-                    loading="lazy">
+                    data-i18n-alt="internationalProgramsPage.summerCamps.intro.gallery.cabinsAlt" loading="lazy">
 
             </figure>
+
 
             <figure class="summer-camps-intro__item">
 
                 <img src="/images/pages/summer-camps/summer-camp-2.jpg"
-                    alt="Jóvenes participando en un campamento de verano" loading="lazy">
+                    alt="Jóvenes participando en un campamento de verano"
+                    data-i18n-alt="internationalProgramsPage.summerCamps.intro.gallery.studentsAlt" loading="lazy">
 
             </figure>
+
 
             <figure class="summer-camps-intro__item">
 
                 <img src="/images/pages/summer-camps/summer-camp-3.jpg"
-                    alt="Instalaciones para participantes de Summer Camps" loading="lazy">
+                    alt="Instalaciones para participantes de Summer Camps"
+                    data-i18n-alt="internationalProgramsPage.summerCamps.intro.gallery.facilitiesAlt" loading="lazy">
 
             </figure>
 

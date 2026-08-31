@@ -2,11 +2,17 @@
 ====================================================
 COMPONENTE: SCHOOL PROGRAM HERO
 
+Página:
+Programa de escolaridad
+
 Componente base:
 page-hero
 
 Variación:
 school-program-hero
+
+Internacionalización:
+i18next
 ====================================================
 -->
 
@@ -17,20 +23,22 @@ school-program-hero
 
     <div class="page-hero__container school-program-hero__container">
 
-        <h1 class="page-hero__title school-program-hero__title">
+        <h1 class="page-hero__title school-program-hero__title"
+            data-i18n="internationalProgramsPage.schoolProgram.hero.title">
             Programa de escolaridad
         </h1>
 
-        <nav class="page-hero__breadcrumb school-program-hero__breadcrumb" aria-label="Migas de pan">
+        <nav class="page-hero__breadcrumb school-program-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="internationalProgramsPage.schoolProgram.hero.breadcrumb.ariaLabel">
 
-            <a href="/">
+            <a href="/" data-i18n="internationalProgramsPage.schoolProgram.hero.breadcrumb.home">
                 Inicio
             </a>
 
             <span class="page-hero__separator school-program-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+            <span aria-current="page" data-i18n="internationalProgramsPage.schoolProgram.hero.breadcrumb.current">
                 Programa de escolaridad
             </span>
 

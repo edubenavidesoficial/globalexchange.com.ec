@@ -2,10 +2,20 @@
 ====================================================
 COMPONENTE: PROFESSIONAL INTERNSHIPS OVERVIEW
 
+Página:
+Pasantías profesionales en el exterior
+
 Reutiliza:
 - foreign-courses-tabs
 - foreign-course-panel
 - foreign-courses-tabs.js
+
+Contenido:
+- Destinos
+- Requisitos
+- Servicios
+- Beneficios
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -17,12 +27,16 @@ Reutiliza:
             Global Exchange
         </p>
 
+
         <!-- ==========================================
              PESTAÑAS
         ========================================== -->
 
         <div class="foreign-courses-tabs__navigation" role="tablist"
-            aria-label="Información sobre pasantías profesionales">
+            aria-label="Información sobre pasantías profesionales"
+            data-i18n-aria-label="internationalProgramsPage.internships.overview.navigationAriaLabel">
+
+            <!-- DESTINOS -->
 
             <button class="foreign-courses-tabs__button is-active" id="internship-tab-destinations" type="button"
                 role="tab" aria-selected="true" aria-controls="internship-panel-destinations"
@@ -31,11 +45,15 @@ Reutiliza:
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_29_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.internships.overview.labels.destinations">
                     Destinos
                 </span>
 
             </button>
+
+
+            <!-- REQUISITOS -->
 
             <button class="foreign-courses-tabs__button" id="internship-tab-requirements" type="button" role="tab"
                 aria-selected="false" aria-controls="internship-panel-requirements"
@@ -44,11 +62,15 @@ Reutiliza:
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_30_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.internships.overview.labels.requirements">
                     Requisitos
                 </span>
 
             </button>
+
+
+            <!-- SERVICIOS -->
 
             <button class="foreign-courses-tabs__button" id="internship-tab-services" type="button" role="tab"
                 aria-selected="false" aria-controls="internship-panel-services" data-foreign-tab="internship-services"
@@ -57,11 +79,15 @@ Reutiliza:
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_32_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.internships.overview.labels.services">
                     Servicios
                 </span>
 
             </button>
+
+
+            <!-- BENEFICIOS -->
 
             <button class="foreign-courses-tabs__button" id="internship-tab-benefits" type="button" role="tab"
                 aria-selected="false" aria-controls="internship-panel-benefits" data-foreign-tab="internship-benefits"
@@ -70,13 +96,15 @@ Reutiliza:
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_31_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.internships.overview.labels.benefits">
                     Beneficios
                 </span>
 
             </button>
 
         </div>
+
 
         <!-- ==========================================
              PANELES
@@ -97,34 +125,80 @@ Reutiliza:
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/shutterstock_144112840.jpg"
-                            alt="Viaje internacional para realizar pasantías profesionales" loading="lazy">
+                            alt="Viaje internacional para realizar pasantías profesionales"
+                            data-i18n-alt="internationalProgramsPage.internships.overview.destinations.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.internships.overview.destinations.eyebrow">
                             Pasantías internacionales
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.internships.overview.destinations.title">
                             Aprendo un nuevo idioma con Global Exchange
                         </h2>
 
+
                         <ul class="foreign-course-panel__country-list">
 
-                            <li>Estados Unidos</li>
-                            <li>Canadá</li>
-                            <li>Inglaterra</li>
-                            <li>Alemania</li>
-                            <li>Bélgica</li>
-                            <li>Francia</li>
-                            <li>Italia</li>
-                            <li>Holanda</li>
-                            <li>Austria</li>
-                            <li>Suiza</li>
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.unitedStates">
+                                Estados Unidos
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.canada">
+                                Canadá
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.england">
+                                Inglaterra
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.germany">
+                                Alemania
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.belgium">
+                                Bélgica
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.france">
+                                Francia
+                            </li>
+
+                            <li data-i18n="internationalProgramsPage.internships.overview.destinations.countries.italy">
+                                Italia
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.netherlands">
+                                Holanda
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.austria">
+                                Austria
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.internships.overview.destinations.countries.switzerland">
+                                Suiza
+                            </li>
 
                         </ul>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -132,7 +206,7 @@ Reutiliza:
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/airplane-1.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.internships.overview.destinations.feature">
                                 Global Exchange te acompaña en la
                                 preparación de tu experiencia profesional
                                 en el extranjero.
@@ -140,10 +214,10 @@ Reutiliza:
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.internships.overview.destinations.button">
                             Leer más
-
                         </a>
 
                     </div>
@@ -151,6 +225,7 @@ Reutiliza:
                 </article>
 
             </div>
+
 
             <!-- ======================================
                  REQUISITOS
@@ -165,24 +240,33 @@ Reutiliza:
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/Requisitos-para-estudiar-en-Esapana-1080x675-1.jpg"
-                            alt="Requisitos para realizar pasantías en el exterior" loading="lazy">
+                            alt="Requisitos para realizar pasantías en el exterior"
+                            data-i18n-alt="internationalProgramsPage.internships.overview.requirements.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.internships.overview.requirements.eyebrow">
                             Requisitos
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.internships.overview.requirements.title">
                             Prepárate para tu experiencia profesional
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.internships.overview.requirements.description">
                             En esta sección colocaremos los requisitos
                             exactos indicados en la página original.
                         </p>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -190,7 +274,7 @@ Reutiliza:
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/reading.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.internships.overview.requirements.feature">
                                 Documentación, formación académica,
                                 conocimiento del idioma y disponibilidad
                                 para viajar.
@@ -198,10 +282,10 @@ Reutiliza:
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.internships.overview.requirements.button">
                             Solicitar información
-
                         </a>
 
                     </div>
@@ -209,6 +293,7 @@ Reutiliza:
                 </article>
 
             </div>
+
 
             <!-- ======================================
                  SERVICIOS
@@ -223,24 +308,33 @@ Reutiliza:
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/clases-local.jpg"
-                            alt="Servicios para estudiantes internacionales" loading="lazy">
+                            alt="Servicios para estudiantes internacionales"
+                            data-i18n-alt="internationalProgramsPage.internships.overview.services.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.internships.overview.services.eyebrow">
                             Servicios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.internships.overview.services.title">
                             Acompañamiento durante todo el programa
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.internships.overview.services.description">
                             En esta sección colocaremos los servicios
                             exactos del programa original.
                         </p>
+
 
                         <div class="foreign-course-panel__features-grid">
 
@@ -249,40 +343,47 @@ Reutiliza:
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/read.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.services.features.professionalGuidance">
                                     Orientación profesional
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/house-1.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.services.features.accommodation">
                                     Apoyo con alojamiento
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/world.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.services.features.internationalAssistance">
                                     Asistencia internacional
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/businessman.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.services.features.followUp">
                                     Seguimiento del participante
                                 </span>
 
@@ -290,10 +391,10 @@ Reutiliza:
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.internships.overview.services.button">
                             Conocer los servicios
-
                         </a>
 
                     </div>
@@ -301,6 +402,7 @@ Reutiliza:
                 </article>
 
             </div>
+
 
             <!-- ======================================
                  BENEFICIOS
@@ -315,24 +417,33 @@ Reutiliza:
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/escuelasde-ingles-en-veracruz.jpg"
-                            alt="Beneficios de las pasantías profesionales" loading="lazy">
+                            alt="Beneficios de las pasantías profesionales"
+                            data-i18n-alt="internationalProgramsPage.internships.overview.benefits.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.internships.overview.benefits.eyebrow">
                             Beneficios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.internships.overview.benefits.title">
                             Impulsa tu carrera profesional
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.internships.overview.benefits.description">
                             Una experiencia internacional fortalece tus
                             conocimientos, tu confianza y tu hoja de vida.
                         </p>
+
 
                         <div class="foreign-course-panel__features-grid">
 
@@ -341,40 +452,47 @@ Reutiliza:
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/businessman.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.benefits.features.professionalExperience">
                                     Experiencia profesional
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idioma.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.benefits.features.language">
                                     Mejora del idioma
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/world.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.benefits.features.internationalExperience">
                                     Experiencia internacional
                                 </span>
 
                             </div>
+
 
                             <div class="foreign-course-panel__feature-card">
 
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idiomas.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.internships.overview.benefits.features.personalGrowth">
                                     Crecimiento personal
                                 </span>
 
@@ -382,10 +500,10 @@ Reutiliza:
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/contactoss/">
 
+                        <a class="foreign-course-panel__button" href="/contactoss/"
+                            data-i18n="internationalProgramsPage.internships.overview.benefits.button">
                             Empezar mi experiencia
-
                         </a>
 
                     </div>

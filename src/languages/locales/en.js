@@ -9,6 +9,21 @@
 export const en = {
 
     translation: {
+        // ============================================
+        // COMMON
+        // Reusable elements
+        // ============================================
+
+        common: {
+
+            carousel: {
+
+                position:
+                    'Show position {{position}}'
+
+            }
+
+        },
 
 
         // ============================================
@@ -2369,6 +2384,1227 @@ export const en = {
 
                             certificate:
                                 'You will receive a certificate demonstrating your level'
+
+                        },
+
+
+                        button:
+                            'Start my experience'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // SCHOOL PROGRAM
+            // ========================================
+
+            schoolProgram: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'School Program',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Breadcrumb',
+
+                        home:
+                            'Home',
+
+                        current:
+                            'School Program'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'Global Exchange School Programs',
+
+                    paragraph1:
+                        'The opportunity to immerse yourself in the culture and language of your destination country is in your hands. During this experience, our students will live abroad for one term or a full school year.',
+
+                    paragraph2:
+                        'Programs are available for the first, second and third years of upper secondary school abroad.',
+
+
+                    activities: {
+
+                        title:
+                            'Clubs and Activities',
+
+                        paragraph1:
+                            'Students have a wide range of opportunities when choosing extracurricular activities for the afternoons after class.',
+
+                        paragraph2:
+                            'Sports options include soccer, basketball, volleyball and swimming, among others, as well as journalism, music, theater, singing, drawing and literature clubs.',
+
+                        paragraph3:
+                            'Schools normally offer excursions and special events during holidays and celebrations such as Christmas, spring break and graduation.'
+
+                    },
+
+
+                    hostFamily: {
+
+                        title:
+                            'Changing Host Families',
+
+                        description:
+                            'Our programs give you the possibility of changing host families up to three times if necessary.'
+
+                    },
+
+
+                    support: {
+
+                        title:
+                            '24/7 Support',
+
+                        description:
+                            'Our students have a tutor who is available to support them throughout their experience.'
+
+                    },
+
+
+                    gallery: {
+
+                        studentAlt:
+                            'Global Exchange student abroad',
+
+                        hostFamilyAlt:
+                            'Student spending time with their host family'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // FEATURES
+                // ====================================
+
+                features: {
+
+                    // =================================
+                    // PUBLIC SCHOOL
+                    // =================================
+
+                    publicSchool: {
+
+                        title:
+                            'Public School Program',
+
+                        paragraph1:
+                            'Your family abroad will become your second home as you share everyday life together. A single or shared bedroom will be available for your comfort.',
+
+                        paragraph2:
+                            'Depending on the season, you may share your experience with another student from anywhere in the world. Your host family will provide accommodation, meals and support.',
+
+                        paragraph3:
+                            'You will improve your language skills in your destination country while attending prestigious public schools, with access to a support office and a responsible coordinator available 24 hours a day.'
+
+                    },
+
+
+                    // =================================
+                    // STUDENT RESIDENCE
+                    // =================================
+
+                    studentResidence: {
+
+                        title:
+                            'Student Residence Accommodation',
+
+                        paragraph1:
+                            'This type of accommodation is normally offered at private schools within their facilities, with separate areas for boys and girls.',
+
+                        paragraph2:
+                            'The residences meet quality standards and provide catered meals and 24-hour supervision for our students.',
+
+                        paragraph3:
+                            'During weekends, host families share outings, lunches and trips with students, helping provide a comfortable, enjoyable and personally enriching stay.'
+
+                    },
+
+
+                    // =================================
+                    // ADDED VALUE
+                    // =================================
+
+                    addedValue: {
+
+                        title:
+                            'Added Value of the School Program',
+
+                        paragraph1:
+                            'Students learn and develop proficiency in the language of their destination country, with the opportunity to take a language proficiency examination.',
+
+                        paragraph2:
+                            'The program provides cultural exchange, a deeper understanding of new customs, a broader perspective when choosing a professional career and opportunities to visit fascinating destinations.'
+
+                    },
+
+
+                    // =================================
+                    // ACTIVITIES
+                    // =================================
+
+                    activities: {
+
+                        title:
+                            'Extracurricular Activities',
+
+                        paragraph1:
+                            'Students have access to a wide variety of activities during the afternoons after class.',
+
+                        paragraph2:
+                            'These include soccer, basketball, volleyball, swimming, journalism, music, theater, singing, drawing and literature.',
+
+                        paragraph3:
+                            'Schools also organize excursions and special events during Christmas, spring break, graduation and other celebrations.'
+
+                    },
+
+
+                    // =================================
+                    // SCHOOLS
+                    // =================================
+
+                    schools: {
+
+                        title:
+                            'Global Exchange Schools',
+
+
+                        section1: {
+
+                            title:
+                                'Section 1',
+
+                            argentina:
+                                'Argentina: private',
+
+                            germany:
+                                'Germany: public and private',
+
+                            australia:
+                                'Australia: private',
+
+                            austria:
+                                'Austria: public',
+
+                            belgium:
+                                'Belgium: public',
+
+                            brazil:
+                                'Brazil: private',
+
+                            canada:
+                                'Canada: public and private',
+
+                            chile:
+                                'Chile: private',
+
+                            china:
+                                'China: public and private',
+
+                            northKorea:
+                                'North Korea: private',
+
+                            southKorea:
+                                'South Korea: private',
+
+                            denmark:
+                                'Denmark: public and private',
+
+                            unitedStates:
+                                'United States: public and private',
+
+                            france:
+                                'France: public and private',
+
+                            hungary:
+                                'Hungary: public',
+
+                            netherlands:
+                                'The Netherlands: public'
+
+                        },
+
+
+                        section2: {
+
+                            title:
+                                'Section 2',
+
+                            england:
+                                'England: public',
+
+                            indonesia:
+                                'Indonesia: private',
+
+                            italy:
+                                'Italy: public',
+
+                            japan:
+                                'Japan: private',
+
+                            liechtenstein:
+                                'Liechtenstein: public',
+
+                            luxembourg:
+                                'Luxembourg: public',
+
+                            malaysia:
+                                'Malaysia: public',
+
+                            malta:
+                                'Malta: private',
+
+                            mexico:
+                                'Mexico: private',
+
+                            newZealand:
+                                'New Zealand: public',
+
+                            portugal:
+                                'Portugal: public',
+
+                            czechRepublic:
+                                'Czech Republic: public',
+
+                            russia:
+                                'Russia: public',
+
+                            singapore:
+                                'Singapore: public',
+
+                            switzerland:
+                                'Switzerland: public and private'
+
+                        }
+
+                    },
+
+
+                    // =================================
+                    // HOST FAMILY
+                    // =================================
+
+                    hostFamily: {
+
+                        title:
+                            'Changing Host Families',
+
+                        paragraph1:
+                            'Our programs give you the possibility of changing host families up to three times if necessary.',
+
+                        paragraph2:
+                            'You will also have 24/7 support and a tutor who remains attentive to our students throughout their experience.'
+
+                    },
+
+
+                    partnersAlt:
+                        'Certifications and partner organizations'
+
+                }
+
+            },
+
+
+            // ========================================
+            // PROFESSIONAL INTERNSHIPS ABROAD
+            // ========================================
+
+            internships: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Professional Internships Abroad',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Breadcrumb',
+
+                        home:
+                            'Home',
+
+                        current:
+                            'Professional Internships Abroad'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // DETAILS
+                // ====================================
+
+                details: {
+
+                    // =================================
+                    // PAID INTERNSHIPS
+                    // =================================
+
+                    paid: {
+
+                        imageAlt:
+                            'International work and training experience',
+
+                        eyebrow:
+                            'International Experience',
+
+                        title:
+                            'Paid Internships Abroad',
+
+
+                        languages: {
+
+                            title:
+                                'Programs in:',
+
+                            german:
+                                'German',
+
+                            french:
+                                'French',
+
+                            italian:
+                                'Italian',
+
+                            english:
+                                'English'
+
+                        },
+
+
+                        options: {
+
+                            title:
+                                'Our online language school offers:',
+
+                            abroad:
+                                'Opportunities abroad',
+
+                            internships:
+                                'Professional internships',
+
+                            jobs:
+                                'Job opportunities',
+
+                            masters:
+                                'Tuition-free master’s programs'
+
+                        },
+
+
+                        duration: {
+
+                            label:
+                                'Duration',
+
+                            value:
+                                '4, 8 or 12 weeks · From 1 to 3 years'
+
+                        },
+
+
+                        button:
+                            'Get in touch'
+
+                    },
+
+
+                    // =================================
+                    // PROFESSIONAL SKILLS
+                    // =================================
+
+                    skills: {
+
+                        imageAlt:
+                            'Young people gaining professional experience',
+
+                        eyebrow:
+                            'Professional Development',
+
+                        title:
+                            'Put your professional skills to the test and show what you can do',
+
+                        paragraph1:
+                            'Develop your language abilities and professional skills in a real working environment.',
+
+                        paragraph2:
+                            'This program is ideal for students and young professionals who want to strengthen their experience and put their knowledge into practice.',
+
+
+                        includes: {
+
+                            title:
+                                'Includes',
+
+                            accommodation:
+                                'Accommodation'
+
+                        },
+
+
+                        requirements: {
+
+                            title:
+                                'Requirements',
+
+                            highSchool:
+                                'Completed high school education',
+
+                            language:
+                                'B2 language level',
+
+                            workExperience:
+                                'Work experience',
+
+                            sectorExperience:
+                                'Previous experience in the relevant field, depending on the position',
+
+                            certificate:
+                                'Internship employment certificate'
+
+                        },
+
+
+                        notice:
+                            'Registration must be completed at least six months before the planned travel date.',
+
+                        button:
+                            'Get in touch'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // TABBED OVERVIEW
+                // ====================================
+
+                overview: {
+
+                    navigationAriaLabel:
+                        'Information about professional internships',
+
+
+                    labels: {
+
+                        destinations:
+                            'Destinations',
+
+                        requirements:
+                            'Requirements',
+
+                        services:
+                            'Services',
+
+                        benefits:
+                            'Benefits'
+
+                    },
+
+
+                    // =================================
+                    // DESTINATIONS
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'International travel for a professional internship',
+
+                        eyebrow:
+                            'International Internships',
+
+                        title:
+                            'Learn a new language with Global Exchange',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'United States',
+
+                            canada:
+                                'Canada',
+
+                            england:
+                                'England',
+
+                            germany:
+                                'Germany',
+
+                            belgium:
+                                'Belgium',
+
+                            france:
+                                'France',
+
+                            italy:
+                                'Italy',
+
+                            netherlands:
+                                'The Netherlands',
+
+                            austria:
+                                'Austria',
+
+                            switzerland:
+                                'Switzerland'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange supports you while preparing for your professional experience abroad.',
+
+                        button:
+                            'Read more'
+
+                    },
+
+
+                    // =================================
+                    // REQUIREMENTS
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Requirements for completing an internship abroad',
+
+                        eyebrow:
+                            'Requirements',
+
+                        title:
+                            'Prepare for your professional experience',
+
+                        description:
+                            'In this section we will add the exact requirements provided on the original page.',
+
+                        feature:
+                            'Documentation, academic background, language proficiency and availability to travel.',
+
+                        button:
+                            'Request information'
+
+                    },
+
+
+                    // =================================
+                    // SERVICES
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Services for international students',
+
+                        eyebrow:
+                            'Services',
+
+                        title:
+                            'Support throughout the entire program',
+
+                        description:
+                            'In this section we will add the exact services provided in the original program.',
+
+
+                        features: {
+
+                            professionalGuidance:
+                                'Professional guidance',
+
+                            accommodation:
+                                'Accommodation support',
+
+                            internationalAssistance:
+                                'International assistance',
+
+                            followUp:
+                                'Participant follow-up'
+
+                        },
+
+
+                        button:
+                            'Discover our services'
+
+                    },
+
+
+                    // =================================
+                    // BENEFITS
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Benefits of professional internships',
+
+                        eyebrow:
+                            'Benefits',
+
+                        title:
+                            'Boost your professional career',
+
+                        description:
+                            'An international experience strengthens your knowledge, confidence and résumé.',
+
+
+                        features: {
+
+                            professionalExperience:
+                                'Professional experience',
+
+                            language:
+                                'Improved language skills',
+
+                            internationalExperience:
+                                'International experience',
+
+                            personalGrowth:
+                                'Personal growth'
+
+                        },
+
+
+                        button:
+                            'Start my experience'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // NANNY PROGRAM
+            // ========================================
+
+            nanny: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Nanny Program – Exchanges in Germany, USA and the Netherlands',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Breadcrumb',
+
+                        home:
+                            'Home',
+
+                        current:
+                            'Nanny Program'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // CONTENT
+                // ====================================
+
+                content: {
+
+                    // =================================
+                    // INTRODUCTION
+                    // =================================
+
+                    intro: {
+
+                        title:
+                            'Exchange Program',
+
+                        quote:
+                            '“If you enjoy working with children, this program is for you.”',
+
+                        paragraph1:
+                            'Take part in a cultural exchange while working as a nanny with a host family abroad.',
+
+                        paragraph2:
+                            'You will have the opportunity to learn or improve a language, develop your independence and share everyday life with a new family.',
+
+
+                        gallery: {
+
+                            ariaLabel:
+                                'Nanny Program experiences',
+
+                            educationalActivitiesAlt:
+                                'Children participating in educational activities',
+
+                            childcareAlt:
+                                'Childcare and support',
+
+                            readingAlt:
+                                'Young girl learning to read',
+
+                            learningAlt:
+                                'Child learning process'
+
+                        }
+
+                    },
+
+
+                    // =================================
+                    // COUNTRIES AND AGES
+                    // =================================
+
+                    ages: {
+
+                        title:
+                            'Countries and Ages',
+
+                        germany:
+                            'Germany: 18 to 26 years old',
+
+                        belgium:
+                            'Belgium: 18 to 26 years old',
+
+                        unitedStates:
+                            'United States: 18 to 25 years old',
+
+                        france:
+                            'France: 18 to 28 years old',
+
+                        netherlands:
+                            'The Netherlands: 18 to 28 years old'
+
+                    },
+
+
+                    // =================================
+                    // PROGRAM
+                    // =================================
+
+                    program: {
+
+                        title:
+                            'Nanny Program',
+
+                        imageAlt:
+                            'Nanny Program participant with a host family'
+
+                    },
+
+
+                    // =================================
+                    // INCLUDED
+                    // =================================
+
+                    includes: {
+
+                        title:
+                            'Included',
+
+                        meals:
+                            'Meals',
+
+                        accommodation:
+                            'Accommodation',
+
+                        medicalInsurance:
+                            'Medical insurance',
+
+                        transportation:
+                            'Transportation',
+
+                        monthlyAllowance:
+                            'Monthly allowance',
+
+                        support:
+                            'Support throughout the program',
+
+                        familyChange:
+                            'Change of host family if required',
+
+                        languageCourse:
+                            'Opportunity to take a language course and certify your language proficiency',
+
+                        support247:
+                            '24-hour support, 7 days a week'
+
+                    },
+
+
+                    // =================================
+                    // NOT INCLUDED
+                    // =================================
+
+                    notIncluded: {
+
+                        title:
+                            'Not included',
+
+                        airfare:
+                            'Airfare',
+
+                        consular:
+                            'Consular application',
+
+                        documents:
+                            'Document translation and apostille services'
+
+                    },
+
+
+                    // =================================
+                    // DESTINATIONS
+                    // =================================
+
+                    destinations: {
+
+                        title:
+                            'Exchange Program Countries'
+
+                    },
+
+
+                    countries: {
+
+                        germany:
+                            'Germany',
+
+                        belgium:
+                            'Belgium',
+
+                        unitedStates:
+                            'United States',
+
+                        france:
+                            'France',
+
+                        netherlands:
+                            'The Netherlands',
+
+                        austria:
+                            'Austria',
+
+                        switzerland:
+                            'Switzerland',
+
+                        china:
+                            'China',
+
+                        australia:
+                            'Australia',
+
+                        liechtenstein:
+                            'Liechtenstein',
+
+                        norway:
+                            'Norway'
+
+                    },
+
+
+                    // =================================
+                    // CAROUSEL
+                    // =================================
+
+                    carousel: {
+
+                        previous:
+                            'Show previous flags',
+
+                        next:
+                            'Show next flags',
+
+                        navigation:
+                            'Carousel navigation'
+
+                    }
+
+                }
+
+            },
+
+
+            // ========================================
+            // SUMMER CAMPS
+            // ========================================
+
+            summerCamps: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Summer Camps',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Breadcrumb',
+
+                        home:
+                            'Home',
+
+                        current:
+                            'Summer Camps'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRODUCTION
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'International Summer Camps',
+
+                    description:
+                        'They give you the opportunity to enjoy an active and enriching vacation through a dynamic, healthy and fun experience combined with learning foreign languages.',
+
+
+                    gallery: {
+
+                        cabinsAlt:
+                            'Cabins at an international camp',
+
+                        studentsAlt:
+                            'Young people participating in a summer camp',
+
+                        facilitiesAlt:
+                            'Facilities for Summer Camps participants'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // TABBED OVERVIEW
+                // ====================================
+
+                overview: {
+
+                    navigationAriaLabel:
+                        'Summer Camps information',
+
+
+                    labels: {
+
+                        destinations:
+                            'Destinations',
+
+                        requirements:
+                            'Requirements',
+
+                        services:
+                            'Services',
+
+                        benefits:
+                            'Benefits'
+
+                    },
+
+
+                    // =================================
+                    // DESTINATIONS
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'International students at a summer camp',
+
+                        eyebrow:
+                            'International Summer Camps',
+
+                        title:
+                            'Learn a language while enjoying your vacation',
+
+                        description:
+                            'Take part in international camps designed to combine language learning with new cultural and recreational experiences.',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'United States',
+
+                            canada:
+                                'Canada',
+
+                            england:
+                                'England',
+
+                            germany:
+                                'Germany',
+
+                            france:
+                                'France',
+
+                            italy:
+                                'Italy',
+
+                            netherlands:
+                                'The Netherlands',
+
+                            austria:
+                                'Austria'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange supports you in organizing your international experience.',
+
+                        button:
+                            'Read more'
+
+                    },
+
+
+                    // =================================
+                    // REQUIREMENTS
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Requirements for participating in Summer Camps',
+
+                        eyebrow:
+                            'Requirements',
+
+                        title:
+                            'Prepare for an unforgettable experience',
+
+                        description:
+                            'Requirements may vary depending on the country, the participant’s age and the duration of the camp.',
+
+                        feature:
+                            'You will receive guidance to prepare the necessary documents before your trip.',
+
+                        button:
+                            'Request information'
+
+                    },
+
+
+                    // =================================
+                    // SERVICES
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Services included in Summer Camps',
+
+                        eyebrow:
+                            'Services',
+
+                        title:
+                            'Activities, learning and support',
+
+
+                        features: {
+
+                            languageClasses:
+                                'Language classes',
+
+                            accommodation:
+                                'Accommodation',
+
+                            sports:
+                                'Sports activities',
+
+                            culturalExchange:
+                                'Cultural exchange'
+
+                        },
+
+
+                        button:
+                            'Discover the program'
+
+                    },
+
+
+                    // =================================
+                    // BENEFITS
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Benefits of participating in Summer Camps',
+
+                        eyebrow:
+                            'Benefits',
+
+                        title:
+                            'Learn, share and develop your independence',
+
+
+                        features: {
+
+                            independence:
+                                'Greater independence',
+
+                            language:
+                                'Improved language skills',
+
+                            friendships:
+                                'New friendships',
+
+                            culturalExperience:
+                                'Cultural experience'
 
                         },
 

@@ -1,24 +1,45 @@
-﻿<section class="page-hero summer-camps-hero">
+﻿<!--
+====================================================
+COMPONENTE: SUMMER CAMPS HERO
+
+Página:
+Summer Camps
+
+Componente base:
+page-hero
+
+Internacionalización:
+i18next
+====================================================
+-->
+
+<section class="page-hero summer-camps-hero">
 
     <div class="page-hero__overlay summer-camps-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container summer-camps-hero__container">
 
-        <h1 class="page-hero__title summer-camps-hero__title">
+        <h1 class="page-hero__title summer-camps-hero__title"
+            data-i18n="internationalProgramsPage.summerCamps.hero.title">
             Summer Camps
         </h1>
 
-        <nav class="page-hero__breadcrumb summer-camps-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb summer-camps-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="internationalProgramsPage.summerCamps.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="internationalProgramsPage.summerCamps.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator summer-camps-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="internationalProgramsPage.summerCamps.hero.breadcrumb.current">
                 Summer Camps
             </span>
 
