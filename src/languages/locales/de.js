@@ -1698,6 +1698,691 @@ export const de = {
 
             }
 
+        },
+
+
+        // ============================================
+        // NATIONAL PROGRAMS PAGE
+        // Nationale Programme
+        // ============================================
+
+        nationalProgramsPage: {
+
+            // ========================================
+            // LOKALE SPRACHKURSE
+            // ========================================
+
+            localCourses: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Lokale Sprachkurse',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Lokale Sprachkurse'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    imageAlt:
+                        'Gruppe internationaler Studierender',
+
+                    title:
+                        'Lokale Sprachkurse',
+
+                    description:
+                        'Verbessere oder lerne eine Sprache an unserem Standort in Quito mit muttersprachlichen Lehrkräften, internationaler Zertifizierung und einem ausgezeichneten Lernumfeld.',
+
+                    button:
+                        'Kontakt aufnehmen',
+
+                    subtitle:
+                        'Sprachschule'
+
+                },
+
+
+                // ====================================
+                // DETAILS
+                // ====================================
+
+                details: {
+
+                    learn: {
+
+                        title:
+                            'Lerne mit uns!',
+
+
+                        languages: {
+
+                            german:
+                                'Deutsch',
+
+                            english:
+                                'Englisch',
+
+                            italian:
+                                'Italienisch',
+
+                            french:
+                                'Französisch'
+
+                        }
+
+                    },
+
+
+                    schedule:
+                        'Wochenend-, Intensiv- und Wochenkurse',
+
+                    imageAlt:
+                        'Studierende von Global Exchange',
+
+                    description:
+                        'Erlerne und beherrsche die Sprache deines Ziellandes und bereite dich auf eine Sprachprüfung vor. Erlebe kulturellen Austausch und lerne Bräuche und Traditionen intensiv kennen, erweitere deine Perspektive bei der Wahl deines beruflichen Weges und entdecke faszinierende Reiseziele.',
+
+                    partnersAlt:
+                        'Internationale Zertifizierungen und Partner'
+
+                }
+
+            },
+
+
+            // ========================================
+            // SPANISCH FÜR AUSLÄNDER - ÖKOTOURISMUS
+            // ========================================
+
+            spanishEcotourism: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Spanisch für Ausländer – Ökotourismus',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Spanisch für Ausländer – Ökotourismus'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INHALT
+                // ====================================
+
+                content: {
+
+                    imageAlt:
+                        'Spanisch für Ausländer - Ökotourismus',
+
+                    title:
+                        'ENTDECKE ECUADOR UND LERNE DABEI EINE SPRACHE',
+
+
+                    // =================================
+                    // EINLEITUNG
+                    // =================================
+
+                    intro: {
+
+                        paragraph1:
+                            'Wir laden junge Menschen aus aller Welt dazu ein, eine kulturelle Erfahrung in Ecuador zu erleben und Spanisch zu lernen, während sie Ökotourismus und abwechslungsreiche Reiseaktivitäten genießen.',
+
+                        paragraph2Before:
+                            'Unser Studentenwohnheim empfängt internationale Studierende in',
+
+                        schoolProgram:
+                            'SCHULPROGRAMMEN',
+
+                        paragraph2After:
+                            'und Spanischkursen.'
+
+                    },
+
+
+                    // =================================
+                    // SPRACHEN
+                    // =================================
+
+                    languages: {
+
+                        title:
+                            'Unsere Online-Sprachschule bietet',
+
+                        list:
+                            'Französisch, Englisch, Italienisch, Deutsch und Spanisch'
+
+                    },
+
+
+                    // =================================
+                    // ABSCHLUSS
+                    // =================================
+
+                    closing: {
+
+                        paragraph1:
+                            'Global Exchange lädt dich in die Mitte der Welt ein, um im wunderschönen Ecuador Spanisch zu lernen.',
+
+                        paragraph2:
+                            'Erlebe eine wunderbare Erfahrung im direkten Kontakt mit unserer Kultur, unseren Landschaften und unserer Sprache an unserem Bildungszentrum.'
+
+                    },
+
+
+                    button:
+                        'Kontakt aufnehmen'
+
+                }
+
+            }
+
+        },
+
+
+        // ============================================
+        // INTERNATIONAL PROGRAMS PAGE
+        // Internationale Programme
+        // ============================================
+
+        internationalProgramsPage: {
+
+            // ========================================
+            // SPRACHKURSE IM AUSLAND
+            // ========================================
+
+            languageCoursesAbroad: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Sprachkurse im Ausland',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Brotkrümelnavigation',
+
+                        home:
+                            'Startseite',
+
+                        current:
+                            'Sprachkurse im Ausland'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'Erweitere dein Wissen und lerne eine neue Sprache',
+
+                    paragraph1:
+                        'Lerne oder verbessere eine Sprache überall auf der Welt. Du entscheidest selbst, welches Reiseziel und welche Sprache du lernen oder perfektionieren möchtest.',
+
+                    paragraph2:
+                        'Lebe bei einer Gastfamilie oder auf dem Campus eines unserer qualifizierten Institute und genieße die Erfahrung, eine neue Sprache zu lernen und gleichzeitig eine neue Kultur kennenzulernen.'
+
+                },
+
+
+                // ====================================
+                // PROGRAMM
+                // ====================================
+
+                program: {
+
+                    quote:
+                        '„Lerne oder verbessere eine Sprache mit GLOBAL EXCHANGE an 76 Reisezielen weltweit.“',
+
+                    title:
+                        'Sprachprogramm',
+
+
+                    lead: {
+
+                        beforeBrand:
+                            'Lerne oder verbessere eine Sprache mit',
+
+                        afterBrand:
+                            'an 76 Reisezielen weltweit.',
+
+                        secondLine:
+                            'Genieße ein exklusives Umfeld in unseren Sprachakademien.'
+
+                    },
+
+
+                    languages: {
+
+                        title:
+                            'Internationale Sprachkurse',
+
+                        list:
+                            'Deutsch, Arabisch, Chinesisch, Französisch, Englisch, Italienisch, Mandarin, Portugiesisch und Russisch.'
+
+                    },
+
+
+                    carousel: {
+
+                        previous:
+                            'Vorherige Flaggen anzeigen',
+
+                        next:
+                            'Nächste Flaggen anzeigen',
+
+                        navigation:
+                            'Karussellnavigation',
+
+                        position:
+                            'Position {{position}} anzeigen'
+
+                    },
+
+
+                    countries: {
+
+                        norway:
+                            'Norwegen',
+
+                        netherlands:
+                            'Niederlande',
+
+                        france:
+                            'Frankreich',
+
+                        china:
+                            'China',
+
+                        germany:
+                            'Deutschland',
+
+                        austria:
+                            'Österreich',
+
+                        unitedStates:
+                            'Vereinigte Staaten',
+
+                        belgium:
+                            'Belgien'
+
+                    },
+
+
+                    accommodation: {
+
+                        title:
+                            'Unterkunftsmöglichkeiten',
+
+                        studentResidence:
+                            'Studentenwohnheim. Einzel- oder Mehrbettzimmer.',
+
+                        hostFamily:
+                            'Gastfamilie. Einzelzimmer.',
+
+                        meals:
+                            'Zwei oder drei Mahlzeiten pro Tag.',
+
+                        hotels:
+                            'Hotels oder Apartments.'
+
+                    },
+
+
+                    courseTypes: {
+
+                        title:
+                            'Kursart',
+
+
+                        general: {
+
+                            title:
+                                'Allgemein',
+
+                            description:
+                                '20 bis 25 Stunden pro Woche'
+
+                        },
+
+
+                        intensive: {
+
+                            title:
+                                'Intensiv',
+
+                            description:
+                                '30 Stunden pro Woche'
+
+                        },
+
+
+                        oneToOne: {
+
+                            title:
+                                'Einzelunterricht',
+
+                            description:
+                                'Privatunterricht'
+
+                        },
+
+
+                        special: {
+
+                            title:
+                                'Spezialkurse',
+
+                            description:
+                                'Sprachvorbereitung für den Hochschulzugang oder den Beruf, zum Beispiel in den Bereichen Wirtschaft, Mode, Design, Medizin und Ingenieurwesen.'
+
+                        }
+
+                    },
+
+
+                    duration: {
+
+                        title:
+                            'Dauer',
+
+                        value:
+                            '4 bis 48 Wochen'
+
+                    },
+
+
+                    schedule: {
+
+                        title:
+                            'Unterrichtszeiten',
+
+                        value:
+                            'Vormittags, nachmittags oder abends'
+
+                    },
+
+
+                    gallery: {
+
+                        studentsAlt:
+                            'Studierende von Global Exchange',
+
+                        groupAlt:
+                            'Internationale Studierendengruppe'
+
+                    },
+
+
+                    destinations:
+                        'Deutschland, Belgien, Frankreich, Niederlande, Österreich, China, Schweiz, Australien, Liechtenstein, Norwegen und Italien.'
+
+                },
+
+
+                // ====================================
+                // TABS
+                // ====================================
+
+                tabs: {
+
+                    navigationAriaLabel:
+                        'Informationen zu Sprachkursen im Ausland',
+
+
+                    labels: {
+
+                        destinations:
+                            'Reiseziele',
+
+                        requirements:
+                            'Voraussetzungen',
+
+                        services:
+                            'Leistungen',
+
+                        benefits:
+                            'Vorteile'
+
+                    },
+
+
+                    // =================================
+                    // REISEZIELE
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'Internationale Studierende auf einer Auslandsreise',
+
+                        eyebrow:
+                            'Internationale Reiseziele',
+
+                        title:
+                            'Lerne eine Sprache rund um die Welt',
+
+                        description:
+                            'Lerne oder verbessere eine Sprache, während du eine neue Kultur entdeckst und Erfahrungen mit internationalen Studierenden teilst.',
+
+                        countriesTitle:
+                            'Verfügbare Länder',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'Vereinigte Staaten',
+
+                            canada:
+                                'Kanada',
+
+                            england:
+                                'England',
+
+                            germany:
+                                'Deutschland',
+
+                            belgium:
+                                'Belgien',
+
+                            france:
+                                'Frankreich',
+
+                            italy:
+                                'Italien',
+
+                            netherlands:
+                                'Niederlande',
+
+                            austria:
+                                'Österreich',
+
+                            switzerland:
+                                'Schweiz'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange begleitet dich bei der Planung deiner internationalen Erfahrung.',
+
+                        button:
+                            'Kontaktiere uns'
+
+                    },
+
+
+                    // =================================
+                    // VORAUSSETZUNGEN
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Voraussetzungen für ein Studium im Ausland',
+
+                        eyebrow:
+                            'Voraussetzungen',
+
+                        title:
+                            'Lerne eine neue Sprache mit Global Exchange',
+
+                        description:
+                            'Ein Auslandsstudium beginnt mit der Vorlage verschiedener Dokumente, die deine Ausbildung nachweisen und bestätigen, dass du die Voraussetzungen für einen Aufenthalt im Zielland erfüllst.',
+
+                        feature:
+                            'Eine andere Kultur kennenzulernen, eine weitere Sprache zu praktizieren und eine internationale Bildungseinrichtung zu besuchen sind Erfahrungen, die dein Leben bereichern und deine persönliche Entwicklung fördern.',
+
+                        button:
+                            'Informationen anfordern'
+
+                    },
+
+
+                    // =================================
+                    // LEISTUNGEN
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Studierende in einem internationalen Programm',
+
+                        eyebrow:
+                            'Leistungen',
+
+                        title:
+                            'Schulprogramm im Ausland',
+
+                        paragraph1:
+                            'Tauche für ein Trimester oder ein ganzes Schuljahr in die Kultur und Sprache deines Ziellandes ein.',
+
+                        paragraph2:
+                            'Programme für die Oberstufe im Ausland stehen für verschiedene Schuljahre zur Verfügung.',
+
+
+                        features: {
+
+                            publicSchool:
+                                'Besuch einer öffentlichen Schule',
+
+                            residence:
+                                'Unterbringung im Studentenwohnheim',
+
+                            activities:
+                                'Außerschulische Aktivitäten',
+
+                            europeanEducation:
+                                'Europäisches Bildungssystem'
+
+                        },
+
+
+                        button:
+                            'Programm entdecken'
+
+                    },
+
+
+                    // =================================
+                    // VORTEILE
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Studierende beim Sprachenlernen',
+
+                        eyebrow:
+                            'Vorteile',
+
+                        title:
+                            'Global Exchange unterstützt deine berufliche Zukunft',
+
+                        paragraph1:
+                            'Das Erlernen einer neuen Sprache im Ausland stärkt deine geistigen Fähigkeiten, dein Selbstvertrauen und deine beruflichen Chancen.',
+
+                        paragraph2:
+                            'Je mehr Zeit du die Sprache täglich und in unterschiedlichen Situationen verwendest, desto besser werden deine Ergebnisse.',
+
+
+                        features: {
+
+                            masterLanguage:
+                                'Du wirst die Sprache sicher beherrschen',
+
+                            confidence:
+                                'Dein Selbstvertrauen wird wachsen',
+
+                            immersion:
+                                'Du tauchst in eine neue Lebensweise ein',
+
+                            certificate:
+                                'Du erhältst ein Zertifikat über dein Sprachniveau'
+
+                        },
+
+
+                        button:
+                            'Meine Erfahrung starten'
+
+                    }
+
+                }
+
+            }
+
         }
 
     }

@@ -1668,6 +1668,722 @@ export const es = {
 
             }
 
+        },
+
+
+        // ============================================
+        // NATIONAL PROGRAMS PAGE
+        // Programas Nacionales
+        // ============================================
+
+        nationalProgramsPage: {
+
+            // ========================================
+            // CURSOS DE IDIOMA LOCAL
+            // ========================================
+
+            localCourses: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Cursos de idioma local',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Migas de pan',
+
+                        home:
+                            'Inicio',
+
+                        current:
+                            'Cursos de idioma local'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    imageAlt:
+                        'Grupo de estudiantes internacionales',
+
+                    title:
+                        'Cursos de idioma local',
+
+                    description:
+                        'Perfecciona o aprende un idioma en nuestra sede local (Quito) con profesores nativos, certificación internacional y en mejor espacio de aprendizaje.',
+
+                    button:
+                        'Ponerse en contacto',
+
+                    subtitle:
+                        'Escuela de Idiomas'
+
+                },
+
+
+                // ====================================
+                // DETAILS
+                // ====================================
+
+                details: {
+
+                    learn: {
+
+                        title:
+                            '¡Aprende con nosotros!',
+
+
+                        languages: {
+
+                            german:
+                                'Alemán',
+
+                            english:
+                                'Inglés',
+
+                            italian:
+                                'Italiano',
+
+                            french:
+                                'Francés'
+
+                        }
+
+                    },
+
+
+                    schedule:
+                        'Horarios de fin de semana, intensivos y semanales',
+
+                    imageAlt:
+                        'Estudiantes de Global Exchange',
+
+                    description:
+                        'Aprendizaje y dominio del idioma del país de destino, dejando la oportunidad al estudiante para rendir su examen de suficiencia idiomática. Intercambio cultural y aprendizaje profundo de costumbres, criterio más amplio para elección de carrera profesional y visitas a paisajes fascinantes.',
+
+                    partnersAlt:
+                        'Certificaciones y aliados internacionales'
+
+                }
+            },
+
+
+            // ========================================
+            // ESPAÑOL PARA EXTRANJEROS - ECOTURISMO
+            // ========================================
+
+            spanishEcotourism: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Español para extranjeros – ecoturismo',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Migas de pan',
+
+                        home:
+                            'Inicio',
+
+                        current:
+                            'Español para extranjeros – ecoturismo'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // CONTENIDO
+                // ====================================
+
+                content: {
+
+                    imageAlt:
+                        'Español para extranjeros - Ecoturismo',
+
+                    title:
+                        'DESCUBRE ECUADOR APRENDIENDO UN IDIOMA',
+
+
+                    // =================================
+                    // INTRODUCCIÓN
+                    // =================================
+
+                    intro: {
+
+                        paragraph1:
+                            'Invitamos a chicos de todo el mundo a tener una experiencia cultural en Ecuador y aprender el español mientras realizan turismo ecológico y divertidos planes de viaje.',
+
+                        paragraph2Before:
+                            'Nuestra residencia estudiantil acoge a estudiantes internacionales en programas de',
+
+                        schoolProgram:
+                            'ESCOLARIDAD',
+
+                        paragraph2After:
+                            'y estudio de español.'
+
+                    },
+
+
+                    // =================================
+                    // IDIOMAS
+                    // =================================
+
+                    languages: {
+
+                        title:
+                            'Nuestra escuela de idiomas online ofrecemos',
+
+                        list:
+                            'Francés, Inglés, Italiano, Alemán, Español'
+
+                    },
+
+
+                    // =================================
+                    // CIERRE
+                    // =================================
+
+                    closing: {
+
+                        paragraph1:
+                            'Global Exchange te invita a la mitad del mundo a aprender el idioma español, en el bello Ecuador.',
+
+                        paragraph2:
+                            'Teniendo una maravillosa experiencia en contacto con nuestra cultura, paisajes e idioma, desde nuestra casa de estudios.'
+
+                    },
+
+
+                    button:
+                        'Ponerse en contacto'
+
+                }
+
+            }
+
+        },
+
+
+        // ============================================
+        // INTERNATIONAL PROGRAMS PAGE
+        // Programas Internacionales
+        // ============================================
+
+        internationalProgramsPage: {
+
+            // ========================================
+            // CURSOS DE IDIOMAS EN EL EXTRANJERO
+            // ========================================
+
+            languageCoursesAbroad: {
+
+                // ====================================
+                // HERO
+                // ====================================
+
+                hero: {
+
+                    title:
+                        'Cursos de idiomas en el extranjero',
+
+
+                    breadcrumb: {
+
+                        ariaLabel:
+                            'Migas de pan',
+
+                        home:
+                            'Inicio',
+
+                        current:
+                            'Cursos de idiomas en el extranjero'
+
+                    }
+
+                },
+
+
+                // ====================================
+                // INTRO
+                // ====================================
+
+                intro: {
+
+                    title:
+                        'Expande tus conocimientos aprendiendo un nuevo idioma',
+
+                    paragraph1:
+                        'Aprendizaje y perfeccionamiento de idiomas en cualquier parte del mundo. Tú eliges el destino y el idioma que quieres aprender o perfeccionar.',
+
+                    paragraph2:
+                        'Vive con una familia anfitriona o en el campus de nuestros institutos calificados y disfruta la experiencia de aprender un nuevo idioma y conocer una nueva cultura.'
+
+                },
+
+
+                // ====================================
+                // PROGRAMA
+                // ====================================
+
+                program: {
+
+                    quote:
+                        '“Aprende o perfecciona una lengua con GLOBAL EXCHANGE en 76 destinos del mundo.”',
+
+                    title:
+                        'Programa idiomático',
+
+
+                    lead: {
+
+                        beforeBrand:
+                            'Aprende o perfecciona una lengua con',
+
+                        afterBrand:
+                            'en 76 destinos del mundo.',
+
+                        secondLine:
+                            'Disfruta de un ambiente exclusivo en nuestras academias de lengua.'
+
+                    },
+
+
+                    // =================================
+                    // IDIOMAS
+                    // =================================
+
+                    languages: {
+
+                        title:
+                            'Cursos internacionales de idiomas',
+
+                        list:
+                            'Alemán, Árabe, Chino, Francés, Inglés, Italiano, Mandarín, Portugués, Ruso.'
+
+                    },
+
+
+                    // =================================
+                    // CARRUSEL
+                    // =================================
+
+                    carousel: {
+
+                        previous:
+                            'Mostrar banderas anteriores',
+
+                        next:
+                            'Mostrar siguientes banderas',
+
+                        navigation:
+                            'Navegación del carrusel',
+
+                        position:
+                            'Mostrar posición {{position}}'
+
+                    },
+
+
+                    // =================================
+                    // PAÍSES
+                    // =================================
+
+                    countries: {
+
+                        norway:
+                            'Noruega',
+
+                        netherlands:
+                            'Holanda',
+
+                        france:
+                            'Francia',
+
+                        china:
+                            'China',
+
+                        germany:
+                            'Alemania',
+
+                        austria:
+                            'Austria',
+
+                        unitedStates:
+                            'Estados Unidos',
+
+                        belgium:
+                            'Bélgica'
+
+                    },
+
+
+                    // =================================
+                    // ALOJAMIENTO
+                    // =================================
+
+                    accommodation: {
+
+                        title:
+                            'Tipo de alojamiento',
+
+                        studentResidence:
+                            'Residencia estudiantil. Habitación individual o compartida.',
+
+                        hostFamily:
+                            'Familia anfitriona. Habitación individual.',
+
+                        meals:
+                            'Alimentación de 2 o 3 comidas.',
+
+                        hotels:
+                            'Hoteles o apartamentos.'
+
+                    },
+
+
+                    // =================================
+                    // TIPOS DE CURSO
+                    // =================================
+
+                    courseTypes: {
+
+                        title:
+                            'Tipo de curso',
+
+
+                        general: {
+
+                            title:
+                                'General',
+
+                            description:
+                                '20 a 25 horas semanales'
+
+                        },
+
+
+                        intensive: {
+
+                            title:
+                                'Intensivo',
+
+                            description:
+                                '30 horas semanales'
+
+                        },
+
+
+                        oneToOne: {
+
+                            title:
+                                'One to one',
+
+                            description:
+                                'Lecciones privadas'
+
+                        },
+
+
+                        special: {
+
+                            title:
+                                'Cursos especiales',
+
+                            description:
+                                'Idioma para ingreso universitario o para tu profesión; por ejemplo: negocios, moda, diseño, medicina e ingeniería.'
+
+                        }
+
+                    },
+
+
+                    // =================================
+                    // DURACIÓN
+                    // =================================
+
+                    duration: {
+
+                        title:
+                            'Duración',
+
+                        value:
+                            '4 a 48 semanas'
+
+                    },
+
+
+                    // =================================
+                    // HORARIOS
+                    // =================================
+
+                    schedule: {
+
+                        title:
+                            'Horarios',
+
+                        value:
+                            'Matutino, vespertino, nocturno'
+
+                    },
+
+
+                    // =================================
+                    // GALERÍA
+                    // =================================
+
+                    gallery: {
+
+                        studentsAlt:
+                            'Estudiantes de Global Exchange',
+
+                        groupAlt:
+                            'Grupo internacional de estudiantes'
+
+                    },
+
+
+                    destinations:
+                        'Alemania, Bélgica, Francia, Holanda, Austria, China, Suiza, Australia, Liechtenstein, Noruega, Italia.'
+
+                },
+
+
+                // ====================================
+                // TABS
+                // ====================================
+
+                tabs: {
+
+                    navigationAriaLabel:
+                        'Información de cursos en el extranjero',
+
+
+                    labels: {
+
+                        destinations:
+                            'Destinos',
+
+                        requirements:
+                            'Requisitos',
+
+                        services:
+                            'Servicios',
+
+                        benefits:
+                            'Beneficios'
+
+                    },
+
+
+                    // =================================
+                    // DESTINOS
+                    // =================================
+
+                    destinations: {
+
+                        imageAlt:
+                            'Estudiantes internacionales viajando al extranjero',
+
+                        eyebrow:
+                            'Destinos internacionales',
+
+                        title:
+                            'Estudia un idioma alrededor del mundo',
+
+                        description:
+                            'Aprende o perfecciona un idioma mientras descubres una nueva cultura y compartes experiencias con estudiantes internacionales.',
+
+                        countriesTitle:
+                            'Países disponibles',
+
+
+                        countries: {
+
+                            unitedStates:
+                                'Estados Unidos',
+
+                            canada:
+                                'Canadá',
+
+                            england:
+                                'Inglaterra',
+
+                            germany:
+                                'Alemania',
+
+                            belgium:
+                                'Bélgica',
+
+                            france:
+                                'Francia',
+
+                            italy:
+                                'Italia',
+
+                            netherlands:
+                                'Holanda',
+
+                            austria:
+                                'Austria',
+
+                            switzerland:
+                                'Suiza'
+
+                        },
+
+
+                        feature:
+                            'Global Exchange te acompaña durante la planificación de tu experiencia internacional.',
+
+                        button:
+                            'Contáctanos'
+
+                    },
+
+
+                    // =================================
+                    // REQUISITOS
+                    // =================================
+
+                    requirements: {
+
+                        imageAlt:
+                            'Requisitos para estudiar en el extranjero',
+
+                        eyebrow:
+                            'Requisitos',
+
+                        title:
+                            'Estudia un nuevo idioma con Global Exchange',
+
+                        description:
+                            'Estudiar en el extranjero comienza con la presentación de varios documentos que acrediten tu formación y que cumplas los requisitos para residir en el país de destino.',
+
+                        feature:
+                            'Conocer otra cultura, practicar otro idioma y asistir a una institución internacional son vivencias que enriquecerán tu vida y te ayudarán a madurar.',
+
+                        button:
+                            'Solicitar información'
+
+                    },
+
+
+                    // =================================
+                    // SERVICIOS
+                    // =================================
+
+                    services: {
+
+                        imageAlt:
+                            'Estudiantes en un programa internacional',
+
+                        eyebrow:
+                            'Servicios',
+
+                        title:
+                            'Escolaridad en el exterior',
+
+                        paragraph1:
+                            'Sumérgete en la cultura y el idioma del país de destino durante un trimestre o un año escolar.',
+
+                        paragraph2:
+                            'Programas disponibles para primero, segundo y tercero de bachillerato en el exterior.',
+
+
+                        features: {
+
+                            publicSchool:
+                                'Escolaridad en colegio público',
+
+                            residence:
+                                'Alojamiento en residencia estudiantil',
+
+                            activities:
+                                'Actividades extracurriculares',
+
+                            europeanEducation:
+                                'Sistema de educación europeo'
+
+                        },
+
+
+                        button:
+                            'Conocer el programa'
+
+                    },
+
+
+                    // =================================
+                    // BENEFICIOS
+                    // =================================
+
+                    benefits: {
+
+                        imageAlt:
+                            'Estudiantes aprendiendo un idioma',
+
+                        eyebrow:
+                            'Beneficios',
+
+                        title:
+                            'Global Exchange te impulsa en tu carrera',
+
+                        paragraph1:
+                            'Estudiar un nuevo idioma en el extranjero beneficia tu cerebro, tu confianza y tu carrera profesional.',
+
+                        paragraph2:
+                            'Mientras más tiempo pases utilizando el idioma todos los días y en situaciones distintas, mejores serán tus resultados.',
+
+
+                        features: {
+
+                            masterLanguage:
+                                'Llegarás a dominar el idioma',
+
+                            confidence:
+                                'Tu autoestima se disparará',
+
+                            immersion:
+                                'Te sumergirás en una nueva forma de vida',
+
+                            certificate:
+                                'Tendrás un certificado que demuestre tu nivel'
+
+                        },
+
+
+                        button:
+                            'Empezar mi experiencia'
+
+                    }
+
+                }
+
+            }
+
         }
 
     }

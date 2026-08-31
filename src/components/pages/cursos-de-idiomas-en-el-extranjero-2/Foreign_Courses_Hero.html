@@ -13,6 +13,7 @@ Responsabilidades:
   estructura, layout, breadcrumb, responsive y accesibilidad.
 - foreign-courses.css:
   variaciones visuales específicas de esta página.
+- Internacionalización mediante i18next.
 ====================================================
 -->
 
@@ -21,22 +22,29 @@ Responsabilidades:
     <div class="page-hero__overlay foreign-courses-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container foreign-courses-hero__container">
 
-        <h1 class="page-hero__title foreign-courses-hero__title">
+        <h1 class="page-hero__title foreign-courses-hero__title"
+            data-i18n="internationalProgramsPage.languageCoursesAbroad.hero.title">
             Cursos de idiomas en el extranjero
         </h1>
 
-        <nav class="page-hero__breadcrumb foreign-courses-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb foreign-courses-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="internationalProgramsPage.languageCoursesAbroad.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="internationalProgramsPage.languageCoursesAbroad.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator foreign-courses-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page"
+                data-i18n="internationalProgramsPage.languageCoursesAbroad.hero.breadcrumb.current">
                 Cursos de idiomas en el extranjero
             </span>
 

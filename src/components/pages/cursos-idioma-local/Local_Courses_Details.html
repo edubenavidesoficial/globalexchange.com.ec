@@ -5,14 +5,20 @@ COMPONENTE: LOCAL COURSES DETAILS
 Página:
 Cursos de idioma local
 
-Estado:
-- HTML propio
+Contenido:
+- Idiomas disponibles
+- Horarios
+- Descripción del programa
+- Certificaciones
+- Internacionalización mediante i18next
 ====================================================
 -->
 
 <section class="local-courses-details">
 
-    <div class="local-courses-details__background" aria-hidden="true"></div>
+    <div class="local-courses-details__background" aria-hidden="true">
+    </div>
+
 
     <div class="local-courses-details__container">
 
@@ -22,42 +28,63 @@ Estado:
 
         <div class="local-courses-details__info">
 
+            <!-- ======================================
+                 IDIOMAS
+            ======================================= -->
+
             <div class="local-courses-details__info-group">
 
-                <span
-                    class="local-courses-details__icon"
-                    aria-hidden="true">
-
+                <span class="local-courses-details__icon" aria-hidden="true">
                     👩‍🏫
                 </span>
 
+
                 <div class="local-courses-details__info-content">
 
-                    <p class="local-courses-details__info-title">
+                    <p class="local-courses-details__info-title"
+                        data-i18n="nationalProgramsPage.localCourses.details.learn.title">
                         ¡Aprende con nosotros!
                     </p>
 
+
                     <ul class="local-courses-details__languages">
-                        <li>Alemán</li>
-                        <li>Inglés</li>
-                        <li>Italiano</li>
-                        <li>Francés</li>
+
+                        <li data-i18n="nationalProgramsPage.localCourses.details.learn.languages.german">
+                            Alemán
+                        </li>
+
+                        <li data-i18n="nationalProgramsPage.localCourses.details.learn.languages.english">
+                            Inglés
+                        </li>
+
+                        <li data-i18n="nationalProgramsPage.localCourses.details.learn.languages.italian">
+                            Italiano
+                        </li>
+
+                        <li data-i18n="nationalProgramsPage.localCourses.details.learn.languages.french">
+                            Francés
+                        </li>
+
                     </ul>
 
                 </div>
 
             </div>
 
+
+            <!-- ======================================
+                 HORARIOS
+            ======================================= -->
+
             <div class="local-courses-details__info-group">
 
-                <span
-                    class="local-courses-details__icon"
-                    aria-hidden="true">
-
+                <span class="local-courses-details__icon" aria-hidden="true">
                     🏫
                 </span>
 
-                <p class="local-courses-details__schedule">
+
+                <p class="local-courses-details__schedule"
+                    data-i18n="nationalProgramsPage.localCourses.details.schedule">
                     Horarios de fin de semana, intensivos y semanales
                 </p>
 
@@ -65,18 +92,18 @@ Estado:
 
         </div>
 
+
         <!-- ==========================================
              IMAGEN CENTRAL
         ========================================== -->
 
         <div class="local-courses-details__visual">
 
-            <img
-                src="/images/pages/cursos-idioma-local/chicos.png"
-                alt="Estudiantes de Global Exchange"
-                loading="lazy">
+            <img src="/images/pages/cursos-idioma-local/chicos.png" alt="Estudiantes de Global Exchange"
+                data-i18n-alt="nationalProgramsPage.localCourses.details.imageAlt" loading="lazy">
 
         </div>
+
 
         <!-- ==========================================
              TEXTO DERECHO
@@ -84,14 +111,12 @@ Estado:
 
         <div class="local-courses-details__description">
 
-            <span
-                class="local-courses-details__description-icon"
-                aria-hidden="true">
-
+            <span class="local-courses-details__description-icon" aria-hidden="true">
                 🎓
             </span>
 
-            <p>
+
+            <p data-i18n="nationalProgramsPage.localCourses.details.description">
                 Aprendizaje y dominio del idioma del país de destino,
                 dejando la oportunidad al estudiante para rendir su
                 examen de suficiencia idiomática. Intercambio cultural
@@ -104,18 +129,16 @@ Estado:
 
     </div>
 
+
     <!-- ==========================================
          CERTIFICACIONES
     ========================================== -->
 
     <div class="local-courses-details__partners">
 
-        <img
-            src="/images/partners/logosExtras-1.png"
-            alt="Certificaciones y aliados internacionales"
-            loading="lazy">
+        <img src="/images/partners/logosExtras-1.png" alt="Certificaciones y aliados internacionales"
+            data-i18n-alt="nationalProgramsPage.localCourses.details.partnersAlt" loading="lazy">
 
     </div>
 
 </section>
-

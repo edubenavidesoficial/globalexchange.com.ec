@@ -8,6 +8,9 @@ Cursos de idiomas en el extranjero
 Responsabilidad:
 Gestiona la navegación por pestañas y el contenido
 de Destinos, Requisitos, Servicios y Beneficios.
+
+Internacionalización:
+i18next
 ====================================================
 -->
 
@@ -19,12 +22,15 @@ de Destinos, Requisitos, Servicios y Beneficios.
             Global Exchange
         </p>
 
+
         <!-- ==========================================
              NAVEGACIÓN
         ========================================== -->
 
-        <div class="foreign-courses-tabs__navigation" role="tablist"
-            aria-label="Información de cursos en el extranjero">
+        <div class="foreign-courses-tabs__navigation" role="tablist" aria-label="Información de cursos en el extranjero"
+            data-i18n-aria-label="internationalProgramsPage.languageCoursesAbroad.tabs.navigationAriaLabel">
+
+            <!-- DESTINOS -->
 
             <button class="foreign-courses-tabs__button is-active" id="foreign-tab-destinations" type="button"
                 role="tab" aria-selected="true" aria-controls="foreign-panel-destinations"
@@ -33,11 +39,15 @@ de Destinos, Requisitos, Servicios y Beneficios.
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_29_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.labels.destinations">
                     Destinos
                 </span>
 
             </button>
+
+
+            <!-- REQUISITOS -->
 
             <button class="foreign-courses-tabs__button" id="foreign-tab-requirements" type="button" role="tab"
                 aria-selected="false" aria-controls="foreign-panel-requirements" data-foreign-tab="requirements"
@@ -46,11 +56,15 @@ de Destinos, Requisitos, Servicios y Beneficios.
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_30_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.labels.requirements">
                     Requisitos
                 </span>
 
             </button>
+
+
+            <!-- SERVICIOS -->
 
             <button class="foreign-courses-tabs__button" id="foreign-tab-services" type="button" role="tab"
                 aria-selected="false" aria-controls="foreign-panel-services" data-foreign-tab="services" tabindex="-1">
@@ -58,11 +72,15 @@ de Destinos, Requisitos, Servicios y Beneficios.
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_32_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.labels.services">
                     Servicios
                 </span>
 
             </button>
+
+
+            <!-- BENEFICIOS -->
 
             <button class="foreign-courses-tabs__button" id="foreign-tab-benefits" type="button" role="tab"
                 aria-selected="false" aria-controls="foreign-panel-benefits" data-foreign-tab="benefits" tabindex="-1">
@@ -70,7 +88,8 @@ de Destinos, Requisitos, Servicios y Beneficios.
                 <img class="foreign-courses-tabs__icon"
                     src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/img_box_31_1.png" alt="" aria-hidden="true">
 
-                <span class="foreign-courses-tabs__label">
+                <span class="foreign-courses-tabs__label"
+                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.labels.benefits">
                     Beneficios
                 </span>
 
@@ -85,7 +104,6 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
         <div class="foreign-courses-tabs__panels">
 
-
             <!-- ======================================
                  DESTINOS
             ======================================= -->
@@ -99,42 +117,95 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/shutterstock_144112840.jpg"
-                            alt="Estudiantes internacionales viajando al extranjero" loading="lazy">
+                            alt="Estudiantes internacionales viajando al extranjero"
+                            data-i18n-alt="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.eyebrow">
                             Destinos internacionales
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.title">
                             Estudia un idioma alrededor del mundo
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.description">
                             Aprende o perfecciona un idioma mientras descubres una
                             nueva cultura y compartes experiencias con estudiantes
                             internacionales.
                         </p>
 
-                        <h3 class="foreign-course-panel__subtitle">
+
+                        <h3 class="foreign-course-panel__subtitle"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countriesTitle">
                             Países disponibles
                         </h3>
 
+
                         <ul class="foreign-course-panel__country-list">
-                            <li>Estados Unidos</li>
-                            <li>Canadá</li>
-                            <li>Inglaterra</li>
-                            <li>Alemania</li>
-                            <li>Bélgica</li>
-                            <li>Francia</li>
-                            <li>Italia</li>
-                            <li>Holanda</li>
-                            <li>Austria</li>
-                            <li>Suiza</li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.unitedStates">
+                                Estados Unidos
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.canada">
+                                Canadá
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.england">
+                                Inglaterra
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.germany">
+                                Alemania
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.belgium">
+                                Bélgica
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.france">
+                                Francia
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.italy">
+                                Italia
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.netherlands">
+                                Holanda
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.austria">
+                                Austria
+                            </li>
+
+                            <li
+                                data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.countries.switzerland">
+                                Suiza
+                            </li>
+
                         </ul>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -142,14 +213,16 @@ de Destinos, Requisitos, Servicios y Beneficios.
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/airplane-1.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.feature">
                                 Global Exchange te acompaña durante la planificación
                                 de tu experiencia internacional.
                             </p>
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/pages/contactos/">
+
+                        <a class="foreign-course-panel__button" href="/pages/contactos/"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.destinations.button">
                             Contáctanos
                         </a>
 
@@ -173,25 +246,34 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/Requisitos-para-estudiar-en-Esapana-1080x675-1.jpg"
-                            alt="Requisitos para estudiar en el extranjero" loading="lazy">
+                            alt="Requisitos para estudiar en el extranjero"
+                            data-i18n-alt="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.eyebrow">
                             Requisitos
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.title">
                             Estudia un nuevo idioma con Global Exchange
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.description">
                             Estudiar en el extranjero comienza con la presentación
                             de varios documentos que acrediten tu formación y que
                             cumplas los requisitos para residir en el país de destino.
                         </p>
+
 
                         <div class="foreign-course-panel__feature">
 
@@ -199,7 +281,7 @@ de Destinos, Requisitos, Servicios y Beneficios.
                                 src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/reading.png" alt=""
                                 aria-hidden="true">
 
-                            <p>
+                            <p data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.feature">
                                 Conocer otra cultura, practicar otro idioma y asistir
                                 a una institución internacional son vivencias que
                                 enriquecerán tu vida y te ayudarán a madurar.
@@ -207,7 +289,9 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/pages/contactos/">
+
+                        <a class="foreign-course-panel__button" href="/pages/contactos/"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.requirements.button">
                             Solicitar información
                         </a>
 
@@ -231,71 +315,99 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/clases-local.jpg"
-                            alt="Estudiantes en un programa internacional" loading="lazy">
+                            alt="Estudiantes en un programa internacional"
+                            data-i18n-alt="internationalProgramsPage.languageCoursesAbroad.tabs.services.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.eyebrow">
                             Servicios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.title">
                             Escolaridad en el exterior
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.paragraph1">
                             Sumérgete en la cultura y el idioma del país de destino
                             durante un trimestre o un año escolar.
                         </p>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.paragraph2">
                             Programas disponibles para primero, segundo y tercero
                             de bachillerato en el exterior.
                         </p>
 
+
                         <div class="foreign-course-panel__features-grid">
 
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/read.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.features.publicSchool">
                                     Escolaridad en colegio público
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/house-1.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.features.residence">
                                     Alojamiento en residencia estudiantil
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/sport.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.features.activities">
                                     Actividades extracurriculares
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/world.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.features.europeanEducation">
                                     Sistema de educación europeo
                                 </span>
+
                             </div>
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/pages/contactos/">
+
+                        <a class="foreign-course-panel__button" href="/pages/contactos/"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.services.button">
                             Conocer el programa
                         </a>
 
@@ -319,72 +431,100 @@ de Destinos, Requisitos, Servicios y Beneficios.
 
                         <img class="foreign-course-panel__image"
                             src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/escuelasde-ingles-en-veracruz.jpg"
-                            alt="Estudiantes aprendiendo un idioma" loading="lazy">
+                            alt="Estudiantes aprendiendo un idioma"
+                            data-i18n-alt="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.imageAlt"
+                            loading="lazy">
 
                     </div>
 
+
                     <div class="foreign-course-panel__content">
 
-                        <p class="foreign-course-panel__eyebrow">
+                        <p class="foreign-course-panel__eyebrow"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.eyebrow">
                             Beneficios
                         </p>
 
-                        <h2 class="foreign-course-panel__title">
+
+                        <h2 class="foreign-course-panel__title"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.title">
                             Global Exchange te impulsa en tu carrera
                         </h2>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.paragraph1">
                             Estudiar un nuevo idioma en el extranjero beneficia tu
                             cerebro, tu confianza y tu carrera profesional.
                         </p>
 
-                        <p class="foreign-course-panel__description">
+
+                        <p class="foreign-course-panel__description"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.paragraph2">
                             Mientras más tiempo pases utilizando el idioma todos los
                             días y en situaciones distintas, mejores serán tus
                             resultados.
                         </p>
 
+
                         <div class="foreign-course-panel__features-grid">
 
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/businessman.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.features.masterLanguage">
                                     Llegarás a dominar el idioma
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/read.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.features.confidence">
                                     Tu autoestima se disparará
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idioma.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.features.immersion">
                                     Te sumergirás en una nueva forma de vida
                                 </span>
+
                             </div>
 
+
                             <div class="foreign-course-panel__feature-card">
+
                                 <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/idiomas.png" alt=""
                                     aria-hidden="true">
 
-                                <span>
+                                <span
+                                    data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.features.certificate">
                                     Tendrás un certificado que demuestre tu nivel
                                 </span>
+
                             </div>
 
                         </div>
 
-                        <a class="foreign-course-panel__button" href="/pages/contactos/">
+
+                        <a class="foreign-course-panel__button" href="/pages/contactos/"
+                            data-i18n="internationalProgramsPage.languageCoursesAbroad.tabs.benefits.button">
                             Empezar mi experiencia
                         </a>
 

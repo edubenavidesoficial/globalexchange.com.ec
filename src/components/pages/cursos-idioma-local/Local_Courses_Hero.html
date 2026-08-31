@@ -11,6 +11,7 @@ Cursos de idioma local
 Responsabilidades:
 - page-hero: estructura, layout y comportamiento responsive común
 - local-courses-hero: variaciones visuales propias de esta página
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -19,22 +20,27 @@ Responsabilidades:
     <div class="page-hero__overlay local-courses-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container local-courses-hero__container">
 
-        <h1 class="page-hero__title local-courses-hero__title">
+        <h1 class="page-hero__title local-courses-hero__title" data-i18n="nationalProgramsPage.localCourses.hero.title">
             Cursos de idioma local
         </h1>
 
-        <nav class="page-hero__breadcrumb local-courses-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb local-courses-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="nationalProgramsPage.localCourses.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="nationalProgramsPage.localCourses.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="nationalProgramsPage.localCourses.hero.breadcrumb.current">
                 Cursos de idioma local
             </span>
 

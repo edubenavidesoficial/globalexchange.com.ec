@@ -1,7 +1,15 @@
 <!--
 ====================================================
 COMPONENTE: LOCAL COURSES INTRO
-Página: Cursos de idioma local
+
+Página:
+Cursos de idioma local
+
+Contenido:
+- Presentación del programa
+- Imagen principal
+- Llamado a contacto
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -17,9 +25,11 @@ Página: Cursos de idioma local
 
             <img class="local-courses-intro__image"
                 src="/images/pages/cursos-idioma-local/amigos-personas-allegadas-1024x684.jpg"
-                alt="Grupo de estudiantes internacionales" loading="lazy">
+                alt="Grupo de estudiantes internacionales"
+                data-i18n-alt="nationalProgramsPage.localCourses.intro.imageAlt" loading="lazy">
 
         </div>
+
 
         <!-- ==========================================
              CONTENIDO
@@ -27,22 +37,25 @@ Página: Cursos de idioma local
 
         <div class="local-courses-intro__content">
 
-            <h2 class="local-courses-intro__title">
+            <h2 class="local-courses-intro__title" data-i18n="nationalProgramsPage.localCourses.intro.title">
                 Cursos de idioma local
             </h2>
 
-            <p class="local-courses-intro__description">
+
+            <p class="local-courses-intro__description" data-i18n="nationalProgramsPage.localCourses.intro.description">
                 Perfecciona o aprende un idioma en nuestra sede local
                 (Quito) con profesores nativos, certificación
                 internacional y en mejor espacio de aprendizaje.
             </p>
 
-            <a class="local-courses-intro__button" href="#contacto">
 
+            <a class="local-courses-intro__button" href="#contacto"
+                data-i18n="nationalProgramsPage.localCourses.intro.button">
                 Ponerse en contacto
             </a>
 
-            <h3 class="local-courses-intro__subtitle">
+
+            <h3 class="local-courses-intro__subtitle" data-i18n="nationalProgramsPage.localCourses.intro.subtitle">
                 Escuela de Idiomas
             </h3>
 

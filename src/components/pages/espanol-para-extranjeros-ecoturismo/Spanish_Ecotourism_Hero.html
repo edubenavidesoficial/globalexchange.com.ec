@@ -5,8 +5,16 @@ COMPONENTE: SPANISH ECOTOURISM HERO
 Componente base:
 page-hero.css
 
+Página:
+Español para extranjeros – ecoturismo
+
 Variaciones específicas:
 spanish-ecotourism.css
+
+Responsabilidades:
+- Mostrar título principal
+- Mostrar breadcrumb
+- Internacionalización mediante i18next
 ====================================================
 -->
 
@@ -15,22 +23,28 @@ spanish-ecotourism.css
     <div class="page-hero__overlay spanish-ecotourism-hero__overlay" aria-hidden="true">
     </div>
 
+
     <div class="page-hero__container spanish-ecotourism-hero__container">
 
-        <h1 class="page-hero__title spanish-ecotourism-hero__title">
+        <h1 class="page-hero__title spanish-ecotourism-hero__title"
+            data-i18n="nationalProgramsPage.spanishEcotourism.hero.title">
             Español para extranjeros – ecoturismo
         </h1>
 
-        <nav class="page-hero__breadcrumb spanish-ecotourism-hero__breadcrumb" aria-label="Migas de pan">
 
-            <a href="/">
+        <nav class="page-hero__breadcrumb spanish-ecotourism-hero__breadcrumb" aria-label="Migas de pan"
+            data-i18n-aria-label="nationalProgramsPage.spanishEcotourism.hero.breadcrumb.ariaLabel">
+
+            <a href="/" data-i18n="nationalProgramsPage.spanishEcotourism.hero.breadcrumb.home">
                 Inicio
             </a>
+
 
             <span class="page-hero__separator spanish-ecotourism-hero__separator" aria-hidden="true">
             </span>
 
-            <span aria-current="page">
+
+            <span aria-current="page" data-i18n="nationalProgramsPage.spanishEcotourism.hero.breadcrumb.current">
                 Español para extranjeros – ecoturismo
             </span>
 
