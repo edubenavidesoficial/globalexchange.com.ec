@@ -1166,7 +1166,7 @@
     min-width: 18px;
     min-height: 18px;
 
-    font-family: Arial, sans-serif;
+    font-family: inherit;
     font-size: 13px;
     font-weight: var(--font-bold);
 

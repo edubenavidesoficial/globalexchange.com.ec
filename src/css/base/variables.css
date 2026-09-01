@@ -47,17 +47,44 @@
    --footer-heading: #e0cb45;
 
    /* ==========================================
-     TYPOGRAPHY - Font Family
-     (CORREGIDO: solo Rubik, como en el original)
-  ========================================== */
+   TYPOGRAPHY - FONT FAMILY
 
-   --font-primary: 'Rubik', sans-serif;
-   --font-secondary: 'Rubik', sans-serif;
-   /* Antes era Nunito */
-   --font-heading: 'Rubik', sans-serif;
+   Sistema tipográfico Global Exchange:
 
-   /* Fuente secundaria utilizada en varios componentes */
-   --font-nunito: "Nunito", sans-serif;
+   Nunito
+   - H1, H2, H3, H4, H5, H6
+   - Títulos de tarjetas
+   - Títulos destacados
+
+   Rubik
+   - Párrafos
+   - Navegación
+   - Botones
+   - Formularios
+   - Labels
+   - Texto general
+========================================== */
+
+   --font-primary:
+      'Rubik',
+      sans-serif;
+
+   --font-body:
+      'Rubik',
+      sans-serif;
+
+   --font-heading:
+      'Nunito',
+      sans-serif;
+
+   --font-secondary:
+      'Nunito',
+      sans-serif;
+
+   /* Compatibilidad con componentes ya creados */
+   --font-nunito:
+      'Nunito',
+      sans-serif;
    /* ==========================================
      TYPOGRAPHY - Font Sizes
   ========================================== */

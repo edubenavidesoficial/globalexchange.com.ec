@@ -1043,7 +1043,7 @@
 
     padding: 0;
 
-    font-family: Arial, sans-serif;
+    font-family: inherit;
     line-height: 1;
 
     color: var(--white);
