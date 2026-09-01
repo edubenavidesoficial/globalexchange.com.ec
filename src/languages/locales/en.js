@@ -316,7 +316,52 @@ export const en = {
                 'our qualified and multilingual staff provides warm and personalized communication with our students.',
 
             button:
-                'Learn more'
+                'Learn more',
+
+
+            headline: {
+
+                beforeStudents:
+                    'For more than 21 years, we have supported',
+
+                students:
+                    'students',
+
+                afterStudents:
+                    'in expanding their opportunities and discovering the world'
+
+            },
+
+
+            cards: {
+
+                guidance: {
+
+                    title:
+                        'International guidance'
+
+                },
+
+
+                support: {
+
+                    title:
+                        'Always close to our students'
+
+                },
+
+
+                journey: {
+
+                    title:
+                        'A journey that inspires us to keep growing',
+
+                    description:
+                        'Discover the story of Global Exchange and the experience gained through more than two decades of international work.'
+
+                }
+
+            }
 
         },
 

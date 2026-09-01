@@ -316,7 +316,52 @@ export const de = {
                 'unser qualifiziertes und mehrsprachiges Team pflegt eine persönliche und herzliche Kommunikation mit unseren Studierenden.',
 
             button:
-                'Mehr erfahren'
+                'Mehr erfahren',
+
+
+            headline: {
+
+                beforeStudents:
+                    'Seit mehr als 21 Jahren begleiten wir',
+
+                students:
+                    'Studierende',
+
+                afterStudents:
+                    'dabei, neue Möglichkeiten zu entdecken und die Welt kennenzulernen'
+
+            },
+
+
+            cards: {
+
+                guidance: {
+
+                    title:
+                        'Internationale Beratung'
+
+                },
+
+
+                support: {
+
+                    title:
+                        'Immer an der Seite unserer Studierenden'
+
+                },
+
+
+                journey: {
+
+                    title:
+                        'Eine Geschichte, die uns weiter antreibt',
+
+                    description:
+                        'Entdecke die Geschichte von Global Exchange und die Erfahrung aus mehr als zwei Jahrzehnten internationaler Arbeit.'
+
+                }
+
+            }
 
         },
 

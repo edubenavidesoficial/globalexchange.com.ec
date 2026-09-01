@@ -316,7 +316,52 @@ export const es = {
                 'nuestro personal calificado y multilingüe, entablará cálidas comunicaciones con nuestros estudiantes.',
 
             button:
-                'Conoce más'
+                'Conoce más',
+
+
+            headline: {
+
+                beforeStudents:
+                    'Más de 21 años acompañando a',
+
+                students:
+                    'estudiantes',
+
+                afterStudents:
+                    'a ampliar sus oportunidades y descubrir el mundo'
+
+            },
+
+
+            cards: {
+
+                guidance: {
+
+                    title:
+                        'Asesoría internacional'
+
+                },
+
+
+                support: {
+
+                    title:
+                        'Siempre cerca de nuestros estudiantes'
+
+                },
+
+
+                journey: {
+
+                    title:
+                        'Una trayectoria que nos impulsa a seguir',
+
+                    description:
+                        'Conoce la historia de Global Exchange y la experiencia acumulada durante más de dos décadas de trabajo internacional.'
+
+                }
+
+            }
 
         },
 

@@ -5,11 +5,15 @@ COMPONENTE: ABOUT
 Proyecto:
 Global Exchange - Migración a Vite
 
-Estado:
-- HTML propio y semántico
-- Sin GT3
-- Botón propio
-- Internacionalización con i18next
+Descripción:
+Sección corporativa de la página principal.
+
+Diseño:
+- Encabezado editorial de gran formato.
+- Tres tarjetas informativas.
+- Línea decorativa inspirada en una ruta.
+- Estilo visual integrado con Program Finder.
+- Internacionalización mediante i18next.
 
 Archivos relacionados:
 - src/css/components/about.css
@@ -21,52 +25,262 @@ Archivos relacionados:
 
 <section class="about" id="global">
 
+    <!-- ==========================================
+         FONDO DECORATIVO
+    ========================================== -->
+
+    <div class="about__background-shape about__background-shape--left" aria-hidden="true">
+    </div>
+
+    <div class="about__background-shape about__background-shape--right" aria-hidden="true">
+    </div>
+
+
     <div class="about__container">
 
-        <div class="about__content">
+        <!-- ==========================================
+             ENCABEZADO
+        ========================================== -->
 
+        <header class="about__header">
 
-            <!-- ======================================
-                 TÍTULO
-            ====================================== -->
-
-            <h2 class="about__title" data-i18n="about.title">
+            <p class="about__eyebrow" data-i18n="about.title">
                 GLOBAL EXCHANGE
+            </p>
+
+
+            <h2 class="about__headline">
+
+                <span data-i18n="about.headline.beforeStudents">
+                    Más de 21 años acompañando a
+                </span>
+
+                <span class="about__headline-highlight" data-i18n="about.headline.students">
+                    estudiantes
+                </span>
+
+                <span data-i18n="about.headline.afterStudents">
+                    a ampliar sus oportunidades y descubrir el mundo
+                </span>
+
             </h2>
 
+        </header>
+
+
+        <!-- ==========================================
+             EXPERIENCIA
+        ========================================== -->
+
+        <div class="about__cards-wrapper">
 
             <!-- ======================================
-                 CONTENIDO
-            ====================================== -->
+                 LÍNEA DECORATIVA
+            ======================================= -->
 
-            <div class="about__text">
+            <svg class="about__route" viewBox="0 0 1400 500" fill="none" aria-hidden="true">
 
-                <p class="about__highlight">
+                <path d="
+                        M -40 245
+                        C 150 130, 250 120, 395 225
+                        C 550 340, 660 400, 790 265
+                        C 930 115, 1035 125, 1115 250
+                        C 1210 395, 1310 390, 1450 225
+                    " />
 
-                    <strong data-i18n="about.experience">
-                        21 años de experiencia
-                    </strong>
-
-                </p>
-
-
-                <p data-i18n="about.description1">
-                    Somos una organización internacional, dedicada a la asesoría
-                    migratoria y programas de estudio en el exterior;
-                </p>
+            </svg>
 
 
-                <p data-i18n="about.description2">
-                    nuestro personal calificado y multilingüe, entablará cálidas
-                    comunicaciones con nuestros estudiantes.
-                </p>
+            <div class="about__cards">
+
+                <!-- ==================================
+                     ASESORÍA INTERNACIONAL
+                =================================== -->
+
+                <article class="about-card about-card--guidance">
+
+                    <div class="about-card__visual">
+
+                        <div class="about-card__icon about-card__icon--world" aria-hidden="true">
+
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                                <circle cx="54" cy="55" r="39" class="about-card__icon-main" />
+
+                                <path d="
+                                        M25 43
+                                        C34 35 40 32 46 33
+                                        C52 34 52 41 57 43
+                                        C63 46 70 39 76 42
+                                        C81 45 79 52 75 56
+                                        C70 61 71 70 67 77
+                                        C61 87 49 86 43 78
+                                        C38 71 40 63 35 59
+                                        C30 55 25 51 25 43
+                                    " class="about-card__icon-detail" />
+
+                                <path d="
+                                        M67 22
+                                        C73 27 78 32 82 39
+                                    " class="about-card__icon-line" />
+
+                                <circle cx="91" cy="81" r="16" class="about-card__icon-accent" />
+
+                                <path d="M80 87L101 75" class="about-card__icon-accent-line" />
+
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="about-card__content">
+
+                        <span class="about-card__badge" data-i18n="about.experience">
+                            21 años de experiencia
+                        </span>
+
+
+                        <h3 class="about-card__title" data-i18n="about.cards.guidance.title">
+                            Asesoría internacional
+                        </h3>
+
+
+                        <p class="about-card__description" data-i18n="about.description1">
+                            Somos una organización internacional, dedicada
+                            a la asesoría migratoria y programas de estudio
+                            en el exterior;
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ==================================
+                     ACOMPAÑAMIENTO
+                =================================== -->
+
+                <article class="about-card about-card--support">
+
+                    <div class="about-card__visual">
+
+                        <div class="about-card__icon about-card__icon--support" aria-hidden="true">
+
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                                <circle cx="60" cy="39" r="17" class="about-card__icon-main" />
+
+                                <path d="
+                                        M29 89
+                                        C32 68 43 59 60 59
+                                        C77 59 88 68 91 89
+                                    " class="about-card__icon-main" />
+
+                                <path d="
+                                        M40 42
+                                        C42 27 49 19 60 19
+                                        C72 19 79 27 80 42
+                                    " class="about-card__icon-line" />
+
+                                <path d="
+                                        M35 43
+                                        C29 43 26 48 26 54
+                                        C26 60 29 64 35 64
+                                    " class="about-card__icon-accent-line" />
+
+                                <path d="
+                                        M85 43
+                                        C91 43 94 48 94 54
+                                        C94 60 91 64 85 64
+                                    " class="about-card__icon-accent-line" />
+
+                                <path d="M94 61C92 72 83 77 73 77" class="about-card__icon-accent-line" />
+
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="about-card__content">
+
+                        <h3 class="about-card__title" data-i18n="about.cards.support.title">
+                            Siempre cerca de nuestros estudiantes
+                        </h3>
+
+
+                        <p class="about-card__description" data-i18n="about.description2">
+                            Nuestro personal calificado y multilingüe
+                            entablará cálidas comunicaciones con nuestros
+                            estudiantes.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ==================================
+                     EXPERIENCIA
+                =================================== -->
+
+                <article class="about-card about-card--journey">
+
+                    <div class="about-card__visual">
+
+                        <div class="about-card__icon about-card__icon--journey" aria-hidden="true">
+
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                                <circle cx="60" cy="60" r="40" class="about-card__icon-accent-soft" />
+
+                                <path d="
+                                        M28 67
+                                        L91 34
+                                        L72 86
+                                        L58 66
+                                        L28 67
+                                    " class="about-card__icon-main" />
+
+                                <path d="M58 66L91 34" class="about-card__icon-line" />
+
+                            </svg>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="about-card__content">
+
+                        <h3 class="about-card__title" data-i18n="about.cards.journey.title">
+                            Una trayectoria que nos impulsa a seguir
+                        </h3>
+
+
+                        <p class="about-card__description" data-i18n="about.cards.journey.description">
+                            Conoce la historia de Global Exchange y la
+                            experiencia acumulada durante más de dos décadas
+                            de trabajo internacional.
+                        </p>
+
+                    </div>
+
+                </article>
 
             </div>
 
+        </div>
 
-            <!-- ======================================
-                 BOTÓN
-            ====================================== -->
+
+        <!-- ==========================================
+             CTA
+        ========================================== -->
+
+        <div class="about__actions">
 
             <a class="about__button" href="/pages/nuestra-historia/" data-i18n="about.button">
                 Conoce más
