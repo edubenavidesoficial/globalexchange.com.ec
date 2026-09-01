@@ -2,18 +2,24 @@
 <html lang="es">
 
 <head>
+
      <meta charset="UTF-8" />
 
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
      <link rel="icon" type="image/png" href="/images/favicon2.png">
 
-     <title>Global Exchange - Tu futuro en el exterior</title>
+     <title>
+          Global Exchange - Tu futuro en el exterior
+     </title>
+
 
      <!-- ==========================================
-         GOOGLE FONTS
-    ========================================== -->
+          GOOGLE FONTS
+     ========================================== -->
 
      <link rel="preconnect" href="https://fonts.googleapis.com" />
+
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
      <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
@@ -21,75 +27,130 @@
 
 
      <!-- ==========================================
-         CSS PRINCIPAL
-    ========================================== -->
+          CSS PRINCIPAL
+     ========================================== -->
 
      <link rel="stylesheet" href="/src/css/main.css" />
+
 </head>
 
+
 <body>
+
      @@include('./src/components/floating-dots/Floating_Dots.html')
 
+
      <!-- ==========================================
-         HEADER
-    ========================================== -->
+          HEADER
+     ========================================== -->
 
      @@include('./src/components/header/Header.html')
 
 
      <!-- ==========================================
-         CONTENIDO PRINCIPAL
-    ========================================== -->
+          CONTENIDO PRINCIPAL
+     ========================================== -->
 
      <main>
 
-          <!-- HERO -->
+          <!-- ======================================
+               PROGRAM FINDER
+               NUEVO HERO PRINCIPAL
+          ======================================= -->
+
+          @@include('./src/components/program-finder/Program_Finder.html')
+
+
+          <!-- ======================================
+               HERO ANTERIOR
+
+               Lo mantenemos temporalmente mientras
+               reconstruimos el resto de la Home.
+          ======================================= -->
+
           @@include('./src/components/hero/Hero.html')
 
-          <!-- PROGRAMS - TEXTO INTRODUCTORIO -->
+
+          <!-- ======================================
+               PROGRAMS - TEXTO INTRODUCTORIO
+          ======================================= -->
+
           @@include('./src/components/programs/Programs.html')
 
-          <!-- PROGRAMS - MAPA Y TARJETAS -->
+
+          <!-- ======================================
+               PROGRAMS - MAPA Y TARJETAS
+          ======================================= -->
+
           @@include('./src/components/programs/Programs_Grid.html')
 
-          <!-- PROGRAM FINDER -->
-          @@include('./src/components/program-finder/Program_Finder.html')
-          <!-- ABOUT -->
+
+          <!-- ======================================
+               ABOUT
+          ======================================= -->
+
           @@include('./src/components/about/About.html')
 
-          <!-- STATS -->
+
+          <!-- ======================================
+               STATS
+          ======================================= -->
+
           @@include('./src/components/stats/Stats.html')
 
-          <!-- PORTFOLIO -->
+
+          <!-- ======================================
+               PORTFOLIO
+          ======================================= -->
+
           @@include('./src/components/portfolio/Portfolio.html')
 
-          <!-- SERVICES -->
+
+          <!-- ======================================
+               SERVICES
+          ======================================= -->
+
           @@include('./src/components/services/Services.html')
 
-          <!-- CONTACT -->
+
+          <!-- ======================================
+               CONTACT
+          ======================================= -->
+
           @@include('./src/components/contact/Contact.html')
 
-          <!-- CALL TO ACTION -->
+
+          <!-- ======================================
+               CALL TO ACTION
+          ======================================= -->
+
           @@include('./src/components/call-to-action/Call_To_Action.html')
 
-          <!-- MAP -->
+
+          <!-- ======================================
+               MAP
+          ======================================= -->
+
           @@include('./src/components/map/Map.html')
 
      </main>
 
 
      <!-- ==========================================
-         FOOTER
-    ========================================== -->
+          FOOTER
+     ========================================== -->
 
      @@include('./src/components/footer/Footer.html')
+
      @@include('./src/components/floating-contact/Floating_Contact.html')
 
-     <!-- ==========================================
-         JAVASCRIPT PRINCIPAL
-    ========================================== -->
 
-     <script type="module" src="/src/js/main.js"></script>
+     <!-- ==========================================
+          JAVASCRIPT PRINCIPAL
+     ========================================== -->
+
+     <script type="module" src="/src/js/main.js">
+     </script>
 
 </body>
 

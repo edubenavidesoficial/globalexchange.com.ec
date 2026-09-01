@@ -1,12 +1,18 @@
 <!--
 ====================================================
-COMPONENTE: PROGRAM FINDER
+COMPONENTE: PROGRAM FINDER HERO
 
 Ubicación:
-src/components/program-finder/ProgramFinder.html
+src/components/program-finder/Program_Finder.html
 
 Descripción:
-Buscador inicial de programas de Global Exchange.
+Sección principal de la nueva Home de Global Exchange.
+
+Objetivo:
+- Ser la primera sección visible de la página.
+- Permitir al usuario indicar edad, ciudad y destino.
+- Presentar visualmente programas destacados.
+- Preparar la futura recomendación automática de programas.
 
 Funcionamiento:
 - Solicita edad.
@@ -18,180 +24,263 @@ Funcionamiento:
 
 <section class="program-finder" id="programas">
 
+    <!-- ==========================================
+         DECORACIÓN DE FONDO
+    ========================================== -->
+
+    <div class="program-finder__shape program-finder__shape--left" aria-hidden="true">
+    </div>
+
+    <div class="program-finder__shape program-finder__shape--right" aria-hidden="true">
+    </div>
+
+    <div class="program-finder__dots program-finder__dots--right" aria-hidden="true">
+    </div>
+
+
     <div class="page-container program-finder__container">
 
         <!-- ==========================================
-             ENCABEZADO
+             COLUMNA IZQUIERDA
         ========================================== -->
 
-        <header class="program-finder__header">
+        <div class="program-finder__content">
 
-            <p class="program-finder__eyebrow">
-                Global Exchange
-            </p>
+            <!-- ======================================
+                 ENCABEZADO
+            ======================================= -->
 
-            <h2 class="program-finder__title">
-                Encuentra tu programa ideal
-            </h2>
+            <header class="program-finder__header">
 
-            <p class="program-finder__description">
-                Cuéntanos un poco sobre ti y descubre las opciones
-                que mejor se adapten a tu próxima experiencia internacional.
-            </p>
+                <h1 class="program-finder__title">
 
-        </header>
+                    <span class="program-finder__title-main">
+                        Encuentra tu
+                    </span>
 
+                    <span class="program-finder__title-highlight">
+                        programa ideal
+                    </span>
 
-        <!-- ==========================================
-             FORMULARIO
-        ========================================== -->
-
-        <form class="program-finder__form" data-program-finder-form novalidate>
-
-            <div class="program-finder__fields">
+                </h1>
 
 
-                <!-- ==================================
-                     EDAD
-                =================================== -->
+                <p class="program-finder__description">
+                    Cuéntanos un poco sobre ti y descubre las opciones
+                    que mejor se adaptan a tu próxima experiencia internacional.
+                </p>
 
-                <div class="program-finder__field">
-
-                    <label class="program-finder__label" for="program-age">
-                        ¿Qué edad tienes?
-                    </label>
-
-                    <div class="program-finder__select-wrapper">
-
-                        <select class="program-finder__select" id="program-age" name="age" required>
-
-                            <option value="" selected disabled>
-                                Selecciona tu edad
-                            </option>
-
-                            <option value="14-16">
-                                14–16 años
-                            </option>
-
-                            <option value="16-18">
-                                16–18 años
-                            </option>
-
-                            <option value="18-25">
-                                18–25 años
-                            </option>
-
-                            <option value="25-plus">
-                                25+ años
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <small class="program-finder__error" data-error-for="program-age"></small>
-
-                </div>
+            </header>
 
 
-                <!-- ==================================
-                     CIUDAD ACTUAL
-                =================================== -->
+            <!-- ======================================
+                 FORMULARIO
+            ======================================= -->
 
-                <div class="program-finder__field">
+            <form class="program-finder__form" data-program-finder-form novalidate>
 
-                    <label class="program-finder__label" for="program-city">
-                        ¿En qué ciudad te encuentras?
-                    </label>
+                <div class="program-finder__fields">
 
-                    <div class="program-finder__select-wrapper">
+                    <!-- ==================================
+                         EDAD
+                    =================================== -->
 
-                        <select class="program-finder__select" id="program-city" name="city" required>
+                    <div class="program-finder__field">
 
-                            <option value="" selected disabled>
-                                Selecciona tu ciudad
-                            </option>
+                        <div class="program-finder__field-icon program-finder__field-icon--age" aria-hidden="true">
 
-                            <option value="quito">
-                                Quito
-                            </option>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 21a8 8 0 0 1 16 0"></path>
+                            </svg>
 
-                            <option value="guayaquil">
-                                Guayaquil
-                            </option>
+                        </div>
 
-                            <option value="cuenca">
-                                Cuenca
-                            </option>
 
-                            <option value="otra">
-                                Otra ciudad
-                            </option>
+                        <div class="program-finder__field-content">
 
-                        </select>
+                            <label class="program-finder__label" for="program-age">
+                                ¿Qué edad tienes?
+                            </label>
+
+
+                            <div class="program-finder__select-wrapper">
+
+                                <select class="program-finder__select" id="program-age" name="age" required>
+
+                                    <option value="" selected disabled>
+                                        Selecciona tu edad
+                                    </option>
+
+                                    <option value="14-16">
+                                        14–16 años
+                                    </option>
+
+                                    <option value="16-18">
+                                        16–18 años
+                                    </option>
+
+                                    <option value="18-25">
+                                        18–25 años
+                                    </option>
+
+                                    <option value="25-plus">
+                                        25+ años
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <small class="program-finder__error" data-error-for="program-age">
+                            </small>
+
+                        </div>
 
                     </div>
 
-                    <small class="program-finder__error" data-error-for="program-city"></small>
 
-                </div>
+                    <!-- ==================================
+                         CIUDAD
+                    =================================== -->
+
+                    <div class="program-finder__field">
+
+                        <div class="program-finder__field-icon program-finder__field-icon--city" aria-hidden="true">
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                <circle cx="12" cy="10" r="2.5"></circle>
+                            </svg>
+
+                        </div>
 
 
-                <!-- ==================================
-                     DESTINO
-                =================================== -->
+                        <div class="program-finder__field-content">
 
-                <div class="program-finder__field">
+                            <label class="program-finder__label" for="program-city">
+                                ¿En qué ciudad te encuentras?
+                            </label>
 
-                    <label class="program-finder__label" for="program-destination">
-                        ¿Qué lugar te interesa?
-                    </label>
 
-                    <div class="program-finder__select-wrapper">
+                            <div class="program-finder__select-wrapper">
 
-                        <select class="program-finder__select" id="program-destination" name="destination" required>
+                                <select class="program-finder__select" id="program-city" name="city" required>
 
-                            <option value="" selected disabled>
-                                Selecciona un destino
-                            </option>
+                                    <option value="" selected disabled>
+                                        Selecciona tu ciudad
+                                    </option>
 
-                            <option value="estados-unidos">
-                                Estados Unidos
-                            </option>
+                                    <option value="quito">
+                                        Quito
+                                    </option>
 
-                            <option value="canada">
-                                Canadá
-                            </option>
+                                    <option value="guayaquil">
+                                        Guayaquil
+                                    </option>
 
-                            <option value="reino-unido">
-                                Reino Unido
-                            </option>
+                                    <option value="cuenca">
+                                        Cuenca
+                                    </option>
 
-                            <option value="espana">
-                                España
-                            </option>
+                                    <option value="otra">
+                                        Otra ciudad
+                                    </option>
 
-                            <option value="alemania">
-                                Alemania
-                            </option>
+                                </select>
 
-                            <option value="francia">
-                                Francia
-                            </option>
+                            </div>
 
-                            <option value="italia">
-                                Italia
-                            </option>
 
-                            <option value="australia">
-                                Australia
-                            </option>
+                            <small class="program-finder__error" data-error-for="program-city">
+                            </small>
 
-                        </select>
+                        </div>
 
                     </div>
 
-                    <small class="program-finder__error" data-error-for="program-destination"></small>
+
+                    <!-- ==================================
+                         DESTINO
+                    =================================== -->
+
+                    <div class="program-finder__field">
+
+                        <div class="program-finder__field-icon program-finder__field-icon--destination"
+                            aria-hidden="true">
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 2 9.5 14.5"></path>
+                                <path d="m16 2 6 0 0 6"></path>
+                                <path d="m3 8 7 3-3 7 3 3 4-8 7-4"></path>
+                            </svg>
+
+                        </div>
+
+
+                        <div class="program-finder__field-content">
+
+                            <label class="program-finder__label" for="program-destination">
+                                ¿Qué lugar te interesa?
+                            </label>
+
+
+                            <div class="program-finder__select-wrapper">
+
+                                <select class="program-finder__select" id="program-destination" name="destination"
+                                    required>
+
+                                    <option value="" selected disabled>
+                                        Selecciona un destino
+                                    </option>
+
+                                    <option value="estados-unidos">
+                                        Estados Unidos
+                                    </option>
+
+                                    <option value="canada">
+                                        Canadá
+                                    </option>
+
+                                    <option value="reino-unido">
+                                        Reino Unido
+                                    </option>
+
+                                    <option value="espana">
+                                        España
+                                    </option>
+
+                                    <option value="alemania">
+                                        Alemania
+                                    </option>
+
+                                    <option value="francia">
+                                        Francia
+                                    </option>
+
+                                    <option value="italia">
+                                        Italia
+                                    </option>
+
+                                    <option value="australia">
+                                        Australia
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <small class="program-finder__error" data-error-for="program-destination">
+                            </small>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -203,26 +292,260 @@ Funcionamiento:
                 <div class="program-finder__actions">
 
                     <button class="program-finder__button" type="submit">
-                        Encontrar mi programa
+
+                        <span>
+                            Encontrar mi programa
+                        </span>
 
                         <span class="program-finder__button-arrow" aria-hidden="true">
                             →
+
                         </span>
 
                     </button>
 
                 </div>
 
-            </div>
+
+                <!-- ==================================
+                     SOCIAL PROOF
+                =================================== -->
+
+                <div class="program-finder__social-proof">
+
+                    <div class="program-finder__avatars" aria-hidden="true">
+
+                        <span class="program-finder__avatar">
+                            G
+                        </span>
+
+                        <span class="program-finder__avatar">
+                            E
+                        </span>
+
+                        <span class="program-finder__avatar">
+                            +
+                        </span>
+
+                        <span class="program-finder__avatar">
+                            ✈
+                        </span>
+
+                    </div>
+
+
+                    <p class="program-finder__social-text">
+                        Miles de jóvenes ya están viviendo
+                        <strong>su experiencia internacional</strong>
+                    </p>
+
+                </div>
+
+
+                <!-- ==================================
+                     ESTADO
+                =================================== -->
+
+                <p class="program-finder__status" data-program-finder-status role="status" aria-live="polite">
+                </p>
+
+            </form>
+
+        </div>
+
+
+        <!-- ==========================================
+             DECORACIÓN DE VIAJE
+        ========================================== -->
+
+        <div class="program-finder__flight" aria-hidden="true">
+
+            <span class="program-finder__plane">
+                ✈
+            </span>
+
+            <svg class="program-finder__flight-path" viewBox="0 0 100 280" fill="none">
+                <path d="M55 5C5 35 14 86 60 95C95 103 94 147 62 153C27 160 30 225 64 275" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-dasharray="7 8" />
+            </svg>
+
+        </div>
+
+
+        <!-- ==========================================
+             PROGRAMAS DESTACADOS
+        ========================================== -->
+
+        <div class="program-finder__programs">
+
+            <!-- ======================================
+                 ESCOLARIDAD
+            ======================================= -->
+
+            <article class="program-showcase-card program-showcase-card--school">
+
+                <div class="program-showcase-card__media">
+
+                    <img src="/images/pages/summer-camps/summer-camp-2.jpg"
+                        alt="Jóvenes participando en una experiencia internacional" loading="eager">
+
+                </div>
+
+
+                <div class="program-showcase-card__body">
+
+                    <span class="program-showcase-card__tag">
+                        Estudia en el extranjero
+                    </span>
+
+                    <h2 class="program-showcase-card__title">
+                        High School Exchange
+                    </h2>
+
+                    <p class="program-showcase-card__description">
+                        Vive una aventura inolvidable mientras estudias
+                        y te sumerges en una nueva cultura.
+                    </p>
+
+
+                    <a class="program-showcase-card__link" href="/pages/programa-escolar/"
+                        aria-label="Conocer el programa High School Exchange">
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                </div>
+
+            </article>
 
 
             <!-- ======================================
-                 ESTADO
+                 IDIOMAS
             ======================================= -->
 
-            <p class="program-finder__status" data-program-finder-status role="status" aria-live="polite"></p>
+            <article class="program-showcase-card program-showcase-card--languages">
 
-        </form>
+                <div class="program-showcase-card__media">
+
+                    <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/clases-local.jpg"
+                        alt="Estudiante participando en un programa internacional de idiomas" loading="eager">
+
+                </div>
+
+
+                <div class="program-showcase-card__body">
+
+                    <span class="program-showcase-card__tag">
+                        Cursos de idiomas
+                    </span>
+
+                    <h2 class="program-showcase-card__title">
+                        Aprende un nuevo idioma
+                    </h2>
+
+                    <p class="program-showcase-card__description">
+                        Cursos en el extranjero diseñados para jóvenes
+                        que quieren descubrir el mundo.
+                    </p>
+
+
+                    <a class="program-showcase-card__link" href="/pages/cursos-de-idiomas-en-el-extranjero-2/"
+                        aria-label="Conocer los cursos de idiomas en el extranjero">
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- ======================================
+                 PASANTÍAS
+            ======================================= -->
+
+            <article class="program-showcase-card program-showcase-card--work">
+
+                <div class="program-showcase-card__media">
+
+                    <img src="/images/pages/cursos-de-idiomas-en-el-extranjero-2/escuelasde-ingles-en-veracruz.jpg"
+                        alt="Joven durante una experiencia internacional de estudio y trabajo" loading="lazy">
+
+                </div>
+
+
+                <div class="program-showcase-card__body">
+
+                    <span class="program-showcase-card__tag">
+                        Study &amp; Work
+                    </span>
+
+                    <h2 class="program-showcase-card__title">
+                        Estudia y trabaja en el extranjero
+                    </h2>
+
+                    <p class="program-showcase-card__description">
+                        Desarrolla tus habilidades profesionales mientras
+                        vives una experiencia única.
+                    </p>
+
+
+                    <a class="program-showcase-card__link" href="/pages/pasantias-profesionales/"
+                        aria-label="Conocer las pasantías profesionales en el exterior">
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <!-- ======================================
+                 EXPERIENCIA INTERNACIONAL
+            ======================================= -->
+
+            <article class="program-showcase-card program-showcase-card--culture">
+
+                <div class="program-showcase-card__media">
+
+                    <img src="/images/pages/summer-camps/summer-camp-destinations.jpg"
+                        alt="Joven disfrutando una experiencia cultural internacional" loading="lazy">
+
+                </div>
+
+
+                <div class="program-showcase-card__body">
+
+                    <span class="program-showcase-card__tag">
+                        Aventura &amp; Cultura
+                    </span>
+
+                    <h2 class="program-showcase-card__title">
+                        Viaja, explora y transforma tu mundo
+                    </h2>
+
+                    <p class="program-showcase-card__description">
+                        Programas para jóvenes que quieren explorar,
+                        aprender y crecer.
+                    </p>
+
+
+                    <a class="program-showcase-card__link" href="/pages/summer-camps/"
+                        aria-label="Conocer experiencias internacionales">
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
 
     </div>
 

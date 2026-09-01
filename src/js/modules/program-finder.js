@@ -5,11 +5,23 @@
 // src/js/modules/program-finder.js
 //
 // Descripción:
-// Valida los filtros iniciales del buscador.
+// Gestiona la validación inicial del buscador de
+// programas de Global Exchange.
+//
+// Fase actual:
+// - Validación de edad.
+// - Validación de ciudad.
+// - Validación de destino.
+// - Preparado para conectar posteriormente
+//   un motor de recomendaciones.
 // ====================================================
 
 
 export function initProgramFinder() {
+
+    // ================================================
+    // FORMULARIO
+    // ================================================
 
     const form =
         document.querySelector(
@@ -22,25 +34,90 @@ export function initProgramFinder() {
     }
 
 
+    // ================================================
+    // ESTADO
+    // ================================================
+
     const status =
         form.querySelector(
             '[data-program-finder-status]'
         );
 
 
+    // ================================================
+    // CAMPOS
+    // ================================================
+
     const fields = {
-        age: form.querySelector('#program-age'),
-        city: form.querySelector('#program-city'),
+
+        age:
+            form.querySelector(
+                '#program-age'
+            ),
+
+        city:
+            form.querySelector(
+                '#program-city'
+            ),
+
         destination:
-            form.querySelector('#program-destination')
+            form.querySelector(
+                '#program-destination'
+            )
+
     };
 
 
-    /* ==========================================
-       MOSTRAR ERROR
-    ========================================== */
+    // ================================================
+    // MENSAJES
+    // ================================================
 
-    function showError(field, message) {
+    const validationMessages = {
+
+        age:
+            'Selecciona tu edad.',
+
+        city:
+            'Selecciona tu ciudad.',
+
+        destination:
+            'Selecciona el lugar que te interesa.',
+
+        incomplete:
+            'Completa los tres campos para continuar.',
+
+        success:
+            'Perfecto. Estamos preparando las opciones que mejor se adaptan a ti.'
+
+    };
+
+
+    // ================================================
+    // OBTENER MENSAJE DE ERROR
+    // ================================================
+
+    function getErrorElement(field) {
+
+        if (!field) {
+            return null;
+        }
+
+
+        return form.querySelector(
+            `[data-error-for="${field.id}"]`
+        );
+
+    }
+
+
+    // ================================================
+    // MOSTRAR ERROR
+    // ================================================
+
+    function showError(
+        field,
+        message
+    ) {
 
         if (!field) {
             return;
@@ -59,9 +136,7 @@ export function initProgramFinder() {
 
 
         const error =
-            form.querySelector(
-                `[data-error-for="${field.id}"]`
-            );
+            getErrorElement(field);
 
 
         if (error) {
@@ -71,9 +146,9 @@ export function initProgramFinder() {
     }
 
 
-    /* ==========================================
-       LIMPIAR ERROR
-    ========================================== */
+    // ================================================
+    // LIMPIAR ERROR
+    // ================================================
 
     function clearError(field) {
 
@@ -94,9 +169,7 @@ export function initProgramFinder() {
 
 
         const error =
-            form.querySelector(
-                `[data-error-for="${field.id}"]`
-            );
+            getErrorElement(field);
 
 
         if (error) {
@@ -106,24 +179,75 @@ export function initProgramFinder() {
     }
 
 
-    /* ==========================================
-       VALIDAR
-    ========================================== */
+    // ================================================
+    // LIMPIAR ESTADO
+    // ================================================
+
+    function clearStatus() {
+
+        if (!status) {
+            return;
+        }
+
+
+        status.textContent = '';
+
+        status.className =
+            'program-finder__status';
+
+    }
+
+
+    // ================================================
+    // MOSTRAR ESTADO
+    // ================================================
+
+    function showStatus(
+        message,
+        type
+    ) {
+
+        if (!status) {
+            return;
+        }
+
+
+        status.textContent = message;
+
+        status.className =
+            'program-finder__status';
+
+
+        if (type) {
+
+            status.classList.add(
+                `is-${type}`
+            );
+
+        }
+
+    }
+
+
+    // ================================================
+    // VALIDAR FORMULARIO
+    // ================================================
 
     function validateForm() {
 
         let isValid = true;
 
 
-        Object.values(fields)
+        Object
+            .values(fields)
             .forEach(clearError);
 
 
-        if (!fields.age.value) {
+        if (!fields.age?.value) {
 
             showError(
                 fields.age,
-                'Selecciona tu edad.'
+                validationMessages.age
             );
 
             isValid = false;
@@ -131,11 +255,11 @@ export function initProgramFinder() {
         }
 
 
-        if (!fields.city.value) {
+        if (!fields.city?.value) {
 
             showError(
                 fields.city,
-                'Selecciona tu ciudad.'
+                validationMessages.city
             );
 
             isValid = false;
@@ -143,11 +267,11 @@ export function initProgramFinder() {
         }
 
 
-        if (!fields.destination.value) {
+        if (!fields.destination?.value) {
 
             showError(
                 fields.destination,
-                'Selecciona el lugar que te interesa.'
+                validationMessages.destination
             );
 
             isValid = false;
@@ -160,11 +284,13 @@ export function initProgramFinder() {
     }
 
 
-    /* ==========================================
-       LIMPIAR AL CAMBIAR
-    ========================================== */
+    // ================================================
+    // ESCUCHAR CAMBIOS
+    // ================================================
 
-    Object.values(fields)
+    Object
+        .values(fields)
+        .filter(Boolean)
         .forEach((field) => {
 
             field.addEventListener(
@@ -173,9 +299,7 @@ export function initProgramFinder() {
 
                     clearError(field);
 
-                    status.textContent = '';
-                    status.className =
-                        'program-finder__status';
+                    clearStatus();
 
                 }
             );
@@ -183,9 +307,9 @@ export function initProgramFinder() {
         });
 
 
-    /* ==========================================
-       ENVÍO
-    ========================================== */
+    // ================================================
+    // ENVÍO
+    // ================================================
 
     form.addEventListener(
         'submit',
@@ -194,24 +318,21 @@ export function initProgramFinder() {
             event.preventDefault();
 
 
-            status.textContent = '';
-
-            status.className =
-                'program-finder__status';
+            clearStatus();
 
 
             if (!validateForm()) {
 
-                status.textContent =
-                    'Completa los tres campos para continuar.';
-
-                status.classList.add(
-                    'is-error'
+                showStatus(
+                    validationMessages.incomplete,
+                    'error'
                 );
 
 
                 form
-                    .querySelector('.is-invalid')
+                    .querySelector(
+                        '.is-invalid'
+                    )
                     ?.focus();
 
 
@@ -220,34 +341,41 @@ export function initProgramFinder() {
             }
 
 
-            const age =
-                fields.age.value;
+            // ========================================
+            // DATOS SELECCIONADOS
+            // ========================================
 
+            const filters = {
 
-            const city =
-                fields.city.value;
+                age:
+                    fields.age.value,
 
+                city:
+                    fields.city.value,
 
-            const destination =
-                fields.destination.value;
+                destination:
+                    fields.destination.value
+
+            };
 
 
             console.log(
-                'Búsqueda de programa:',
-                {
-                    age,
-                    city,
-                    destination
-                }
+                'Program Finder:',
+                filters
             );
 
 
-            status.textContent =
-                'Perfecto. Estamos preparando las opciones que mejor se adaptan a ti.';
+            // ========================================
+            // RESPUESTA TEMPORAL
+            //
+            // En una siguiente etapa este punto
+            // conectará con la lógica real para
+            // recomendar programas.
+            // ========================================
 
-
-            status.classList.add(
-                'is-success'
+            showStatus(
+                validationMessages.success,
+                'success'
             );
 
         }

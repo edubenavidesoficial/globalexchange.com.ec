@@ -1,29 +1,39 @@
 /* ====================================================
-   PROGRAM FINDER
+   PROGRAM FINDER HERO
 
    Archivo:
    src/css/components/program-finder.css
 
    Descripción:
-   Buscador compacto de programas de Global Exchange.
+   Hero principal de la nueva Home de Global Exchange.
+
+   Estructura:
+   - Información + buscador
+   - Programas destacados
+   - Elementos decorativos
 ==================================================== */
 
 
-/* ==========================================
+/* ====================================================
    SECCIÓN
-========================================== */
+==================================================== */
 
 .program-finder {
     position: relative;
 
     width: 100%;
+    min-height: calc(100vh - 86px);
 
-    padding: 90px 0;
+    padding: 62px 0 72px;
 
     background:
+        radial-gradient(circle at 28% 20%,
+            rgba(255, 129, 83, 0.07),
+            transparent 28%),
         linear-gradient(135deg,
-            rgba(255, 248, 250, 0.96),
-            rgba(247, 246, 255, 0.96));
+            #fffdfb 0%,
+            #ffffff 48%,
+            #fffaf7 100%);
 
     overflow: hidden;
 
@@ -31,64 +41,207 @@
 }
 
 
-/* ==========================================
-   CONTENEDOR
-========================================== */
+/* ====================================================
+   DECORACIÓN DE FONDO
+==================================================== */
 
-.program-finder__container {
-    max-width: 1180px;
+.program-finder__shape {
+    position: absolute;
+
+    z-index: 0;
+
+    pointer-events: none;
 }
 
 
-/* ==========================================
+.program-finder__shape--left {
+    left: -190px;
+    bottom: -250px;
+
+    width: 540px;
+    height: 540px;
+
+    border-radius:
+        42% 58% 64% 36% / 56% 39% 61% 44%;
+
+    background:
+        linear-gradient(145deg,
+            #7657ff,
+            #4857ff);
+
+    opacity: 0.95;
+
+    transform: rotate(18deg);
+}
+
+
+.program-finder__shape--right {
+    right: -210px;
+    bottom: -225px;
+
+    width: 510px;
+    height: 510px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(145deg,
+            #ffd74a,
+            #ffad27);
+
+    opacity: 0.92;
+}
+
+
+.program-finder__dots {
+    position: absolute;
+
+    z-index: 1;
+
+    width: 68px;
+    height: 68px;
+
+    pointer-events: none;
+
+    opacity: 0.82;
+
+    background-image:
+        radial-gradient(circle,
+            currentColor 3px,
+            transparent 3.5px);
+
+    background-size: 18px 18px;
+}
+
+
+
+.program-finder__dots--right {
+    top: 135px;
+    right: 28px;
+
+    color: #f5a8dc;
+}
+
+
+/* ====================================================
+   CONTENEDOR PRINCIPAL
+==================================================== */
+
+.program-finder__container {
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(420px, 0.92fr) 72px minmax(570px, 1.28fr);
+
+    gap: 26px;
+
+    align-items: center;
+
+    width: min(100% - 48px, 1480px);
+    max-width: 1480px;
+
+    margin: 0 auto;
+}
+
+
+/* ====================================================
+   COLUMNA IZQUIERDA
+==================================================== */
+
+.program-finder__content {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+}
+
+
+/* ====================================================
    ENCABEZADO
-========================================== */
+==================================================== */
 
 .program-finder__header {
-    max-width: 800px;
+    position: relative;
 
-    margin: 0 auto 42px;
+    max-width: 620px;
 
-    text-align: center;
+    margin-bottom: 30px;
 }
 
 
 .program-finder__eyebrow {
-    margin: 0 0 10px;
-
-    font-family: var(--font-primary);
-    font-size: 25px;
-    font-weight: var(--font-extrabold);
-
-    text-transform: uppercase;
-    letter-spacing: 1.3px;
-
-    color: var(--brand-orange);
+    display: none;
 }
 
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
 
 .program-finder__title {
-    margin: 0 0 14px;
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
+
+    margin: 0 0 22px;
 
     font-family: var(--font-nunito);
-    font-size: clamp(32px, 3vw, 42px);
-    font-weight: var(--font-extrabold);
-    line-height: 1.15;
-
-    color: var(--brand-purple);
+    font-size: clamp(48px, 4.2vw, 76px);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -2.4px;
 }
 
 
-.program-finder__description {
-    max-width: 680px;
+.program-finder__title-main {
+    color: #111c58;
+}
 
-    margin: 0 auto;
+
+.program-finder__title-highlight {
+    display: inline-block;
+
+    width: max-content;
+    max-width: 100%;
+
+    padding-bottom: 5px;
+
+    background:
+        linear-gradient(90deg,
+            #6654f5 0%,
+            #315cff 52%,
+            #404adf 100%);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* ==========================================
+   DESCRIPCIÓN
+========================================== */
+
+.program-finder__description {
+    max-width: 565px;
+
+    margin: 0;
 
     font-family: var(--font-primary);
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 17px;
+    font-weight: var(--font-normal);
+    line-height: 1.75;
 
-    color: var(--text);
+    color: #59617e;
 }
 
 
@@ -97,66 +250,135 @@
 ==================================================== */
 
 .program-finder__form {
+    position: relative;
+
     width: 100%;
+    max-width: 580px;
 
-    padding: 34px;
+    padding: 30px 32px 25px;
 
-    background: var(--white);
+    background:
+        rgba(255, 255, 255, 0.97);
 
     border:
-        1px solid rgba(59, 54, 99, 0.1);
+        1px solid rgba(27, 35, 87, 0.07);
 
-    border-radius: var(--radius-xl);
+    border-radius: 28px;
 
     box-shadow:
-        0 20px 45px rgba(59, 54, 99, 0.1);
+        0 24px 60px rgba(41, 46, 93, 0.12),
+        0 5px 15px rgba(41, 46, 93, 0.05);
+
+    backdrop-filter: blur(14px);
 }
 
 
-/* ==========================================
+/* ====================================================
    CAMPOS
-========================================== */
+==================================================== */
 
 .program-finder__fields {
-    display: grid;
+    display: flex;
 
-    grid-template-columns:
-        minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr) auto;
+    flex-direction: column;
 
-    gap: 18px;
-
-    align-items: end;
+    gap: 14px;
 }
 
 
 .program-finder__field {
+    display: grid;
+
+    grid-template-columns:
+        58px minmax(0, 1fr);
+
+    gap: 15px;
+
+    align-items: start;
+
     min-width: 0;
 }
 
 
-/* ==========================================
+.program-finder__field-content {
+    min-width: 0;
+}
+
+
+/* ====================================================
+   ICONOS
+==================================================== */
+
+.program-finder__field-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 50px;
+
+    margin-top: 4px;
+
+    border-radius: 50%;
+
+    color: #172057;
+}
+
+
+.program-finder__field-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+
+.program-finder__field-icon--age {
+    background:
+        linear-gradient(135deg,
+            #fab0ef,
+            #e97afa);
+}
+
+
+.program-finder__field-icon--city {
+    background:
+        linear-gradient(135deg,
+            #48e1d6,
+            #04c8b3);
+}
+
+
+.program-finder__field-icon--destination {
+    background:
+        linear-gradient(135deg,
+            #ffd94d,
+            #ffb600);
+
+    color: #e34f18;
+}
+
+
+/* ====================================================
    LABEL
-========================================== */
+==================================================== */
 
 .program-finder__label {
     display: block;
 
-    min-height: 42px;
-
-    margin-bottom: 9px;
+    margin: 0 0 8px;
 
     font-family: var(--font-primary);
-    font-size: 14px;
-    font-weight: var(--font-semibold);
-    line-height: 1.3;
+    font-size: 15px;
+    font-weight: var(--font-bold);
+    line-height: 1.35;
 
-    color: var(--brand-purple);
+    color: #111a50;
 }
 
 
-/* ==========================================
+/* ====================================================
    SELECT
-========================================== */
+==================================================== */
 
 .program-finder__select-wrapper {
     position: relative;
@@ -167,39 +389,40 @@
     display: block;
 
     width: 100%;
-    min-height: 52px;
+    height: 48px;
 
     padding:
-        0 42px 0 16px;
+        0 48px 0 16px;
 
     appearance: none;
     -webkit-appearance: none;
 
-    font-family: var(--font-primary);
-    font-size: 15px;
-    font-weight: var(--font-normal);
-
-    color: var(--brand-purple);
-
-    background: #fbfbfc;
+    background:
+        #ffffff;
 
     border:
-        1px solid rgba(59, 54, 99, 0.15);
+        1px solid #dfe3ed;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     outline: none;
+
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: var(--font-normal);
+
+    color: #58617d;
 
     cursor: pointer;
 
     transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        background-color 0.25s ease;
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
 }
 
 
-/* Flecha personalizada */
+/* Flecha */
 
 .program-finder__select-wrapper::after {
     content: "";
@@ -207,13 +430,13 @@
     position: absolute;
 
     top: 50%;
-    right: 18px;
+    right: 20px;
 
     width: 8px;
     height: 8px;
 
-    border-right: 2px solid var(--brand-purple);
-    border-bottom: 2px solid var(--brand-purple);
+    border-right: 2px solid #566084;
+    border-bottom: 2px solid #566084;
 
     pointer-events: none;
 
@@ -225,126 +448,234 @@
 /* Focus */
 
 .program-finder__select:focus {
-    background: var(--white);
-
-    border-color: var(--brand-orange);
+    border-color: #5462ff;
 
     box-shadow:
-        0 0 0 3px rgba(255, 111, 53, 0.12);
+        0 0 0 4px rgba(84, 98, 255, 0.11);
 }
 
 
-/* ==========================================
+/* ====================================================
    ERROR
-========================================== */
+==================================================== */
 
 .program-finder__select.is-invalid {
-    border-color: #d94141;
+    border-color: #da4242;
 
     box-shadow:
-        0 0 0 3px rgba(217, 65, 65, 0.08);
+        0 0 0 3px rgba(218, 66, 66, 0.08);
 }
 
 
 .program-finder__error {
     display: block;
 
-    min-height: 17px;
+    min-height: 13px;
 
-    margin-top: 5px;
+    margin-top: 3px;
 
     font-family: var(--font-primary);
-    font-size: 11px;
-    line-height: 1.3;
+    font-size: 10px;
+    line-height: 1.25;
 
     color: #c53636;
 }
 
 
-/* ==========================================
-   BOTÓN
-========================================== */
+/* ====================================================
+   ACCIONES
+==================================================== */
 
 .program-finder__actions {
-    padding-bottom: 22px;
+    margin-top: 5px;
 }
 
 
 .program-finder__button {
-    display: inline-flex;
+    display: flex;
 
     align-items: center;
     justify-content: center;
 
-    gap: 10px;
+    gap: 22px;
 
-    min-width: 190px;
-    min-height: 52px;
+    width: 100%;
+    min-height: 56px;
 
-    padding:
-        0 24px;
+    padding: 0 28px;
 
     border: 0;
-    border-radius: 10px;
+    border-radius: 999px;
 
     background:
-        var(--gradient-primary);
+        linear-gradient(90deg,
+            #ff8618 0%,
+            #ff5b12 55%,
+            #ff4515 100%);
+
+    box-shadow:
+        0 12px 24px rgba(255, 93, 22, 0.19);
 
     font-family: var(--font-primary);
-    font-size: 14px;
+    font-size: 17px;
     font-weight: var(--font-bold);
 
-    color: var(--white);
+    color: #ffffff;
 
     cursor: pointer;
 
-    white-space: nowrap;
-
     transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
 .program-finder__button:hover,
 .program-finder__button:focus-visible {
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(243, 145, 37, 0.25);
+        0 17px 30px rgba(255, 93, 22, 0.28);
 }
 
 
 .program-finder__button-arrow {
+    font-size: 25px;
+    line-height: 1;
+
     transition:
-        transform 0.25s ease;
+        transform 0.2s ease;
 }
 
 
 .program-finder__button:hover .program-finder__button-arrow {
-    transform:
-        translateX(4px);
+    transform: translateX(5px);
 }
 
 
-/* ==========================================
-   ESTADO
-========================================== */
+/* ====================================================
+   SOCIAL PROOF
+==================================================== */
 
-.program-finder__status {
-    min-height: 22px;
+.program-finder__social-proof {
+    display: flex;
 
-    margin:
-        12px 0 0;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 24px;
+}
+
+
+.program-finder__avatars {
+    display: flex;
+
+    flex-shrink: 0;
+}
+
+
+.program-finder__avatar {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    margin-left: -9px;
+
+    border:
+        3px solid #ffffff;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg,
+            #ffbd8f,
+            #f48072);
+
+    box-shadow:
+        0 3px 9px rgba(21, 28, 69, 0.11);
 
     font-family: var(--font-primary);
     font-size: 13px;
-    line-height: 1.5;
+    font-weight: var(--font-bold);
+
+    color: #ffffff;
+}
+
+
+.program-finder__avatar:first-child {
+    margin-left: 0;
+
+    background:
+        linear-gradient(135deg,
+            #1b285e,
+            #4256bf);
+}
+
+
+.program-finder__avatar:nth-child(2) {
+    background:
+        linear-gradient(135deg,
+            #ee7964,
+            #f6a25e);
+}
+
+
+.program-finder__avatar:nth-child(3) {
+    background:
+        linear-gradient(135deg,
+            #33b8b0,
+            #4dd2c9);
+}
+
+
+.program-finder__avatar:nth-child(4) {
+    background:
+        linear-gradient(135deg,
+            #875ce7,
+            #4c58db);
+}
+
+
+.program-finder__social-text {
+    margin: 0;
+
+    font-family: var(--font-primary);
+    font-size: 12px;
+    font-weight: var(--font-semibold);
+    line-height: 1.45;
+
+    color: #151b4b;
+}
+
+
+.program-finder__social-text strong {
+    display: block;
+
+    font-weight: var(--font-bold);
+}
+
+
+/* ====================================================
+   ESTADO
+==================================================== */
+
+.program-finder__status {
+    min-height: 20px;
+
+    margin: 10px 0 0;
+
+    font-family: var(--font-primary);
+    font-size: 12px;
+    line-height: 1.45;
 
     text-align: center;
 
-    color: var(--brand-purple);
+    color: #172057;
 }
 
 
@@ -359,33 +690,436 @@
 
 
 /* ====================================================
+   VUELO DECORATIVO
+==================================================== */
+
+.program-finder__flight {
+    position: relative;
+
+    align-self: center;
+
+    width: 72px;
+    height: 310px;
+
+    color: #27c8bf;
+
+    pointer-events: none;
+}
+
+
+.program-finder__plane {
+    position: absolute;
+
+    z-index: 2;
+
+    top: -10px;
+    left: 14px;
+
+    display: block;
+
+    font-size: 42px;
+
+    transform: rotate(-24deg);
+}
+
+
+.program-finder__flight-path {
+    position: absolute;
+
+    top: 34px;
+    left: 0;
+
+    width: 70px;
+    height: 260px;
+
+    overflow: visible;
+}
+
+
+/* ====================================================
+   GRID DE PROGRAMAS
+==================================================== */
+
+.program-finder__programs {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    width: 100%;
+}
+
+
+/* ====================================================
+   TARJETA DE PROGRAMA
+==================================================== */
+
+.program-showcase-card {
+    position: relative;
+
+    min-width: 0;
+    min-height: 340px;
+
+    border-radius: 28px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 18px 45px rgba(27, 35, 87, 0.12);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+
+.program-showcase-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 25px 55px rgba(27, 35, 87, 0.17);
+}
+
+
+/* ====================================================
+   IMAGEN
+==================================================== */
+
+.program-showcase-card__media {
+    position: absolute;
+
+    inset:
+        0 0 auto;
+
+    width: 100%;
+    height: 57%;
+
+    overflow: hidden;
+
+    background: #e9ebf2;
+}
+
+
+.program-showcase-card__media::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(180deg,
+            transparent 55%,
+            rgba(10, 17, 56, 0.08));
+}
+
+
+.program-showcase-card__media img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.5s ease;
+}
+
+
+.program-showcase-card:hover .program-showcase-card__media img {
+    transform: scale(1.045);
+}
+
+
+/* ====================================================
+   PANEL DE CONTENIDO
+==================================================== */
+
+.program-showcase-card__body {
+    position: absolute;
+
+    z-index: 2;
+
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    min-height: 52%;
+
+    padding:
+        27px 70px 23px 24px;
+
+    color: #ffffff;
+
+    clip-path:
+        ellipse(115% 88% at 50% 100%);
+}
+
+
+/* Colores */
+
+.program-showcase-card--school .program-showcase-card__body {
+    background:
+        linear-gradient(145deg,
+            #3549ed,
+            #143dd6);
+}
+
+
+.program-showcase-card--languages .program-showcase-card__body {
+    background:
+        linear-gradient(145deg,
+            #ff4e91,
+            #f83975);
+}
+
+
+.program-showcase-card--work .program-showcase-card__body {
+    background:
+        linear-gradient(145deg,
+            #9168e8,
+            #7146cf);
+}
+
+
+.program-showcase-card--culture .program-showcase-card__body {
+    background:
+        linear-gradient(145deg,
+            #20bcae,
+            #039e96);
+}
+
+
+/* ====================================================
+   TAG
+==================================================== */
+
+.program-showcase-card__tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 28px;
+
+    margin-bottom: 10px;
+
+    padding:
+        5px 13px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    font-family: var(--font-primary);
+    font-size: 11px;
+    font-weight: var(--font-bold);
+
+    color: #303c94;
+}
+
+
+.program-showcase-card--languages .program-showcase-card__tag {
+    color: #df3a71;
+}
+
+
+.program-showcase-card--work .program-showcase-card__tag {
+    color: #6540bd;
+}
+
+
+.program-showcase-card--culture .program-showcase-card__tag {
+    color: #078078;
+}
+
+
+/* ====================================================
+   TEXTO
+==================================================== */
+
+.program-showcase-card__title {
+    max-width: 260px;
+
+    margin: 0 0 8px;
+
+    font-family: var(--font-nunito);
+    font-size: clamp(21px, 1.8vw, 28px);
+    font-weight: var(--font-extrabold);
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+
+    color: #ffffff;
+}
+
+
+.program-showcase-card__description {
+    max-width: 295px;
+
+    margin: 0;
+
+    font-family: var(--font-primary);
+    font-size: 11.5px;
+    line-height: 1.45;
+
+    color:
+        rgba(255, 255, 255, 0.94);
+}
+
+
+/* ====================================================
+   BOTÓN DE TARJETA
+==================================================== */
+
+.program-showcase-card__link {
+    position: absolute;
+
+    right: 19px;
+    bottom: 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 7px 18px rgba(12, 20, 61, 0.14);
+
+    font-size: 25px;
+    font-weight: var(--font-bold);
+
+    color: #3545cb;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.program-showcase-card__link:hover,
+.program-showcase-card__link:focus-visible {
+    transform: translateX(3px);
+
+    box-shadow:
+        0 10px 24px rgba(12, 20, 61, 0.2);
+}
+
+
+.program-showcase-card--languages .program-showcase-card__link {
+    color: #f23d78;
+}
+
+
+.program-showcase-card--work .program-showcase-card__link {
+    color: #7545ca;
+}
+
+
+.program-showcase-card--culture .program-showcase-card__link {
+    color: #05978f;
+}
+
+
+/* ====================================================
    RESPONSIVE
 ==================================================== */
 
 
 /* ==========================================
-   PANTALLAS MEDIANAS
+   ESCRITORIO MEDIANO
 ========================================== */
 
-@media (max-width: 1050px) {
+@media (max-width: 1350px) {
 
-    .program-finder__fields {
+    .program-finder__container {
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            minmax(390px, 0.92fr) 45px minmax(500px, 1.18fr);
+
+        gap: 20px;
     }
 
 
-    .program-finder__actions {
-        display: flex;
-
-        align-items: flex-end;
-
-        padding-bottom: 22px;
+    .program-finder__title {
+        font-size: clamp(46px, 4vw, 65px);
     }
 
 
-    .program-finder__button {
-        width: 100%;
+    .program-finder__flight {
+        width: 45px;
+    }
+
+
+    .program-finder__plane {
+        left: 0;
+    }
+
+
+    .program-showcase-card {
+        min-height: 315px;
+    }
+
+}
+
+
+/* ==========================================
+   TABLET GRANDE
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .program-finder {
+        padding:
+            55px 0 75px;
+    }
+
+
+    .program-finder__container {
+        grid-template-columns:
+            minmax(0, 1fr) minmax(0, 1fr);
+
+        gap: 42px;
+
+        align-items: start;
+    }
+
+
+    .program-finder__flight {
+        display: none;
+    }
+
+
+    .program-finder__programs {
+        gap: 15px;
+    }
+
+
+    .program-showcase-card {
+        min-height: 300px;
+    }
+
+
+    .program-showcase-card__body {
+        padding:
+            25px 60px 20px 20px;
+    }
+
+
+    .program-showcase-card__title {
+        font-size: 21px;
     }
 
 }
@@ -395,78 +1129,273 @@
    TABLET
 ========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 
     .program-finder {
-        padding: 70px 0;
+        min-height: auto;
+
+        padding:
+            55px 0 80px;
     }
 
+
+    .program-finder__container {
+        display: block;
+
+        width:
+            min(100% - 38px, 760px);
+    }
+
+
+    .program-finder__content {
+        max-width: 660px;
+
+        margin: 0 auto;
+    }
+
+
+    .program-finder__header {
+        max-width: 620px;
+
+        text-align: center;
+    }
+
+
+    .program-finder__title {
+        align-items: center;
+
+        font-size:
+            clamp(44px, 8vw, 64px);
+    }
+
+
+    .program-finder__title-highlight {
+        width: auto;
+    }
+
+
+    .program-finder__description {
+        margin:
+            0 auto;
+    }
 
     .program-finder__form {
-        padding: 26px;
+        max-width: 620px;
+
+        margin:
+            0 auto;
     }
 
 
-    .program-finder__fields {
-        grid-template-columns: 1fr;
+    .program-finder__programs {
+        margin-top: 48px;
     }
 
 
-    .program-finder__label {
-        min-height: auto;
+    .program-showcase-card {
+        min-height: 350px;
     }
 
-
-    .program-finder__actions {
-        padding-bottom: 0;
+    .program-finder__dots--right {
+        right: 5px;
     }
 
 }
 
 
 /* ==========================================
-   MÓVIL
+   MÓVIL GRANDE
 ========================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
     .program-finder {
-        padding: 55px 0;
+        padding:
+            42px 0 65px;
     }
 
 
     .program-finder__container {
-        padding-right: var(--page-gutter-xs);
-        padding-left: var(--page-gutter-xs);
+        width:
+            min(100% - 28px, 580px);
     }
 
 
     .program-finder__header {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
 
 
     .program-finder__title {
-        font-size: 29px;
+        font-size:
+            clamp(39px, 12vw, 53px);
+
+        letter-spacing: -1.7px;
     }
 
 
     .program-finder__description {
         font-size: 15px;
+        line-height: 1.65;
     }
 
 
     .program-finder__form {
-        padding: 20px;
+        padding:
+            24px 20px 22px;
 
-        border-radius: 16px;
+        border-radius: 23px;
+    }
+
+
+    .program-finder__field {
+        grid-template-columns:
+            48px minmax(0, 1fr);
+
+        gap: 11px;
+    }
+
+
+    .program-finder__field-icon {
+        width: 43px;
+        height: 43px;
+    }
+
+
+    .program-finder__field-icon svg {
+        width: 22px;
+        height: 22px;
     }
 
 
     .program-finder__button {
-        width: 100%;
+        min-height: 54px;
 
-        min-width: 0;
+        font-size: 15px;
+    }
+
+
+    .program-finder__social-proof {
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .program-finder__avatar {
+        width: 32px;
+        height: 32px;
+
+        font-size: 10px;
+    }
+
+
+    .program-finder__social-text {
+        font-size: 11px;
+    }
+
+
+    .program-finder__programs {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+
+        margin-top: 40px;
+    }
+
+
+    .program-showcase-card {
+        min-height: 380px;
+    }
+
+
+    .program-showcase-card__body {
+        min-height: 50%;
+
+        padding:
+            30px 75px 25px 25px;
+    }
+
+
+    .program-showcase-card__title {
+        max-width: 310px;
+
+        font-size: 27px;
+    }
+
+
+    .program-showcase-card__description {
+        font-size: 12px;
+    }
+
+
+    .program-finder__dots {
+        display: none;
+    }
+
+}
+
+
+/* ==========================================
+   MÓVIL PEQUEÑO
+========================================== */
+
+@media (max-width: 420px) {
+
+    .program-finder__title {
+        font-size: 39px;
+    }
+
+
+    .program-finder__form {
+        padding:
+            22px 15px 20px;
+    }
+
+
+    .program-finder__field {
+        grid-template-columns:
+            42px minmax(0, 1fr);
+    }
+
+
+    .program-finder__field-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .program-finder__label {
+        font-size: 13px;
+    }
+
+
+    .program-finder__select {
+        height: 45px;
+
+        padding-left: 13px;
+
+        font-size: 13px;
+    }
+
+
+    .program-finder__social-proof {
+        display: block;
+    }
+
+
+    .program-finder__social-text {
+        margin-top: 10px;
+    }
+
+
+    .program-showcase-card {
+        min-height: 355px;
+    }
+
+
+    .program-showcase-card__title {
+        font-size: 24px;
     }
 
 }
