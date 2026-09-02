@@ -22,7 +22,7 @@
 
     width: 100%;
 
-    padding: 105px 0 120px;
+    padding: 70px 0 120px;
 
     background:
         radial-gradient(circle at 12% 22%,
@@ -1702,7 +1702,7 @@
 @media (max-width: 700px) {
 
     .services {
-        padding: 70px 0 80px;
+        padding: 55px 0 80px;
     }
 
 
