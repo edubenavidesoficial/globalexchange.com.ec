@@ -5,575 +5,1286 @@ COMPONENTE: SERVICES
 Proyecto:
 Global Exchange - Migración a Vite
 
-Estado:
-- HTML propio y semántico
-- Sin GT3
-- Sin imágenes duplicadas
-- Grid responsive de tres columnas
-- Internacionalización con i18next
+Diseño:
+- Carrusel vertical de programas.
+- Tarjeta activa centrada.
+- Programa anterior y siguiente parcialmente visibles.
+- Resumen dinámico.
+- Agenda de asesoría.
+- Integración con WhatsApp.
 
-Archivo relacionado:
+Archivos relacionados:
 - src/css/components/services.css
+- src/js/modules/services.js
 ====================================================
 -->
 
 <section class="services" id="servicios">
 
     <!-- ==========================================
-         ENCABEZADO DE LA SECCIÓN
+         DECORACIONES
     ========================================== -->
 
-    <header class="services__header">
+    <div class="services__shape services__shape--left" aria-hidden="true"></div>
 
-        <p class="services__eyebrow" data-i18n="services.eyebrow">
-            GLOBAL EXCHANGE
-        </p>
+    <div class="services__shape services__shape--right" aria-hidden="true"></div>
 
-        <h2 class="services__title" data-i18n="services.title">
-            Nuestros Servicios
-        </h2>
+    <div class="services__dots" aria-hidden="true"></div>
 
-
-        <!-- Decoraciones -->
-
-        <span class="services__decoration services__decoration--cross-left" aria-hidden="true">
-            <img src="/images/decorations/home_06_icon_22.png" alt="">
-        </span>
-
-
-        <span class="services__decoration services__decoration--triangle-orange" aria-hidden="true">
-            <img src="/images/decorations/triangle_orange.png" alt="">
-        </span>
-
-
-        <span class="services__decoration services__decoration--triangle-blue" aria-hidden="true">
-            <img src="/images/decorations/triangle_blue.png" alt="">
-        </span>
-
-
-        <span class="services__decoration services__decoration--cross-right" aria-hidden="true">
-            <img src="/images/decorations/home_06_icon_22.png" alt="">
-        </span>
-
-
-        <span class="services__decoration services__decoration--plus" aria-hidden="true">
-            <img src="/images/decorations/home_06_icon_23.png" alt="">
-        </span>
-
-    </header>
-
-
-    <!-- ==========================================
-         CONTENIDO
-    ========================================== -->
 
     <div class="services__container">
 
-        <div class="services__columns">
+        <!-- ==========================================
+             ENCABEZADO
+        ========================================== -->
+
+        <header class="services__header">
+
+            <p class="services__eyebrow">
+                Global Exchange
+            </p>
+
+            <h2 class="services__title">
+                Explora nuestros
+                <span>programas internacionales</span>
+            </h2>
+
+            <p class="services__description">
+                Descubre diferentes formas de estudiar, viajar y crecer
+                en el exterior. Explora nuestros programas y agenda una
+                asesoría personalizada para encontrar la opción ideal para ti.
+            </p>
+
+        </header>
 
 
-            <!-- ======================================
-                 COLUMNA 1
-            ======================================= -->
+        <!-- ==========================================
+             DOS COLUMNAS
+        ========================================== -->
 
-            <div class="services__column">
-
-
-                <!-- ==================================
-                     PROGRAMA IDIOMÁTICO
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/cursos-de-idiomas-en-el-extranjero-2/"
-                        aria-label="Programa idiomático" data-i18n-aria-label="services.languageProgram.ariaLabel">
-                        <img src="/images/services/idiomas.png" alt="" loading="lazy">
-                    </a>
+        <div class="services__layout">
 
 
-                    <div class="services__card-content">
+            <!-- ==================================================
+                 COLUMNA IZQUIERDA
+            =================================================== -->
 
-                        <h3 class="services__card-title">
+            <div class="services-programs">
 
-                            <a href="/pages/cursos-de-idiomas-en-el-extranjero-2/"
-                                data-i18n="services.languageProgram.title">
+                <!-- ==========================================
+                     CABECERA
+                ========================================== -->
+
+                <div class="services-programs__header">
+
+                    <div>
+
+                        <span class="services-programs__eyebrow">
+                            Nuestros programas
+                        </span>
+
+                        <h3 class="services-programs__title">
+                            Encuentra tu próxima experiencia
+                        </h3>
+
+                    </div>
+
+
+                    <div class="services-programs__controls">
+
+                        <button class="services-programs__arrow" type="button" data-services-prev
+                            aria-label="Programa anterior">
+                            ↑
+                        </button>
+
+                        <button class="services-programs__arrow" type="button" data-services-next
+                            aria-label="Siguiente programa">
+                            ↓
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     CONTADOR
+                ========================================== -->
+
+                <div class="services-programs__progress">
+
+                    <strong data-services-current>
+                        01
+                    </strong>
+
+                    <span></span>
+
+                    <strong>
+                        10
+                    </strong>
+
+                </div>
+
+
+                <!-- ==========================================
+                     CARRUSEL VERTICAL
+                ========================================== -->
+
+                <div class="services-carousel" data-services-carousel tabindex="0"
+                    aria-label="Programas de Global Exchange">
+
+                    <div class="services-carousel__track" data-services-track>
+
+
+                        <!-- ==================================
+                             01 PROGRAMA IDIOMÁTICO
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--blue
+                                is-active
+                            " data-service-card data-service-name="Programa idiomático">
+
+                            <span class="services-program-card__number">
+                                01
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/idiomas.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Idiomas
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Programa idiomático
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Aprende o perfecciona un idioma en el
+                                    extranjero mientras descubres una nueva
+                                    cultura y amplías tus oportunidades.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>76 destinos</span>
+
+                                    <span>4 a 48 semanas</span>
+
+                                    <span>
+                                        Experiencia internacional
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link"
+                                        href="/pages/cursos-de-idiomas-en-el-extranjero-2/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             02 ESCOLARIDAD
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--pink
+                            " data-service-card data-service-name="Escolaridad">
+
+                            <span class="services-program-card__number">
+                                02
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/idiomas-2.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Intercambio estudiantil
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Escolaridad
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Sumérgete en la cultura y el idioma del
+                                    país de destino mientras estudias un
+                                    trimestre, quimestre o año escolar.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>
+                                        Colegio en el exterior
+                                    </span>
+
+                                    <span>
+                                        Familia o residencia
+                                    </span>
+
+                                    <span>
+                                        Acompañamiento
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/programa-escolar/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             03 SUMMER CAMP
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--orange
+                            " data-service-card data-service-name="Summer Camp">
+
+                            <span class="services-program-card__number">
+                                03
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/tent.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Aventura internacional
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Summer Camp
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Vive unas vacaciones diferentes con
+                                    actividades, excursiones, aprendizaje
+                                    de idiomas y nuevas amistades.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>Jóvenes</span>
+
+                                    <span>Idiomas</span>
+
+                                    <span>
+                                        Cultura y aventura
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/summer-camps/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             04 UNIVERSIDADES
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--purple
+                            " data-service-card data-service-name="Universidades en el exterior">
+
+                            <span class="services-program-card__number">
+                                04
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/studying.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Educación superior
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Universidades en el exterior
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Encuentra oportunidades académicas
+                                    internacionales y recibe acompañamiento
+                                    durante tu proceso de aplicación.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>Universidades</span>
+
+                                    <span>Aplicación</span>
+
+                                    <span>Asesoría</span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/educacion-en-el-exterior/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             05 PASANTÍAS
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--teal
+                            " data-service-card data-service-name="Pasantías universitarias">
+
+                            <span class="services-program-card__number">
+                                05
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/businessman.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Experiencia profesional
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Pasantías universitarias
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Desarrolla tus habilidades laborales y
+                                    lingüísticas dentro de un entorno de
+                                    trabajo internacional.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>
+                                        Experiencia laboral
+                                    </span>
+
+                                    <span>Idiomas</span>
+
+                                    <span>
+                                        Desarrollo profesional
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/pasantias-profesionales/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             06 AUSBILDUNG
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--blue
+                            " data-service-card data-service-name="Ausbildung">
+
+                            <span class="services-program-card__number">
+                                06
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/educacion.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Formación técnica
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Ausbildung
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Desarrolla conocimientos y habilidades
+                                    profesionales mediante formación teórica
+                                    y experiencia práctica.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>
+                                        Formación profesional
+                                    </span>
+
+                                    <span>
+                                        Teoría + práctica
+                                    </span>
+
+                                    <span>
+                                        Proyección laboral
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Solicitar información
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             07 EDUCACIÓN DUAL
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--orange
+                            " data-service-card data-service-name="Educación dual">
+
+                            <span class="services-program-card__number">
+                                07
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/educacion-a-distancia.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Estudio + trabajo
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Educación dual
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Combina clases teóricas con experiencia
+                                    práctica dentro de una empresa durante
+                                    tu formación profesional.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>Universidad</span>
+
+                                    <span>Empresa</span>
+
+                                    <span>
+                                        Formación práctica
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Solicitar información
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             08 NANNY
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--pink
+                            " data-service-card data-service-name="Programa Nanny">
+
+                            <span class="services-program-card__number">
+                                08
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/cot.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Intercambio cultural
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Programa Nanny
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Vive con una familia anfitriona, mejora
+                                    un nuevo idioma y desarrolla independencia
+                                    mientras participas en un intercambio cultural.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>
+                                        Familia anfitriona
+                                    </span>
+
+                                    <span>Idioma</span>
+
+                                    <span>
+                                        Experiencia cultural
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/programa-nanny/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             09 LENGUA LOCAL
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--teal
+                            " data-service-card data-service-name="Curso de lengua local">
+
+                            <span class="services-program-card__number">
+                                09
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/hero/idiomas-1.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Escuela de idiomas
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Curso de lengua local
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Aprende y mejora tus habilidades
+                                    lingüísticas con cursos diseñados para
+                                    diferentes niveles y objetivos.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>Inglés</span>
+
+                                    <span>Alemán</span>
+
+                                    <span>
+                                        Francés e italiano
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/cursos-idioma-local/">
+                                        Ver programa
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ==================================
+                             10 CURSOS ESPECIALES
+                        =================================== -->
+
+                        <article class="
+                                services-program-card
+                                services-program-card--purple
+                            " data-service-card data-service-name="Cursos especiales">
+
+                            <span class="services-program-card__number">
+                                10
+                            </span>
+
+                            <div class="services-program-card__icon">
+
+                                <img src="/images/services/airplane-1.png" alt="" loading="lazy">
+
+                            </div>
+
+
+                            <div class="services-program-card__content">
+
+                                <span class="services-program-card__badge">
+                                    Programas especializados
+                                </span>
+
+                                <h4 class="services-program-card__title">
+                                    Cursos especiales
+                                </h4>
+
+                                <p class="services-program-card__description">
+                                    Encuentra programas de idiomas y formación
+                                    orientados a objetivos académicos,
+                                    profesionales y personales.
+                                </p>
+
+                                <div class="services-program-card__features">
+
+                                    <span>Profesiones</span>
+
+                                    <span>Idiomas</span>
+
+                                    <span>
+                                        Formación especializada
+                                    </span>
+
+                                </div>
+
+
+                                <div class="services-program-card__actions">
+
+                                    <button class="services-program-card__select" type="button" data-service-select>
+                                        Me interesa
+                                        <span aria-hidden="true">→</span>
+                                    </button>
+
+                                    <a class="services-program-card__link" href="/pages/cursos-idioma-local/">
+                                        Ver opciones
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     RESUMEN DINÁMICO
+                ========================================== -->
+
+                <div class="services-program-summary" data-services-summary>
+
+                    <div class="services-program-summary__header">
+
+                        <div>
+
+                            <span class="services-program-summary__eyebrow">
+                                Programa activo
+                            </span>
+
+                            <span class="services-program-summary__helper">
+                                Información rápida
+                            </span>
+
+                        </div>
+
+                        <strong class="services-program-summary__counter" data-services-summary-counter>
+                            01 / 10
+                        </strong>
+
+                    </div>
+
+
+                    <div class="services-program-summary__content">
+
+                        <div class="services-program-summary__text">
+
+                            <h4 class="services-program-summary__title" data-services-summary-title>
                                 Programa idiomático
-                            </a>
+                            </h4>
 
-                        </h3>
+                            <p class="services-program-summary__description" data-services-summary-description>
+                                Aprende o perfecciona un idioma en el extranjero
+                                mientras descubres una nueva cultura.
+                            </p>
 
-
-                        <p class="services__card-description" data-i18n="services.languageProgram.description">
-                            Aprende o perfecciona una lengua con Global Exchange
-                            en 76 destinos del mundo. Disfruta de un ambiente
-                            exclusivo en nuestras academias de lengua.
-                        </p>
+                        </div>
 
 
-                        <p class="services__card-note">
+                        <div class="services-program-summary__plane" aria-hidden="true">
+                            ✈
+                        </div>
 
-                            <span data-i18n="services.languageProgram.ageLine1">
-                                No hay límite de edad
+                    </div>
+
+
+                    <div class="services-program-summary__features" data-services-summary-features>
+
+                        <span>76 destinos</span>
+
+                        <span>4 a 48 semanas</span>
+
+                        <span>
+                            Experiencia internacional
+                        </span>
+
+                    </div>
+
+
+                    <div class="services-program-summary__progress">
+
+                        <div class="services-program-summary__progress-info">
+
+                            <span>
+                                Explora nuestros programas
                             </span>
 
-                            <br>
-
-                            <span data-i18n="services.languageProgram.ageLine2">
-                                “18 años en adelante”
+                            <span data-services-summary-progress-label>
+                                10%
                             </span>
 
-                        </p>
-
-                    </div>
-
-                </article>
+                        </div>
 
 
-                <!-- ==================================
-                     UNIVERSIDAD EN EL EXTERIOR
-                ================================== -->
+                        <div class="services-program-summary__progress-track">
 
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/educacion-en-el-exterior/"
-                        aria-label="Universidad en el exterior"
-                        data-i18n-aria-label="services.universityAbroad.ariaLabel">
-                        <img src="/images/services/studying.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/educacion-en-el-exterior/" data-i18n="services.universityAbroad.title">
-                                Universidad en el exterior
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.universityAbroad.description">
-                            Las mejores universidades del mundo esperan por ti.
-                            Te ayudamos a aplicar a universidades internacionales
-                            en países como Francia, Italia, Alemania, Bélgica,
-                            Australia, Austria, Holanda y Suiza; son países que
-                            ofrecen educación pública casi gratuita.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ==================================
-                     SUMMER CAMP
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/summer-camps/" aria-label="Summer Camp"
-                        data-i18n-aria-label="services.summerCamp.ariaLabel">
-                        <img src="/images/services/tent.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/summer-camps/" data-i18n="services.summerCamp.title">
-                                Summer Camp
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.summerCamp.description">
-                            Las escuelas normalmente ofrecen excursiones y
-                            eventos especiales en los días festivos como
-                            Navidad, spring break, graduación, entre otros.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ==================================
-                     NANNY
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/programa-nanny/" aria-label="Programa Nanny"
-                        data-i18n-aria-label="services.nanny.ariaLabel">
-                        <img src="/images/services/cot.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/programa-nanny/" data-i18n="services.nanny.title">
-                                Nanny
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.nanny.description">
-                            Haz un intercambio cultural durante un año, mientras
-                            trabajas como Nanny en el seno de una familia
-                            anfitriona.
-                        </p>
-
-
-                        <div class="services__details">
-
-                            <strong data-i18n="services.nanny.notIncluded">
-                                No incluye
-                            </strong>
-
-                            <ul>
-
-                                <li data-i18n="services.nanny.items.airfare">
-                                    Pasajes aéreos
-                                </li>
-
-                                <li data-i18n="services.nanny.items.consular">
-                                    Presentación consular
-                                </li>
-
-                                <li data-i18n="services.nanny.items.documents">
-                                    Traducciones y apostillado de documentos
-                                </li>
-
-                            </ul>
+                            <span class="services-program-summary__progress-bar" data-services-summary-progress></span>
 
                         </div>
 
                     </div>
 
-                </article>
+                </div>
 
             </div>
 
 
-            <!-- ======================================
-                 COLUMNA 2
-            ======================================= -->
+            <!-- ==================================================
+                 COLUMNA DERECHA
+            =================================================== -->
 
-            <div class="services__column">
+            <aside class="services-consult" data-services-consult>
+
+                <!-- ==========================================
+                     CABECERA
+                ========================================== -->
+
+                <header class="services-consult__header">
+
+                    <span class="services-consult__eyebrow">
+                        Asesoría personalizada
+                    </span>
+
+                    <h3 class="services-consult__title">
+                        Agenda tu consulta
+                    </h3>
+
+                    <p class="services-consult__description">
+                        Elige cómo prefieres conversar con nosotros.
+                        Un asesor de Global Exchange te ayudará a conocer
+                        tus opciones y definir tu siguiente paso.
+                    </p>
+
+                </header>
 
 
-                <!-- ==================================
-                     EDUCACIÓN DUAL
-                ================================== -->
+                <!-- ==========================================
+                     PROGRAMA SELECCIONADO
+                ========================================== -->
 
-                <article class="services__card">
+                <div class="services-consult__selected">
 
-                    <div class="services__icon">
+                    <span>
+                        Programa de interés
+                    </span>
 
-                        <img src="/images/services/educacion-a-distancia.png" alt="" loading="lazy">
+                    <strong data-selected-service>
+                        Programa idiomático
+                    </strong>
+
+                </div>
+
+
+                <!-- ==========================================
+                     MODALIDADES
+                ========================================== -->
+
+                <div class="services-consult__options">
+
+
+                    <!-- ONLINE -->
+
+                    <button class="
+                            services-consult-option
+                            is-active
+                        " type="button" data-consult-mode="online" data-consult-label="En línea" aria-pressed="true">
+
+                        <span class="
+                                services-consult-option__icon
+                                services-consult-option__icon--online
+                            ">
+
+                            <svg viewBox="0 0 24 24" fill="none">
+
+                                <rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor"
+                                    stroke-width="1.8" />
+
+                                <path d="M8 21H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+
+                                <path d="M12 17V21" stroke="currentColor" stroke-width="1.8" />
+
+                            </svg>
+
+                        </span>
+
+
+                        <span class="services-consult-option__content">
+
+                            <strong>
+                                En línea
+                            </strong>
+
+                            <small>
+                                Reunión virtual personalizada
+                            </small>
+
+                        </span>
+
+
+                        <span class="services-consult-option__radio"></span>
+
+                    </button>
+
+
+                    <!-- TELÉFONO -->
+
+                    <button class="services-consult-option" type="button" data-consult-mode="phone"
+                        data-consult-label="Llamada telefónica" aria-pressed="false">
+
+                        <span class="
+                                services-consult-option__icon
+                                services-consult-option__icon--phone
+                            ">
+
+                            <svg viewBox="0 0 24 24" fill="none">
+
+                                <path
+                                    d="M5 4L8.5 3L11 8L8.8 9.8C10 12.5 11.8 14.3 14.4 15.5L16.2 13.3L21 16L20 19.5C19.7 20.6 18.7 21.3 17.6 21.2C9.6 20.4 3.6 14.4 2.8 6.4C2.7 5.3 3.4 4.3 4.5 4H5Z"
+                                    stroke="currentColor" stroke-width="1.8" />
+
+                            </svg>
+
+                        </span>
+
+
+                        <span class="services-consult-option__content">
+
+                            <strong>
+                                Llamada telefónica
+                            </strong>
+
+                            <small>
+                                Rápida y directa para resolver tus dudas
+                            </small>
+
+                        </span>
+
+
+                        <span class="services-consult-option__radio"></span>
+
+                    </button>
+
+
+                    <!-- OFICINA -->
+
+                    <button class="services-consult-option" type="button" data-consult-mode="office"
+                        data-consult-label="En oficina" aria-pressed="false">
+
+                        <span class="
+                                services-consult-option__icon
+                                services-consult-option__icon--office
+                            ">
+
+                            <svg viewBox="0 0 24 24" fill="none">
+
+                                <path d="M5 21V4H16V21" stroke="currentColor" stroke-width="1.8" />
+
+                                <path d="M16 9H20V21" stroke="currentColor" stroke-width="1.8" />
+
+                                <path d="M3 21H22" stroke="currentColor" stroke-width="1.8" />
+
+                            </svg>
+
+                        </span>
+
+
+                        <span class="services-consult-option__content">
+
+                            <strong>
+                                En una oficina
+                            </strong>
+
+                            <small>
+                                Atención presencial con nuestro equipo
+                            </small>
+
+                        </span>
+
+
+                        <span class="services-consult-option__radio"></span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- ==========================================
+                     PANEL DINÁMICO
+                ========================================== -->
+
+                <div class="services-consult__panels">
+
+
+                    <div class="
+                            services-consult-panel
+                            is-active
+                        " data-consult-panel="online">
+
+                        <span class="services-consult-panel__label">
+                            Reunión virtual
+                        </span>
+
+                        <h4 class="services-consult-panel__title">
+                            Conversemos desde donde estés
+                        </h4>
+
+                        <p>
+                            Coordinaremos una videollamada para explicarte
+                            programas, destinos y próximos pasos según tus
+                            objetivos.
+                        </p>
 
                     </div>
 
 
-                    <div class="services__card-content">
+                    <div class="services-consult-panel" data-consult-panel="phone" hidden>
 
-                        <h3 class="services__card-title" data-i18n="services.dualEducation.title">
-                            Educación dual
-                        </h3>
+                        <span class="services-consult-panel__label">
+                            Atención telefónica
+                        </span>
 
+                        <h4 class="services-consult-panel__title">
+                            Nosotros te llamamos
+                        </h4>
 
-                        <p class="services__card-description" data-i18n="services.dualEducation.description">
-                            El componente básico de un programa de estudio dual
-                            es la combinación de trabajo práctico en una empresa
-                            y clases teóricas en una universidad o centro de
-                            formación cooperativa.
+                        <p>
+                            Déjanos tu número y un horario preferido.
+                            Nuestro equipo se pondrá en contacto contigo.
                         </p>
 
+                    </div>
 
-                        <div class="services__details">
 
-                            <strong data-i18n="services.dualEducation.countriesTitle">
-                                Países
-                            </strong>
+                    <div class="services-consult-panel" data-consult-panel="office" hidden>
 
-                            <p data-i18n="services.dualEducation.countries">
-                                Alemania, Bélgica, Francia, Holanda, Austria,
-                                China, Suiza, Australia, Liechtenstein, Noruega
-                                e Italia.
-                            </p>
+                        <span class="services-consult-panel__label">
+                            Reunión presencial
+                        </span>
+
+                        <h4 class="services-consult-panel__title">
+                            Visítanos y revisemos tu caso
+                        </h4>
+
+                        <p>
+                            Indica tu ciudad y una fecha preferida.
+                            Confirmaremos contigo la oficina y disponibilidad.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     FORMULARIO
+                ========================================== -->
+
+                <form class="services-consult-form" data-services-consult-form novalidate>
+
+                    <input type="hidden" name="program" value="Programa idiomático" data-selected-service-input>
+
+                    <input type="hidden" name="consultMode" value="En línea" data-consult-mode-input>
+
+
+                    <div class="services-consult-form__heading">
+
+                        <span>
+                            Tus datos
+                        </span>
+
+                        <p>
+                            La fecha y hora son una preferencia.
+                            Nuestro equipo confirmará contigo.
+                        </p>
+
+                    </div>
+
+
+                    <div class="services-consult-form__grid">
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-name">
+                                Nombre completo
+                            </label>
+
+                            <input id="services-consult-name" name="name" type="text" autocomplete="name"
+                                placeholder="Ej. Ana Pérez" required>
+
+                        </div>
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-phone">
+                                Teléfono / WhatsApp
+                            </label>
+
+                            <input id="services-consult-phone" name="phone" type="tel" autocomplete="tel"
+                                placeholder="Ej. 098 123 4567" required>
+
+                        </div>
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-email">
+                                Correo electrónico
+                            </label>
+
+                            <input id="services-consult-email" name="email" type="email" autocomplete="email"
+                                placeholder="correo@ejemplo.com">
+
+                        </div>
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-city">
+                                Ciudad
+                            </label>
+
+                            <input id="services-consult-city" name="city" type="text" autocomplete="address-level2"
+                                placeholder="Ej. Quito" required>
+
+                        </div>
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-date">
+                                Fecha preferida
+                            </label>
+
+                            <input id="services-consult-date" name="date" type="date" required>
+
+                        </div>
+
+
+                        <div class="services-consult-form__field">
+
+                            <label for="services-consult-time">
+                                Hora preferida
+                            </label>
+
+                            <input id="services-consult-time" name="time" type="time" required>
+
+                        </div>
+
+
+                        <div class="
+                                services-consult-form__field
+                                services-consult-form__field--full
+                            ">
+
+                            <label for="services-consult-message">
+                                Cuéntanos qué estás buscando
+                            </label>
+
+                            <textarea id="services-consult-message" name="message" rows="4"
+                                placeholder="Ej. Quiero estudiar inglés durante tres meses en Canadá."></textarea>
 
                         </div>
 
                     </div>
 
-                </article>
 
+                    <button class="services-consult-form__submit" type="submit">
 
-                <!-- ==================================
-                     AUSBILDUNG
-                ================================== -->
+                        <span>
+                            Solicitar asesoría
+                        </span>
 
-                <article class="services__card">
+                        <span class="services-consult-form__submit-arrow" aria-hidden="true">
+                            →
+                        </span>
 
-                    <div class="services__icon">
+                    </button>
 
-                        <img src="/images/services/educacion.png" alt="" loading="lazy">
 
-                    </div>
+                    <p class="services-consult-form__status" data-services-consult-status role="status"
+                        aria-live="polite"></p>
 
+                </form>
 
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title" data-i18n="services.ausbildung.title">
-                            Ausbildung
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.ausbildung.description">
-                            La formación Ausbildung es una medida educativa en
-                            la que se imparten o desarrollan conocimientos y
-                            habilidades de trabajo. Al finalizar la capacitación,
-                            las personas pueden ejercer una actividad técnica
-                            específica.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ==================================
-                     SISTEMA DE EDUCACIÓN EUROPEO
-                ================================== -->
-
-                <article class="services__card">
-
-                    <div class="services__icon">
-
-                        <img src="/images/services/airplane-1.png" alt="" loading="lazy">
-
-                    </div>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title" data-i18n="services.europeanEducation.title">
-                            Sistema de educación europeo
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.europeanEducation.description1">
-                            Bachelor o licenciatura en seis semestres. Maestrías
-                            de dos a tres años, tercer nivel gratuito. Doctorado
-                            de dos años gratuito y posdoctorado de dos años
-                            gratuito.
-                        </p>
-
-
-                        <p class="services__card-description" data-i18n="services.europeanEducation.description2">
-                            Nivel educacional de alto reconocimiento, ubicando
-                            sus universidades dentro de las cien mejores del
-                            mundo.
-                        </p>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- ======================================
-                 COLUMNA 3
-            ======================================= -->
-
-            <div class="services__column">
-
-
-                <!-- ==================================
-                     PASANTÍAS UNIVERSITARIAS
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/pasantias-profesionales/"
-                        aria-label="Pasantías universitarias" data-i18n-aria-label="services.internships.ariaLabel">
-                        <img src="/images/services/businessman.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/pasantias-profesionales/" data-i18n="services.internships.title">
-                                Pasantías universitarias
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.internships.description">
-                            Desarrolla tu capacidad lingüística y tus habilidades
-                            laborales en un entorno de trabajo real.
-                        </p>
-
-
-                        <div class="services__details">
-
-                            <strong data-i18n="services.internships.programsTitle">
-                                Programas
-                            </strong>
-
-                            <p data-i18n="services.internships.languages">
-                                Alemán, francés, italiano e inglés.
-                            </p>
-
-
-                            <strong data-i18n="services.internships.optionsTitle">
-                                Opciones en el exterior
-                            </strong>
-
-                            <ul>
-
-                                <li data-i18n="services.internships.options.professional">
-                                    Prácticas profesionales
-                                </li>
-
-                                <li data-i18n="services.internships.options.jobs">
-                                    Plazas de trabajo
-                                </li>
-
-                                <li data-i18n="services.internships.options.masters">
-                                    Maestrías gratuitas
-                                </li>
-
-                            </ul>
-
-
-                            <strong data-i18n="services.internships.timeTitle">
-                                Tiempo
-                            </strong>
-
-
-                            <p>
-
-                                <span data-i18n="services.internships.timeWeeks">
-                                    4, 8 o 12 semanas
-                                </span>
-
-                                <br>
-
-                                <span data-i18n="services.internships.timeYears">
-                                    1 a 3 años
-                                </span>
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ==================================
-                     ESCOLARIDAD
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/programa-escolar/" aria-label="Escolaridad"
-                        data-i18n-aria-label="services.school.ariaLabel">
-                        <img src="/images/services/idiomas-2.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/programa-escolar/" data-i18n="services.school.title">
-                                Escolaridad
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description">
-
-                            <strong data-i18n="services.school.programName">
-                                Programa de Escolaridad Global Exchange
-                            </strong>
-
-                        </p>
-
-
-                        <p class="services__card-description" data-i18n="services.school.description1">
-                            La oportunidad de sumergirte en la cultura y el
-                            idioma del país de destino está en tus manos. En este
-                            proceso, nuestro estudiante vivirá en el exterior
-                            durante un trimestre o un año escolar.
-                        </p>
-
-
-                        <p class="services__card-description" data-i18n="services.school.description2">
-                            Cursos de primero, segundo y tercero de bachillerato
-                            en el exterior.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- ==================================
-                     CURSOS ESPECIALES
-                ================================== -->
-
-                <article class="services__card">
-
-                    <a class="services__icon" href="/pages/cursos-idioma-local/" aria-label="Cursos especiales"
-                        data-i18n-aria-label="services.specialCourses.ariaLabel">
-                        <img src="/images/hero/idiomas-1.png" alt="" loading="lazy">
-                    </a>
-
-
-                    <div class="services__card-content">
-
-                        <h3 class="services__card-title">
-
-                            <a href="/pages/cursos-idioma-local/" data-i18n="services.specialCourses.title">
-                                Cursos especiales
-                            </a>
-
-                        </h3>
-
-
-                        <p class="services__card-description" data-i18n="services.specialCourses.description1">
-                            Además de nuestros programas en el exterior,
-                            Global Exchange te ofrece asesoría para el ingreso y
-                            aplicación a las mejores universidades del mundo.
-                        </p>
-
-
-                        <p class="services__card-description" data-i18n="services.specialCourses.description2">
-                            Estaremos gustosos de ofrecerte las mejores
-                            alternativas y servicios para tus estudios
-                            superiores en el exterior.
-                        </p>
-
-                    </div>
-
-                </article>
-
-            </div>
+            </aside>
 
         </div>
 

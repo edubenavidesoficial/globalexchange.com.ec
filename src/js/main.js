@@ -71,6 +71,10 @@ import {
     initProgramFinder
 } from './modules/program-finder.js';
 
+import {
+    initServices
+} from './modules/services.js';
+
 
 // ====================================================
 // INICIALIZACIÓN
@@ -81,7 +85,7 @@ document.addEventListener(
     async () => {
 
         // ============================================
-        // 1. IDIOMAS
+        // 1. INTERNACIONALIZACIÓN
         // ============================================
 
         await initI18n();
@@ -96,20 +100,37 @@ document.addEventListener(
 
 
         // ============================================
-        // 3. COMPONENTES DE LA PÁGINA
+        // 3. HOME
         // ============================================
 
         initTyped();
+
         initCounters();
+
         initPortfolioCarousel();
-        initContactForm();
-        initFooterSearch();
-        initFloatingContact();
-        initAboutLocationsProgress();
-        initFaqAccordion();
-        initForeignCoursesTabs();
-        initForeignFlagsCarousel();
+
         initProgramFinder();
+
+        initServices();
+
+        initContactForm();
+
+        initFloatingContact();
+
+
+        // ============================================
+        // 4. COMPONENTES COMPARTIDOS
+        // ============================================
+
+        initFooterSearch();
+
+        initAboutLocationsProgress();
+
+        initFaqAccordion();
+
+        initForeignCoursesTabs();
+
+        initForeignFlagsCarousel();
 
     }
 );
