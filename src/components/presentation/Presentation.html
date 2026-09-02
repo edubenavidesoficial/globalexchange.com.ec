@@ -1,0 +1,165 @@
+<!--
+====================================================
+COMPONENTE: PRESENTATION
+
+Proyecto:
+Global Exchange - Migración a Vite
+
+Descripción:
+Sección de presentación institucional con resumen
+de Global Exchange y video de apoyo.
+
+Estilo:
+- Inspirado en program-finder y about
+- Diseño moderno, limpio y corporativo
+====================================================
+-->
+
+<section class="presentation" id="presentacion">
+
+    <!-- Decoraciones -->
+    <span class="presentation__shape presentation__shape--circle-left" aria-hidden="true"></span>
+    <span class="presentation__shape presentation__shape--circle-right" aria-hidden="true"></span>
+    <span class="presentation__shape presentation__shape--dot-grid" aria-hidden="true"></span>
+    <span class="presentation__shape presentation__shape--dot-small" aria-hidden="true"></span>
+
+    <div class="page-container presentation__container">
+
+        <!-- ==========================================
+             COLUMNA IZQUIERDA
+        ========================================== -->
+
+        <div class="presentation__content">
+
+            <p class="presentation__eyebrow">
+                Presentación
+            </p>
+
+            <h2 class="presentation__title">
+                Conoce <span>Global Exchange</span>
+            </h2>
+
+            <p class="presentation__lead">
+                Somos una organización internacional con más de
+                <strong>21 años de experiencia</strong> en asesoría
+                migratoria y programas de estudio en el exterior.
+            </p>
+
+            <p class="presentation__text">
+                Acompañamos a estudiantes y familias con atención cálida,
+                personalizada y multilingüe, brindando oportunidades para
+                estudiar, viajar y crecer en diferentes destinos del mundo.
+            </p>
+
+            <p class="presentation__text">
+                Nuestro objetivo es convertir a cada estudiante en un
+                ciudadano del mundo, con más oportunidades académicas,
+                culturales y profesionales.
+            </p>
+
+            <!-- Métricas -->
+            <div class="presentation__stats">
+
+                <article class="presentation__stat">
+                    <strong class="presentation__stat-number">21+</strong>
+                    <span class="presentation__stat-label">
+                        años de experiencia
+                    </span>
+                </article>
+
+                <article class="presentation__stat">
+                    <strong class="presentation__stat-number">8.000+</strong>
+                    <span class="presentation__stat-label">
+                        estudiantes viajados
+                    </span>
+                </article>
+
+                <article class="presentation__stat">
+                    <strong class="presentation__stat-number">76</strong>
+                    <span class="presentation__stat-label">
+                        destinos disponibles
+                    </span>
+                </article>
+
+            </div>
+
+            <!-- Puntos destacados -->
+            <ul class="presentation__features">
+
+                <li class="presentation__feature">
+                    Asesoría migratoria y educativa
+                </li>
+
+                <li class="presentation__feature">
+                    Acompañamiento personalizado
+                </li>
+
+                <li class="presentation__feature">
+                    Equipo calificado y multilingüe
+                </li>
+
+                <li class="presentation__feature">
+                    Programas académicos internacionales
+                </li>
+
+            </ul>
+
+            <div class="presentation__actions">
+                <a class="presentation__button" href="/pages/nuestra-historia/">
+                    Conoce más
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             COLUMNA DERECHA - VIDEO
+        ========================================== -->
+
+        <div class="presentation__media">
+
+            <div class="presentation__video-card">
+
+                <div class="presentation__video-badge">
+                    Video institucional
+                </div>
+
+                <div class="presentation__video-frame">
+
+                    <!-- OPCIÓN 1: VIDEO LOCAL -->
+                    <video class="presentation__video" controls preload="metadata" playsinline
+                        poster="/images/favicon.png">
+
+                        <source src="/videos/presentacion-global-exchange.mp4" type="video/mp4">
+
+                        Tu navegador no soporta la reproducción de video.
+                    </video>
+
+                    <!--
+                    OPCIÓN 2: SI QUIERES YOUTUBE, REEMPLAZA EL <video> POR ESTO
+
+                    <iframe
+                        class="presentation__video"
+                        src="https://www.youtube.com/embed/TU_VIDEO_ID"
+                        title="Presentación de Global Exchange"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                    -->
+
+                </div>
+
+                <p class="presentation__caption">
+                    Descubre nuestra experiencia, nuestros programas y la forma
+                    en la que acompañamos a cada estudiante en su camino internacional.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

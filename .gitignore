@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Video local de Presentation
+public/videos/presentacion-global-exchange.mp4
