@@ -1,0 +1,317 @@
+<!--
+====================================================
+PROGRAM FINDER RESULTS
+
+Página:
+Resultados personalizados de Program Finder
+
+La lógica se encuentra en:
+src/js/modules/program-finder.js
+====================================================
+-->
+
+<main class="program-results" data-program-finder-results>
+
+
+    <!-- ==========================================
+         HERO
+    ========================================== -->
+
+    <section class="program-results-hero">
+
+        <div class="program-results-hero__orb
+                   program-results-hero__orb--left" aria-hidden="true"></div>
+
+        <div class="program-results-hero__orb
+                   program-results-hero__orb--right" aria-hidden="true"></div>
+
+
+        <div class="program-results-hero__route" aria-hidden="true">
+
+            <span class="program-results-hero__route-line">
+            </span>
+
+            <span class="program-results-hero__plane">
+                ✈
+            </span>
+
+        </div>
+
+
+        <div class="program-results__container">
+
+            <a class="program-results-hero__back" href="/#programas">
+                <span aria-hidden="true">
+                    ←
+                </span>
+
+                Modificar búsqueda
+            </a>
+
+
+            <div class="program-results-hero__grid">
+
+                <div class="program-results-hero__copy">
+
+                    <span class="program-results__eyebrow">
+                        Tu experiencia empieza aquí
+                    </span>
+
+
+                    <h1 class="program-results-hero__title">
+
+                        Encontramos opciones para
+
+                        <span data-results-title-destination>
+                            tu destino
+                        </span>
+
+                    </h1>
+
+
+                    <p class="program-results-hero__description">
+                        Analizamos tu edad y el destino seleccionado
+                        para mostrarte los programas que mejor encajan
+                        con tu búsqueda.
+                    </p>
+
+                </div>
+
+
+                <!-- PERFIL -->
+
+                <aside class="program-results-profile">
+
+                    <span class="program-results-profile__label">
+                        Tu búsqueda
+                    </span>
+
+
+                    <div class="program-results-profile__items">
+
+                        <div class="program-results-profile__item">
+
+                            <span class="program-results-profile__icon" aria-hidden="true">
+                                👤
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Edad
+                                </small>
+
+                                <strong data-results-age>
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="program-results-profile__item">
+
+                            <span class="program-results-profile__icon" aria-hidden="true">
+                                ✈
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Destino
+                                </small>
+
+                                <strong data-results-destination>
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="program-results-profile__item">
+
+                            <span class="program-results-profile__icon" aria-hidden="true">
+                                ⌖
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Ciudad actual
+                                </small>
+
+                                <strong data-results-city>
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         RESULTADOS
+    ========================================== -->
+
+    <section class="program-results-list">
+
+        <div class="program-results__container">
+
+
+            <!-- HEADER -->
+
+            <header class="program-results-list__header">
+
+                <div>
+
+                    <span class="program-results__eyebrow">
+                        Programas para ti
+                    </span>
+
+                    <h2>
+                        Explora tus opciones
+                    </h2>
+
+                </div>
+
+
+                <div class="program-results-list__meta">
+
+                    <strong data-results-count>
+                        Buscando programas...
+                    </strong>
+
+                    <span data-results-excluded>
+                    </span>
+
+                </div>
+
+            </header>
+
+
+            <!-- AVISO -->
+
+            <div class="program-results-info">
+
+                <span class="program-results-info__icon" aria-hidden="true">
+                    i
+                </span>
+
+                <p>
+                    Program Finder realiza una primera orientación.
+                    Cuando un programa indique
+                    <strong>“Requisitos por confirmar”</strong>,
+                    un asesor de Global Exchange deberá validar
+                    requisitos académicos, migratorios, lingüísticos
+                    y de edad antes de la inscripción.
+                </p>
+
+            </div>
+
+
+            <!-- GRID -->
+
+            <div class="program-results-grid" data-results-grid></div>
+
+
+            <!-- VACÍO -->
+
+            <div class="program-results-empty" data-results-empty hidden>
+
+                <div class="program-results-empty__icon" aria-hidden="true">
+                    ✈
+                </div>
+
+
+                <h2>
+                    Necesitamos ajustar tu búsqueda
+                </h2>
+
+
+                <p>
+                    No encontramos una coincidencia directa
+                    con los datos seleccionados. Esto no significa
+                    que no exista una alternativa para ti.
+                </p>
+
+
+                <div class="program-results-empty__actions">
+
+                    <a href="/#programas" class="program-results-empty__primary">
+                        Modificar búsqueda
+                    </a>
+
+
+                    <a href="/#servicios" class="program-results-empty__secondary">
+                        Hablar con un asesor
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         CTA
+    ========================================== -->
+
+    <section class="program-results-cta">
+
+        <div class="program-results__container">
+
+            <div class="program-results-cta__card">
+
+                <div>
+
+                    <span class="program-results__eyebrow">
+                        ¿Necesitas ayuda?
+                    </span>
+
+
+                    <h2>
+                        Tu programa ideal también
+                        puede empezar con una conversación.
+                    </h2>
+
+
+                    <p>
+                        Nuestro equipo puede ayudarte a revisar
+                        requisitos, destinos, fechas y opciones
+                        específicas para tu perfil.
+                    </p>
+
+                </div>
+
+
+                <a class="program-results-cta__button" href="/#servicios">
+                    Agenda una asesoría
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>

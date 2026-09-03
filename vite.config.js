@@ -281,6 +281,12 @@ export default defineConfig({
                     'pages/programa-nanny/index.html'
                 ),
 
+                /* PROGRAM FINDER */
+
+                programFinder: resolve(
+                    process.cwd(),
+                    'pages/program-finder/index.html'
+                ),
 
                 /* SUMMER CAMPS */
 
