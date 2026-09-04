@@ -23,57 +23,75 @@ import {
     initHeader
 } from './modules/header.js';
 
+
 import {
     initLanguageSwitcher
 } from './modules/language-switcher.js';
+
 
 import {
     initTyped
 } from './modules/typed-effect.js';
 
+
 import {
     initCounters
 } from './modules/counters.js';
+
 
 import {
     initPortfolioCarousel
 } from './modules/portfolio-carousel.js';
 
+
 import {
     initContactForm
 } from './modules/contact-form.js';
+
 
 import {
     initFooterSearch
 } from './modules/footer-search.js';
 
+
 import {
     initFloatingContact
 } from './modules/floating-contact.js';
+
 
 import {
     initAboutLocationsProgress
 } from './modules/about-locations-progress.js';
 
+
 import {
     initFaqAccordion
 } from './modules/faq-accordion.js';
+
 
 import {
     initForeignCoursesTabs
 } from './modules/foreign-courses-tabs.js';
 
+
 import {
     initForeignFlagsCarousel
 } from './modules/foreign-flags-carousel.js';
+
 
 import {
     initProgramFinder
 } from './modules/program-finder.js';
 
+
 import {
     initServices
 } from './modules/services.js';
+
+
+import {
+    initDestinations
+} from './modules/destinations.js';
 
 
 // ====================================================
@@ -83,6 +101,7 @@ import {
 document.addEventListener(
     'DOMContentLoaded',
     async () => {
+
 
         // ============================================
         // 1. INTERNACIONALIZACIÓN
@@ -96,6 +115,7 @@ document.addEventListener(
         // ============================================
 
         initHeader();
+
         initLanguageSwitcher();
 
 
@@ -112,6 +132,8 @@ document.addEventListener(
         initProgramFinder();
 
         initServices();
+
+        initDestinations();
 
         initContactForm();
 

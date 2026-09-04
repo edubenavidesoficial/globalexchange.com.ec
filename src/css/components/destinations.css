@@ -1,0 +1,1541 @@
+/* ====================================================
+   DESTINOS
+
+   Archivo:
+   src/css/components/destinations.css
+
+   Diseño:
+   - Carrusel infinito de dos filas
+   - Filas independientes
+   - Movimiento en sentidos contrarios
+   - Tarjetas compactas
+   - Fondo pastel
+   - Placa de color girada en hover
+   - Placa desplazada hacia abajo y derecha
+   - Efecto 3D sutil
+   - Fondo orgánico
+   - Diseño responsive
+==================================================== */
+
+
+/* ====================================================
+   SECCIÓN
+==================================================== */
+
+.destinations {
+    --destinations-navy: #17205c;
+    --destinations-blue: #5366f5;
+    --destinations-teal: #28c6b8;
+    --destinations-orange: #ff7b24;
+    --destinations-pink: #e84d98;
+    --destinations-purple: #8155dd;
+
+    position: relative;
+
+    isolation: isolate;
+
+    padding:
+        105px 0 110px;
+
+    background:
+        radial-gradient(circle at 8% 18%,
+            rgba(40, 198, 184, 0.17),
+            transparent 25%),
+        radial-gradient(circle at 92% 18%,
+            rgba(255, 123, 36, 0.12),
+            transparent 24%),
+        radial-gradient(circle at 17% 90%,
+            rgba(83, 102, 245, 0.12),
+            transparent 25%),
+        radial-gradient(circle at 89% 83%,
+            rgba(232, 77, 152, 0.10),
+            transparent 23%),
+        linear-gradient(180deg,
+            #f8fffd 0%,
+            #f7f9ff 50%,
+            #fff9f5 100%);
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   CONTENEDOR
+==================================================== */
+
+.destinations__container {
+    position: relative;
+
+    z-index: 5;
+
+    width:
+        min(100% - 52px, 1380px);
+
+    margin:
+        0 auto;
+}
+
+
+/* ====================================================
+   FORMAS ORGÁNICAS
+==================================================== */
+
+.destinations__shape {
+    position: absolute;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    border-radius:
+        45% 55% 61% 39% / 55% 38% 62% 45%;
+}
+
+
+.destinations__shape--left {
+    top: -230px;
+    left: -230px;
+
+    width: 610px;
+    height: 540px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(67, 220, 199, 0.24),
+            rgba(67, 220, 199, 0.04));
+
+    animation:
+        destinations-shape-left 15s ease-in-out infinite;
+}
+
+
+.destinations__shape--right {
+    right: -280px;
+    bottom: -250px;
+
+    width: 650px;
+    height: 600px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 170, 61, 0.18),
+            rgba(255, 170, 61, 0.025));
+
+    animation:
+        destinations-shape-right 17s ease-in-out infinite;
+}
+
+
+@keyframes destinations-shape-left {
+
+    0%,
+    100% {
+        transform:
+            rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform:
+            rotate(8deg) scale(1.06);
+    }
+
+}
+
+
+@keyframes destinations-shape-right {
+
+    0%,
+    100% {
+        transform:
+            rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform:
+            rotate(-7deg) scale(1.05);
+    }
+
+}
+
+
+/* ====================================================
+   RESPLANDORES
+==================================================== */
+
+.destinations__glow {
+    position: absolute;
+
+    z-index: 0;
+
+    width: 360px;
+    height: 360px;
+
+    border-radius: 50%;
+
+    filter:
+        blur(20px);
+
+    pointer-events: none;
+}
+
+
+.destinations__glow--blue {
+    top: 39%;
+    left: 24%;
+
+    background:
+        radial-gradient(circle,
+            rgba(83, 102, 245, 0.10),
+            transparent 68%);
+}
+
+
+.destinations__glow--orange {
+    right: 18%;
+    bottom: 3%;
+
+    background:
+        radial-gradient(circle,
+            rgba(255, 123, 36, 0.09),
+            transparent 68%);
+}
+
+
+/* ====================================================
+   CABECERA
+==================================================== */
+
+.destinations__header {
+    position: relative;
+
+    max-width: 900px;
+
+    margin:
+        0 auto 60px;
+
+    text-align: center;
+}
+
+
+/* ====================================================
+   ONDA DECORATIVA
+==================================================== */
+
+.destinations__wave {
+    width: 54px;
+
+    margin:
+        0 auto 15px;
+
+    color:
+        #315cff;
+}
+
+
+.destinations__wave svg {
+    display: block;
+
+    width: 100%;
+    height: auto;
+}
+
+
+/* ====================================================
+   ETIQUETA SUPERIOR
+==================================================== */
+
+.destinations__eyebrow {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    padding:
+        7px 13px;
+
+    border:
+        1px solid rgba(83, 102, 245, 0.10);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.72);
+
+    box-shadow:
+        0 7px 18px rgba(31, 42, 91, 0.04);
+
+    font-family:
+        var(--font-body);
+
+    font-size: 10px;
+
+    font-weight:
+        var(--font-bold);
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    color:
+        var(--destinations-orange);
+}
+
+
+/* ====================================================
+   TÍTULO
+==================================================== */
+
+.destinations__title {
+    max-width: 920px;
+
+    margin:
+        0 auto 20px;
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        clamp(43px, 4.7vw, 68px);
+
+    font-weight:
+        var(--font-black);
+
+    line-height: 1.01;
+
+    letter-spacing: -2.2px;
+
+    color:
+        var(--destinations-navy);
+
+    text-wrap: balance;
+}
+
+
+.destinations__title span {
+    display: block;
+
+    width: fit-content;
+
+    margin:
+        4px auto 0;
+
+    background:
+        linear-gradient(90deg,
+            #5366f5,
+            #3979ff,
+            #28bdb1);
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ====================================================
+   DESCRIPCIÓN
+==================================================== */
+
+.destinations__description {
+    max-width: 720px;
+
+    margin:
+        0 auto;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 16px;
+
+    line-height: 1.7;
+
+    color:
+        #676e86;
+}
+
+
+/* ====================================================
+   CARRUSELES
+==================================================== */
+
+.destinations__marquees {
+    position: relative;
+
+    z-index: 4;
+
+    display: grid;
+
+    gap: 25px;
+}
+
+
+/* ====================================================
+   FILA
+==================================================== */
+
+.destinations__row {
+    position: relative;
+
+    width: 100%;
+}
+
+
+/* ====================================================
+   ÁREA VISIBLE
+
+   El espacio vertical permite que la placa trasera
+   girada pueda sobresalir sin quedar cortada.
+==================================================== */
+
+.destinations__viewport {
+    width: 100%;
+
+    padding:
+        20px 0 22px;
+
+    overflow: hidden;
+}
+
+
+/* ====================================================
+   PISTA DE MOVIMIENTO
+==================================================== */
+
+.destinations__track {
+    display: flex;
+
+    width: max-content;
+
+    will-change: transform;
+
+    animation:
+        destinations-marquee-left 42s linear infinite;
+}
+
+
+.destinations__row--reverse .destinations__track {
+    animation-name:
+        destinations-marquee-right;
+
+    animation-duration:
+        47s;
+}
+
+
+/* ====================================================
+   PAUSA INDEPENDIENTE
+
+   Solo se detiene la fila donde está el cursor.
+==================================================== */
+
+.destinations__row.is-paused .destinations__track {
+    animation-play-state:
+        paused;
+}
+
+
+/* ====================================================
+   GRUPO DE TARJETAS
+==================================================== */
+
+.destinations__group {
+    display: flex;
+
+    flex-shrink: 0;
+
+    gap: 21px;
+
+    padding-right: 21px;
+}
+
+
+/* ====================================================
+   ANIMACIÓN DE FILA SUPERIOR
+==================================================== */
+
+@keyframes destinations-marquee-left {
+
+    from {
+        transform:
+            translate3d(0,
+                0,
+                0);
+    }
+
+    to {
+        transform:
+            translate3d(-50%,
+                0,
+                0);
+    }
+
+}
+
+
+/* ====================================================
+   ANIMACIÓN DE FILA INFERIOR
+==================================================== */
+
+@keyframes destinations-marquee-right {
+
+    from {
+        transform:
+            translate3d(-50%,
+                0,
+                0);
+    }
+
+    to {
+        transform:
+            translate3d(0,
+                0,
+                0);
+    }
+
+}
+
+
+/* ====================================================
+   DEGRADADOS LATERALES
+==================================================== */
+
+.destinations__fade {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    z-index: 7;
+
+    width: 100px;
+
+    pointer-events: none;
+}
+
+
+.destinations__fade--left {
+    left: 0;
+
+    background:
+        linear-gradient(90deg,
+            rgba(249, 252, 255, 0.98),
+            rgba(249, 252, 255, 0));
+}
+
+
+.destinations__fade--right {
+    right: 0;
+
+    background:
+        linear-gradient(270deg,
+            rgba(251, 251, 255, 0.96),
+            rgba(251, 251, 255, 0));
+}
+
+
+/* ====================================================
+   TARJETA DE DESTINO
+
+   Escritorio:
+   - Ancho: 250px
+   - Altura mínima: 150px
+   - Imagen vertical compacta
+   - Placa de color trasera
+==================================================== */
+
+.destination-card {
+    --destination-accent:
+        #5366f5;
+
+    --destination-accent-2:
+        #3180ff;
+
+    --destination-soft:
+        #edf1ff;
+
+    --destination-rotate-x:
+        0deg;
+
+    --destination-rotate-y:
+        0deg;
+
+    position: relative;
+
+    isolation: isolate;
+
+    display: grid;
+
+    grid-template-columns:
+        104px minmax(0, 1fr);
+
+    gap: 10px;
+
+    align-items: center;
+
+    flex:
+        0 0 250px;
+
+    width: 250px;
+
+    min-height: 150px;
+
+    padding: 12px;
+
+    border: 0;
+
+    border-radius: 26px;
+
+    background:
+        transparent;
+
+    box-shadow:
+        none;
+
+    color:
+        inherit;
+
+    overflow:
+        visible;
+
+    transform:
+        translateY(0) rotateX(var(--destination-rotate-x)) rotateY(var(--destination-rotate-y));
+
+    transform-style:
+        preserve-3d;
+
+    transition:
+        transform 0.20s ease;
+
+    will-change:
+        transform;
+}
+
+
+/* ====================================================
+   PLACA GIRADA DE COLOR
+
+   Esta placa aparece detrás de la tarjeta.
+
+   IMPORTANTE:
+   - Se desplaza hacia la derecha.
+   - Se desplaza hacia abajo.
+   - Usa giro POSITIVO.
+   - El color depende de cada tarjeta.
+==================================================== */
+
+.destination-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset:
+        5px 3px 3px 5px;
+
+    z-index: 0;
+
+    border-radius:
+        24px;
+
+    background:
+        linear-gradient(135deg,
+            var(--destination-accent),
+            var(--destination-accent-2));
+
+    box-shadow:
+        8px 13px 29px color-mix(in srgb,
+            var(--destination-accent) 30%,
+            transparent);
+
+    opacity: 0;
+
+    transform:
+        translate3d(7px,
+            7px,
+            0) rotate(2deg) scale(0.97);
+
+    transform-origin:
+        center;
+
+    transition:
+        opacity 0.28s ease,
+        transform 0.34s cubic-bezier(0.22,
+            1,
+            0.36,
+            1),
+        box-shadow 0.28s ease;
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   SUPERFICIE PRINCIPAL DE LA TARJETA
+==================================================== */
+
+.destination-card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    border:
+        1px solid color-mix(in srgb,
+            var(--destination-accent) 17%,
+            transparent);
+
+    border-radius:
+        26px;
+
+    background:
+        radial-gradient(circle at 95% 10%,
+            color-mix(in srgb,
+                var(--destination-accent) 12%,
+                transparent),
+            transparent 36%),
+        radial-gradient(circle at 93% 88%,
+            color-mix(in srgb,
+                var(--destination-accent) 8%,
+                transparent),
+            transparent 27%),
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.97),
+            var(--destination-soft));
+
+    box-shadow:
+        0 14px 34px rgba(29, 40, 90, 0.09);
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.28s ease;
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   INTERACCIÓN AL PASAR EL CURSOR
+==================================================== */
+
+.destination-card:hover,
+.destination-card:focus-visible {
+    transform:
+        translateY(-5px) rotateX(var(--destination-rotate-x)) rotateY(var(--destination-rotate-y));
+}
+
+
+/* ====================================================
+   PLACA TRASERA DURANTE HOVER
+
+   El efecto queda claramente abajo y a la derecha.
+==================================================== */
+
+.destination-card:hover::before,
+.destination-card:focus-visible::before {
+    opacity:
+        0.95;
+
+    transform:
+        translate3d(11px,
+            10px,
+            0) rotate(4.5deg) scale(0.97);
+
+    box-shadow:
+        11px 16px 34px color-mix(in srgb,
+            var(--destination-accent) 40%,
+            transparent);
+}
+
+
+.destination-card:hover::after,
+.destination-card:focus-visible::after {
+    border-color:
+        color-mix(in srgb,
+            var(--destination-accent) 33%,
+            transparent);
+
+    box-shadow:
+        0 21px 43px rgba(29, 40, 90, 0.14);
+}
+
+
+.destination-card:focus-visible {
+    outline:
+        3px solid color-mix(in srgb,
+            var(--destination-accent) 25%,
+            transparent);
+
+    outline-offset:
+        7px;
+}
+
+
+/* ====================================================
+   PALETA AZUL
+==================================================== */
+
+.destination-card--blue {
+    --destination-accent:
+        #5366f5;
+
+    --destination-accent-2:
+        #3180ff;
+
+    --destination-soft:
+        #edf1ff;
+}
+
+
+/* ====================================================
+   PALETA ROSA
+==================================================== */
+
+.destination-card--pink {
+    --destination-accent:
+        #e84d98;
+
+    --destination-accent-2:
+        #f25e79;
+
+    --destination-soft:
+        #fff0f7;
+}
+
+
+/* ====================================================
+   PALETA NARANJA
+==================================================== */
+
+.destination-card--orange {
+    --destination-accent:
+        #ff7b24;
+
+    --destination-accent-2:
+        #ffae32;
+
+    --destination-soft:
+        #fff1e4;
+}
+
+
+/* ====================================================
+   PALETA TURQUESA
+==================================================== */
+
+.destination-card--teal {
+    --destination-accent:
+        #20afa8;
+
+    --destination-accent-2:
+        #2bcdc0;
+
+    --destination-soft:
+        #e8faf7;
+}
+
+
+/* ====================================================
+   PALETA VIOLETA
+==================================================== */
+
+.destination-card--purple {
+    --destination-accent:
+        #8155dd;
+
+    --destination-accent-2:
+        #a75fe9;
+
+    --destination-soft:
+        #f2ecff;
+}
+
+
+/* ====================================================
+   IMAGEN DE LA TARJETA
+==================================================== */
+
+.destination-card__image {
+    position: relative;
+
+    z-index: 3;
+
+    width:
+        104px;
+
+    height:
+        124px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.60);
+
+    border-radius:
+        21px;
+
+    overflow: hidden;
+
+    background:
+        var(--destination-soft);
+
+    box-shadow:
+        0 10px 21px rgba(29, 40, 90, 0.10);
+
+    transform:
+        translateZ(18px);
+}
+
+
+/* ====================================================
+   CAPA DE COLOR SOBRE LA IMAGEN
+==================================================== */
+
+.destination-card__image::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(135deg,
+            color-mix(in srgb,
+                var(--destination-accent) 8%,
+                transparent),
+            transparent 55%);
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   FOTOGRAFÍA
+==================================================== */
+
+.destination-card__image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit:
+        cover;
+
+    object-position:
+        center;
+
+    transition:
+        transform 0.65s cubic-bezier(0.22,
+            1,
+            0.36,
+            1);
+
+    will-change:
+        transform;
+}
+
+
+/* ====================================================
+   ZOOM DE LA IMAGEN
+==================================================== */
+
+.destination-card:hover .destination-card__image img,
+.destination-card:focus-visible .destination-card__image img {
+    transform:
+        scale(1.08);
+}
+
+
+/* ====================================================
+   CONTENIDO DE LA TARJETA
+==================================================== */
+
+.destination-card__content {
+    position: relative;
+
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-width: 0;
+
+    padding-right: 1px;
+
+    transform:
+        translateZ(12px);
+}
+
+
+/* ====================================================
+   ETIQUETA "DESTINO"
+==================================================== */
+
+.destination-card__label {
+    margin-bottom: 5px;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 7px;
+
+    font-weight:
+        var(--font-bold);
+
+    letter-spacing: 0.9px;
+
+    text-transform: uppercase;
+
+    color:
+        var(--destination-accent);
+}
+
+
+/* ====================================================
+   NOMBRE DEL DESTINO
+==================================================== */
+
+.destination-card h3 {
+    margin:
+        0 0 8px;
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        20px;
+
+    font-weight:
+        var(--font-black);
+
+    line-height: 1.02;
+
+    letter-spacing:
+        -0.4px;
+
+    color:
+        var(--destinations-navy);
+
+    overflow-wrap:
+        break-word;
+}
+
+
+/* ====================================================
+   ACCIÓN DE LA TARJETA
+==================================================== */
+
+.destination-card__action {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 7px;
+
+    font-weight:
+        var(--font-bold);
+
+    line-height: 1.25;
+
+    color:
+        #6a7086;
+}
+
+
+/* ====================================================
+   BOTÓN CIRCULAR DE LA ACCIÓN
+==================================================== */
+
+.destination-card__action>span {
+    display: inline-flex;
+
+    flex:
+        0 0 auto;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 21px;
+    height: 21px;
+
+    border-radius: 50%;
+
+    background:
+        color-mix(in srgb,
+            var(--destination-accent) 15%,
+            #ffffff);
+
+    color:
+        var(--destination-accent);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.destination-card:hover .destination-card__action>span,
+.destination-card:focus-visible .destination-card__action>span {
+    transform:
+        translateX(4px);
+
+    background:
+        color-mix(in srgb,
+            var(--destination-accent) 24%,
+            #ffffff);
+}
+
+
+/* ====================================================
+   PIE DE LA SECCIÓN
+==================================================== */
+
+.destinations__footer {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 30px;
+
+    max-width: 820px;
+
+    margin:
+        54px auto 0;
+
+    padding:
+        19px 22px;
+
+    border:
+        1px solid rgba(83, 102, 245, 0.09);
+
+    border-radius:
+        24px;
+
+    background:
+        rgba(255, 255, 255, 0.69);
+
+    box-shadow:
+        0 15px 35px rgba(31, 42, 91, 0.06);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+}
+
+
+.destinations__footer p {
+    max-width: 500px;
+
+    margin: 0;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    color:
+        #696f84;
+}
+
+
+/* ====================================================
+   BOTÓN PRINCIPAL
+==================================================== */
+
+.destinations__button {
+    flex:
+        0 0 auto;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 11px;
+
+    min-height: 50px;
+
+    padding:
+        0 20px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(95deg,
+            #ff841a,
+            #ff5618);
+
+    box-shadow:
+        0 12px 25px rgba(255, 86, 24, 0.20);
+
+    font-family:
+        var(--font-body);
+
+    font-size: 11px;
+
+    font-weight:
+        var(--font-bold);
+
+    color:
+        #ffffff;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.destinations__button:hover {
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 17px 31px rgba(255, 86, 24, 0.28);
+}
+
+
+.destinations__button span {
+    font-size: 17px;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.destinations__button:hover span {
+    transform:
+        translateX(4px);
+}
+
+
+/* ====================================================
+   TABLET
+==================================================== */
+
+@media (max-width: 900px) {
+
+    .destinations {
+        padding:
+            85px 0 90px;
+    }
+
+
+    .destinations__header {
+        margin-bottom:
+            48px;
+    }
+
+
+    /* ================================================
+       TARJETA TABLET
+
+       250px escritorio
+       240px tablet
+    ================================================ */
+
+    .destination-card {
+        flex-basis:
+            240px;
+
+        width:
+            240px;
+
+        grid-template-columns:
+            98px minmax(0, 1fr);
+
+        gap:
+            9px;
+    }
+
+
+    .destination-card__image {
+        width:
+            98px;
+
+        height:
+            116px;
+    }
+
+
+    .destination-card h3 {
+        font-size:
+            19px;
+    }
+
+
+    .destination-card__action {
+        font-size:
+            6.8px;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVIL
+==================================================== */
+
+@media (max-width: 650px) {
+
+    .destinations {
+        padding:
+            72px 0 75px;
+    }
+
+
+    .destinations__container {
+        width:
+            min(100% - 28px,
+                560px);
+    }
+
+
+    .destinations__title {
+        font-size:
+            clamp(38px,
+                11vw,
+                50px);
+
+        letter-spacing:
+            -1.5px;
+    }
+
+
+    .destinations__description {
+        font-size:
+            14px;
+    }
+
+
+    .destinations__marquees {
+        gap:
+            16px;
+    }
+
+
+    .destinations__viewport {
+        padding:
+            17px 0 19px;
+    }
+
+
+    .destinations__fade {
+        width:
+            35px;
+    }
+
+
+    .destinations__group {
+        gap:
+            18px;
+
+        padding-right:
+            18px;
+    }
+
+
+    /* ================================================
+       TARJETA MÓVIL
+
+       Conservamos la altura pero reducimos
+       todavía más el ancho.
+    ================================================ */
+
+    .destination-card {
+        flex-basis:
+            225px;
+
+        width:
+            225px;
+
+        min-height:
+            130px;
+
+        grid-template-columns:
+            86px minmax(0, 1fr);
+
+        gap:
+            8px;
+
+        padding:
+            10px;
+
+        border-radius:
+            23px;
+    }
+
+
+    /* ================================================
+       PLACA DE COLOR EN MÓVIL
+    ================================================ */
+
+    .destination-card::before {
+        border-radius:
+            21px;
+    }
+
+
+    .destination-card::after {
+        border-radius:
+            23px;
+    }
+
+
+    .destination-card:hover::before,
+    .destination-card:focus-visible::before {
+        transform:
+            translate3d(8px,
+                8px,
+                0) rotate(4deg) scale(0.97);
+
+        box-shadow:
+            8px 12px 26px color-mix(in srgb,
+                var(--destination-accent) 36%,
+                transparent);
+    }
+
+
+    /* ================================================
+       IMAGEN MÓVIL
+    ================================================ */
+
+    .destination-card__image {
+        width:
+            86px;
+
+        height:
+            102px;
+
+        border-radius:
+            18px;
+    }
+
+
+    /* ================================================
+       TEXTOS MÓVIL
+    ================================================ */
+
+    .destination-card h3 {
+        font-size:
+            18px;
+    }
+
+
+    .destination-card__action {
+        font-size:
+            6.5px;
+    }
+
+
+    .destination-card__action>span {
+        width:
+            20px;
+
+        height:
+            20px;
+    }
+
+
+    /* ================================================
+       PIE DE SECCIÓN MÓVIL
+    ================================================ */
+
+    .destinations__footer {
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            17px;
+
+        margin-top:
+            42px;
+
+        text-align:
+            center;
+    }
+
+
+    .destinations__footer p {
+        max-width:
+            none;
+    }
+
+
+    .destinations__button {
+        width:
+            100%;
+    }
+
+}
+
+
+/* ====================================================
+   MOVIMIENTO REDUCIDO
+
+   Respeta la preferencia del usuario cuando
+   desactiva las animaciones del sistema.
+==================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .destinations__shape,
+    .destinations__track {
+        animation:
+            none;
+    }
+
+
+    .destinations__viewport {
+        overflow-x:
+            auto;
+
+        scrollbar-width:
+            thin;
+    }
+
+
+    .destinations__track {
+        transform:
+            none;
+    }
+
+
+    .destinations__group[data-destinations-clone] {
+        display:
+            none;
+    }
+
+
+    .destination-card,
+    .destination-card::before,
+    .destination-card::after,
+    .destination-card__image img,
+    .destination-card__action>span,
+    .destinations__button {
+        transition:
+            none;
+    }
+
+}

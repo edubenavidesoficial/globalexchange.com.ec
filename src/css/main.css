@@ -1,48 +1,75 @@
 /* ====================================================
    MAIN CSS - Punto de entrada
-   ==================================================== */
+==================================================== */
 
-/* ==========================================
-   BASE 
-========================================== */
+
+/* ====================================================
+   BASE
+==================================================== */
 
 @import './base/variables.css';
+
 @import './base/reset.css';
+
 @import './base/typography.css';
 
-/* ==========================================
-   LAYOUTS 
-========================================== */
+
+/* ====================================================
+   LAYOUTS
+==================================================== */
 
 @import './layouts/grid.css';
+
 @import './layouts/header.css';
+
 @import './layouts/footer.css';
 
-/* ==========================================
-   COMPONENTS 
-========================================== */
+
+/* ====================================================
+   COMPONENTS
+==================================================== */
 
 @import './components/buttons.css';
-@import './components/hero.css';
-@import './components/page-hero.css';
-@import './components/about.css';
-@import './components/presentation.css';
-@import './components/services.css';
-@import './components/events.css';
-@import './components/programs.css';
-@import './components/contact.css';
-@import './components/call-to-action.css';
-@import './components/map.css';
-@import './components/stats.css';
-@import './components/programs-grid.css';
-@import './components/portfolio.css';
-@import './components/floating-contact.css';
-@import './components/floating-dots.css';
-@import "./components/program-finder.css";
-@import './pages/program-finder-results.css';
 
-/* ==========================================
+@import './components/hero.css';
+
+@import './components/page-hero.css';
+
+@import './components/about.css';
+
+@import './components/presentation.css';
+
+@import './components/services.css';
+
+@import './components/events.css';
+
+@import './components/destinations.css';
+
+@import './components/programs.css';
+
+@import './components/contact.css';
+
+@import './components/call-to-action.css';
+
+@import './components/map.css';
+
+@import './components/stats.css';
+
+@import './components/programs-grid.css';
+
+@import './components/portfolio.css';
+
+@import './components/floating-contact.css';
+
+@import './components/floating-dots.css';
+
+@import './components/program-finder.css';
+
+
+/* ====================================================
    PAGES
-========================================== */
+==================================================== */
+
+@import './pages/program-finder-results.css';
 
 @import './pages/home.css';

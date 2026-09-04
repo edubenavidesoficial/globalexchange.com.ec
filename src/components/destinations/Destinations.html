@@ -1,0 +1,716 @@
+<!--
+====================================================
+COMPONENTE: DESTINATIONS
+
+Página:
+Home
+
+Objetivo:
+Mostrar destinos internacionales mediante dos
+filas animadas e independientes.
+
+Comportamiento:
+- Fila superior se mueve hacia la izquierda.
+- Fila inferior se mueve hacia la derecha.
+- Hover sobre una tarjeta pausa únicamente su fila.
+- Click en un destino lo preselecciona en Program Finder.
+
+JavaScript:
+src/js/modules/destinations.js
+
+Estilos:
+src/css/components/destinations.css
+====================================================
+-->
+
+<section class="destinations" id="destinos" data-destinations>
+
+    <!-- ==========================================
+         DECORACIONES DE FONDO
+    ========================================== -->
+
+    <div class="destinations__shape
+               destinations__shape--left" aria-hidden="true"></div>
+
+    <div class="destinations__shape
+               destinations__shape--right" aria-hidden="true"></div>
+
+    <div class="destinations__glow
+               destinations__glow--blue" aria-hidden="true"></div>
+
+    <div class="destinations__glow
+               destinations__glow--orange" aria-hidden="true"></div>
+
+
+    <!-- ==========================================
+         CABECERA
+    ========================================== -->
+
+    <div class="destinations__container">
+
+        <header class="destinations__header">
+
+            <!-- ONDA DECORATIVA -->
+
+            <div class="destinations__wave" aria-hidden="true">
+                <svg viewBox="0 0 64 14" role="presentation">
+                    <path d="M2 7C8 1 14 1 20 7C26 13 32 13 38 7C44 1 50 1 56 7C58 9 60 9 62 7" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                </svg>
+            </div>
+
+
+            <span class="destinations__eyebrow">
+                Explora el mundo
+            </span>
+
+
+            <h2 class="destinations__title">
+
+                Tu próximo destino está
+
+                <span>
+                    más cerca de lo que imaginas
+                </span>
+
+            </h2>
+
+
+            <p class="destinations__description">
+                Conoce algunos de los destinos donde puedes vivir
+                una experiencia académica, profesional o cultural
+                con Global Exchange.
+            </p>
+
+        </header>
+
+    </div>
+
+
+    <!-- ==========================================
+         MARQUEES
+    ========================================== -->
+
+    <div class="destinations__marquees">
+
+
+        <!-- ======================================
+             FILA 1
+        ======================================= -->
+
+        <div class="destinations__row
+                   destinations__row--forward" data-destinations-row>
+
+            <div class="destinations__fade destinations__fade--left">
+            </div>
+
+            <div class="destinations__fade destinations__fade--right">
+            </div>
+
+
+            <div class="destinations__viewport">
+
+                <div class="destinations__track" data-destinations-track>
+
+                    <div class="destinations__group" data-destinations-group>
+
+
+                        <!-- ALEMANIA -->
+
+                        <a class="destination-card destination-card--blue" href="/?destination=alemania#programas"
+                            data-destination-card data-destination="alemania">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/alemania.webp" alt="Alemania" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Alemania
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- FRANCIA -->
+
+                        <a class="destination-card destination-card--pink" href="/?destination=francia#programas"
+                            data-destination-card data-destination="francia">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/francia.webp" alt="Francia" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Francia
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- CANADÁ -->
+
+                        <a class="destination-card destination-card--teal" href="/?destination=canada#programas"
+                            data-destination-card data-destination="canada">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/canada.webp" alt="Canadá" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Canadá
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- ITALIA -->
+
+                        <a class="destination-card destination-card--orange" href="/?destination=italia#programas"
+                            data-destination-card data-destination="italia">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/italia.webp" alt="Italia" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Italia
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- AUSTRALIA -->
+
+                        <a class="destination-card destination-card--purple" href="/?destination=australia#programas"
+                            data-destination-card data-destination="australia">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/australia.webp" alt="Australia" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Australia
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- ESPAÑA -->
+
+                        <a class="destination-card destination-card--blue" href="/?destination=espana#programas"
+                            data-destination-card data-destination="espana">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/espana.webp" alt="España" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    España
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- ESTADOS UNIDOS -->
+
+                        <a class="destination-card destination-card--pink" href="/?destination=estados-unidos#programas"
+                            data-destination-card data-destination="estados-unidos">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/estados-unidos.webp" alt="Estados Unidos" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Estados Unidos
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             FILA 2
+        ======================================= -->
+
+        <div class="destinations__row
+                   destinations__row--reverse" data-destinations-row>
+
+            <div class="destinations__fade destinations__fade--left">
+            </div>
+
+            <div class="destinations__fade destinations__fade--right">
+            </div>
+
+
+            <div class="destinations__viewport">
+
+                <div class="destinations__track" data-destinations-track>
+
+                    <div class="destinations__group" data-destinations-group>
+
+
+                        <!-- BÉLGICA -->
+
+                        <a class="destination-card destination-card--purple" href="/?destination=belgica#programas"
+                            data-destination-card data-destination="belgica">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/belgica.webp" alt="Bélgica" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Bélgica
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- SUIZA -->
+
+                        <a class="destination-card destination-card--teal" href="/?destination=suiza#programas"
+                            data-destination-card data-destination="suiza">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/suiza.webp" alt="Suiza" loading="lazy" decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Suiza
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- HOLANDA -->
+
+                        <a class="destination-card destination-card--orange" href="/?destination=holanda#programas"
+                            data-destination-card data-destination="holanda">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/holanda.webp" alt="Holanda" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Holanda
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- AUSTRIA -->
+
+                        <a class="destination-card destination-card--pink" href="/?destination=austria#programas"
+                            data-destination-card data-destination="austria">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/austria.webp" alt="Austria" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Austria
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- REINO UNIDO -->
+
+                        <a class="destination-card destination-card--blue" href="/?destination=reino-unido#programas"
+                            data-destination-card data-destination="reino-unido">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/reino-unido.webp" alt="Reino Unido" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Reino Unido
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- NORUEGA -->
+
+                        <a class="destination-card destination-card--purple" href="/?destination=noruega#programas"
+                            data-destination-card data-destination="noruega">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/noruega.webp" alt="Noruega" loading="lazy"
+                                    decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    Noruega
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- CHINA -->
+
+                        <a class="destination-card destination-card--teal" href="/?destination=china#programas"
+                            data-destination-card data-destination="china">
+
+                            <div class="destination-card__image">
+
+                                <img src="/images/destinations/china.webp" alt="China" loading="lazy" decoding="async">
+
+                            </div>
+
+
+                            <div class="destination-card__content">
+
+                                <span class="destination-card__label">
+                                    Destino
+                                </span>
+
+                                <h3>
+                                    China
+                                </h3>
+
+                                <span class="destination-card__action">
+
+                                    Explorar programas
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CTA
+    ========================================== -->
+
+    <div class="destinations__container">
+
+        <div class="destinations__footer">
+
+            <p>
+                ¿Ya tienes un país en mente?
+                Selecciónalo y te ayudamos a descubrir
+                qué programas pueden adaptarse a ti.
+            </p>
+
+
+            <a class="destinations__button" href="#programas">
+
+                Encuentra tu programa
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
