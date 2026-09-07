@@ -1,0 +1,298 @@
+<!--
+====================================================
+COMPONENTE: EXPERIENCIA FINAL
+
+Página:
+Home
+
+Ubicación:
+Después del footer.
+
+Objetivo:
+Cerrar la página mediante una experiencia visual
+controlada directamente por el scroll.
+
+Comportamiento:
+- JavaScript fija la escena mientras está activa.
+- El texto permanece centrado.
+- Las frases aparecen progresivamente.
+- Las formas tienen efecto parallax.
+- La ruta se dibuja con el desplazamiento.
+- El avión avanza sobre la ruta.
+- La composición final permanece completa.
+- Al subir, toda la animación retrocede.
+
+JavaScript:
+src/js/modules/closing-experience.js
+
+Estilos:
+src/css/components/closing-experience.css
+====================================================
+-->
+
+<section class="closing-experience" data-closing-experience aria-labelledby="closing-experience-title">
+
+    <!-- ==========================================
+         ESCENARIO
+    ========================================== -->
+
+    <div class="closing-experience__stage" data-closing-stage>
+
+
+        <!-- ======================================
+             FORMAS DECORATIVAS
+        ======================================= -->
+
+        <div class="
+                closing-experience__shape
+                closing-experience__shape--blue
+            " aria-hidden="true"></div>
+
+
+        <div class="
+                closing-experience__shape
+                closing-experience__shape--teal
+            " aria-hidden="true"></div>
+
+
+        <div class="
+                closing-experience__shape
+                closing-experience__shape--orange
+            " aria-hidden="true"></div>
+
+
+        <div class="
+                closing-experience__shape
+                closing-experience__shape--lavender
+            " aria-hidden="true"></div>
+
+
+        <!-- ======================================
+             PUNTOS DECORATIVOS
+        ======================================= -->
+
+        <div class="
+                closing-experience__dots
+                closing-experience__dots--one
+            " aria-hidden="true">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <div class="
+                closing-experience__dots
+                closing-experience__dots--two
+            " aria-hidden="true">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <!-- ======================================
+             CONTENIDO CENTRAL
+        ======================================= -->
+
+        <div class="closing-experience__container">
+
+            <div class="closing-experience__content">
+
+
+                <!-- ==================================
+                     ETIQUETA
+                =================================== -->
+
+                <div class="closing-experience__eyebrow" data-closing-reveal data-start="0.00" data-end="0.11">
+
+                    <span class="closing-experience__eyebrow-line" aria-hidden="true"></span>
+
+                    Tu futuro puede comenzar aquí
+
+                </div>
+
+
+                <!-- ==================================
+                     MENSAJE PRINCIPAL
+                =================================== -->
+
+                <h2 class="closing-experience__title" id="closing-experience-title">
+
+                    <span class="
+                            closing-experience__line
+                            closing-experience__line--one
+                        " data-closing-reveal data-start="0.02" data-end="0.18">
+                        El mundo
+                    </span>
+
+
+                    <span class="
+                            closing-experience__line
+                            closing-experience__line--two
+                        " data-closing-reveal data-start="0.12" data-end="0.29">
+                        no solo se conoce.
+                    </span>
+
+
+                    <span class="
+                            closing-experience__line
+                            closing-experience__line--three
+                        " data-closing-reveal data-start="0.27" data-end="0.44">
+                        Se descubre,
+                    </span>
+
+
+                    <span class="
+                            closing-experience__line
+                            closing-experience__line--four
+                        " data-closing-reveal data-start="0.40" data-end="0.57">
+                        se aprende
+                    </span>
+
+
+                    <span class="
+                            closing-experience__line
+                            closing-experience__line--five
+                        " data-closing-reveal data-start="0.53" data-end="0.70">
+                        y se vive.
+                    </span>
+
+                </h2>
+
+
+                <!-- ==================================
+                     DESCRIPCIÓN
+                =================================== -->
+
+                <p class="closing-experience__description" data-closing-reveal data-start="0.65" data-end="0.80">
+                    Cada destino puede convertirse en una nueva
+                    experiencia, una oportunidad y una historia
+                    que recordarás para siempre.
+                </p>
+
+
+                <!-- ==================================
+                     BOTÓN FINAL
+                =================================== -->
+
+                <div class="closing-experience__actions" data-closing-reveal data-start="0.76" data-end="0.90">
+
+                    <a class="closing-experience__button" href="#programas">
+
+                        Comienza tu experiencia
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             RUTA DEL AVIÓN
+        ======================================= -->
+
+        <div class="closing-experience__route" aria-hidden="true">
+
+            <svg class="closing-experience__route-svg" viewBox="0 0 1000 220" preserveAspectRatio="none">
+
+                <!-- RUTA BASE -->
+
+                <path class="closing-experience__route-base" d="
+                        M 35 165
+                        C 210 55,
+                          365 210,
+                          550 115
+                        S 820 40,
+                          965 105
+                    "></path>
+
+
+                <!-- RUTA QUE SE VA DIBUJANDO -->
+
+                <path class="closing-experience__route-progress" data-closing-route-path pathLength="1" d="
+                        M 35 165
+                        C 210 55,
+                          365 210,
+                          550 115
+                        S 820 40,
+                          965 105
+                    "></path>
+
+
+                <!-- AVIÓN -->
+
+                <g class="closing-experience__plane" data-closing-plane>
+
+                    <circle class="closing-experience__plane-halo" cx="0" cy="0" r="22"></circle>
+
+                    <text x="0" y="1" text-anchor="middle" dominant-baseline="central">
+                        ✈
+                    </text>
+
+                </g>
+
+            </svg>
+
+        </div>
+
+
+        <!-- ======================================
+             INDICADOR INICIAL
+        ======================================= -->
+
+        <div class="closing-experience__scroll-indicator" data-closing-scroll-indicator aria-hidden="true">
+
+            <span>
+                Sigue explorando
+            </span>
+
+            <span class="closing-experience__scroll-arrow">
+                ↓
+            </span>
+
+        </div>
+
+
+        <!-- ======================================
+             INDICADOR DE PROGRESO
+        ======================================= -->
+
+        <div class="closing-experience__progress" aria-hidden="true">
+
+            <span class="closing-experience__progress-number">
+                01
+            </span>
+
+
+            <div class="closing-experience__progress-track">
+
+                <span class="closing-experience__progress-bar" data-closing-progress-bar></span>
+
+            </div>
+
+
+            <span class="closing-experience__progress-number">
+                04
+            </span>
+
+        </div>
+
+    </div>
+
+</section>

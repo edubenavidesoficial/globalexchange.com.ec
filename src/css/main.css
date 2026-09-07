@@ -1,5 +1,5 @@
 /* ====================================================
-   MAIN CSS - Punto de entrada
+   MAIN CSS - PUNTO DE ENTRADA
 ==================================================== */
 
 
@@ -26,7 +26,7 @@
 
 
 /* ====================================================
-   COMPONENTS
+   COMPONENTES
 ==================================================== */
 
 @import './components/buttons.css';
@@ -65,9 +65,11 @@
 
 @import './components/program-finder.css';
 
+@import './components/closing-experience.css';
+
 
 /* ====================================================
-   PAGES
+   PÁGINAS
 ==================================================== */
 
 @import './pages/program-finder-results.css';

@@ -94,6 +94,11 @@ import {
 } from './modules/destinations.js';
 
 
+import {
+    initClosingExperience
+} from './modules/closing-experience.js';
+
+
 // ====================================================
 // INICIALIZACIÓN
 // ====================================================
@@ -134,6 +139,8 @@ document.addEventListener(
         initServices();
 
         initDestinations();
+
+        initClosingExperience();
 
         initContactForm();
 
