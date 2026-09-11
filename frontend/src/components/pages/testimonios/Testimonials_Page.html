@@ -1,0 +1,764 @@
+<!--
+====================================================
+TESTIMONIALS PAGE
+
+Página:
+Testimonios
+
+Responsabilidades:
+- Hero
+- Introducción
+- Testimonios
+- Videos
+- Galería
+- Lightbox
+- CTA
+
+JavaScript:
+src/js/modules/testimonials-page.js
+====================================================
+-->
+
+
+<!-- =================================================
+     HERO
+================================================== -->
+
+<section class="testimonials-hero" data-testimonials-hero>
+
+    <div class="testimonials-hero__overlay" aria-hidden="true"></div>
+
+
+    <span class="testimonials-hero__orb testimonials-hero__orb--one" aria-hidden="true"></span>
+
+    <span class="testimonials-hero__orb testimonials-hero__orb--two" aria-hidden="true"></span>
+
+
+    <div class="testimonials-hero__container">
+
+        <div class="testimonials-hero__content">
+
+            <span class="testimonials-hero__eyebrow">
+                Historias Global Exchange
+            </span>
+
+
+            <h1 class="testimonials-hero__title" data-i18n="testimonialsPage.hero.title">
+                Testimonios
+            </h1>
+
+
+            <p class="testimonials-hero__description">
+                Experiencias reales de estudiantes que decidieron
+                descubrir nuevas oportunidades alrededor del mundo.
+            </p>
+
+
+            <nav class="testimonials-hero__breadcrumb" aria-label="Migas de pan"
+                data-i18n-aria-label="testimonialsPage.hero.breadcrumb.ariaLabel">
+
+                <a href="/" data-i18n="testimonialsPage.hero.breadcrumb.home">
+                    Inicio
+                </a>
+
+
+                <span class="testimonials-hero__breadcrumb-dot" aria-hidden="true"></span>
+
+
+                <span aria-current="page" data-i18n="testimonialsPage.hero.breadcrumb.current">
+                    Testimonios
+                </span>
+
+            </nav>
+
+        </div>
+
+
+        <div class="testimonials-hero__scroll" aria-hidden="true">
+            <span></span>
+            <i></i>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     EXPERIENCIAS
+================================================== -->
+
+<section class="testimonials-experience">
+
+    <span class="testimonials-decoration testimonials-decoration--violet" aria-hidden="true"></span>
+
+    <span class="testimonials-decoration testimonials-decoration--orange" aria-hidden="true"></span>
+
+    <span class="testimonials-decoration testimonials-decoration--teal" aria-hidden="true"></span>
+
+
+    <!-- =============================================
+         RUTA DECORATIVA
+    ============================================== -->
+
+    <div class="testimonials-route" aria-hidden="true">
+
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none">
+
+            <path class="testimonials-route__line" d="
+                    M20 185
+                    C180 30 365 240 535 115
+                    S870 30 1180 145
+                "></path>
+
+
+            <g class="testimonials-route__plane">
+
+                <path d="
+                        M0 14
+                        L46 0
+                        L29 44
+                        L20 26
+                        L7 34
+                        Z
+                    "></path>
+
+            </g>
+
+        </svg>
+
+    </div>
+
+
+    <div class="testimonials-shell">
+
+
+        <!-- ==========================================
+             INTRO
+        =========================================== -->
+
+        <header class="testimonials-intro" data-testimonials-reveal="up">
+
+            <span class="testimonials-kicker">
+                Experiencias reales
+            </span>
+
+
+            <h2>
+                Historias que cruzan fronteras
+            </h2>
+
+
+            <p>
+                Cada experiencia es diferente, pero todas comienzan
+                con una decisión: atreverse a conocer algo nuevo.
+                Conoce las historias de quienes ya dieron ese paso.
+            </p>
+
+
+            <span class="testimonials-intro__line" aria-hidden="true"></span>
+
+        </header>
+
+
+        <!-- =================================================
+             TESTIMONIO 01
+        ================================================== -->
+
+        <article class="testimonial-story" data-testimonials-reveal="up">
+
+            <div class="testimonial-story__video" data-testimonials-tilt>
+
+                <div class="testimonial-story__video-frame">
+
+                    <iframe src="https://www.youtube-nocookie.com/embed/nXUJggEaLds"
+                        title="Testimonio de estudiante Global Exchange" loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                </div>
+
+
+                <span class="testimonial-story__video-label" aria-hidden="true">
+                    01
+                </span>
+
+            </div>
+
+
+            <div class="testimonial-story__content">
+
+                <span class="testimonial-story__eyebrow">
+                    Testimonio 01
+                </span>
+
+
+                <div class="testimonial-story__person">
+
+                    <img src="/images/pages/testimonios/T1.png" alt="Estudiante de Global Exchange"
+                        data-i18n-alt="testimonialsPage.testimonials.first.imageAlt" loading="lazy">
+
+
+                    <div>
+
+                        <h3 data-i18n="testimonialsPage.testimonials.studentTitle">
+                            Testimonio Estudiante
+                        </h3>
+
+                        <span>
+                            Experiencia Global Exchange
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <blockquote class="testimonial-story__quote" data-i18n="testimonialsPage.testimonials.first.quote">
+                    “Quiero agradecer a Global Exchange por esta
+                    oportunidad. La verdad es una experiencia
+                    sumamente enriquecedora que pienso que todos
+                    deberíamos tener: la oportunidad de viajar e
+                    intercambiar cultura con otros países.”
+                </blockquote>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TESTIMONIO 02
+        ================================================== -->
+
+        <article class="testimonial-story testimonial-story--reverse" data-testimonials-reveal="up">
+
+            <div class="testimonial-story__video" data-testimonials-tilt>
+
+                <div class="testimonial-story__video-frame">
+
+                    <iframe src="https://www.youtube-nocookie.com/embed/-qG6gvMxZF4" title="Testimonio de Amir Carrera"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                </div>
+
+
+                <span class="testimonial-story__video-label" aria-hidden="true">
+                    02
+                </span>
+
+            </div>
+
+
+            <div class="testimonial-story__content">
+
+                <span class="testimonial-story__eyebrow">
+                    Testimonio 02
+                </span>
+
+
+                <div class="testimonial-story__person">
+
+                    <img src="/images/pages/testimonios/T2.png" alt="Amir Carrera" loading="lazy">
+
+
+                    <div>
+
+                        <h3>
+                            Amir Carrera
+                        </h3>
+
+                        <span>
+                            Programa Nanny · Alemania
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <blockquote class="testimonial-story__quote" data-i18n="testimonialsPage.testimonials.amir.quote">
+                    Hola, soy Amir Carrera y he sido participante
+                    del programa Global Exchange para viajar en el
+                    programa Nanny. Al fin podré realizar mi sueño
+                    de viajar a Alemania y emprender un nuevo camino
+                    para mi vida y mi futuro.
+                </blockquote>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TESTIMONIO 03
+        ================================================== -->
+
+        <article class="testimonial-story" data-testimonials-reveal="up">
+
+            <div class="testimonial-story__video" data-testimonials-tilt>
+
+                <div class="testimonial-story__video-frame">
+
+                    <iframe src="https://www.youtube-nocookie.com/embed/dU3HRneFvCY" title="Testimonio de Aylin Burbano"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                </div>
+
+
+                <span class="testimonial-story__video-label" aria-hidden="true">
+                    03
+                </span>
+
+            </div>
+
+
+            <div class="testimonial-story__content">
+
+                <span class="testimonial-story__eyebrow">
+                    Testimonio 03
+                </span>
+
+
+                <div class="testimonial-story__person">
+
+                    <img src="/images/pages/testimonios/T3.png" alt="Aylin Burbano" loading="lazy">
+
+
+                    <div>
+
+                        <h3>
+                            Aylin Burbano
+                        </h3>
+
+                        <span>
+                            Experiencia en Alemania
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <blockquote class="testimonial-story__quote" data-i18n="testimonialsPage.testimonials.aylin.quote">
+                    Hola, qué tal. Mi nombre es Aylin Burbano.
+                    Voy a viajar a Alemania y estoy muy emocionada.
+                    Gracias a Global Exchange porque me ha ayudado
+                    con todos los documentos necesarios.
+                </blockquote>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TESTIMONIO 04
+        ================================================== -->
+
+        <article class="testimonial-story testimonial-story--reverse" data-testimonials-reveal="up">
+
+            <div class="testimonial-story__video" data-testimonials-tilt>
+
+                <div class="testimonial-story__video-frame">
+
+                    <iframe src="https://www.youtube-nocookie.com/embed/w5vbZGn9ql4"
+                        title="Testimonio de Amanda Valencia" loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                </div>
+
+
+                <span class="testimonial-story__video-label" aria-hidden="true">
+                    04
+                </span>
+
+            </div>
+
+
+            <div class="testimonial-story__content">
+
+                <span class="testimonial-story__eyebrow">
+                    Testimonio 04
+                </span>
+
+
+                <div class="testimonial-story__person">
+
+                    <img src="/images/pages/testimonios/T4.png" alt="Amanda Valencia" loading="lazy">
+
+
+                    <div>
+
+                        <h3>
+                            Amanda Valencia
+                        </h3>
+
+                        <span>
+                            Programa Nanny · Alemania
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <blockquote class="testimonial-story__quote" data-i18n="testimonialsPage.testimonials.amanda.quote">
+                    Hola, mi nombre es Amanda Valencia. Pertenezco
+                    al programa Nanny Alemania y agradezco a Global
+                    Exchange por su apoyo durante todo el programa,
+                    en mis estudios de alemán y para encontrar una
+                    hermosa familia en Alemania.
+                </blockquote>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TESTIMONIO 05
+        ================================================== -->
+
+        <article class="testimonial-story" data-testimonials-reveal="up">
+
+            <div class="testimonial-story__video" data-testimonials-tilt>
+
+                <div class="testimonial-story__video-frame">
+
+                    <iframe src="https://www.youtube-nocookie.com/embed/n3pNnjK8W54"
+                        title="Testimonio de María Emilia Bravo" loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                </div>
+
+
+                <span class="testimonial-story__video-label" aria-hidden="true">
+                    05
+                </span>
+
+            </div>
+
+
+            <div class="testimonial-story__content">
+
+                <span class="testimonial-story__eyebrow">
+                    Testimonio 05
+                </span>
+
+
+                <div class="testimonial-story__person">
+
+                    <img src="/images/pages/testimonios/T5.png" alt="María Emilia Bravo" loading="lazy">
+
+
+                    <div>
+
+                        <h3>
+                            María Emilia Bravo
+                        </h3>
+
+                        <span>
+                            Intercambio · Colonia, Alemania
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <blockquote class="testimonial-story__quote" data-i18n="testimonialsPage.testimonials.maria.quote">
+                    Mi nombre es María Emilia Bravo. Voy a viajar
+                    de intercambio a Colonia, Alemania, con el
+                    programa de Global Exchange. Es un programa muy
+                    asertivo y hoy recibí la visa para mi viaje.
+                </blockquote>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     GALERÍA
+================================================== -->
+
+<section class="testimonials-gallery">
+
+    <span class="testimonials-gallery__watermark" aria-hidden="true">
+        ✈
+    </span>
+
+
+    <div class="testimonials-shell">
+
+        <header class="testimonials-gallery__header" data-testimonials-reveal="up">
+
+            <span class="testimonials-kicker">
+                Momentos Global
+            </span>
+
+
+            <h2 class="testimonials-gallery__title" data-i18n="testimonialsPage.gallery.title">
+                Galería
+            </h2>
+
+
+            <p class="testimonials-gallery__description" data-i18n="testimonialsPage.gallery.description">
+                Experiencias de nuestros estudiantes alrededor del mundo.
+            </p>
+
+
+            <span class="testimonials-intro__line" aria-hidden="true"></span>
+
+        </header>
+
+
+        <div class="testimonials-gallery__grid">
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/vi.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de estudiante en París"
+                data-i18n-aria-label="testimonialsPage.gallery.items.paris.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/vi.jpg" alt="Estudiante de Global Exchange en París"
+                    data-i18n-alt="testimonialsPage.gallery.items.paris.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/a.jpeg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de estudiante en la nieve"
+                data-i18n-aria-label="testimonialsPage.gallery.items.snow.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/a.jpeg" alt="Estudiante de Global Exchange en la nieve"
+                    data-i18n-alt="testimonialsPage.gallery.items.snow.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/8.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de estudiante durante su viaje"
+                data-i18n-aria-label="testimonialsPage.gallery.items.trip.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/8.jpg" alt="Estudiante de Global Exchange durante su viaje"
+                    data-i18n-alt="testimonialsPage.gallery.items.trip.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/g34.jpeg"
+                data-testimonials-gallery-item aria-label="Abrir fotografía de estudiante en Berlín"
+                data-i18n-aria-label="testimonialsPage.gallery.items.berlin.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/g34.jpeg" alt="Estudiante de Global Exchange en Berlín"
+                    data-i18n-alt="testimonialsPage.gallery.items.berlin.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/10.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de familia anfitriona"
+                data-i18n-aria-label="testimonialsPage.gallery.items.hostFamily.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/10.jpg" alt="Estudiante con su familia anfitriona"
+                    data-i18n-alt="testimonialsPage.gallery.items.hostFamily.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/g21.jpg"
+                data-testimonials-gallery-item aria-label="Abrir fotografía de estudiantes durante una excursión"
+                data-i18n-aria-label="testimonialsPage.gallery.items.excursion.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/g21.jpg" alt="Estudiantes de Global Exchange durante una excursión"
+                    data-i18n-alt="testimonialsPage.gallery.items.excursion.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/12.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de experiencia internacional"
+                data-i18n-aria-label="testimonialsPage.gallery.items.international.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/12.jpg" alt="Experiencia internacional de Global Exchange"
+                    data-i18n-alt="testimonialsPage.gallery.items.international.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/111.jpg"
+                data-testimonials-gallery-item aria-label="Abrir fotografía de estudiantes viajando"
+                data-i18n-aria-label="testimonialsPage.gallery.items.traveling.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/111.jpg" alt="Estudiantes de Global Exchange viajando"
+                    data-i18n-alt="testimonialsPage.gallery.items.traveling.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/11.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de estudiante en Europa"
+                data-i18n-aria-label="testimonialsPage.gallery.items.europe.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/11.jpg" alt="Estudiante de Global Exchange en Europa"
+                    data-i18n-alt="testimonialsPage.gallery.items.europe.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/9.jpg" data-testimonials-gallery-item
+                aria-label="Abrir fotografía de experiencia cultural"
+                data-i18n-aria-label="testimonialsPage.gallery.items.cultural.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/9.jpg" alt="Experiencia cultural con Global Exchange"
+                    data-i18n-alt="testimonialsPage.gallery.items.cultural.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+
+            <a class="testimonials-gallery__item" href="/images/pages/testimonios/g33.jpeg"
+                data-testimonials-gallery-item aria-label="Abrir fotografía de estudiante durante su intercambio"
+                data-i18n-aria-label="testimonialsPage.gallery.items.exchange.open" data-testimonials-reveal="up">
+
+                <img src="/images/pages/testimonios/g33.jpeg" alt="Estudiante durante su intercambio internacional"
+                    data-i18n-alt="testimonialsPage.gallery.items.exchange.alt" loading="lazy">
+
+                <span class="testimonials-gallery__overlay">
+                    <span>+</span>
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     CTA
+================================================== -->
+
+<section class="testimonials-cta">
+
+    <div class="testimonials-shell" data-testimonials-reveal="up">
+
+        <div class="testimonials-cta__card">
+
+            <span class="testimonials-cta__circle testimonials-cta__circle--one" aria-hidden="true"></span>
+
+            <span class="testimonials-cta__circle testimonials-cta__circle--two" aria-hidden="true"></span>
+
+
+            <div class="testimonials-cta__content">
+
+                <span class="testimonials-cta__eyebrow">
+                    Tu próxima historia
+                </span>
+
+
+                <h2>
+                    La siguiente experiencia puede ser la tuya.
+                </h2>
+
+
+                <p>
+                    Cuéntanos qué quieres estudiar, conocer o vivir
+                    y nuestro equipo te ayudará a encontrar
+                    una opción internacional para ti.
+                </p>
+
+
+                <a class="testimonials-cta__button" href="https://wa.me/593983511575" target="_blank"
+                    rel="noopener noreferrer">
+                    Hablar con un asesor
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     LIGHTBOX
+================================================== -->
+
+<div class="testimonials-lightbox" data-testimonials-lightbox aria-hidden="true">
+
+    <button class="testimonials-lightbox__backdrop" type="button" aria-label="Cerrar galería"
+        data-testimonials-lightbox-close></button>
+
+
+    <div class="testimonials-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Fotografía ampliada">
+
+        <button class="testimonials-lightbox__close" type="button" aria-label="Cerrar fotografía"
+            data-testimonials-lightbox-close>
+            ×
+        </button>
+
+
+        <img src="" alt="" data-testimonials-lightbox-image>
+
+    </div>
+
+</div>

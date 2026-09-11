@@ -1,0 +1,797 @@
+<!--
+====================================================
+COMPONENTE: MAP
+
+Proyecto:
+Global Exchange - Migración a Vite
+
+Diseño:
+- Introducción visual animada
+- Estadísticas corporativas
+- Mapa internacional interactivo
+- Pines con animación
+- Rutas dinámicas
+- Panel informativo
+- Autoplay de destinos
+- Partners y certificaciones
+
+Archivos relacionados:
+- src/css/components/map.css
+- src/js/modules/map-experience.js
+====================================================
+-->
+
+<section class="map" id="mapa-global" data-map-experience>
+
+    <div class="map__container">
+
+
+        <!-- ==========================================
+             CABECERA
+        ========================================== -->
+
+        <header class="map__header">
+
+
+            <!-- ======================================
+                 ETIQUETA
+            ======================================= -->
+
+            <div class="
+                    map__reveal
+                    map__reveal--eyebrow
+                " data-map-reveal>
+
+                <span class="map__eyebrow">
+
+                    <span class="map__eyebrow-line" aria-hidden="true"></span>
+
+                    Destinos Global Exchange
+
+                </span>
+
+            </div>
+
+
+            <!-- ======================================
+                 TÍTULO
+            ======================================= -->
+
+            <h2 class="map__title">
+
+                <span class="
+                        map__title-line
+                        map__title-line--primary
+                        map__reveal
+                    " data-map-reveal>
+                    Tu próxima experiencia comienza
+                </span>
+
+
+                <span class="
+                        map__title-line
+                        map__title-line--accent
+                        map__reveal
+                    " data-map-reveal>
+                    en algún lugar del mundo
+                </span>
+
+            </h2>
+
+
+            <!-- ======================================
+                 DESCRIPCIÓN
+            ======================================= -->
+
+            <p class="
+                    map__description
+                    map__reveal
+                " data-map-reveal>
+                Explora nuestros destinos y descubre dónde
+                puede comenzar tu próxima historia.
+            </p>
+
+
+            <!-- ======================================
+                 ESTADÍSTICAS
+            ======================================= -->
+
+            <div class="
+                    map__stats
+                    map__reveal
+                " data-map-reveal aria-label="Experiencia de Global Exchange">
+
+
+                <!-- 26 AÑOS -->
+
+                <div class="map__stat">
+
+                    <div class="
+                            map__stat-icon
+                            map__stat-icon--violet
+                        " aria-hidden="true">
+                        <span></span>
+                    </div>
+
+
+                    <div class="map__stat-content">
+
+                        <strong class="map__stat-value">
+
+                            <span data-map-stat data-map-stat-target="26">
+                                26
+                            </span>
+
+                        </strong>
+
+
+                        <span class="map__stat-label">
+                            años de experiencia
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEPARADOR -->
+
+                <span class="map__stats-divider" aria-hidden="true"></span>
+
+
+                <!-- 76 DESTINOS -->
+
+                <div class="map__stat">
+
+                    <div class="
+                            map__stat-icon
+                            map__stat-icon--teal
+                        " aria-hidden="true">
+                        <span></span>
+                    </div>
+
+
+                    <div class="map__stat-content">
+
+                        <strong class="map__stat-value">
+
+                            <span data-map-stat data-map-stat-target="76">
+                                76
+                            </span>
+
+                        </strong>
+
+
+                        <span class="map__stat-label">
+                            destinos
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEPARADOR -->
+
+                <span class="map__stats-divider" aria-hidden="true"></span>
+
+
+                <!-- 10.000 ESTUDIANTES -->
+
+                <div class="map__stat">
+
+                    <div class="
+                            map__stat-icon
+                            map__stat-icon--orange
+                        " aria-hidden="true">
+                        <span></span>
+                    </div>
+
+
+                    <div class="map__stat-content">
+
+                        <strong class="map__stat-value">
+
+                            <span class="map__stat-prefix">
+                                +
+                            </span>
+
+                            <span data-map-stat data-map-stat-target="10000">
+                                10.000
+                            </span>
+
+                        </strong>
+
+
+                        <span class="map__stat-label">
+                            estudiantes
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 INDICADOR HACIA EL MAPA
+            ======================================= -->
+
+            <div class="
+                    map__explore
+                    map__reveal
+                " data-map-reveal aria-hidden="true">
+
+                <span class="map__explore-text">
+                    Explora el mapa
+                </span>
+
+
+                <span class="map__explore-line"></span>
+
+
+                <span class="map__explore-arrow">
+                    ↓
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==========================================
+             EXPERIENCIA DEL MAPA
+        ========================================== -->
+
+        <div class="
+                map__experience
+                map__reveal
+            " data-map-reveal>
+
+
+            <!-- ======================================
+                 DECORACIONES
+            ======================================= -->
+
+            <div class="
+                    map__decor
+                    map__decor--one
+                " aria-hidden="true"></div>
+
+
+            <div class="
+                    map__decor
+                    map__decor--two
+                " aria-hidden="true"></div>
+
+
+            <div class="
+                    map__decor
+                    map__decor--three
+                " aria-hidden="true"></div>
+
+
+            <!-- ======================================
+                 PUNTOS
+            ======================================= -->
+
+            <div class="
+                    map__grid-dots
+                    map__grid-dots--left
+                " aria-hidden="true">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+
+            <div class="
+                    map__grid-dots
+                    map__grid-dots--right
+                " aria-hidden="true">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+
+            <!-- ======================================
+                 LAYOUT
+            ======================================= -->
+
+            <div class="map__layout">
+
+
+                <!-- ==================================
+                     MAPA
+                =================================== -->
+
+                <div class="map__board">
+
+
+                    <!-- ==============================
+                         BARRA SUPERIOR
+                    =============================== -->
+
+                    <div class="map__board-top">
+
+                        <span class="map__mini-badge">
+
+                            <span class="map__mini-badge-dot" aria-hidden="true"></span>
+
+                            Explora el mundo
+
+                        </span>
+
+
+                        <div class="map__legend" aria-label="Leyenda del mapa">
+
+                            <span>
+
+                                <i class="
+                                        map__legend-dot
+                                        map__legend-dot--intl
+                                    "></i>
+
+                                Internacional
+
+                            </span>
+
+
+                            <span>
+
+                                <i class="
+                                        map__legend-dot
+                                        map__legend-dot--local
+                                    "></i>
+
+                                Ecuador
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==============================
+                         ESCENA
+                    =============================== -->
+
+                    <div class="map__scene">
+
+
+                        <!-- ==========================
+                             MAPA BASE
+                        =========================== -->
+
+                        <div class="map__world-base" aria-hidden="true">
+
+                            <img src="/images/map/mapafinal-1-2048x862.jpg" alt="" loading="lazy">
+
+                        </div>
+
+
+                        <!-- ==========================
+                             ATMÓSFERA
+                        =========================== -->
+
+                        <div class="
+                                map__world-glow
+                                map__world-glow--one
+                            " aria-hidden="true"></div>
+
+
+                        <div class="
+                                map__world-glow
+                                map__world-glow--two
+                            " aria-hidden="true"></div>
+
+
+                        <!-- ==========================
+                             RUTAS
+                        =========================== -->
+
+                        <svg class="map__routes" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+
+                            <!-- AMÉRICA -->
+
+                            <path class="map__route" data-map-route="america" d="
+                                    M 286 276
+                                    C 240 228,
+                                      185 196,
+                                      122 208
+                                "></path>
+
+
+                            <!-- EUROPA -->
+
+                            <path class="map__route" data-map-route="europa" d="
+                                    M 286 276
+                                    C 370 214,
+                                      447 178,
+                                      530 181
+                                "></path>
+
+
+                            <!-- ÁFRICA -->
+
+                            <path class="map__route" data-map-route="africa" d="
+                                    M 286 276
+                                    C 377 259,
+                                      463 267,
+                                      534 307
+                                "></path>
+
+
+                            <!-- ASIA -->
+
+                            <path class="map__route" data-map-route="asia" d="
+                                    M 286 276
+                                    C 440 210,
+                                      620 166,
+                                      760 204
+                                "></path>
+
+
+                            <!-- OCEANÍA -->
+
+                            <path class="map__route" data-map-route="oceania" d="
+                                    M 286 276
+                                    C 480 305,
+                                      701 352,
+                                      850 393
+                                "></path>
+
+                        </svg>
+
+
+                        <!-- ==========================
+                             ECUADOR
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--ecuador
+                            " type="button" data-map-location="ecuador" aria-label="Explorar Ecuador">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                Ecuador
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             AMÉRICA
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--america
+                            " type="button" data-map-location="america" aria-label="Explorar América">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                América
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             EUROPA
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--europa
+                            " type="button" data-map-location="europa" aria-label="Explorar Europa">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                Europa
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             ÁFRICA
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--africa
+                            " type="button" data-map-location="africa" aria-label="Explorar África">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                África
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             ASIA
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--asia
+                            " type="button" data-map-location="asia" aria-label="Explorar Asia">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                Asia
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             OCEANÍA
+                        =========================== -->
+
+                        <button class="
+                                map__pin
+                                map__pin--oceania
+                            " type="button" data-map-location="oceania" aria-label="Explorar Oceanía">
+
+                            <span class="map__pin-pulse"></span>
+
+                            <span class="map__pin-core"></span>
+
+                            <span class="map__pin-label">
+                                Oceanía
+                            </span>
+
+                        </button>
+
+
+                        <!-- ==========================
+                             TARJETA FLOTANTE 1
+                        =========================== -->
+
+                        <div class="
+                                map__floating-card
+                                map__floating-card--one
+                            " aria-hidden="true">
+
+                            <span class="map__floating-card-tag">
+                                Mundo Global
+                            </span>
+
+                            <strong>
+                                Experiencias internacionales
+                            </strong>
+
+                            <small>
+                                Descubre nuevas culturas,
+                                idiomas y oportunidades.
+                            </small>
+
+                        </div>
+
+
+                        <!-- ==========================
+                             TARJETA FLOTANTE 2
+                        =========================== -->
+
+                        <div class="
+                                map__floating-card
+                                map__floating-card--two
+                            " aria-hidden="true">
+
+                            <span class="
+                                    map__floating-card-tag
+                                    map__floating-card-tag--alt
+                                ">
+                                Ecuador
+                            </span>
+
+                            <strong>
+                                Tu experiencia puede comenzar aquí
+                            </strong>
+
+                            <small>
+                                Explora también nuestras
+                                alternativas nacionales.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     PANEL DINÁMICO
+                =================================== -->
+
+                <aside class="map__panel">
+
+
+                    <!-- ==============================
+                         CABECERA DEL PANEL
+                    =============================== -->
+
+                    <div>
+
+                        <span class="map__panel-eyebrow">
+                            Ubicación activa
+                        </span>
+
+
+                        <h3 class="map__panel-title" data-map-active-title>
+                            Ecuador
+                        </h3>
+
+
+                        <p class="map__panel-description" data-map-active-description>
+                            Programas locales y conexiones
+                            con experiencias internacionales
+                            desde Ecuador.
+                        </p>
+
+                    </div>
+
+
+                    <!-- ==============================
+                         BENEFICIOS
+                    =============================== -->
+
+                    <ul class="map__panel-list" data-map-active-list>
+
+                        <li>
+                            Opciones académicas y culturales
+                        </li>
+
+                        <li>
+                            Conexión con destinos internacionales
+                        </li>
+
+                        <li>
+                            Asesoría personalizada
+                        </li>
+
+                    </ul>
+
+
+                    <!-- ==============================
+                         BOTONES
+                    =============================== -->
+
+                    <div class="map__panel-actions">
+
+                        <a class="
+                                map__panel-button
+                                map__panel-button--primary
+                            " href="#programas">
+                            Ver programas
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </a>
+
+
+                        <a class="
+                                map__panel-button
+                                map__panel-button--secondary
+                            " href="#servicios">
+                            Hablar con un asesor
+                        </a>
+
+                    </div>
+
+
+                    <!-- ==============================
+                         SELECTORES
+                    =============================== -->
+
+                    <div class="map__chips">
+
+                        <button class="
+                                map__chip
+                                is-active
+                            " type="button" data-map-location="ecuador">
+                            Ecuador
+                        </button>
+
+
+                        <button class="map__chip" type="button" data-map-location="america">
+                            América
+                        </button>
+
+
+                        <button class="map__chip" type="button" data-map-location="europa">
+                            Europa
+                        </button>
+
+
+                        <button class="map__chip" type="button" data-map-location="africa">
+                            África
+                        </button>
+
+
+                        <button class="map__chip" type="button" data-map-location="asia">
+                            Asia
+                        </button>
+
+
+                        <button class="map__chip" type="button" data-map-location="oceania">
+                            Oceanía
+                        </button>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PARTNERS
+        ========================================== -->
+
+        <div class="
+                map__partners
+                map__reveal
+            " data-map-reveal>
+
+            <span class="map__partners-title">
+                Aliados y certificaciones
+            </span>
+
+
+            <img src="/images/partners/logosExtras-1.png"
+                alt="Certificaciones y aliados internacionales de Global Exchange" data-i18n-alt="map.partnersAlt"
+                loading="lazy">
+
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,2080 @@
+/* ====================================================
+   EXPERIENCIA FINAL
+
+   Archivo:
+   src/css/components/closing-experience.css
+
+   Proyecto:
+   Global Exchange - Migración a Vite
+
+   Diseño:
+   - Sección ubicada después del footer
+   - Escenario fijado mediante JavaScript
+   - Animación vinculada al scroll
+   - Mensaje central
+   - Tarjetas de Quito y Guayaquil
+   - Parallax de formas
+   - Ruta animada
+   - Avión en movimiento
+   - Diseño responsive
+==================================================== */
+
+
+/* ====================================================
+   SECCIÓN PRINCIPAL
+==================================================== */
+
+.closing-experience {
+    --closing-navy: #17205c;
+    --closing-blue: #5366f5;
+    --closing-teal: #25c7bb;
+    --closing-orange: #ff7a22;
+    --closing-pink: #e84d98;
+    --closing-lavender: #a99ae7;
+
+    --closing-shape-blue-x: 0px;
+    --closing-shape-blue-y: 0px;
+
+    --closing-shape-teal-x: 0px;
+    --closing-shape-teal-y: 0px;
+
+    --closing-shape-orange-x: 0px;
+    --closing-shape-orange-y: 0px;
+
+    --closing-shape-lavender-x: 0px;
+    --closing-shape-lavender-y: 0px;
+
+    position: relative;
+
+    width: 100%;
+
+    height: 180vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    background:
+        #17205c;
+
+    overflow: visible;
+}
+
+
+/* ====================================================
+   ESCENARIO
+==================================================== */
+
+.closing-experience__stage {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    z-index: 20;
+
+    width: 100%;
+
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 620px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 50% 42%,
+            rgba(83, 102, 245, 0.13),
+            transparent 36%),
+        linear-gradient(145deg,
+            #11194d 0%,
+            #17205c 52%,
+            #1b2466 100%);
+}
+
+
+/* ====================================================
+   ESCENARIO ACTIVO
+==================================================== */
+
+.closing-experience.is-active .closing-experience__stage {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+
+    width: 100%;
+}
+
+
+/* ====================================================
+   ESCENARIO FINALIZADO
+==================================================== */
+
+.closing-experience.is-complete .closing-experience__stage {
+    position: absolute;
+
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+}
+
+
+/* ====================================================
+   TEXTURA DE PUNTOS
+==================================================== */
+
+.closing-experience__stage::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    opacity: 0.11;
+
+    background-image:
+        radial-gradient(circle,
+            rgba(255, 255, 255, 0.38) 1px,
+            transparent 1.5px);
+
+    background-size:
+        35px 35px;
+
+    mask-image:
+        radial-gradient(ellipse at center,
+            #000 18%,
+            transparent 78%);
+
+    -webkit-mask-image:
+        radial-gradient(ellipse at center,
+            #000 18%,
+            transparent 78%);
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   ILUMINACIÓN CENTRAL
+==================================================== */
+
+.closing-experience__stage::after {
+    content: "";
+
+    position: absolute;
+
+    z-index: 0;
+
+    top: 48%;
+    left: 50%;
+
+    width: 900px;
+    height: 600px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle,
+            rgba(255, 255, 255, 0.05),
+            transparent 68%);
+
+    transform:
+        translate(-50%, -50%);
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   CONTENEDOR CENTRAL
+==================================================== */
+
+.closing-experience__container {
+    position: relative;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width:
+        min(100% - 64px,
+            1380px);
+
+    height: 100%;
+
+    margin:
+        0 auto;
+
+    padding:
+        18px 0 128px;
+}
+
+
+/* ====================================================
+   CONTENIDO
+==================================================== */
+
+.closing-experience__content {
+    position: relative;
+
+    width:
+        min(100%,
+            1080px);
+
+    margin:
+        0 auto;
+
+    text-align: center;
+}
+
+
+/* ====================================================
+   ETIQUETA SUPERIOR
+==================================================== */
+
+.closing-experience__eyebrow {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+
+    padding:
+        7px 13px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.14);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+
+    font-family:
+        var(--font-body);
+
+    font-size: 9px;
+
+    font-weight:
+        var(--font-bold);
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    color:
+        #ff9a52;
+}
+
+
+.closing-experience__eyebrow-line {
+    width: 22px;
+    height: 2px;
+
+    border-radius: 999px;
+
+    background:
+        var(--closing-orange);
+}
+
+
+/* ====================================================
+   TÍTULO
+==================================================== */
+
+.closing-experience__title {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    margin: 0;
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        clamp(42px,
+            4.65vw,
+            70px);
+
+    font-weight:
+        var(--font-black);
+
+    line-height: 0.94;
+
+    letter-spacing:
+        -2.6px;
+
+    color:
+        #ffffff;
+
+    text-wrap:
+        balance;
+}
+
+
+/* ====================================================
+   LÍNEAS DEL MENSAJE
+==================================================== */
+
+.closing-experience__line {
+    position: relative;
+
+    display: block;
+
+    width: fit-content;
+
+    will-change:
+        opacity,
+        transform;
+}
+
+
+/* ====================================================
+   EL MUNDO
+==================================================== */
+
+.closing-experience__line--one {
+    color:
+        #ffffff;
+}
+
+
+/* ====================================================
+   NO SOLO SE CONOCE
+==================================================== */
+
+.closing-experience__line--two {
+    margin-top: 1px;
+
+    color:
+        #dfe3ff;
+}
+
+
+/* ====================================================
+   SE DESCUBRE
+==================================================== */
+
+.closing-experience__line--three {
+    margin-top: 6px;
+
+    background:
+        linear-gradient(90deg,
+            #7585ff,
+            #50a2ff);
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ====================================================
+   SE APRENDE
+==================================================== */
+
+.closing-experience__line--four {
+    background:
+        linear-gradient(90deg,
+            #2ed5c7,
+            #6de9dc);
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ====================================================
+   Y SE VIVE
+==================================================== */
+
+.closing-experience__line--five {
+    background:
+        linear-gradient(90deg,
+            #ffa04a,
+            #ff6730);
+
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ====================================================
+   DESCRIPCIÓN FINAL
+==================================================== */
+
+.closing-experience__description {
+    max-width: 650px;
+
+    margin:
+        15px auto 0;
+
+    font-family:
+        var(--font-body);
+
+    font-size:
+        clamp(11px,
+            1vw,
+            14px);
+
+    line-height: 1.55;
+
+    color:
+        rgba(255, 255, 255, 0.73);
+}
+
+
+/* ====================================================
+   CONTENEDOR DEL BOTÓN
+==================================================== */
+
+.closing-experience__actions {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 15px;
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   BOTÓN
+==================================================== */
+
+.closing-experience__button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    min-height: 47px;
+
+    padding:
+        0 21px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.16);
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(95deg,
+            #ff8625,
+            #ff551c);
+
+    box-shadow:
+        0 14px 28px rgba(255, 89, 28, 0.25);
+
+    font-family:
+        var(--font-body);
+
+    font-size: 10px;
+
+    font-weight:
+        var(--font-bold);
+
+    color:
+        #ffffff;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+
+.closing-experience__button:hover {
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 20px 38px rgba(255, 89, 28, 0.34);
+}
+
+
+.closing-experience__button>span {
+    font-size: 17px;
+
+    transition:
+        transform 0.22s ease;
+}
+
+
+.closing-experience__button:hover>span {
+    transform:
+        translateX(5px);
+}
+
+
+/* ====================================================
+   SEDES
+
+   Diseño compacto:
+   - Más angostas.
+   - Centradas.
+   - Menor peso visual.
+   - Dirección dividida intencionalmente.
+==================================================== */
+
+.closing-experience__locations {
+    position: relative;
+
+    z-index: 8;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+    width:
+        min(100%, 760px);
+
+    margin:
+        26px auto 0;
+
+    text-align: left;
+}
+
+
+/* ====================================================
+   TARJETA
+==================================================== */
+
+.closing-experience__location-card {
+    --location-accent: #9189ff;
+    --location-soft: rgba(145, 137, 255, 0.13);
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        44px minmax(0, 1fr);
+
+    gap: 14px;
+
+    align-items: center;
+
+    min-width: 0;
+    min-height: 104px;
+
+    padding:
+        15px 18px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.095),
+            rgba(255, 255, 255, 0.045));
+
+    box-shadow:
+        0 14px 32px rgba(5, 10, 45, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.055);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.28s ease,
+        border-color 0.28s ease,
+        background 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+
+/* ====================================================
+   RESPLANDOR
+==================================================== */
+
+.closing-experience__location-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -90px;
+    right: -80px;
+
+    width: 190px;
+    height: 190px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle,
+            var(--location-soft),
+            transparent 68%);
+
+    pointer-events: none;
+}
+
+
+/* ====================================================
+   PEQUEÑO ACENTO SUPERIOR
+==================================================== */
+
+.closing-experience__location-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 18px;
+
+    width: 58px;
+    height: 2px;
+
+    border-radius:
+        0 0 999px 999px;
+
+    background:
+        var(--location-accent);
+}
+
+
+/* ====================================================
+   QUITO
+==================================================== */
+
+.closing-experience__location-card--quito {
+    --location-accent:
+        #948bff;
+
+    --location-soft:
+        rgba(148, 139, 255, 0.15);
+}
+
+
+/* ====================================================
+   GUAYAQUIL
+==================================================== */
+
+.closing-experience__location-card--guayaquil {
+    --location-accent:
+        #47d8cb;
+
+    --location-soft:
+        rgba(71, 216, 203, 0.15);
+}
+
+
+/* ====================================================
+   HOVER
+==================================================== */
+
+.closing-experience__location-card:hover {
+    transform:
+        translateY(-4px);
+
+    border-color:
+        color-mix(in srgb,
+            var(--location-accent) 32%,
+            transparent);
+
+    background:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.125),
+            rgba(255, 255, 255, 0.06));
+
+    box-shadow:
+        0 20px 40px rgba(5, 10, 45, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+
+/* ====================================================
+   ICONO
+==================================================== */
+
+.closing-experience__location-icon {
+    display: grid;
+
+    place-items: center;
+
+    width: 44px;
+    height: 44px;
+
+    border:
+        1px solid color-mix(in srgb,
+            var(--location-accent) 25%,
+            transparent);
+
+    border-radius: 13px;
+
+    color:
+        var(--location-accent);
+
+    background:
+        var(--location-soft);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+
+.closing-experience__location-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+/* ====================================================
+   CONTENIDO
+==================================================== */
+
+.closing-experience__location-content {
+    min-width: 0;
+}
+
+
+/* ====================================================
+   ETIQUETA
+==================================================== */
+
+.closing-experience__location-label {
+    display: block;
+
+    margin-bottom: 1px;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 7px;
+
+    font-weight:
+        var(--font-bold);
+
+    line-height: 1.2;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+    color:
+        var(--location-accent);
+}
+
+
+/* ====================================================
+   CIUDAD
+==================================================== */
+
+.closing-experience__location-title {
+    margin:
+        0 0 6px;
+
+    font-family:
+        var(--font-heading);
+
+    font-size: 17px;
+
+    font-weight:
+        var(--font-black);
+
+    line-height: 1.05;
+
+    letter-spacing:
+        -0.3px;
+
+    color:
+        #ffffff;
+}
+
+
+/* ====================================================
+   DIRECCIÓN
+==================================================== */
+
+.closing-experience__location-address {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1px;
+
+    margin: 0;
+
+    font-family:
+        var(--font-body);
+
+    font-size: 9px;
+
+    font-style: normal;
+
+    font-weight:
+        var(--font-normal);
+
+    line-height: 1.4;
+
+    color:
+        rgba(255, 255, 255, 0.65);
+}
+
+
+.closing-experience__location-address-line {
+    display: block;
+}
+
+
+/* ====================================================
+   TABLET
+==================================================== */
+
+@media (max-width: 1000px) {
+
+    .closing-experience__locations {
+        width:
+            min(100%, 700px);
+
+        gap: 14px;
+    }
+
+
+    .closing-experience__location-card {
+        padding:
+            14px 16px;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVIL
+==================================================== */
+
+@media (max-width: 700px) {
+
+    .closing-experience__locations {
+        grid-template-columns:
+            1fr;
+
+        gap: 8px;
+
+        width:
+            min(100%, 390px);
+
+        margin-top: 12px;
+    }
+
+
+    .closing-experience__location-card {
+        grid-template-columns:
+            38px minmax(0, 1fr);
+
+        gap: 11px;
+
+        min-height: 72px;
+
+        padding:
+            9px 12px;
+
+        border-radius: 15px;
+    }
+
+
+    .closing-experience__location-icon {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 11px;
+    }
+
+
+    .closing-experience__location-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    .closing-experience__location-title {
+        margin-bottom: 3px;
+
+        font-size: 14px;
+    }
+
+
+    .closing-experience__location-address {
+        gap: 0;
+
+        font-size: 7.5px;
+
+        line-height: 1.3;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVILES PEQUEÑOS
+==================================================== */
+
+@media (max-width: 440px) {
+
+    .closing-experience__locations {
+        width:
+            min(100%, 340px);
+    }
+
+
+    .closing-experience__location-card {
+        grid-template-columns:
+            34px minmax(0, 1fr);
+
+        padding:
+            8px 10px;
+    }
+
+
+    .closing-experience__location-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+}
+
+/* ====================================================
+   ELEMENTOS QUE APARECEN CON EL SCROLL
+==================================================== */
+
+[data-closing-reveal] {
+    opacity: 0;
+
+    transform:
+        translate3d(0,
+            26px,
+            0) scale(0.98);
+
+    will-change:
+        opacity,
+        transform;
+}
+
+
+/* ====================================================
+   FORMAS DECORATIVAS
+==================================================== */
+
+.closing-experience__shape {
+    position: absolute;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    will-change:
+        transform;
+}
+
+
+/* ====================================================
+   FORMA AZUL
+==================================================== */
+
+.closing-experience__shape--blue {
+    top: -350px;
+    left: -300px;
+
+    width: 720px;
+    height: 690px;
+
+    border-radius:
+        43% 57% 55% 45% / 50% 40% 60% 50%;
+
+    background:
+        linear-gradient(145deg,
+            rgba(83, 102, 245, 0.92),
+            rgba(62, 74, 202, 0.78));
+
+    transform:
+        translate3d(var(--closing-shape-blue-x),
+            var(--closing-shape-blue-y),
+            0) rotate(-12deg);
+}
+
+
+/* ====================================================
+   FORMA TURQUESA
+==================================================== */
+
+.closing-experience__shape--teal {
+    top: -330px;
+    right: -300px;
+
+    width: 680px;
+    height: 650px;
+
+    border-radius:
+        60% 40% 44% 56% / 48% 61% 39% 52%;
+
+    background:
+        linear-gradient(145deg,
+            rgba(37, 199, 187, 0.87),
+            rgba(32, 151, 158, 0.72));
+
+    transform:
+        translate3d(var(--closing-shape-teal-x),
+            var(--closing-shape-teal-y),
+            0) rotate(14deg);
+}
+
+
+/* ====================================================
+   FORMA NARANJA
+==================================================== */
+
+.closing-experience__shape--orange {
+    left: -270px;
+    bottom: -450px;
+
+    width: 720px;
+    height: 690px;
+
+    border-radius:
+        57% 43% 66% 34% / 46% 58% 42% 54%;
+
+    background:
+        linear-gradient(150deg,
+            rgba(255, 126, 37, 0.94),
+            rgba(255, 86, 30, 0.72));
+
+    transform:
+        translate3d(var(--closing-shape-orange-x),
+            var(--closing-shape-orange-y),
+            0) rotate(17deg);
+}
+
+
+/* ====================================================
+   FORMA LAVANDA
+==================================================== */
+
+.closing-experience__shape--lavender {
+    right: -240px;
+    bottom: -430px;
+
+    width: 650px;
+    height: 620px;
+
+    border-radius:
+        48% 52% 36% 64% / 47% 43% 57% 53%;
+
+    background:
+        linear-gradient(145deg,
+            rgba(183, 170, 238, 0.74),
+            rgba(132, 115, 213, 0.46));
+
+    transform:
+        translate3d(var(--closing-shape-lavender-x),
+            var(--closing-shape-lavender-y),
+            0) rotate(-14deg);
+}
+
+
+/* ====================================================
+   PUNTOS DECORATIVOS
+==================================================== */
+
+.closing-experience__dots {
+    position: absolute;
+
+    z-index: 3;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 6px);
+
+    gap: 10px;
+
+    pointer-events: none;
+}
+
+
+.closing-experience__dots span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.62);
+}
+
+
+.closing-experience__dots--one {
+    top: 9%;
+    right: 9%;
+}
+
+
+.closing-experience__dots--two {
+    left: 9%;
+    bottom: 17%;
+
+    grid-template-columns:
+        repeat(2, 6px);
+}
+
+
+.closing-experience__dots--two span:nth-child(1) {
+    background:
+        #25c7bb;
+}
+
+
+.closing-experience__dots--two span:nth-child(2) {
+    background:
+        #ff8625;
+}
+
+
+.closing-experience__dots--two span:nth-child(3) {
+    background:
+        #6e77ff;
+}
+
+
+.closing-experience__dots--two span:nth-child(4) {
+    background:
+        #e84d98;
+}
+
+
+/* ====================================================
+   RUTA DEL AVIÓN
+==================================================== */
+
+.closing-experience__route {
+    position: absolute;
+
+    z-index: 2;
+
+    left: 50%;
+    bottom: 1.5%;
+
+    width:
+        min(90%,
+            1280px);
+
+    height: 115px;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events: none;
+
+    opacity: 0.62;
+}
+
+
+.closing-experience__route-svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+}
+
+
+/* ====================================================
+   RUTA BASE
+==================================================== */
+
+.closing-experience__route-base {
+    fill: none;
+
+    stroke:
+        rgba(255, 255, 255, 0.07);
+
+    stroke-width: 2;
+
+    stroke-linecap: round;
+
+    stroke-dasharray:
+        7 11;
+}
+
+
+/* ====================================================
+   RUTA ANIMADA
+==================================================== */
+
+.closing-experience__route-progress {
+    fill: none;
+
+    stroke:
+        rgba(86, 224, 210, 0.76);
+
+    stroke-width: 2.3;
+
+    stroke-linecap: round;
+
+    stroke-dasharray: 1;
+
+    stroke-dashoffset: 1;
+
+    filter:
+        drop-shadow(0 0 7px rgba(37, 199, 187, 0.34));
+}
+
+
+/* ====================================================
+   AVIÓN
+==================================================== */
+
+.closing-experience__plane {
+    opacity: 0;
+
+    fill:
+        #ffffff;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 30px;
+
+    filter:
+        drop-shadow(0 7px 9px rgba(6, 12, 48, 0.35));
+}
+
+
+.closing-experience__plane-halo {
+    fill:
+        rgba(37, 199, 187, 0.16);
+
+    stroke:
+        rgba(255, 255, 255, 0.16);
+
+    stroke-width: 1;
+}
+
+
+/* ====================================================
+   INDICADOR "SIGUE EXPLORANDO"
+==================================================== */
+
+.closing-experience__scroll-indicator {
+    position: absolute;
+
+    z-index: 6;
+
+    left: 50%;
+    bottom: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    transform:
+        translateX(-50%);
+
+    font-family:
+        var(--font-body);
+
+    font-size: 7px;
+
+    font-weight:
+        var(--font-semibold);
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(255, 255, 255, 0.53);
+
+    pointer-events: none;
+}
+
+
+.closing-experience__scroll-arrow {
+    font-size: 15px;
+
+    animation:
+        closing-scroll-arrow 1.7s ease-in-out infinite;
+}
+
+
+@keyframes closing-scroll-arrow {
+
+    0%,
+    100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(6px);
+    }
+
+}
+
+
+/* ====================================================
+   PROGRESO LATERAL
+==================================================== */
+
+.closing-experience__progress {
+    position: absolute;
+
+    z-index: 7;
+
+    top: 50%;
+    right: 28px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 9px;
+
+    transform:
+        translateY(-50%);
+}
+
+
+.closing-experience__progress-number {
+    font-family:
+        var(--font-body);
+
+    font-size: 8px;
+
+    font-weight:
+        var(--font-bold);
+
+    color:
+        rgba(255, 255, 255, 0.48);
+}
+
+
+.closing-experience__progress-track {
+    position: relative;
+
+    width: 2px;
+    height: 105px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.13);
+}
+
+
+.closing-experience__progress-bar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 0%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(180deg,
+            #5366f5,
+            #25c7bb,
+            #ff8625);
+}
+
+
+/* ====================================================
+   PANTALLAS CON POCA ALTURA
+
+   Mantiene toda la composición visible en portátiles.
+==================================================== */
+
+@media (min-width: 701px) and (max-height: 900px) {
+
+    .closing-experience__container {
+        padding:
+            12px 0 100px;
+    }
+
+
+    .closing-experience__eyebrow {
+        margin-bottom: 9px;
+
+        padding:
+            6px 12px;
+    }
+
+
+    .closing-experience__title {
+        font-size:
+            clamp(38px,
+                4vw,
+                60px);
+
+        line-height: 0.92;
+    }
+
+
+    .closing-experience__line--three {
+        margin-top: 4px;
+    }
+
+
+    .closing-experience__description {
+        margin-top: 10px;
+
+        font-size: 11px;
+    }
+
+
+    .closing-experience__actions {
+        margin-top: 10px;
+    }
+
+
+    .closing-experience__button {
+        min-height: 43px;
+    }
+
+
+    .closing-experience__locations {
+        margin-top: 12px;
+    }
+
+
+    .closing-experience__location-card {
+        min-height: 78px;
+
+        padding:
+            10px 14px;
+
+        grid-template-columns:
+            38px minmax(0, 1fr);
+    }
+
+
+    .closing-experience__location-icon {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 12px;
+    }
+
+
+    .closing-experience__location-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    .closing-experience__location-title {
+        font-size: 15px;
+    }
+
+
+    .closing-experience__location-address {
+        font-size: 9px;
+
+        line-height: 1.35;
+    }
+
+
+    .closing-experience__route {
+        height: 95px;
+
+        opacity: 0.52;
+    }
+
+}
+
+
+/* ====================================================
+   TABLET
+==================================================== */
+
+@media (max-width: 1000px) {
+
+    .closing-experience {
+        height:
+            175vh;
+    }
+
+
+    .closing-experience__container {
+        width:
+            min(100% - 42px,
+                900px);
+
+        padding-bottom:
+            110px;
+    }
+
+
+    .closing-experience__title {
+        font-size:
+            clamp(39px,
+                6.2vw,
+                60px);
+
+        letter-spacing:
+            -2.2px;
+    }
+
+
+    .closing-experience__locations {
+        gap: 11px;
+
+        max-width: 760px;
+    }
+
+
+    .closing-experience__location-card {
+        min-height: 88px;
+
+        padding:
+            12px 14px;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVIL
+==================================================== */
+
+@media (max-width: 700px) {
+
+    .closing-experience {
+        height:
+            175vh;
+    }
+
+
+    .closing-experience__stage {
+        min-height:
+            560px;
+    }
+
+
+    .closing-experience__container {
+        width:
+            min(100% - 28px,
+                560px);
+
+        align-items:
+            center;
+
+        padding:
+            16px 0 76px;
+    }
+
+
+    .closing-experience__eyebrow {
+        margin-bottom:
+            8px;
+
+        padding:
+            6px 10px;
+
+        font-size:
+            7px;
+    }
+
+
+    .closing-experience__eyebrow-line {
+        width: 17px;
+    }
+
+
+    .closing-experience__title {
+        font-size:
+            clamp(29px,
+                9.2vw,
+                43px);
+
+        line-height:
+            0.95;
+
+        letter-spacing:
+            -1.5px;
+    }
+
+
+    .closing-experience__line--three {
+        margin-top:
+            4px;
+    }
+
+
+    .closing-experience__description {
+        max-width:
+            370px;
+
+        margin-top:
+            9px;
+
+        font-size:
+            9px;
+
+        line-height: 1.45;
+    }
+
+
+    .closing-experience__actions {
+        margin-top:
+            9px;
+    }
+
+
+    .closing-experience__button {
+        min-height:
+            42px;
+
+        padding:
+            0 15px;
+
+        font-size:
+            8px;
+    }
+
+
+    /* ================================================
+       SEDES MÓVIL
+    ================================================ */
+
+    .closing-experience__locations {
+        grid-template-columns:
+            1fr;
+
+        gap: 7px;
+
+        max-width:
+            430px;
+
+        margin-top:
+            10px;
+    }
+
+
+    .closing-experience__location-card {
+        min-height:
+            65px;
+
+        grid-template-columns:
+            36px minmax(0, 1fr);
+
+        gap: 10px;
+
+        padding:
+            8px 11px;
+
+        border-radius:
+            15px;
+    }
+
+
+    .closing-experience__location-card::after {
+        left: 12px;
+
+        width: 55px;
+    }
+
+
+    .closing-experience__location-icon {
+        width: 36px;
+        height: 36px;
+
+        border-radius:
+            11px;
+    }
+
+
+    .closing-experience__location-icon svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+    .closing-experience__location-label {
+        font-size: 6px;
+
+        letter-spacing:
+            1px;
+    }
+
+
+    .closing-experience__location-title {
+        display: inline;
+
+        margin-right: 5px;
+
+        font-size: 13px;
+    }
+
+
+    .closing-experience__location-address {
+        display: inline;
+
+        font-size: 8px;
+
+        line-height: 1.3;
+    }
+
+
+    .closing-experience__location-dot {
+        display: none;
+    }
+
+
+    /* ================================================
+       FORMAS
+    ================================================ */
+
+    .closing-experience__shape--blue {
+        top:
+            -260px;
+
+        left:
+            -285px;
+
+        width:
+            500px;
+
+        height:
+            480px;
+    }
+
+
+    .closing-experience__shape--teal {
+        top:
+            -250px;
+
+        right:
+            -285px;
+
+        width:
+            490px;
+
+        height:
+            470px;
+    }
+
+
+    .closing-experience__shape--orange {
+        left:
+            -290px;
+
+        bottom:
+            -365px;
+
+        width:
+            530px;
+
+        height:
+            510px;
+    }
+
+
+    .closing-experience__shape--lavender {
+        right:
+            -280px;
+
+        bottom:
+            -350px;
+
+        width:
+            510px;
+
+        height:
+            490px;
+    }
+
+
+    .closing-experience__route {
+        bottom:
+            1%;
+
+        width:
+            112%;
+
+        height:
+            80px;
+
+        opacity: 0.40;
+    }
+
+
+    .closing-experience__progress {
+        right:
+            10px;
+    }
+
+
+    .closing-experience__progress-track {
+        height:
+            72px;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVIL PEQUEÑO
+==================================================== */
+
+@media (max-width: 440px) {
+
+    .closing-experience__container {
+        padding-bottom:
+            63px;
+    }
+
+
+    .closing-experience__title {
+        font-size:
+            clamp(27px,
+                8.8vw,
+                37px);
+    }
+
+
+    .closing-experience__description {
+        max-width:
+            310px;
+    }
+
+
+    .closing-experience__locations {
+        max-width:
+            360px;
+    }
+
+
+    .closing-experience__progress {
+        display:
+            none;
+    }
+
+
+    .closing-experience__route {
+        opacity:
+            0.32;
+    }
+
+}
+
+
+/* ====================================================
+   MÓVILES DE POCA ALTURA
+==================================================== */
+
+@media (max-width: 700px) and (max-height: 700px) {
+
+    .closing-experience__container {
+        padding:
+            10px 0 52px;
+    }
+
+
+    .closing-experience__title {
+        font-size:
+            clamp(25px,
+                7.5vw,
+                33px);
+    }
+
+
+    .closing-experience__description {
+        margin-top:
+            6px;
+
+        font-size:
+            8px;
+    }
+
+
+    .closing-experience__actions {
+        margin-top:
+            6px;
+    }
+
+
+    .closing-experience__button {
+        min-height:
+            36px;
+    }
+
+
+    .closing-experience__locations {
+        margin-top:
+            7px;
+    }
+
+
+    .closing-experience__location-card {
+        min-height:
+            55px;
+
+        padding:
+            6px 9px;
+    }
+
+
+    .closing-experience__location-icon {
+        width: 31px;
+        height: 31px;
+    }
+
+
+    .closing-experience__location-address {
+        font-size: 7px;
+    }
+
+
+    .closing-experience__route {
+        display: none;
+    }
+
+}
+
+
+/* ====================================================
+   MOVIMIENTO REDUCIDO
+==================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .closing-experience {
+        height:
+            auto;
+    }
+
+
+    .closing-experience__stage,
+    .closing-experience.is-active .closing-experience__stage,
+    .closing-experience.is-complete .closing-experience__stage {
+        position:
+            relative;
+
+        top:
+            auto;
+
+        bottom:
+            auto;
+
+        height:
+            auto;
+
+        min-height:
+            820px;
+    }
+
+
+    [data-closing-reveal] {
+        opacity:
+            1 !important;
+
+        transform:
+            none !important;
+
+        pointer-events:
+            auto !important;
+    }
+
+
+    .closing-experience__shape {
+        transform:
+            none !important;
+    }
+
+
+    .closing-experience__route-progress {
+        stroke-dashoffset:
+            0 !important;
+    }
+
+
+    .closing-experience__scroll-indicator {
+        display:
+            none;
+    }
+
+
+    .closing-experience__progress-bar {
+        height:
+            100% !important;
+    }
+
+
+    .closing-experience__scroll-arrow {
+        animation:
+            none;
+    }
+
+
+    .closing-experience__actions,
+    .closing-experience__locations {
+        pointer-events:
+            auto;
+    }
+
+
+    .closing-experience__location-card {
+        transition:
+            none;
+    }
+
+}

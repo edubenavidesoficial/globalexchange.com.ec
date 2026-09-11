@@ -1,0 +1,755 @@
+<!--
+====================================================
+PÁGINA: NOSOTROS
+
+Archivo:
+src/components/pages/nuestra-historia/About_Page.html
+
+Responsabilidad:
+- Hero
+- Historia
+- Identidad
+- Servicios
+- Escuela de idiomas
+- Sedes
+- Partners
+
+Diseño:
+- Narrativa visual
+- Timeline animado
+- Profundidad y movimiento
+- Responsive
+- Internacionalización existente
+
+JavaScript:
+src/js/pages/about-page.js
+====================================================
+-->
+
+
+<!-- =================================================
+     HERO
+================================================== -->
+
+<section class="about-hero" data-about-hero>
+
+    <div class="about-hero__overlay" aria-hidden="true"></div>
+
+
+    <!-- DECORACIONES -->
+
+    <div class="about-hero__orb about-hero__orb--one" aria-hidden="true"></div>
+
+    <div class="about-hero__orb about-hero__orb--two" aria-hidden="true"></div>
+
+
+    <div class="about-hero__container">
+
+        <div class="about-hero__content" data-about-hero-content>
+
+            <span class="about-hero__eyebrow">
+                Global Exchange
+            </span>
+
+
+            <h1 class="about-hero__title" data-i18n="aboutPage.hero.title">
+                Nosotros
+            </h1>
+
+
+            <nav class="about-hero__breadcrumb" aria-label="Migas de pan"
+                data-i18n-aria-label="aboutPage.hero.breadcrumb.ariaLabel">
+
+                <a href="/" data-i18n="aboutPage.hero.breadcrumb.home">
+                    Inicio
+                </a>
+
+
+                <span class="about-hero__breadcrumb-dot" aria-hidden="true"></span>
+
+
+                <span aria-current="page" data-i18n="aboutPage.hero.breadcrumb.current">
+                    Nosotros
+                </span>
+
+            </nav>
+
+        </div>
+
+
+        <!-- INDICADOR -->
+
+        <div class="about-hero__scroll" aria-hidden="true">
+
+            <span></span>
+
+            <i></i>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     HISTORIA
+================================================== -->
+
+<section class="about-story" data-about-story>
+
+    <!-- DECORACIONES -->
+
+    <div class="about-decoration about-decoration--violet" aria-hidden="true"></div>
+
+    <div class="about-decoration about-decoration--orange" aria-hidden="true"></div>
+
+
+    <div class="about-shell">
+
+
+        <!-- ==========================================
+             INTRODUCCIÓN
+        ========================================== -->
+
+        <header class="about-section-heading" data-about-reveal="up">
+
+            <span class="about-kicker">
+                Global Exchange
+            </span>
+
+
+            <h2 class="about-section-heading__title" data-i18n="aboutPage.history.founder.title">
+                Nuestra Historia
+            </h2>
+
+
+            <span class="about-section-heading__line" aria-hidden="true"></span>
+
+        </header>
+
+
+        <!-- ==========================================
+             TIMELINE
+        ========================================== -->
+
+        <div class="about-story__timeline">
+
+
+            <!-- LÍNEA -->
+
+            <div class="about-story__rail" aria-hidden="true">
+
+                <span class="about-story__rail-progress" data-about-story-progress></span>
+
+            </div>
+
+
+            <!-- ======================================
+                 HISTORIA DEL FUNDADOR
+            ======================================= -->
+
+            <article class="about-story__item about-story__item--left" data-about-story-item>
+
+                <div class="about-story__media" data-about-reveal="left" data-about-tilt>
+
+                    <span class="about-story__media-number" aria-hidden="true">
+                        01
+                    </span>
+
+
+                    <div class="about-story__image-frame">
+
+                        <img class="about-story__image" src="/images/pages/nuestra-historia/Jorge_paz.png"
+                            alt="Dr. Jorge Pazmiño, fundador e inspiración de Global Exchange"
+                            data-i18n-alt="aboutPage.history.founder.imageAlt" loading="lazy">
+
+                    </div>
+
+                </div>
+
+
+                <span class="about-story__marker" aria-hidden="true"></span>
+
+
+                <div class="about-story__content" data-about-reveal="right">
+
+                    <span class="about-story__step">
+                        01
+                    </span>
+
+
+                    <h3 class="about-story__heading" data-i18n="aboutPage.history.founder.title">
+                        Nuestra Historia
+                    </h3>
+
+
+                    <p data-i18n="aboutPage.history.founder.paragraph1">
+                        París, la ciudad luz, acogió a mi padre,
+                        Dr. Jorge Pazmiño, ecuatoriano, alumno y
+                        profesor de la Sorbona de París.
+                    </p>
+
+
+                    <p data-i18n="aboutPage.history.founder.paragraph2">
+                        Nos dejó el camino para arrancar con una de las
+                        más exclusivas academias de lenguas, agencia de
+                        estudios internacionales e intercambio
+                        estudiantil, con sede en Alemania, China,
+                        Ecuador y Estados Unidos.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- ======================================
+                 GLOBAL EXCHANGE
+            ======================================= -->
+
+            <article class="about-story__item about-story__item--right" data-about-story-item>
+
+                <div class="about-story__content" data-about-reveal="left">
+
+                    <span class="about-story__step">
+                        02
+                    </span>
+
+
+                    <h3 class="about-story__heading">
+                        Global Exchange
+                    </h3>
+
+
+                    <p data-i18n="aboutPage.history.globalExchange.paragraph1">
+                        Como directora especializada en derecho
+                        migratorio y seguros, estarán en buenas manos.
+                        Nuestro equipo tiene la fiel convicción de
+                        convertir a estudiantes en ciudadanos del mundo
+                        con más oportunidades para la vida profesional,
+                        en miras de una vida exitosa y feliz.
+                    </p>
+
+
+                    <p data-i18n="aboutPage.history.globalExchange.paragraph2">
+                        Hace 21 años iniciamos la aventura y hemos
+                        crecido. Más de 8.000 chicos han viajado
+                        alrededor del mundo y 76 destinos esperan por
+                        ti. Personalmente viajo para mostrarles lo bello
+                        del mundo y reviso cada detalle para que su
+                        estancia sea confortable, segura y deje la
+                        mejor huella.
+                    </p>
+
+
+                    <blockquote class="about-story__quote" data-i18n="aboutPage.history.globalExchange.quote">
+                        “Ama, vive, viaja, sueña, que el mundo
+                        GLOBALEXCHANGE ahora está a tu alcance”.
+                    </blockquote>
+
+                </div>
+
+
+                <span class="about-story__marker" aria-hidden="true"></span>
+
+
+                <div class="about-story__media" data-about-reveal="right" data-about-tilt>
+
+                    <span class="about-story__media-number" aria-hidden="true">
+                        02
+                    </span>
+
+
+                    <div class="about-story__image-frame">
+
+                        <img class="about-story__image about-story__image--square"
+                            src="/images/pages/nuestra-historia/cambridgeCuadrada.jpg"
+                            alt="Global Exchange y sus programas internacionales"
+                            data-i18n-alt="aboutPage.history.globalExchange.imageAlt" loading="lazy">
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     IDENTIDAD
+================================================== -->
+
+<section class="about-identity">
+
+    <div class="about-shell">
+
+
+        <!-- ==========================================
+             INTRODUCCIÓN
+        ========================================== -->
+
+        <header class="about-identity__intro" data-about-reveal="up">
+
+            <span class="about-kicker">
+                Global Exchange
+            </span>
+
+
+            <p class="about-identity__locations" data-i18n="aboutPage.identity.intro.locations">
+                Nuestras sedes están en USA-Miami,
+                Duisburgo-Alemania y Quito-Ecuador.
+            </p>
+
+
+            <h2 class="about-identity__headline" data-i18n="aboutPage.identity.intro.title">
+                ¡Te invitamos a conocer nuestro mundo!
+            </h2>
+
+        </header>
+
+
+        <!-- ==========================================
+             QUIÉNES SOMOS
+        ========================================== -->
+
+        <article class="about-feature">
+
+            <div class="about-feature__visual" data-about-reveal="left" data-about-tilt>
+
+                <div class="about-feature__image-wrapper">
+
+                    <img class="about-feature__image" src="/images/pages/nuestra-historia/clases-local.jpg"
+                        alt="Estudiantes de Global Exchange" data-i18n-alt="aboutPage.identity.whoWeAre.imageAlt"
+                        loading="lazy">
+
+                </div>
+
+
+                <span class="about-feature__accent" aria-hidden="true"></span>
+
+            </div>
+
+
+            <div class="about-feature__content" data-about-reveal="right">
+
+                <span class="about-kicker">
+                    Global Exchange
+                </span>
+
+
+                <h2 class="about-feature__title" data-i18n="aboutPage.identity.whoWeAre.title">
+                    Quiénes Somos
+                </h2>
+
+
+                <p data-i18n="aboutPage.identity.whoWeAre.paragraph1">
+                    Somos una organización internacional dedicada a la
+                    asesoría migratoria y programas de estudio en el
+                    exterior; nuestro personal calificado y multilingüe
+                    entablará cálidas comunicaciones con nuestros
+                    estudiantes.
+                </p>
+
+
+                <p data-i18n="aboutPage.identity.whoWeAre.paragraph2">
+                    Nuestro servicio está atento 24h00, 7 días a la
+                    semana en cada país de destino seleccionado; esto
+                    hace posible una atención inmediata a cada
+                    necesidad.
+                </p>
+
+
+                <p class="about-feature__highlight" data-i18n="aboutPage.identity.whoWeAre.highlight">
+                    ¡Trabajamos con pasión, con el único fin de apoyar
+                    el futuro exitoso de cada uno de nuestros
+                    postulantes!
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <!-- ==========================================
+             QUÉ HACEMOS
+        ========================================== -->
+
+        <div class="about-services">
+
+            <header class="about-section-heading" data-about-reveal="up">
+
+                <span class="about-kicker">
+                    Global Exchange
+                </span>
+
+
+                <h2 class="about-section-heading__title" data-i18n="aboutPage.identity.whatWeDo.title">
+                    ¿Qué hacemos?
+                </h2>
+
+
+                <span class="about-section-heading__line" aria-hidden="true"></span>
+
+            </header>
+
+
+            <div class="about-services__grid">
+
+
+                <!-- AGENCIA -->
+
+                <article class="about-service-card" data-about-reveal="left">
+
+                    <div class="about-service-card__visual">
+
+                        <img src="/images/pages/nuestra-historia/estudiar-extranjero.jpg"
+                            alt="Agencia de estudios internacionales"
+                            data-i18n-alt="aboutPage.identity.whatWeDo.agency.imageAlt" loading="lazy">
+
+                    </div>
+
+
+                    <div class="about-service-card__body">
+
+                        <span class="about-service-card__number">
+                            01
+                        </span>
+
+
+                        <h3 class="about-service-card__title" data-i18n="aboutPage.identity.whatWeDo.agency.title">
+                            Agencia de Estudios Internacionales
+                        </h3>
+
+
+                        <p data-i18n="aboutPage.identity.whatWeDo.agency.description">
+                            Ubicamos estudiantes ecuatorianos y extranjeros
+                            en programas de intercambio internacionales
+                            en 76 destinos.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- INTERCAMBIO -->
+
+                <article class="about-service-card about-service-card--teal" data-about-reveal="right">
+
+                    <div class="about-service-card__visual">
+
+                        <img src="/images/pages/nuestra-historia/intercambio.jpg" alt="Intercambio estudiantil"
+                            data-i18n-alt="aboutPage.identity.whatWeDo.exchange.imageAlt" loading="lazy">
+
+                    </div>
+
+
+                    <div class="about-service-card__body">
+
+                        <span class="about-service-card__number">
+                            02
+                        </span>
+
+
+                        <h3 class="about-service-card__title" data-i18n="aboutPage.identity.whatWeDo.exchange.title">
+                            Intercambio Estudiantil
+                        </h3>
+
+
+                        <p data-i18n="aboutPage.identity.whatWeDo.exchange.paragraph1">
+                            Enviamos y recibimos jóvenes entre 12 y 29 años
+                            a familias de acogida y residencias
+                            estudiantiles en diferentes países.
+                        </p>
+
+
+                        <p data-i18n="aboutPage.identity.whatWeDo.exchange.paragraph2">
+                            La seguridad, certificación y probidad de las
+                            familias se basa en la experiencia de nuestro
+                            trabajo.
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     ESCUELA DE IDIOMAS
+================================================== -->
+
+<section class="about-school">
+
+    <div class="about-shell">
+
+        <header class="about-section-heading" data-about-reveal="up">
+
+            <span class="about-kicker">
+                Idiomas sin fronteras
+            </span>
+
+
+            <h2 class="about-section-heading__title" data-i18n="aboutPage.locations.school.title">
+                Escuela de Idiomas
+            </h2>
+
+
+            <span class="about-section-heading__line" aria-hidden="true"></span>
+
+        </header>
+
+
+        <div class="about-school__grid">
+
+
+            <!-- ======================================
+                 EN EL MUNDO
+            ======================================= -->
+
+            <article class="about-school__card" data-about-reveal="left">
+
+                <span class="about-school__orb about-school__orb--violet" aria-hidden="true"></span>
+
+
+                <span class="about-school__number">
+                    01
+                </span>
+
+
+                <h3 class="about-school__title" data-i18n="aboutPage.locations.school.world.title">
+                    En el Mundo
+                </h3>
+
+
+                <p data-i18n="aboutPage.locations.school.world.description">
+                    76 países, escuelas de lengua en:
+                </p>
+
+
+                <p class="about-school__languages" data-i18n="aboutPage.locations.school.world.languages">
+                    Francés, Alemán, Inglés, Italiano, Japonés,
+                    Chino, Mandarín, Portugués, Ruso, Árabe.
+                </p>
+
+            </article>
+
+
+            <!-- ======================================
+                 ECUADOR
+            ======================================= -->
+
+            <article class="about-school__card about-school__card--teal" data-about-reveal="right">
+
+                <span class="about-school__orb about-school__orb--teal" aria-hidden="true"></span>
+
+
+                <span class="about-school__number">
+                    02
+                </span>
+
+
+                <h3 class="about-school__title" data-i18n="aboutPage.locations.school.ecuador.title">
+                    En Ecuador
+                </h3>
+
+
+                <p data-i18n="aboutPage.locations.school.ecuador.paragraph1">
+                    Invitamos a chicos de todo el mundo a tener una
+                    experiencia cultural en Ecuador y aprender el
+                    español mientras realizan turismo ecológico y
+                    divertidos planes de viaje.
+                </p>
+
+
+                <p>
+
+                    <span data-i18n="aboutPage.locations.school.ecuador.paragraph2Before">
+                        Nuestra residencia estudiantil acoge a estudiantes
+                        internacionales en programas de
+                    </span>
+
+                    <strong data-i18n="aboutPage.locations.school.ecuador.schoolProgram">
+                        ESCOLARIDAD
+                    </strong>
+
+                    <span data-i18n="aboutPage.locations.school.ecuador.paragraph2After">
+                        y estudio de español.
+                    </span>
+
+                </p>
+
+
+                <p data-i18n="aboutPage.locations.school.ecuador.paragraph3">
+                    Nuestra escuela de idiomas online ofrecemos:
+                </p>
+
+
+                <p class="about-school__languages" data-i18n="aboutPage.locations.school.ecuador.languages">
+                    Francés, Inglés, Italiano, Alemán, Español.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     SEDES
+================================================== -->
+
+<section class="about-offices">
+
+    <div class="about-shell">
+
+        <header class="about-offices__header" data-about-reveal="up">
+
+            <span class="about-kicker">
+                Global Exchange
+            </span>
+
+
+            <h2 class="about-offices__title" data-i18n="aboutPage.locations.offices.title">
+                Sedes
+            </h2>
+
+        </header>
+
+
+        <div class="about-offices__layout">
+
+
+            <!-- ======================================
+                 IMAGEN
+            ======================================= -->
+
+            <div class="about-offices__visual" data-about-reveal="left" data-about-tilt>
+
+                <div class="about-offices__image-wrapper">
+
+                    <img class="about-offices__image" src="/images/pages/nuestra-historia/Sin-titulo.png"
+                        alt="Sedes nacionales e internacionales de Global Exchange"
+                        data-i18n-alt="aboutPage.locations.offices.imageAlt" loading="lazy">
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 COBERTURA
+            ======================================= -->
+
+            <div class="about-offices__stats">
+
+
+                <!-- NACIONAL -->
+
+                <article class="about-office-stat" data-about-reveal="right">
+
+                    <div class="
+                            about-office-stat__progress
+                            about-office-stat__progress--national
+                        " data-about-progress="76" role="img" aria-label="Cobertura nacional: 76 por ciento"
+                        data-i18n-aria-label="aboutPage.locations.offices.national.ariaLabel">
+
+                        <span data-about-progress-value>
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="about-office-stat__title" data-i18n="aboutPage.locations.offices.national.title">
+                            Nacional
+                        </h3>
+
+
+                        <p>
+                            Ecuador
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <!-- INTERNACIONAL -->
+
+                <article class="
+                        about-office-stat
+                        about-office-stat--orange
+                    " data-about-reveal="right">
+
+                    <div class="
+                            about-office-stat__progress
+                            about-office-stat__progress--international
+                        " data-about-progress="89" role="img" aria-label="Cobertura internacional: 89 por ciento"
+                        data-i18n-aria-label="aboutPage.locations.offices.international.ariaLabel">
+
+                        <span data-about-progress-value>
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="about-office-stat__title"
+                            data-i18n="aboutPage.locations.offices.international.title">
+                            Internacional
+                        </h3>
+
+
+                        <p>
+                            USA · China ·
+
+                            <span data-i18n="aboutPage.locations.offices.international.germany">
+                                Alemania
+                            </span>
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PARTNERS
+        ========================================== -->
+
+        <div class="about-offices__partners" data-about-reveal="up">
+
+            <img src="/images/partners/logosExtras-1.png"
+                alt="Certificaciones y aliados internacionales de Global Exchange"
+                data-i18n-alt="aboutPage.locations.partnersAlt" loading="lazy">
+
+        </div>
+
+    </div>
+
+</section>

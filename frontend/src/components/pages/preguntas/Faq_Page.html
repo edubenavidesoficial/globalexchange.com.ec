@@ -1,0 +1,730 @@
+<!--
+====================================================
+FAQ PAGE
+
+Página:
+Preguntas
+
+Responsabilidades:
+- Hero
+- Introducción
+- Buscador
+- Preguntas frecuentes
+- Artículos relacionados
+- CTA final
+
+JavaScript:
+src/js/modules/faq-accordion.js
+====================================================
+-->
+
+
+<!-- =================================================
+     HERO
+================================================== -->
+
+<section class="faq-hero" data-faq-hero>
+
+    <div class="faq-hero__overlay" aria-hidden="true"></div>
+
+
+    <!-- DECORACIONES -->
+
+    <span class="faq-hero__orb faq-hero__orb--violet" aria-hidden="true"></span>
+
+    <span class="faq-hero__orb faq-hero__orb--teal" aria-hidden="true"></span>
+
+
+    <div class="faq-hero__container">
+
+        <div class="faq-hero__content">
+
+            <span class="faq-hero__eyebrow">
+                Centro de ayuda
+            </span>
+
+
+            <h1 class="faq-hero__title" data-i18n="questionsPage.hero.title">
+                Preguntas
+            </h1>
+
+
+            <p class="faq-hero__description">
+                Encuentra respuestas y resuelve tus dudas
+                antes de comenzar tu próxima experiencia.
+            </p>
+
+
+            <nav class="faq-hero__breadcrumb" aria-label="Migas de pan"
+                data-i18n-aria-label="questionsPage.hero.breadcrumb.ariaLabel">
+
+                <a href="/" data-i18n="questionsPage.hero.breadcrumb.home">
+                    Inicio
+                </a>
+
+
+                <span class="faq-hero__breadcrumb-dot" aria-hidden="true"></span>
+
+
+                <span aria-current="page" data-i18n="questionsPage.hero.breadcrumb.current">
+                    Preguntas
+                </span>
+
+            </nav>
+
+        </div>
+
+
+        <div class="faq-hero__scroll" aria-hidden="true">
+
+            <span></span>
+
+            <i></i>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     FAQ EXPERIENCE
+================================================== -->
+
+<section class="faq-experience" data-faq-experience>
+
+    <!-- =============================================
+         DECORACIONES
+    ============================================== -->
+
+    <span class="faq-decoration faq-decoration--orange" aria-hidden="true"></span>
+
+    <span class="faq-decoration faq-decoration--violet" aria-hidden="true"></span>
+
+    <span class="faq-decoration faq-decoration--teal" aria-hidden="true"></span>
+
+
+    <!-- =============================================
+         RUTA DECORATIVA
+    ============================================== -->
+
+    <div class="faq-experience__route" aria-hidden="true">
+
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none">
+
+            <path class="faq-experience__route-shadow" d="
+                    M30 190
+                    C190 45 330 250 510 125
+                    S850 30 1165 145
+                "></path>
+
+
+            <path class="faq-experience__route-line" d="
+                    M30 190
+                    C190 45 330 250 510 125
+                    S850 30 1165 145
+                "></path>
+
+
+            <g class="faq-experience__plane">
+
+                <path d="
+                        M0 14
+                        L45 0
+                        L29 43
+                        L20 26
+                        L7 33
+                        Z
+                    "></path>
+
+            </g>
+
+        </svg>
+
+    </div>
+
+
+    <div class="faq-shell">
+
+
+        <!-- ==========================================
+             INTRO
+        =========================================== -->
+
+        <header class="faq-intro" data-faq-reveal="up">
+
+            <span class="faq-kicker">
+                Resuelve tus dudas
+            </span>
+
+
+            <h2 class="faq-intro__title" data-i18n="questionsPage.questions.title">
+                Preguntas más populares
+            </h2>
+
+
+            <p class="faq-intro__description">
+                Hemos reunido algunas de las preguntas más frecuentes
+                para ayudarte a encontrar información de manera rápida
+                y sencilla.
+            </p>
+
+
+            <span class="faq-intro__line" aria-hidden="true"></span>
+
+        </header>
+
+
+        <!-- ==========================================
+             BUSCADOR
+        =========================================== -->
+
+        <div class="faq-search" data-faq-reveal="up">
+
+            <div class="faq-search__field">
+
+                <span class="faq-search__icon" aria-hidden="true">
+
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="6.5"></circle>
+
+                        <path d="M16 16L21 21"></path>
+                    </svg>
+
+                </span>
+
+
+                <input id="faq-search" class="faq-search__input" type="search" placeholder="Buscar una pregunta..."
+                    autocomplete="off" aria-label="Buscar entre las preguntas frecuentes" data-faq-search>
+
+
+                <button class="faq-search__clear" type="button" aria-label="Limpiar búsqueda" data-faq-clear hidden>
+                    ×
+                </button>
+
+            </div>
+
+
+            <p class="faq-search__meta">
+
+                <span data-faq-visible-count>
+                    5
+                </span>
+
+                preguntas disponibles
+
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             PREGUNTAS
+        ================================================== -->
+
+        <div class="faq-questions__list" data-faq-list>
+
+
+            <!-- =============================================
+                 PREGUNTA 01
+            ============================================== -->
+
+            <article class="faq-questions__item is-open" data-faq-item data-faq-reveal="up">
+
+                <button class="faq-questions__question" type="button" aria-expanded="true"
+                    aria-controls="faq-answer-01">
+
+                    <span class="faq-questions__number">
+                        01
+                    </span>
+
+
+                    <span class="faq-questions__question-text"
+                        data-i18n="questionsPage.questions.learningSpeed.question">
+                        ¿Puedo acelerar mi proceso de aprendizaje?
+                    </span>
+
+
+                    <span class="faq-questions__icon" aria-hidden="true"></span>
+
+                </button>
+
+
+                <div id="faq-answer-01" class="faq-questions__answer" aria-hidden="false">
+
+                    <div class="faq-questions__answer-inner">
+
+                        <p data-i18n="questionsPage.questions.learningSpeed.paragraph1">
+                            Es normal que cuando iniciamos nuestro aprendizaje
+                            del inglés queramos dominar el idioma de manera
+                            rápida, pero lo cierto es que esto no es una tarea
+                            fácil.
+                        </p>
+
+
+                        <p data-i18n="questionsPage.questions.learningSpeed.paragraph2">
+                            Existen algunas técnicas que pueden ayudarte:
+                        </p>
+
+
+                        <ul>
+
+                            <li data-i18n="questionsPage.questions.learningSpeed.items.devices">
+                                Configura tus dispositivos en inglés para
+                                acostumbrarte a estar rodeado del idioma.
+                            </li>
+
+
+                            <li data-i18n="questionsPage.questions.learningSpeed.items.reading">
+                                Lee en inglés tanto como puedas para aprender
+                                vocabulario, comprensión y gramática.
+                            </li>
+
+
+                            <li data-i18n="questionsPage.questions.learningSpeed.items.activities">
+                                Involucra el idioma en actividades que te
+                                interesen para mantener la motivación.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- =============================================
+                 PREGUNTA 02
+            ============================================== -->
+
+            <article class="faq-questions__item" data-faq-item data-faq-reveal="up">
+
+                <button class="faq-questions__question" type="button" aria-expanded="false"
+                    aria-controls="faq-answer-02">
+
+                    <span class="faq-questions__number">
+                        02
+                    </span>
+
+
+                    <span class="faq-questions__question-text" data-i18n="questionsPage.questions.moviesMusic.question">
+                        ¿Se puede aprender inglés con películas y canciones?
+                    </span>
+
+
+                    <span class="faq-questions__icon" aria-hidden="true"></span>
+
+                </button>
+
+
+                <div id="faq-answer-02" class="faq-questions__answer" aria-hidden="true">
+
+                    <div class="faq-questions__answer-inner">
+
+                        <p data-i18n="questionsPage.questions.moviesMusic.paragraph1">
+                            La mejor opción para aprender inglés de forma
+                            exitosa es realizar un curso. Sin embargo, también
+                            puedes reforzar tu aprendizaje viendo series,
+                            películas y escuchando canciones en inglés.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- =============================================
+                 PREGUNTA 03
+            ============================================== -->
+
+            <article class="faq-questions__item" data-faq-item data-faq-reveal="up">
+
+                <button class="faq-questions__question" type="button" aria-expanded="false"
+                    aria-controls="faq-answer-03">
+
+                    <span class="faq-questions__number">
+                        03
+                    </span>
+
+
+                    <span class="faq-questions__question-text" data-i18n="questionsPage.questions.motivation.question">
+                        ¿Cómo mantener la motivación?
+                    </span>
+
+
+                    <span class="faq-questions__icon" aria-hidden="true"></span>
+
+                </button>
+
+
+                <div id="faq-answer-03" class="faq-questions__answer" aria-hidden="true">
+
+                    <div class="faq-questions__answer-inner">
+
+                        <p data-i18n="questionsPage.questions.motivation.paragraph1">
+                            La motivación es el motor del aprendizaje de
+                            idiomas. Es esencial para comenzar y también para
+                            continuar.
+                        </p>
+
+
+                        <ul>
+
+                            <li data-i18n="questionsPage.questions.motivation.items.progress">
+                                Haz balance de tu progreso.
+                            </li>
+
+
+                            <li data-i18n="questionsPage.questions.motivation.items.steps">
+                                Divide el proceso de aprendizaje y avanza poco
+                                a poco.
+                            </li>
+
+
+                            <li data-i18n="questionsPage.questions.motivation.items.shareGoals">
+                                Comparte tus objetivos con otras personas,
+                                profesores o compañeros de intercambio.
+                            </li>
+
+
+                            <li data-i18n="questionsPage.questions.motivation.items.breaks">
+                                Tómate descansos para retomar el estudio con
+                                más energía.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- =============================================
+                 PREGUNTA 04
+            ============================================== -->
+
+            <article class="faq-questions__item" data-faq-item data-faq-reveal="up">
+
+                <button class="faq-questions__question" type="button" aria-expanded="false"
+                    aria-controls="faq-answer-04">
+
+                    <span class="faq-questions__number">
+                        04
+                    </span>
+
+
+                    <span class="faq-questions__question-text"
+                        data-i18n="questionsPage.questions.universities.question">
+                        ¿A qué universidades puedo aplicar en el exterior?
+                    </span>
+
+
+                    <span class="faq-questions__icon" aria-hidden="true"></span>
+
+                </button>
+
+
+                <div id="faq-answer-04" class="faq-questions__answer" aria-hidden="true">
+
+                    <div class="faq-questions__answer-inner">
+
+                        <p data-i18n="questionsPage.questions.universities.paragraph1">
+                            Las mejores universidades del mundo esperan por ti.
+                        </p>
+
+
+                        <p data-i18n="questionsPage.questions.universities.paragraph2">
+                            Te ayudamos a aplicar a universidades internacionales
+                            en países como Francia, Italia, Alemania, Bélgica,
+                            Australia, Austria, Holanda y Suiza.
+                        </p>
+
+
+                        <p data-i18n="questionsPage.questions.universities.paragraph3">
+                            Algunos de estos países ofrecen educación pública
+                            casi gratuita, con valores aproximados de entre
+                            100 y 700 euros por semestre.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- =============================================
+                 PREGUNTA 05
+            ============================================== -->
+
+            <article class="faq-questions__item" data-faq-item data-faq-reveal="up">
+
+                <button class="faq-questions__question" type="button" aria-expanded="false"
+                    aria-controls="faq-answer-05">
+
+                    <span class="faq-questions__number">
+                        05
+                    </span>
+
+
+                    <span class="faq-questions__question-text"
+                        data-i18n="questionsPage.questions.accommodation.question">
+                        ¿Cómo es el alojamiento residencial estudiantil?
+                    </span>
+
+
+                    <span class="faq-questions__icon" aria-hidden="true"></span>
+
+                </button>
+
+
+                <div id="faq-answer-05" class="faq-questions__answer" aria-hidden="true">
+
+                    <div class="faq-questions__answer-inner">
+
+                        <p data-i18n="questionsPage.questions.accommodation.paragraph1">
+                            Este tipo de alojamiento normalmente se ofrece en
+                            colegios privados, con áreas separadas para chicos
+                            y chicas, alimentación y cuidado durante las
+                            24 horas.
+                        </p>
+
+
+                        <p data-i18n="questionsPage.questions.accommodation.paragraph2">
+                            Durante los fines de semana, las familias de acogida
+                            suelen compartir paseos, almuerzos y viajes con los
+                            estudiantes para ofrecerles una estancia cómoda y
+                            enriquecedora.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <!-- ==========================================
+             SIN RESULTADOS
+        =========================================== -->
+
+        <div class="faq-empty" data-faq-empty hidden>
+
+            <span class="faq-empty__icon" aria-hidden="true">
+                ?
+            </span>
+
+
+            <h3>
+                No encontramos esa pregunta
+            </h3>
+
+
+            <p>
+                Intenta buscar con otras palabras o revisa
+                las preguntas disponibles.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ARTÍCULOS
+    ================================================== -->
+
+    <div class="faq-posts">
+
+        <div class="faq-shell">
+
+            <header class="faq-posts__header" data-faq-reveal="up">
+
+                <span class="faq-kicker">
+                    Sigue explorando
+                </span>
+
+
+                <h2>
+                    Contenido que puede ayudarte
+                </h2>
+
+
+                <p>
+                    Información útil para preparar mejor
+                    tu próxima experiencia internacional.
+                </p>
+
+            </header>
+
+
+            <div class="faq-posts__grid">
+
+
+                <!-- ARTÍCULO 01 -->
+
+                <article class="faq-post" data-faq-reveal="up">
+
+                    <a href="#" class="faq-post__image">
+
+                        <img src="/images/pages/preguntas/a.jpeg" alt="Consejos para planificar cursos de idiomas"
+                            data-i18n-alt="questionsPage.posts.languageCourses.imageAlt" loading="lazy">
+
+                    </a>
+
+
+                    <div class="faq-post__content">
+
+                        <span class="faq-post__number">
+                            01
+                        </span>
+
+
+                        <h3 class="faq-post__title" data-i18n="questionsPage.posts.languageCourses.title">
+                            Consejos para planificar cursos de idiomas
+                            en el exterior
+                        </h3>
+
+
+                        <a href="#" class="faq-post__button" data-i18n="questionsPage.posts.readMore">
+                            Leer más
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ARTÍCULO 02 -->
+
+                <article class="faq-post faq-post--teal" data-faq-reveal="up">
+
+                    <a href="#" class="faq-post__image">
+
+                        <img src="/images/pages/preguntas/d.jpg" alt="English for 15 plus"
+                            data-i18n-alt="questionsPage.posts.english15.imageAlt" loading="lazy">
+
+                    </a>
+
+
+                    <div class="faq-post__content">
+
+                        <span class="faq-post__number">
+                            02
+                        </span>
+
+
+                        <h3 class="faq-post__title" data-i18n="questionsPage.posts.english15.title">
+                            English for 15+
+                        </h3>
+
+
+                        <a href="#" class="faq-post__button" data-i18n="questionsPage.posts.readMore">
+                            Leer más
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ARTÍCULO 03 -->
+
+                <article class="faq-post faq-post--orange" data-faq-reveal="up">
+
+                    <a href="#" class="faq-post__image">
+
+                        <img src="/images/pages/preguntas/c.jpeg" alt="Requisitos para estudiar en España"
+                            data-i18n-alt="questionsPage.posts.studySpain.imageAlt" loading="lazy">
+
+                    </a>
+
+
+                    <div class="faq-post__content">
+
+                        <span class="faq-post__number">
+                            03
+                        </span>
+
+
+                        <h3 class="faq-post__title" data-i18n="questionsPage.posts.studySpain.title">
+                            Requisitos para estudiar en España
+                        </h3>
+
+
+                        <a href="#" class="faq-post__button" data-i18n="questionsPage.posts.readMore">
+                            Leer más
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CTA
+    ================================================== -->
+
+    <div class="faq-cta">
+
+        <div class="faq-shell" data-faq-reveal="up">
+
+            <div class="faq-cta__card">
+
+                <span class="faq-cta__orb faq-cta__orb--one" aria-hidden="true"></span>
+
+                <span class="faq-cta__orb faq-cta__orb--two" aria-hidden="true"></span>
+
+
+                <div class="faq-cta__content">
+
+                    <span class="faq-cta__eyebrow">
+                        Estamos para ayudarte
+                    </span>
+
+
+                    <h2>
+                        ¿Aún tienes alguna pregunta?
+                    </h2>
+
+
+                    <p>
+                        Nuestro equipo puede orientarte personalmente
+                        antes de comenzar tu experiencia.
+                    </p>
+
+
+                    <a class="faq-cta__button" href="https://wa.me/593983511575" target="_blank"
+                        rel="noopener noreferrer">
+                        Hablar con un asesor
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,12 @@
+/* Homepage-only styles: internal pages load only their own styles. */
+@import '../components/hero.css';
+@import '../components/about.css';
+@import '../components/presentation.css';
+@import '../components/services.css';
+@import '../components/events.css';
+@import '../components/destinations.css';
+@import '../components/call-to-action.css';
+@import '../components/map.css';
+@import '../components/stats.css';
+@import '../components/portfolio.css';
+@import '../components/closing-experience.css';
