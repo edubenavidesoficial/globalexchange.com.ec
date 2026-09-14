@@ -3666,35 +3666,114 @@ export const es = {
         },
 
         programsPage: {
-            eyebrow: 'PROGRAMAS',
-            title: 'Encuentra la experiencia ideal para ti',
-            intro: 'Explora nuestras opciones para estudiar, viajar y crecer.',
-            explore: 'Explorar programas',
-            local: 'Programas en Ecuador',
-            international: 'Experiencias internacionales',
-            catalogTitle: 'Elige tu próxima experiencia',
-            catalogIntro: 'Compara programas y descubre cuál se adapta mejor a tus objetivos.',
-            all: 'Todos',
-            details: 'Conocer el programa',
-            finder: 'Encontrar mi programa ideal',
-            contact: 'Recibir asesoría',
-            allPrograms: 'Ver todos los programas',
-            stepsTitle: 'Tu camino comienza aquí',
-            step1: 'Explora', step1Text: 'Conoce las opciones disponibles.',
-            step2: 'Conversa con nosotros', step2Text: 'Te orientamos según tus metas.',
-            step3: 'Da el primer paso', step3Text: 'Planifica tu experiencia con nuestro equipo.',
-            ctaTitle: '¿No sabes cuál elegir?',
-            ctaIntro: 'Te ayudamos a encontrar el programa ideal.',
+
+            eyebrow:
+                'PROGRAMAS',
+
+            title:
+                'Encuentra la experiencia ideal para ti',
+
+            intro:
+                'Explora nuestras opciones para estudiar, viajar y crecer.',
+
+            explore:
+                'Explorar programas',
+
+            local:
+                'Programas en Ecuador',
+
+            international:
+                'Experiencias internacionales',
+
+            catalogTitle:
+                'Elige tu próxima experiencia',
+
+            catalogIntro:
+                'Compara programas y descubre cuál se adapta mejor a tus objetivos.',
+
+            all:
+                'Todos',
+
+
+            // ========================================
+            // CONTADOR DINÁMICO
+            // ========================================
+
+            count_one:
+                'Mostrando {{count}} programa',
+
+            count_other:
+                'Mostrando {{count}} programas',
+
+
+            details:
+                'Conocer el programa',
+
+            finder:
+                'Encontrar mi programa ideal',
+
+            contact:
+                'Recibir asesoría',
+
+            allPrograms:
+                'Ver todos los programas',
+
+            stepsTitle:
+                'Tu camino comienza aquí',
+
+            step1:
+                'Explora',
+
+            step1Text:
+                'Conoce las opciones disponibles.',
+
+            step2:
+                'Conversa con nosotros',
+
+            step2Text:
+                'Te orientamos según tus metas.',
+
+            step3:
+                'Da el primer paso',
+
+            step3Text:
+                'Planifica tu experiencia con nuestro equipo.',
+
+            ctaTitle:
+                '¿No sabes cuál elegir?',
+
+            ctaIntro:
+                'Te ayudamos a encontrar el programa ideal.',
+
+
             descriptions: {
-                localLanguageCourses: 'Aprende un idioma desde Ecuador y conecta con nuevas oportunidades.',
-                spanishEcotourism: 'Vive el español a través de la cultura y naturaleza del Ecuador.',
-                languageCoursesAbroad: 'Aprende un idioma mientras descubres una nueva cultura.',
-                schoolProgram: 'Estudia en el exterior y vive una experiencia inolvidable.',
-                internships: 'Desarrolla tus habilidades profesionales en otro país.',
-                nanny: 'Vive un intercambio cultural con una familia anfitriona.',
-                summerCamps: 'Combina aprendizaje, aventura y nuevas amistades.',
-                educationAbroad: 'Encuentra oportunidades académicas internacionales.'
+
+                localLanguageCourses:
+                    'Aprende un idioma desde Ecuador y conecta con nuevas oportunidades.',
+
+                spanishEcotourism:
+                    'Vive el español a través de la cultura y naturaleza del Ecuador.',
+
+                languageCoursesAbroad:
+                    'Aprende un idioma mientras descubres una nueva cultura.',
+
+                schoolProgram:
+                    'Estudia en el exterior y vive una experiencia inolvidable.',
+
+                internships:
+                    'Desarrolla tus habilidades profesionales en otro país.',
+
+                nanny:
+                    'Vive un intercambio cultural con una familia anfitriona.',
+
+                summerCamps:
+                    'Combina aprendizaje, aventura y nuevas amistades.',
+
+                educationAbroad:
+                    'Encuentra oportunidades académicas internacionales.'
+
             }
+
         },
 
     }
