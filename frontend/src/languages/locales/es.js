@@ -3664,6 +3664,121 @@ export const es = {
             }
 
         },
+        // ============================================
+        // PROGRAMS PAGE
+        // Page: Programs
+        // ============================================
+
+        programsPage: {
+
+            eyebrow:
+                'PROGRAMS',
+
+            title:
+                'Find the ideal experience for you',
+
+            intro:
+                'Explore our options to study, travel and grow.',
+
+            explore:
+                'Explore programs',
+
+            local:
+                'Programs in Ecuador',
+
+            international:
+                'International experiences',
+
+            catalogTitle:
+                'Choose your next experience',
+
+            catalogIntro:
+                'Compare programs and discover which one best fits your goals.',
+
+            all:
+                'All',
+
+
+            // ========================================
+            // DYNAMIC COUNTER
+            // ========================================
+
+            count_one:
+                'Showing {{count}} program',
+
+            count_other:
+                'Showing {{count}} programs',
+
+
+            details:
+                'Discover the program',
+
+            finder:
+                'Find my ideal program',
+
+            contact:
+                'Get guidance',
+
+            allPrograms:
+                'View all programs',
+
+            stepsTitle:
+                'Your journey starts here',
+
+            step1:
+                'Explore',
+
+            step1Text:
+                'Discover the available options.',
+
+            step2:
+                'Talk to us',
+
+            step2Text:
+                'We guide you according to your goals.',
+
+            step3:
+                'Take the first step',
+
+            step3Text:
+                'Plan your experience with our team.',
+
+            ctaTitle:
+                'Not sure which one to choose?',
+
+            ctaIntro:
+                'We help you find the right program.',
+
+
+            descriptions: {
+
+                localLanguageCourses:
+                    'Learn a language from Ecuador and connect with new opportunities.',
+
+                spanishEcotourism:
+                    'Experience Spanish through Ecuadorian culture and nature.',
+
+                languageCoursesAbroad:
+                    'Learn a language while discovering a new culture.',
+
+                schoolProgram:
+                    'Study abroad and enjoy an unforgettable experience.',
+
+                internships:
+                    'Develop your professional skills in another country.',
+
+                nanny:
+                    'Experience a cultural exchange with a host family.',
+
+                summerCamps:
+                    'Combine learning, adventure and new friendships.',
+
+                educationAbroad:
+                    'Discover international academic opportunities.'
+
+            }
+
+        },
 
         programsPage: {
 
@@ -3682,8 +3797,14 @@ export const es = {
             local:
                 'Programas en Ecuador',
 
+            localIntro:
+                'Opciones para aprender, prepararte y vivir nuevas experiencias desde Ecuador.',
+
             international:
                 'Experiencias internacionales',
+
+            internationalIntro:
+                'Estudia, viaja y descubre nuevas oportunidades alrededor del mundo.',
 
             catalogTitle:
                 'Elige tu próxima experiencia',
@@ -3694,17 +3815,11 @@ export const es = {
             all:
                 'Todos',
 
-
-            // ========================================
-            // CONTADOR DINÁMICO
-            // ========================================
-
             count_one:
                 'Mostrando {{count}} programa',
 
             count_other:
                 'Mostrando {{count}} programas',
-
 
             details:
                 'Conocer el programa',
@@ -3744,7 +3859,6 @@ export const es = {
 
             ctaIntro:
                 'Te ayudamos a encontrar el programa ideal.',
-
 
             descriptions: {
 
