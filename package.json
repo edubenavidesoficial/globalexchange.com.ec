@@ -1,0 +1,13 @@
+{
+    "name": "globalexchange",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "npm run dev:frontend",
+        "dev:frontend": "npm --prefix frontend run dev",
+        "build": "npm run build:frontend",
+        "build:frontend": "npm --prefix frontend run build",
+        "preview": "npm run preview:frontend",
+        "preview:frontend": "npm --prefix frontend run preview"
+    }
+}
