@@ -1,0 +1,23 @@
+{
+  "name": "globalexchange-backend",
+  "version": "1.0.0",
+  "description": "API backend para Global Exchange Ecuador",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "global-exchange",
+    "api",
+    "backend"
+  ],
+  "author": "Global Exchange Ecuador",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
