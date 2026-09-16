@@ -283,6 +283,14 @@ export default defineConfig({
                     'pages/programa-nanny/index.html'
                 ),
 
+                /* CATÁLOGO DE PROGRAMAS */
+
+                programas: resolve(
+                    process.cwd(),
+                    'pages/programas/index.html'
+                ),
+
+
                 /* PROGRAM FINDER */
 
                 programFinder: resolve(
