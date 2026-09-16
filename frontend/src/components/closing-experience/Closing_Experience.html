@@ -2,18 +2,24 @@
 ====================================================
 COMPONENTE: EXPERIENCIA FINAL
 
-Página:
-Home
+Uso:
+Componente global reutilizable.
 
 Ubicación:
-Después del footer.
+Después del footer en las páginas del sitio.
 
 Objetivo:
-Cerrar la página mediante una experiencia visual
+Cerrar cada página mediante una experiencia visual
 controlada directamente por el scroll.
 
+Contenido contextual:
+El mensaje cambia automáticamente según la página
+actual mediante closing-experience.js.
+
 Comportamiento:
-- JavaScript fija la escena mientras está activa.
+- JavaScript detecta la página actual.
+- Cambia el mensaje y CTA según el contexto.
+- Fija la escena mientras está activa.
 - El texto permanece centrado.
 - Las frases aparecen progresivamente.
 - Las formas tienen efecto parallax.
@@ -113,7 +119,8 @@ src/css/components/closing-experience.css
                      ETIQUETA
                 =================================== -->
 
-                <div class="closing-experience__eyebrow" data-closing-reveal data-start="0.00" data-end="0.11">
+                <div class="closing-experience__eyebrow" data-closing-eyebrow data-closing-reveal data-start="0.00"
+                    data-end="0.11">
 
                     <span class="closing-experience__eyebrow-line" aria-hidden="true"></span>
 
@@ -131,7 +138,7 @@ src/css/components/closing-experience.css
                     <span class="
                             closing-experience__line
                             closing-experience__line--one
-                        " data-closing-reveal data-start="0.02" data-end="0.18">
+                        " data-closing-line="1" data-closing-reveal data-start="0.02" data-end="0.18">
                         El mundo
                     </span>
 
@@ -139,7 +146,7 @@ src/css/components/closing-experience.css
                     <span class="
                             closing-experience__line
                             closing-experience__line--two
-                        " data-closing-reveal data-start="0.12" data-end="0.29">
+                        " data-closing-line="2" data-closing-reveal data-start="0.12" data-end="0.29">
                         no solo se conoce.
                     </span>
 
@@ -147,7 +154,7 @@ src/css/components/closing-experience.css
                     <span class="
                             closing-experience__line
                             closing-experience__line--three
-                        " data-closing-reveal data-start="0.27" data-end="0.44">
+                        " data-closing-line="3" data-closing-reveal data-start="0.27" data-end="0.44">
                         Se descubre,
                     </span>
 
@@ -155,7 +162,7 @@ src/css/components/closing-experience.css
                     <span class="
                             closing-experience__line
                             closing-experience__line--four
-                        " data-closing-reveal data-start="0.40" data-end="0.57">
+                        " data-closing-line="4" data-closing-reveal data-start="0.40" data-end="0.57">
                         se aprende
                     </span>
 
@@ -163,7 +170,7 @@ src/css/components/closing-experience.css
                     <span class="
                             closing-experience__line
                             closing-experience__line--five
-                        " data-closing-reveal data-start="0.53" data-end="0.70">
+                        " data-closing-line="5" data-closing-reveal data-start="0.53" data-end="0.70">
                         y se vive.
                     </span>
 
@@ -174,7 +181,8 @@ src/css/components/closing-experience.css
                      DESCRIPCIÓN
                 =================================== -->
 
-                <p class="closing-experience__description" data-closing-reveal data-start="0.63" data-end="0.77">
+                <p class="closing-experience__description" data-closing-description data-closing-reveal
+                    data-start="0.63" data-end="0.77">
                     Cada destino puede convertirse en una nueva
                     experiencia, una oportunidad y una historia
                     que recordarás para siempre.
@@ -187,7 +195,7 @@ src/css/components/closing-experience.css
 
                 <div class="closing-experience__actions" data-closing-reveal data-start="0.72" data-end="0.85">
 
-                    <a class="closing-experience__button" href="/pages/program-finder/">
+                    <a class="closing-experience__button" href="/pages/program-finder/" data-closing-button>
                         Comienza tu experiencia
 
                         <span aria-hidden="true">
