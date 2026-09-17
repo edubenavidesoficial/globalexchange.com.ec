@@ -32,6 +32,22 @@
 // ====================================================
 
 const CLOSING_CONTEXTS = {
+    '/pages/ausbildung/': {
+        id: 'ausbildung',
+        eyebrow: 'Formación para tu desarrollo profesional',
+        lines: ['Aprende,', 'pon en práctica', 'tus conocimientos', 'y construye', 'tu camino profesional.'],
+        description: 'Conoce cómo la formación y la experiencia en una empresa pueden acompañar el desarrollo de tu carrera.',
+        button: 'Consultar sobre Ausbildung',
+        href: '/pages/contactos/'
+    },
+    '/pages/educacion-dual/': {
+        id: 'educacion-dual',
+        eyebrow: 'Estudio y experiencia práctica',
+        lines: ['Estudia,', 'lleva la teoría', 'a la práctica', 'y sigue', 'aprendiendo.'],
+        description: 'Explora una formación que combina estudios académicos y experiencia práctica en una empresa.',
+        button: 'Consultar sobre Educación Dual',
+        href: '/pages/contactos/'
+    },
 
     // ================================================
     // HOME

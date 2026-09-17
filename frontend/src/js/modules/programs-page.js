@@ -6,6 +6,10 @@ export function initProgramsPage() {
     const buttons = [...page.querySelectorAll('[data-program-filter]')];
     const cards = [...page.querySelectorAll('[data-program-family]')];
     const count = page.querySelector('[data-program-count]');
+    buttons.forEach(button => {
+        const total = cards.filter(card => button.dataset.programFilter === 'all' || card.dataset.programFamily === button.dataset.programFilter).length;
+        button.querySelector('[data-program-filter-count]').textContent = String(total).padStart(2, '0');
+    });
     const updateCount = () => {
         count.textContent = i18next.t('programsPage.count', { count: cards.filter(card => !card.hidden).length });
     };

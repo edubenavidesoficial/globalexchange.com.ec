@@ -576,16 +576,16 @@ export const PROGRAM_FINDER_PROGRAMS = [
             'Ausbildung',
 
         category:
-            'Formación profesional',
+            'Experiencias internacionales',
 
         description:
             'Formación orientada al desarrollo de conocimientos y habilidades profesionales mediante aprendizaje y experiencia práctica.',
 
         image:
-            '/images/program-finder/program-finder-ashbuilding.jpg',
+            '/images/pages/educacion-en-el-exterior/university-ausbildung.jpg',
 
         url:
-            null,
+            '/pages/ausbildung/',
 
         color:
             'blue',
@@ -596,24 +596,15 @@ export const PROGRAM_FINDER_PROGRAMS = [
         destinations:
             [],
 
+        // No hay un rango de edad documentado: requiere asesoría.
         ageMode:
-            'operational',
-
-        age: {
-
-            min:
-                18,
-
-            max:
-                NO_MAX_AGE
-
-        },
+            'review',
 
         ageVerified:
             false,
 
         professionMode:
-            'professional',
+            'review',
 
         features: [
 
@@ -639,10 +630,10 @@ export const PROGRAM_FINDER_PROGRAMS = [
             'educacion-dual',
 
         name:
-            'Educación dual',
+            'Educación Dual',
 
         category:
-            'Estudio + experiencia práctica',
+            'Experiencias internacionales',
 
         description:
             'Combina trabajo práctico en una empresa con clases teóricas en una universidad o centro de formación.',
@@ -651,7 +642,7 @@ export const PROGRAM_FINDER_PROGRAMS = [
             '/images/program-finder/program-finder-educacion-dual.jpg',
 
         url:
-            null,
+            '/pages/educacion-dual/',
 
         color:
             'orange',
@@ -675,24 +666,15 @@ export const PROGRAM_FINDER_PROGRAMS = [
 
         ],
 
+        // No hay un rango de edad documentado: requiere asesoría.
         ageMode:
-            'operational',
-
-        age: {
-
-            min:
-                18,
-
-            max:
-                NO_MAX_AGE
-
-        },
+            'review',
 
         ageVerified:
             false,
 
         professionMode:
-            'professional',
+            'review',
 
         features: [
 
@@ -1228,6 +1210,10 @@ function evaluateAge(
     age,
     destination
 ) {
+    // La ausencia de requisitos no confirma ni descarta la elegibilidad.
+    if (program.ageMode === 'review') {
+        return { matches: true, verified: false, message: 'Edad por confirmar con un asesor' };
+    }
 
     if (
         program.ageMode ===
@@ -1391,6 +1377,9 @@ function evaluateProfession(
     program,
     profession
 ) {
+    if (program.professionMode === 'review') {
+        return { score: 0, level: 'open', label: 'Afinidad por confirmar', message: 'Consulta las áreas y requisitos disponibles con un asesor' };
+    }
 
     const professionLabel =
         getProfessionLabel(

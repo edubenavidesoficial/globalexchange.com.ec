@@ -236,6 +236,18 @@ export default defineConfig({
                 ),
 
 
+                /* FORMACIÓN PROFESIONAL Y EDUCACIÓN DUAL */
+
+                ausbildung: resolve(
+                    process.cwd(),
+                    'pages/ausbildung/index.html'
+                ),
+
+                educacionDual: resolve(
+                    process.cwd(),
+                    'pages/educacion-dual/index.html'
+                ),
+
                 /* ESPAÑOL PARA EXTRANJEROS */
 
                 spanishEcotourism: resolve(
