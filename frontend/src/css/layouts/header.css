@@ -2183,17 +2183,17 @@ body.header-drawer-open { overflow: hidden; }
     left: 50%;
 
     width:
-        min(800px,
+        min(960px,
             calc(100vw - 40px));
 
     max-height:
-        calc(100dvh - 120px);
+        none;
 
-    overflow-y:
-        auto;
+    overflow:
+        visible;
 
     padding:
-        24px;
+        20px;
 
     background:
         radial-gradient(ellipse at 0 0,
@@ -2246,7 +2246,7 @@ body.header-drawer-open { overflow: hidden; }
     display: grid;
 
     grid-template-columns:
-        1fr 1.2fr;
+        minmax(0, 0.9fr) minmax(0, 1.6fr);
 
     gap: 16px;
 
@@ -2256,8 +2256,10 @@ body.header-drawer-open { overflow: hidden; }
 
 
 .programs-menu section {
+    min-width: 0;
+
     padding:
-        20px;
+        18px;
 
     border:
         1px solid #bce4dd;
@@ -2295,7 +2297,7 @@ body.header-drawer-open { overflow: hidden; }
     height: 4px;
 
     margin-bottom:
-        14px;
+        10px;
 
     border-radius:
         8px;
@@ -2325,13 +2327,13 @@ body.header-drawer-open { overflow: hidden; }
 
 .programs-menu p {
     margin:
-        0 0 14px;
+        0 0 10px;
 
     font-size:
         13px;
 
     line-height:
-        1.6;
+        1.5;
 
     color:
         #625c78;
@@ -2455,10 +2457,10 @@ body.header-drawer-open { overflow: hidden; }
     gap: 12px;
 
     margin-top:
-        20px;
+        14px;
 
     padding-top:
-        20px;
+        14px;
 
     border-top:
         1px solid #d1cbe5;
@@ -2476,10 +2478,10 @@ body.header-drawer-open { overflow: hidden; }
     flex:
         1;
 
-    min-height: 48px;
+    min-height: 44px;
 
     padding:
-        12px 16px;
+        10px 16px;
 
     border:
         1px solid #3b3663;
@@ -2546,6 +2548,39 @@ body.header-drawer-open { overflow: hidden; }
         #ffb783;
 }
 
+
+/* Preserve DOM and keyboard order: the international list flows by rows. */
+@media (min-width: 1025px) {
+    .programs-menu__columns section:nth-child(2) ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 22px;
+        row-gap: 2px;
+    }
+
+    .programs-menu__columns li {
+        min-width: 0;
+    }
+
+    .programs-menu__columns a {
+        min-height: 44px;
+        height: 100%;
+        margin: 0 -8px;
+        padding: 8px;
+    }
+}
+
+/* Only short desktop viewports may scroll; never hide overflowing links. */
+@media (min-width: 1025px) and (max-height: 700px) {
+    .programs-menu {
+        max-height: calc(100dvh - var(--header-desktop-height) - 16px);
+        overflow-y: auto;
+    }
+
+    .header.is-scrolled .programs-menu {
+        max-height: calc(100dvh - var(--header-desktop-compact-height) - 16px);
+    }
+}
 
 /* ====================================================
    ACTIVO
@@ -2977,6 +3012,12 @@ body:has(> .header):not(.header-drawer-open) { overflow-x: clip !important; }
     }
 
 
+    .programs-menu__columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+
     /* ==============================
        IDIOMAS TABLET
     ============================== */
@@ -3030,14 +3071,6 @@ body:has(> .header):not(.header-drawer-open) { overflow-x: clip !important; }
 ==================================================== */
 
 @media (max-width: 640px) {
-
-    .programs-menu__columns {
-        grid-template-columns:
-            1fr;
-
-        gap: 16px;
-    }
-
 
     .programs-menu__footer {
         flex-direction:
