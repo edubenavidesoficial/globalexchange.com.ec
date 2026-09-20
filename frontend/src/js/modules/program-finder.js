@@ -53,6 +53,26 @@ export function initProgramFinder() {
 
     initProgramFinderForm();
 
+    const finder = document.querySelector('.program-finder');
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (finder && !motion.matches && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+            if (entries.some(entry => entry.isIntersecting)) {
+                finder.classList.add('is-revealed');
+                observer.disconnect();
+                motion.removeEventListener('change', stopReveal);
+            }
+        }, { threshold: 0.08 });
+        function stopReveal(event) {
+            if (!event.matches) return;
+            observer.disconnect();
+            finder.classList.remove('is-revealed');
+            motion.removeEventListener('change', stopReveal);
+        }
+        motion.addEventListener('change', stopReveal);
+        observer.observe(finder);
+    }
+
     initProgramFinderResults();
 
 }

@@ -10,7 +10,7 @@
 // - Contador de resultados.
 // - Estado sin resultados.
 // - Animaciones reveal.
-// - Parallax suave del hero.
+// - Movimiento del hero mediante CSS compartido.
 // - Accesibilidad.
 // - Movimiento reducido.
 //
@@ -57,10 +57,6 @@ const EMPTY_SELECTOR =
 
 const REVEAL_SELECTOR =
     '[data-faq-reveal]';
-
-
-const HERO_SELECTOR =
-    '[data-faq-hero]';
 
 
 // ====================================================
@@ -128,9 +124,7 @@ export function initFaqAccordion() {
     );
 
 
-    initHeroParallax(
-        page
-    );
+    // Hero motion is handled by the shared CSS system (no scroll listener).
 
 }
 
@@ -742,136 +736,6 @@ function showAllRevealElements(
 
             }
         );
-
-}
-
-
-// ====================================================
-// HERO PARALLAX
-// ====================================================
-
-function initHeroParallax(
-    page
-) {
-
-    const hero =
-        page.querySelector(
-            HERO_SELECTOR
-        );
-
-
-    if (!hero) {
-        return;
-    }
-
-
-    let frame =
-        null;
-
-
-    function requestUpdate() {
-
-        if (
-            frame !==
-            null
-        ) {
-            return;
-        }
-
-
-        frame =
-            window.requestAnimationFrame(
-                () => {
-
-                    frame =
-                        null;
-
-
-                    updateHeroParallax(
-                        hero
-                    );
-
-                }
-            );
-
-    }
-
-
-    window.addEventListener(
-        'scroll',
-        requestUpdate,
-        {
-            passive: true
-        }
-    );
-
-
-    window.addEventListener(
-        'resize',
-        requestUpdate,
-        {
-            passive: true
-        }
-    );
-
-
-    requestUpdate();
-
-}
-
-
-// ====================================================
-// ACTUALIZAR PARALLAX
-// ====================================================
-
-function updateHeroParallax(
-    hero
-) {
-
-    const rectangle =
-        hero.getBoundingClientRect();
-
-
-    const height =
-        Math.max(
-            hero.offsetHeight,
-            1
-        );
-
-
-    if (
-        rectangle.bottom <
-        0
-    ) {
-
-        hero.style.setProperty(
-            '--faq-hero-parallax',
-            '38px'
-        );
-
-
-        return;
-    }
-
-
-    const progress =
-        clamp(
-            -rectangle.top /
-            height,
-            0,
-            1
-        );
-
-
-    const movement =
-        progress *
-        38;
-
-
-    hero.style.setProperty(
-        '--faq-hero-parallax',
-        `${movement}px`
-    );
 
 }
 

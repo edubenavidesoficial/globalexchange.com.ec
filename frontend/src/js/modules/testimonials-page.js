@@ -3,7 +3,7 @@
 //
 // Responsabilidades:
 // - Reveal al hacer scroll.
-// - Parallax del hero.
+// - Movimiento del hero mediante CSS compartido.
 // - Tilt 3D suave en videos.
 // - Lightbox de la galería.
 // - Accesibilidad.
@@ -13,10 +13,6 @@
 
 const PAGE_SELECTOR =
     '.testimonials-page';
-
-
-const HERO_SELECTOR =
-    '[data-testimonials-hero]';
 
 
 const REVEAL_SELECTOR =
@@ -86,9 +82,7 @@ export function initTestimonialsPage() {
     );
 
 
-    initHeroParallax(
-        page
-    );
+    // Hero motion is handled by the shared CSS system (no scroll listener).
 
 
     initTilt(
@@ -218,100 +212,6 @@ function showAllReveals(
 
             }
         );
-
-}
-
-
-// ====================================================
-// HERO PARALLAX
-// ====================================================
-
-function initHeroParallax(
-    page
-) {
-
-    const hero =
-        page.querySelector(
-            HERO_SELECTOR
-        );
-
-
-    if (!hero) {
-        return;
-    }
-
-
-    let frame =
-        null;
-
-
-    function requestUpdate() {
-
-        if (
-            frame !==
-            null
-        ) {
-            return;
-        }
-
-
-        frame =
-            window.requestAnimationFrame(
-                () => {
-
-                    frame = null;
-
-
-                    const rectangle =
-                        hero.getBoundingClientRect();
-
-
-                    const height =
-                        Math.max(
-                            hero.offsetHeight,
-                            1
-                        );
-
-
-                    const progress =
-                        clamp(
-                            -rectangle.top /
-                            height,
-                            0,
-                            1
-                        );
-
-
-                    hero.style.setProperty(
-                        '--testimonials-hero-parallax',
-                        `${progress * 40}px`
-                    );
-
-                }
-            );
-
-    }
-
-
-    window.addEventListener(
-        'scroll',
-        requestUpdate,
-        {
-            passive: true
-        }
-    );
-
-
-    window.addEventListener(
-        'resize',
-        requestUpdate,
-        {
-            passive: true
-        }
-    );
-
-
-    requestUpdate();
 
 }
 

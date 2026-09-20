@@ -33,12 +33,11 @@
         78px 0 105px;
 
     background:
-        radial-gradient(circle at 28% 5%,
-            rgba(255, 122, 47, 0.055),
-            transparent 27%),
-        linear-gradient(180deg,
-            #ffffff 0%,
-            #fffdfb 100%);
+        radial-gradient(ellipse at 4% 12%, #5366f51c, transparent 42%),
+        radial-gradient(ellipse at 42% 9%, #ff7a2217, transparent 32%),
+        radial-gradient(ellipse at 98% 25%, #25c7bb24, transparent 42%),
+        radial-gradient(ellipse at 50% 78%, #5366f51a, transparent 60%),
+        linear-gradient(180deg, #fffdfb, #f3f4ff 75%, #fafaff);
 
     overflow: hidden;
 }
@@ -67,9 +66,7 @@
     border-radius: 50%;
 
     background:
-        linear-gradient(145deg,
-            #6753ff,
-            #5545ed);
+        radial-gradient(circle, #b9adf54d, #d9d2fb22 70%);
 }
 
 
@@ -83,9 +80,7 @@
     border-radius: 50%;
 
     background:
-        linear-gradient(145deg,
-            #ffdc54,
-            #ffb32c);
+        radial-gradient(circle, #a0e7dc55, #c7f0e322 70%);
 }
 
 
@@ -312,15 +307,15 @@
         25px;
 
     background:
-        rgba(255, 255, 255, 0.98);
+        rgba(255, 255, 255, 0.88);
 
     border:
-        1px solid rgba(37, 48, 101, 0.065);
+        1px solid rgba(83, 102, 245, 0.12);
 
     border-radius: 28px;
 
     box-shadow:
-        0 20px 55px rgba(28, 40, 90, 0.11);
+        0 18px 45px rgba(28, 40, 90, 0.08), inset 0 1px 0 #fff;
 }
 
 
@@ -1448,4 +1443,40 @@
         transition: none;
     }
 
+}
+/* Ambient route and progressive reveal: content remains visible without JS. */
+.program-finder__header-plane { position: relative; animation-duration: 9s; }
+.program-finder__header-plane::before { content: ''; position: absolute; width: 190px; height: 100px; right: 25px; top: 20px; border: 1px dashed #25a99d55; border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; pointer-events: none; }
+.program-finder__dots--right { color: #b578d04d; animation: finder-drift 10s ease-in-out infinite; }
+.program-finder__field:nth-child(1) { --field-accent: #b866b9; }
+.program-finder__field:nth-child(2) { --field-accent: #168e85; }
+.program-finder__field:nth-child(3) { --field-accent: #7953c9; }
+.program-finder__field:nth-child(4) { --field-accent: #c76822; }
+.program-finder__field:hover { border-color: var(--field-accent); transform: translateY(-1px); }
+.program-finder__field-icon { transition: transform .2s ease; }
+.program-finder__field:hover .program-finder__field-icon { transform: scale(1.03); }
+.program-finder__select:focus-visible, .program-finder__button:focus-visible { outline: 3px solid #5366f5; outline-offset: 4px; border-radius: 6px; }
+.program-finder__button { background: linear-gradient(110deg, #ff8625, #e85b15); box-shadow: 0 10px 24px #ef721d30; }
+.program-finder__button:hover { transform: translateY(-1px); }
+.program-finder__programs { position: relative; }
+.program-finder__title-main { --finder-delay: 0ms; }
+.program-finder__title-highlight { --finder-delay: 70ms; }
+.program-finder__description { --finder-delay: 130ms; }
+.program-finder__form { --finder-delay: 180ms; }
+.program-finder__field:nth-child(1) { --finder-delay: 220ms; }
+.program-finder__field:nth-child(2) { --finder-delay: 270ms; }
+.program-finder__field:nth-child(3) { --finder-delay: 320ms; }
+.program-finder__field:nth-child(4) { --finder-delay: 370ms; }
+.program-finder__actions { --finder-delay: 420ms; }
+@media (prefers-reduced-motion: no-preference) {
+    .program-finder.is-revealed :is(.program-finder__title-main, .program-finder__title-highlight, .program-finder__description, .program-finder__form, .program-finder__field, .program-finder__actions) { animation: finder-enter .65s cubic-bezier(.22,1,.36,1) var(--finder-delay, 0ms) backwards; }
+}
+@keyframes finder-enter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes finder-drift { 50% { transform: translateY(-4px); opacity: .7; } }
+@media (min-width: 651px) and (max-width: 900px) { .program-finder__fields { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 650px) { .program-finder__dots { display: none; } .program-finder__shape { width: 280px; height: 280px; } }
+@media (prefers-reduced-motion: reduce) {
+    .program-finder *, .program-finder *::before, .program-finder *::after { animation: none !important; transition: none !important; }
+    .program-finder :is(.program-finder__field, .program-finder__field-icon, .program-finder__button, .program-finder__button-arrow, .program-showcase-card, .program-showcase-card__media img, .program-showcase-card__link):hover { transform: none; }
+    .program-finder__field:hover .program-finder__field-icon, .program-finder__button:hover .program-finder__button-arrow, .program-finder .program-showcase-card:hover img { transform: none; }
 }

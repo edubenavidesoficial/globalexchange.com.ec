@@ -12,7 +12,7 @@
 // - Revelar elementos al entrar en pantalla.
 // - Animar la línea temporal de Nuestra Historia.
 // - Activar visualmente las etapas del timeline.
-// - Aplicar parallax suave al hero.
+// - Movimiento del hero mediante CSS compartido.
 // - Aplicar profundidad 3D sutil a imágenes.
 // - Animar los indicadores circulares de Sedes.
 // - Respetar prefers-reduced-motion.
@@ -52,10 +52,6 @@ const PROGRESS_SELECTOR =
 
 const PROGRESS_VALUE_SELECTOR =
     '[data-about-progress-value]';
-
-
-const HERO_SELECTOR =
-    '[data-about-hero]';
 
 
 // ====================================================
@@ -121,9 +117,7 @@ export function initAboutPage() {
     );
 
 
-    initHeroParallax(
-        page
-    );
+    // Hero motion is handled by the shared CSS system (no scroll listener).
 
 
     initTiltEffects(
@@ -491,166 +485,6 @@ function updateStoryTimeline(
             );
 
         }
-    );
-
-}
-
-
-// ====================================================
-// PARALLAX DEL HERO
-//
-// Se mueve solamente el background-position.
-// No modificamos el layout ni la altura del hero.
-// ====================================================
-
-function initHeroParallax(
-    page
-) {
-
-    const hero =
-        page.querySelector(
-            HERO_SELECTOR
-        );
-
-
-    if (!hero) {
-        return;
-    }
-
-
-    let frame =
-        null;
-
-
-    function requestUpdate() {
-
-        if (
-            frame !==
-            null
-        ) {
-            return;
-        }
-
-
-        frame =
-            window.requestAnimationFrame(
-                () => {
-
-                    frame =
-                        null;
-
-
-                    updateHeroParallax(
-                        hero
-                    );
-
-                }
-            );
-
-    }
-
-
-    window.addEventListener(
-        'scroll',
-        requestUpdate,
-        {
-            passive:
-                true
-        }
-    );
-
-
-    window.addEventListener(
-        'resize',
-        requestUpdate,
-        {
-            passive:
-                true
-        }
-    );
-
-
-    requestUpdate();
-
-}
-
-
-// ====================================================
-// ACTUALIZAR PARALLAX
-// ====================================================
-
-function updateHeroParallax(
-    hero
-) {
-
-    const rectangle =
-        hero.getBoundingClientRect();
-
-
-    const height =
-        Math.max(
-            hero.offsetHeight,
-            1
-        );
-
-
-    // ================================================
-    // SI ESTÁ MUY LEJOS DEL VIEWPORT
-    // ================================================
-
-    if (
-        rectangle.bottom <
-        0
-    ) {
-
-        hero.style.setProperty(
-            '--about-hero-parallax',
-            '42px'
-        );
-
-
-        return;
-    }
-
-
-    if (
-        rectangle.top >
-        window.innerHeight
-    ) {
-
-        hero.style.setProperty(
-            '--about-hero-parallax',
-            '0px'
-        );
-
-
-        return;
-    }
-
-
-    const progress =
-        clamp(
-            -rectangle.top /
-            height,
-            0,
-            1
-        );
-
-
-    // ================================================
-    // MOVIMIENTO MÁXIMO
-    //
-    // 42px mantiene el efecto elegante.
-    // ================================================
-
-    const movement =
-        progress *
-        42;
-
-
-    hero.style.setProperty(
-        '--about-hero-parallax',
-        `${movement}px`
     );
 
 }
@@ -1191,26 +1025,6 @@ function showCompleteAboutPage(
 
             }
         );
-
-
-    // ================================================
-    // HERO SIN PARALLAX
-    // ================================================
-
-    const hero =
-        page.querySelector(
-            HERO_SELECTOR
-        );
-
-
-    if (hero) {
-
-        hero.style.setProperty(
-            '--about-hero-parallax',
-            '0px'
-        );
-
-    }
 
 
     // ================================================
