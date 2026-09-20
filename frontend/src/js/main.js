@@ -43,8 +43,8 @@ import {
 
 
 import {
-    initFooterSearch
-} from './modules/footer-search.js';
+    initFooter
+} from './modules/footer.js';
 
 
 // ====================================================
@@ -173,7 +173,7 @@ document.addEventListener(
 
         initFloatingContact();
 
-        initFooterSearch();
+        initFooter();
 
 
         // ============================================
