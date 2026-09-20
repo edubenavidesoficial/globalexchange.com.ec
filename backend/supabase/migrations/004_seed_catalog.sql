@@ -1,0 +1,333 @@
+-- Catálogo inicial: frontend/src/js/data/program-finder-data.js.
+-- Requiere 003_extend_program_age_mode.sql. No modifica permisos ni RLS.
+-- 10 programas, 15 destinos y 61 relaciones de destinos conocidos.
+-- Los máximos abiertos (Number.POSITIVE_INFINITY) se representan como NULL.
+-- Lengua local solo declara id, name e includeInFinder=false: los campos
+-- opcionales quedan NULL y los obligatorios usan los defaults de 001.
+-- Nanny no declara una edad general: programs.age_min/age_max quedan NULL.
+-- Sus reglas específicas y fallback se materializan en program_destinations.
+-- Los demás programas conservan sus edades generales solo en programs.
+-- Este seed hace upsert de sus filas; no elimina registros ajenos al catálogo.
+
+begin;
+
+insert into public.destinations (code, name, active)
+values
+    ('alemania', 'Alemania', true),
+    ('australia', 'Australia', true),
+    ('austria', 'Austria', true),
+    ('belgica', 'Bélgica', true),
+    ('canada', 'Canadá', true),
+    ('china', 'China', true),
+    ('espana', 'España', true),
+    ('estados-unidos', 'Estados Unidos', true),
+    ('francia', 'Francia', true),
+    ('holanda', 'Holanda', true),
+    ('italia', 'Italia', true),
+    ('liechtenstein', 'Liechtenstein', true),
+    ('noruega', 'Noruega', true),
+    ('reino-unido', 'Reino Unido', true),
+    ('suiza', 'Suiza', true)
+on conflict (code) do update set
+    name = excluded.name,
+    active = excluded.active,
+    updated_at = now();
+
+insert into public.programs (
+    code,
+    name,
+    slug,
+    category,
+    description,
+    image_path,
+    page_url,
+    color,
+    destination_mode,
+    age_mode,
+    age_min,
+    age_max,
+    age_verified,
+    include_in_finder,
+    priority,
+    active
+)
+values
+    (
+        'programa-idiomatico',
+        'Programa idiomático',
+        'programa-idiomatico',
+        'Idiomas',
+        'Aprende o perfecciona un idioma mientras vives una experiencia internacional y descubres una nueva cultura.',
+        '/images/pages/cursos-de-idiomas-en-el-extranjero-2/clases-local.jpg',
+        '/pages/cursos-de-idiomas-en-el-extranjero-2/',
+        'blue',
+        'review',
+        'operational',
+        12,
+        null,
+        false,
+        true,
+        100,
+        true
+    ),
+    (
+        'escolaridad',
+        'Escolaridad',
+        'escolaridad',
+        'Intercambio estudiantil',
+        'Vive una experiencia escolar en el exterior mientras te sumerges en la cultura y el idioma del país de destino.',
+        '/images/pages/summer-camps/summer-camp-2.jpg',
+        '/pages/programa-escolar/',
+        'pink',
+        'known',
+        'operational',
+        14,
+        18,
+        false,
+        true,
+        95,
+        true
+    ),
+    (
+        'summer-camp',
+        'Summer Camp',
+        'summer-camp',
+        'Aventura & cultura',
+        'Descubre una experiencia internacional diseñada para combinar aprendizaje, cultura y nuevas experiencias.',
+        '/images/pages/summer-camps/summer-camp-destinations.jpg',
+        '/pages/summer-camps/',
+        'orange',
+        'known',
+        'operational',
+        12,
+        18,
+        false,
+        true,
+        90,
+        true
+    ),
+    (
+        'universidades',
+        'Universidades en el exterior',
+        'universidades',
+        'Educación superior',
+        'Explora oportunidades de educación superior en el exterior con acompañamiento durante tu proceso.',
+        '/images/program-finder/program-finder-universidad-exterior.jpg',
+        '/pages/educacion-en-el-exterior/',
+        'purple',
+        'known',
+        'operational',
+        17,
+        null,
+        false,
+        true,
+        80,
+        true
+    ),
+    (
+        'pasantias',
+        'Pasantías universitarias',
+        'pasantias',
+        'Experiencia profesional',
+        'Fortalece tu perfil profesional mediante una experiencia internacional vinculada con tu formación.',
+        '/images/program-finder/program-finder-pasantias.jpg',
+        '/pages/pasantias-profesionales/',
+        'teal',
+        'known',
+        'operational',
+        18,
+        null,
+        false,
+        true,
+        75,
+        true
+    ),
+    (
+        'ausbildung',
+        'Ausbildung',
+        'ausbildung',
+        'Experiencias internacionales',
+        'Formación orientada al desarrollo de conocimientos y habilidades profesionales mediante aprendizaje y experiencia práctica.',
+        '/images/pages/educacion-en-el-exterior/university-ausbildung.jpg',
+        '/pages/ausbildung/',
+        'blue',
+        'review',
+        'review',
+        null,
+        null,
+        false,
+        true,
+        72,
+        true
+    ),
+    (
+        'educacion-dual',
+        'Educación Dual',
+        'educacion-dual',
+        'Experiencias internacionales',
+        'Combina trabajo práctico en una empresa con clases teóricas en una universidad o centro de formación.',
+        '/images/program-finder/program-finder-educacion-dual.jpg',
+        '/pages/educacion-dual/',
+        'orange',
+        'known',
+        'review',
+        null,
+        null,
+        false,
+        true,
+        85,
+        true
+    ),
+    (
+        'nanny',
+        'Programa Nanny',
+        'nanny',
+        'Intercambio cultural',
+        'Vive con una familia anfitriona, desarrolla tu independencia y perfecciona un idioma durante una experiencia cultural.',
+        '/images/pages/programa-nanny/program-finder-nanny.jpg',
+        '/pages/programa-nanny/',
+        'pink',
+        'known',
+        'destination',
+        null,
+        null,
+        false,
+        true,
+        92,
+        true
+    ),
+    (
+        'lengua-local',
+        'Curso de lengua local',
+        'lengua-local',
+        null,
+        null,
+        null,
+        null,
+        null,
+        'review',
+        'operational',
+        null,
+        null,
+        false,
+        false,
+        0,
+        true
+    ),
+    (
+        'cursos-especiales',
+        'Cursos especiales',
+        'cursos-especiales',
+        'Formación especializada',
+        'Programas de formación e idiomas orientados a objetivos académicos y profesionales específicos.',
+        '/images/program-finder/program-finder-cursos-especiales.jpg',
+        null,
+        'purple',
+        'review',
+        'operational',
+        18,
+        null,
+        false,
+        true,
+        65,
+        true
+    )
+on conflict (code) do update set
+    name = excluded.name,
+    slug = excluded.slug,
+    category = excluded.category,
+    description = excluded.description,
+    image_path = excluded.image_path,
+    page_url = excluded.page_url,
+    color = excluded.color,
+    destination_mode = excluded.destination_mode,
+    age_mode = excluded.age_mode,
+    age_min = excluded.age_min,
+    age_max = excluded.age_max,
+    age_verified = excluded.age_verified,
+    include_in_finder = excluded.include_in_finder,
+    priority = excluded.priority,
+    active = excluded.active,
+    updated_at = now();
+
+-- Solo destinationMode='known' genera relaciones.
+-- Las edades NULL en relaciones no sustituyen las edades generales de programs.
+-- Nanny: cinco reglas verificadas y seis destinos con fallback 18–29 no verificado.
+with catalog_relations (program_code, destination_code, age_min, age_max, age_verified, active) as (
+    values
+    ('escolaridad', 'alemania', null, null, false, true),
+    ('escolaridad', 'australia', null, null, false, true),
+    ('escolaridad', 'austria', null, null, false, true),
+    ('escolaridad', 'belgica', null, null, false, true),
+    ('escolaridad', 'canada', null, null, false, true),
+    ('escolaridad', 'china', null, null, false, true),
+    ('escolaridad', 'estados-unidos', null, null, false, true),
+    ('escolaridad', 'francia', null, null, false, true),
+    ('escolaridad', 'holanda', null, null, false, true),
+    ('escolaridad', 'italia', null, null, false, true),
+    ('escolaridad', 'liechtenstein', null, null, false, true),
+    ('escolaridad', 'reino-unido', null, null, false, true),
+    ('escolaridad', 'suiza', null, null, false, true),
+    ('summer-camp', 'estados-unidos', null, null, false, true),
+    ('summer-camp', 'canada', null, null, false, true),
+    ('summer-camp', 'reino-unido', null, null, false, true),
+    ('summer-camp', 'alemania', null, null, false, true),
+    ('summer-camp', 'francia', null, null, false, true),
+    ('summer-camp', 'italia', null, null, false, true),
+    ('summer-camp', 'holanda', null, null, false, true),
+    ('summer-camp', 'austria', null, null, false, true),
+    ('universidades', 'alemania', null, null, false, true),
+    ('universidades', 'australia', null, null, false, true),
+    ('universidades', 'austria', null, null, false, true),
+    ('universidades', 'belgica', null, null, false, true),
+    ('universidades', 'francia', null, null, false, true),
+    ('universidades', 'holanda', null, null, false, true),
+    ('universidades', 'italia', null, null, false, true),
+    ('universidades', 'suiza', null, null, false, true),
+    ('pasantias', 'estados-unidos', null, null, false, true),
+    ('pasantias', 'canada', null, null, false, true),
+    ('pasantias', 'reino-unido', null, null, false, true),
+    ('pasantias', 'alemania', null, null, false, true),
+    ('pasantias', 'belgica', null, null, false, true),
+    ('pasantias', 'francia', null, null, false, true),
+    ('pasantias', 'italia', null, null, false, true),
+    ('pasantias', 'holanda', null, null, false, true),
+    ('pasantias', 'austria', null, null, false, true),
+    ('pasantias', 'suiza', null, null, false, true),
+    ('educacion-dual', 'alemania', null, null, false, true),
+    ('educacion-dual', 'belgica', null, null, false, true),
+    ('educacion-dual', 'francia', null, null, false, true),
+    ('educacion-dual', 'holanda', null, null, false, true),
+    ('educacion-dual', 'austria', null, null, false, true),
+    ('educacion-dual', 'china', null, null, false, true),
+    ('educacion-dual', 'suiza', null, null, false, true),
+    ('educacion-dual', 'australia', null, null, false, true),
+    ('educacion-dual', 'liechtenstein', null, null, false, true),
+    ('educacion-dual', 'noruega', null, null, false, true),
+    ('educacion-dual', 'italia', null, null, false, true),
+    ('nanny', 'alemania', 18, 26, true, true),
+    ('nanny', 'belgica', 18, 26, true, true),
+    ('nanny', 'estados-unidos', 18, 25, true, true),
+    ('nanny', 'francia', 18, 28, true, true),
+    ('nanny', 'holanda', 18, 28, true, true),
+    ('nanny', 'austria', 18, 29, false, true),
+    ('nanny', 'suiza', 18, 29, false, true),
+    ('nanny', 'china', 18, 29, false, true),
+    ('nanny', 'australia', 18, 29, false, true),
+    ('nanny', 'liechtenstein', 18, 29, false, true),
+    ('nanny', 'noruega', 18, 29, false, true)
+)
+insert into public.program_destinations (
+    program_id, destination_id, age_min, age_max, age_verified, active
+)
+select p.id, d.id, r.age_min, r.age_max, r.age_verified, r.active
+from catalog_relations r
+join public.programs p on p.code = r.program_code
+join public.destinations d on d.code = r.destination_code
+on conflict (program_id, destination_id) do update set
+    age_min = excluded.age_min,
+    age_max = excluded.age_max,
+    age_verified = excluded.age_verified,
+    active = excluded.active;
+
+commit;
