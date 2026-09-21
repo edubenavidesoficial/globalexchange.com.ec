@@ -384,10 +384,10 @@
 
 .program-finder__field:focus-within {
     border-color:
-        rgba(66, 91, 255, 0.65);
+        rgba(37, 199, 187, 0.35);
 
     box-shadow:
-        0 0 0 4px rgba(66, 91, 255, 0.08);
+        0 0 0 3px rgba(37, 199, 187, 0.08);
 }
 
 
@@ -530,6 +530,13 @@
 
 .program-finder__select:focus {
     outline: none;
+}
+
+
+.program-finder__select:focus-visible {
+    outline: 2px solid #17205c;
+    outline-offset: 2px;
+    border-radius: 6px;
 }
 
 
@@ -1455,7 +1462,7 @@
 .program-finder__field:hover { border-color: var(--field-accent); transform: translateY(-1px); }
 .program-finder__field-icon { transition: transform .2s ease; }
 .program-finder__field:hover .program-finder__field-icon { transform: scale(1.03); }
-.program-finder__select:focus-visible, .program-finder__button:focus-visible { outline: 3px solid #5366f5; outline-offset: 4px; border-radius: 6px; }
+.program-finder__button:focus-visible { outline: 3px solid #5366f5; outline-offset: 4px; border-radius: 6px; }
 .program-finder__button { background: linear-gradient(110deg, #ff8625, #e85b15); box-shadow: 0 10px 24px #ef721d30; }
 .program-finder__button:hover { transform: translateY(-1px); }
 .program-finder__programs { position: relative; }
