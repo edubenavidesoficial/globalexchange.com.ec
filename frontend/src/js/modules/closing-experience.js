@@ -14,7 +14,6 @@
 // - Liberarlo exactamente al terminar.
 // - Calcular el progreso del scroll.
 // - Revelar los textos.
-// - Revelar las sedes.
 // - Aplicar parallax.
 // - Dibujar la ruta.
 // - Mover el avión.
@@ -1005,7 +1004,7 @@ function updateExperience(
 
 
     // ================================================
-    // TEXTOS Y SEDES
+    // TEXTOS Y CTA
     // ================================================
 
     updateReveals(
