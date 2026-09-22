@@ -122,50 +122,87 @@ export const PROGRAM_FINDER_CITIES = {
 // ====================================================
 
 export const PROGRAM_FINDER_PROFESSIONS = {
-
-    'sin-definir':
-        'Aún no lo tengo claro',
-
-    'administracion-negocios':
-        'Administración y Negocios',
-
-    'arquitectura-diseno':
-        'Arquitectura y Diseño',
-
-    ciencias:
-        'Ciencias',
-
-    'comunicacion-marketing':
-        'Comunicación y Marketing',
-
-    'derecho-sociales':
-        'Derecho y Ciencias Sociales',
-
-    educacion:
-        'Educación',
-
-    ingenieria:
-        'Ingeniería',
-
-    'informatica-tecnologia':
-        'Informática y Tecnología',
-
-    'medicina-salud':
-        'Medicina y Salud',
-
-    'turismo-hoteleria':
-        'Turismo y Hotelería',
-
-    artes:
-        'Artes',
-
-    idiomas:
-        'Idiomas',
-
-    otra:
-        'Otra área'
-
+    'medicina-salud': 'Medicina y Salud',
+    'ingenieria-mecatronica': 'Ingeniería Mecatrónica',
+    'ingenieria-quimica-biologia': 'Ingeniería Química y Biología',
+    'derecho-internacional': 'Derecho',
+    otra: 'Otra área'
 };
+
+// Las áreas retiradas de URLs antiguas reciben orientación abierta.
+export function normalizeProgramFinderProfession(value) {
+    return Object.hasOwn(PROGRAM_FINDER_PROFESSIONS, value) ? value : 'otra';
+}
+
+// Resúmenes de los PDFs corporativos. Las fuentes y páginas permiten revisar
+// el contenido editorial; no intervienen en el ranking ni confirman admisión.
+export const careerRecommendations = {
+    'medicina-salud': {
+        alemania: {
+            title: '¿Por qué estudiar Medicina en Alemania?',
+            text: 'La formación médica en Alemania combina preparación académica con períodos prácticos y conexión con hospitales, universidades e institutos de investigación. Permite acercarse a distintos campos de la medicina.',
+            highlights: ['Formación práctica', 'Investigación', 'Entorno hospitalario'],
+            source: { file: 'MEDICINA EN ALEMANIA.pdf', pages: [2] }
+        }
+    },
+    'ingenieria-mecatronica': {
+        alemania: {
+            title: '¿Por qué estudiar Mecatrónica en Alemania?',
+            text: 'Mecatrónica combina mecánica, electrónica, sistemas de control e informática. Su formación abarca robótica, diseño y construcción de máquinas, con aplicaciones en el desarrollo de productos inteligentes.',
+            highlights: ['Robótica', 'Sistemas de control', 'Tecnología'],
+            source: { file: 'ESTUDIAR MECATRONICA EN ALEMANIA.pdf', pages: [1, 2] }
+        }
+    },
+    'ingenieria-quimica-biologia': {
+        alemania: {
+            title: '¿Por qué estudiar Ingeniería Química en Alemania?',
+            text: 'La Ingeniería Química reúne conocimientos científicos y técnicos para comprender las transformaciones de las sustancias. En universidades técnicas alemanas, la investigación y el trabajo interdisciplinario forman parte de este entorno académico.',
+            highlights: ['Ciencias', 'Tecnología', 'Investigación'],
+            source: { file: 'ESTUDIAR INGENIERIA QUIMICA EN ALEMANIA.pdf', pages: [1, 2, 3] }
+        }
+    },
+    'derecho-internacional': {
+        alemania: {
+            title: '¿Por qué estudiar Derecho Internacional en Alemania?',
+            text: 'Alemania cuenta con una tradición jurídica que permite conocer el derecho alemán y acercarse al derecho europeo e internacional. Su oferta académica incluye distintos enfoques y áreas de especialización.',
+            highlights: ['Derecho europeo', 'Perspectiva internacional', 'Especialización'],
+            source: { file: 'ESTUDIAR DERECHO INTERNACIONAL EN ALEMANIA.pdf', pages: [1, 2] }
+        }
+    }
+};
+
+export const destinationGuidance = {
+    francia: {
+        text: 'Francia reúne distintas alternativas de educación superior. Las opciones de apoyo financiero para estudiantes internacionales deben revisarse según la institución, el programa y la convocatoria.',
+        source: { file: 'ESTUDIAR EN FRANCIA.pdf', pages: [1, 2, 3] }
+    }
+};
+
+export function getCareerRecommendation(careerId, destinationId) {
+    const profession = normalizeProgramFinderProfession(careerId);
+    if (profession === 'otra') {
+        return {
+            title: '¿Tienes otra carrera en mente?',
+            text: 'Podemos orientarte según tu formación, objetivos y destino para encontrar alternativas académicas relacionadas con tu perfil. Una consulta permite revisar tus intereses y los próximos pasos.',
+            highlights: ['Tus objetivos', 'Orientación personalizada'],
+            consultation: true
+        };
+    }
+    const destinations = careerRecommendations[profession];
+    const specific = destinations && Object.hasOwn(destinations, destinationId)
+        ? destinations[destinationId] : null;
+    if (specific) return specific;
+
+    const career = PROGRAM_FINDER_PROFESSIONS[profession];
+    const destination = Object.hasOwn(PROGRAM_FINDER_DESTINATIONS, destinationId)
+        ? PROGRAM_FINDER_DESTINATIONS[destinationId] : 'tu destino';
+    return {
+        title: `Explora ${career} en ${destination}`,
+        text: `Tu perfil muestra interés en ${career} y en ${destination} como destino. Podemos ayudarte a revisar las opciones académicas disponibles y los requisitos específicos de cada programa.`,
+        highlights: ['Perfil académico', 'Destino seleccionado', 'Revisión personalizada'],
+        consultation: true
+    };
+}
 
 
 // ====================================================
@@ -225,13 +262,7 @@ export const PROGRAM_FINDER_PROGRAMS = [
             false,
 
 
-        /*
-         * El idioma puede complementar cualquier
-         * trayectoria profesional.
-         *
-         * Si el interés principal es Idiomas,
-         * su afinidad aumenta.
-         */
+        // El idioma puede complementar cualquier trayectoria profesional.
 
         professionMode:
             'language',
@@ -921,10 +952,9 @@ export const PROGRAM_FINDER_PROGRAMS = [
 
         professionAreas: [
 
-            'administracion-negocios',
-            'arquitectura-diseno',
             'medicina-salud',
-            'ingenieria'
+            'ingenieria-mecatronica',
+            'ingenieria-quimica-biologia'
 
         ],
 
@@ -1028,22 +1058,8 @@ export function getCityLabel(
 // LABEL PROFESIÓN
 // ====================================================
 
-export function getProfessionLabel(
-    profession
-) {
-
-    return (
-
-        PROGRAM_FINDER_PROFESSIONS[
-        profession
-        ] ||
-
-        profession ||
-
-        'Área profesional'
-
-    );
-
+export function getProfessionLabel(profession) {
+    return PROGRAM_FINDER_PROFESSIONS[normalizeProgramFinderProfession(profession)];
 }
 
 
@@ -1394,8 +1410,6 @@ function evaluateProfession(
     if (
         !profession ||
         profession ===
-        'sin-definir' ||
-        profession ===
         'otra'
     ) {
 
@@ -1427,28 +1441,7 @@ function evaluateProfession(
         'language'
     ) {
 
-        if (
-            profession ===
-            'idiomas'
-        ) {
 
-            return {
-
-                score:
-                    3,
-
-                level:
-                    'high',
-
-                label:
-                    'Alta afinidad',
-
-                message:
-                    'Relacionado directamente con tu interés en idiomas'
-
-            };
-
-        }
 
 
         return {
@@ -1618,6 +1611,8 @@ export function findProgramsForProfile({
     profession
 
 }) {
+
+    profession = normalizeProgramFinderProfession(profession);
 
     const numericAge =
         normalizeProgramFinderAge(

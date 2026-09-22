@@ -28,6 +28,10 @@
 
 import {
 
+    PROGRAM_FINDER_PROFESSIONS,
+    getCareerRecommendation,
+    destinationGuidance,
+    normalizeProgramFinderProfession,
     findProgramsForProfile,
     getDestinationLabel,
     getCityLabel,
@@ -129,6 +133,16 @@ function initProgramFinderForm() {
 
     };
 
+
+    // Una única fuente para opciones y labels; conserva selección al reinicializar.
+    if (fields.profession) {
+        const selected = fields.profession.value;
+        fields.profession.replaceChildren(new Option('Selecciona un área', ''));
+        Object.entries(PROGRAM_FINDER_PROFESSIONS).forEach(([id, label]) => {
+            fields.profession.add(new Option(label, id));
+        });
+        fields.profession.value = selected ? normalizeProgramFinderProfession(selected) : '';
+    }
 
     // ================================================
     // MENSAJES
@@ -521,17 +535,8 @@ function initProgramFinderResults() {
             ),
 
 
-        /*
-         * Compatibilidad con URLs antiguas:
-         * si no existe profession utilizamos
-         * "sin-definir".
-         */
-
-        profession:
-            parameters.get(
-                'profession'
-            ) ||
-            'sin-definir',
+        // Las áreas antiguas o desconocidas se muestran como Otra área.
+        profession: normalizeProgramFinderProfession(parameters.get('profession')),
 
         destination:
             parameters.get(
@@ -705,6 +710,8 @@ function initProgramFinderResults() {
 
     }
 
+
+    renderCareerGuidance(root, profile);
 
     // ================================================
     // MOTOR
@@ -953,7 +960,7 @@ function updateExcludedInformation(
     if (
         professionLabel &&
         professionLabel !==
-        'Aún no lo tengo claro'
+        'Otra área'
     ) {
 
         fragments.push(
@@ -1837,4 +1844,29 @@ function escapeHTML(
             '&#039;'
         );
 
+}
+// Orientación editorial independiente de las tarjetas y del motor de afinidad.
+function renderCareerGuidance(root, profile) {
+    const section = root.querySelector('[data-career-guidance]');
+    if (!section) return;
+    const recommendation = getCareerRecommendation(profile.profession, profile.destination);
+    section.querySelector('[data-guidance-title]').textContent = recommendation.title;
+    section.querySelector('[data-guidance-text]').textContent = recommendation.text;
+    section.querySelector('[data-guidance-highlights]').replaceChildren(
+        ...recommendation.highlights.map(text => {
+            const item = document.createElement('li');
+            item.textContent = text;
+            return item;
+        })
+    );
+    section.querySelector('[data-guidance-consultation]').hidden = !recommendation.consultation;
+    section.hidden = false;
+
+    const destination = root.querySelector('[data-destination-guidance]');
+    if (destination) {
+        const guidance = Object.hasOwn(destinationGuidance, profile.destination)
+            ? destinationGuidance[profile.destination] : null;
+        destination.querySelector('[data-destination-guidance-text]').textContent = guidance?.text || '';
+        destination.hidden = !guidance;
+    }
 }
