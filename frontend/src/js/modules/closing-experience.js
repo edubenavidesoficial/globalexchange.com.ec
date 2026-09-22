@@ -37,7 +37,7 @@ const CLOSING_CONTEXTS = {
         lines: ['Aprende,', 'pon en práctica', 'tus conocimientos', 'y construye', 'tu camino profesional.'],
         description: 'Conoce cómo la formación y la experiencia en una empresa pueden acompañar el desarrollo de tu carrera.',
         button: 'Consultar sobre Ausbildung',
-        href: '/pages/contactos/'
+        href: '/#agenda-consulta'
     },
     '/pages/educacion-dual/': {
         id: 'educacion-dual',
@@ -45,7 +45,7 @@ const CLOSING_CONTEXTS = {
         lines: ['Estudia,', 'lleva la teoría', 'a la práctica', 'y sigue', 'aprendiendo.'],
         description: 'Explora una formación que combina estudios académicos y experiencia práctica en una empresa.',
         button: 'Consultar sobre Educación Dual',
-        href: '/pages/contactos/'
+        href: '/#agenda-consulta'
     },
 
     // ================================================
@@ -139,7 +139,7 @@ const CLOSING_CONTEXTS = {
             'Hablar con un asesor',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -235,7 +235,7 @@ const CLOSING_CONTEXTS = {
             'Hablar con nosotros',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -299,7 +299,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -331,7 +331,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -395,7 +395,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -427,7 +427,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -459,7 +459,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 
@@ -491,7 +491,7 @@ const CLOSING_CONTEXTS = {
             'Solicitar información',
 
         href:
-            '/pages/contactos/'
+            '/#agenda-consulta'
 
     },
 

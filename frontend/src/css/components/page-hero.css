@@ -222,7 +222,6 @@
     overflow: hidden;
 }
 .page-hero.page-hero--about { --hero-accent-secondary: 255 122 34; }
-.page-hero.page-hero--contact { --hero-accent-primary: 255 122 34; min-height: 360px; }
 .page-hero.page-hero--faq { --hero-accent-primary: 109 86 222; }
 .page-hero--cinematic::before {
     content: ''; position: absolute; inset: -2%; z-index: -2;
@@ -276,7 +275,6 @@
 @keyframes page-hero-enter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 600px) {
     .page-hero.page-hero--cinematic { min-height: 330px; padding: 52px 0 64px; background-position: 58% center; }
-    .page-hero.page-hero--contact { min-height: 280px; }
     .page-hero--cinematic .page-hero__title { font-size: clamp(38px, 10vw, 56px); }
     .page-hero--cinematic :is(.about-hero__orb,.faq-hero__orb,.testimonials-hero__orb) { opacity: .4; }
     .page-hero--cinematic .page-hero__breadcrumb { font-size: 12px; }

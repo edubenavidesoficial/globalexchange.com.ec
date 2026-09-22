@@ -1108,6 +1108,16 @@
    COLUMNA CONSULTA
 ==================================================== */
 
+/* Leave room for the 100px header before it compacts to 78px. */
+#agenda-consulta {
+    scroll-margin-top: 110px;
+}
+
+/* This fragment target receives focus without joining the Tab order. */
+#agenda-consulta:focus {
+    outline: none;
+}
+
 .services-consult {
     min-width: 0;
 
@@ -1828,6 +1838,11 @@
 ==================================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
+    html:has(#agenda-consulta:target) {
+        scroll-behavior: auto;
+    }
+
 
     .services-carousel__track,
     .services-program-card,

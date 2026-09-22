@@ -122,18 +122,25 @@ export function initHeader() {
 
     // Section state follows the existing navigation URLs, including program details.
     const normalizePath = pathname => pathname.replace(/\/index\.html$/, '/').replace(/\/+$/, '') || '/';
-    const currentPath = normalizePath(window.location.pathname);
-    navigation?.querySelectorAll('.header__menu > .header__menu-item').forEach(item => {
-        const links = [...item.querySelectorAll(':scope > a[href], .global-menu__list a[href], .programs-menu__columns a[href], .programs-menu__footer a[href="/pages/programas/"]')];
-        const active = links.some(link => {
-            const url = new URL(link.href);
-            return url.origin === window.location.origin && !url.hash && normalizePath(url.pathname) === currentPath;
-        }) || (item.classList.contains('header__programs') && currentPath === '/pages/program-finder');
-        item.classList.toggle('header__menu-item--active', active);
-        const control = item.querySelector(':scope > a, :scope > button');
-        if (active) control?.setAttribute('aria-current', control.tagName === 'A' ? 'page' : 'true');
-        else control?.removeAttribute('aria-current');
-    });
+    function updateActiveNavigation() {
+        const currentPath = normalizePath(window.location.pathname);
+        const atConsultation = currentPath === '/' && window.location.hash === '#agenda-consulta';
+        navigation?.querySelectorAll('.header__menu > .header__menu-item').forEach(item => {
+            const links = [...item.querySelectorAll(':scope > a[href], .global-menu__list a[href], .programs-menu__columns a[href], .programs-menu__footer a[href="/pages/programas/"]')];
+            const active = links.some(link => {
+                const url = new URL(link.href);
+                if (url.origin !== window.location.origin || normalizePath(url.pathname) !== currentPath) return false;
+                if (url.hash) return atConsultation && url.hash === '#agenda-consulta';
+                return !atConsultation;
+            }) || (item.classList.contains('header__programs') && currentPath === '/pages/program-finder');
+            item.classList.toggle('header__menu-item--active', active);
+            const control = item.querySelector(':scope > a, :scope > button');
+            if (active) control?.setAttribute('aria-current', atConsultation ? 'location' : control.tagName === 'A' ? 'page' : 'true');
+            else control?.removeAttribute('aria-current');
+        });
+    }
+    updateActiveNavigation();
+    window.addEventListener('hashchange', updateActiveNavigation);
 
     let desktopMode = window.innerWidth > 1024;
     const modalBackground = new Map();
@@ -933,6 +940,8 @@ export function initHeader() {
                 link.addEventListener(
                     'click',
                     () => {
+
+                        if (link.hash === '#agenda-consulta') closeDropdowns();
 
                         if (
                             window.innerWidth <=

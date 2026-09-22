@@ -72,7 +72,8 @@ import {
 
 
 import {
-    initServices
+    initServices,
+    initConsultationNavigation
 } from './modules/services.js';
 
 
@@ -89,11 +90,6 @@ import {
 import {
     initClosingExperience
 } from './modules/closing-experience.js';
-
-
-import {
-    initContactForm
-} from './modules/contact-form.js';
 
 
 // ====================================================
@@ -196,7 +192,6 @@ document.addEventListener(
 
         initClosingExperience();
 
-        initContactForm();
 
 
         // ============================================
@@ -231,6 +226,8 @@ document.addEventListener(
         initProgramDetail();
 
         initTestimonialsPage();
+
+        initConsultationNavigation();
 
     }
 );

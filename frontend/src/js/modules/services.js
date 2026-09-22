@@ -1206,3 +1206,22 @@ function initServicesConsultation() {
     );
 
 }
+
+// Restore the contact fragment after page initialization, without a timed delay.
+export function initConsultationNavigation() {
+    const section = document.getElementById('agenda-consulta');
+    if (!section) return;
+
+    function navigateToConsultation() {
+        if (window.location.hash !== '#agenda-consulta') return;
+        window.requestAnimationFrame(() => {
+            if (window.location.hash !== '#agenda-consulta') return;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            section.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+            section.focus({ preventScroll: true });
+        });
+    }
+
+    window.addEventListener('hashchange', navigateToConsultation);
+    navigateToConsultation();
+}

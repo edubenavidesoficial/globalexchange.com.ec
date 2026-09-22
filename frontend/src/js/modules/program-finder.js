@@ -1128,7 +1128,7 @@ function createProgramResultCard({
             : `
                 <a
                     class="program-result-card__primary"
-                    href="/#servicios"
+                    href="/#agenda-consulta"
                 >
                     Solicitar información
 
@@ -1376,7 +1376,7 @@ function createProgramResultCard({
 
                 <a
                     class="program-result-card__secondary"
-                    href="/#servicios"
+                    href="/#agenda-consulta"
                 >
                     Hablar con un asesor
                 </a>
