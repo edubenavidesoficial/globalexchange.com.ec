@@ -1,0 +1,84 @@
+/* Global Exchange ambient shapes. Opt in on individual content sections.
+   Tune the tokens here; geometry is shared across all page variants. */
+:root {
+    --decor-mint: #ccece8;
+    --decor-lilac: #dedcf4;
+    --decor-sky: #d5e8f7;
+}
+.page-decor {
+    --decor-color: var(--decor-mint);
+    --decor-secondary: var(--decor-lilac);
+    --decor-size: clamp(340px, 44vw, 660px);
+    --decor-top: 48px;
+    --decor-bottom: 60px;
+    --decor-edge: -190px;
+    --decor-opacity: .72;
+    --decor-radius: 42% 58% 65% 35% / 54% 40% 60% 46%;
+    position: relative;
+    isolation: isolate;
+}
+/* Clip only the artwork, never focus rings, dropdowns or content shadows.
+   A negative layer inside isolation paints above the section background
+   and below its content, without changing any existing content z-index. */
+.page-decor > .page-decor__art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    overflow: clip;
+    pointer-events: none;
+    user-select: none;
+}
+.page-decor__art::before,
+.page-decor__art::after {
+    content: '';
+    position: absolute;
+    width: var(--decor-size);
+    height: calc(var(--decor-size) * .82);
+    border-radius: var(--decor-radius);
+    opacity: var(--decor-opacity);
+    pointer-events: none;
+}
+.page-decor__art::before {
+    top: var(--decor-top);
+    left: var(--decor-edge);
+    background: linear-gradient(135deg, var(--decor-color), var(--decor-sky));
+    transform: rotate(-16deg);
+}
+.page-decor__art::after {
+    right: var(--decor-edge);
+    bottom: var(--decor-bottom);
+    width: calc(var(--decor-size) * .8);
+    height: calc(var(--decor-size) * .7);
+    background: linear-gradient(150deg, var(--decor-secondary), var(--decor-color));
+    border-radius: 65% 35% 38% 62% / 40% 65% 35% 60%;
+    transform: rotate(20deg);
+}
+.page-decor--lavender {
+    --decor-color: var(--decor-lilac);
+    --decor-secondary: var(--decor-sky);
+    --decor-top: 110px;
+    --decor-bottom: 24px;
+}
+.page-decor--arc {
+    --decor-color: var(--decor-sky);
+    --decor-secondary: var(--decor-mint);
+    --decor-radius: 50% 50% 22% 22%;
+    --decor-top: 24px;
+    --decor-bottom: 100px;
+}
+.page-decor--reverse > .page-decor__art { transform: scaleX(-1); }
+.page-decor--quiet { --decor-opacity: .48; --decor-size: clamp(300px, 38vw, 540px); }
+@media (max-width: 700px) {
+    .page-decor {
+        --decor-size: 320px;
+        --decor-edge: -190px;
+        --decor-top: 32px;
+        --decor-bottom: 32px;
+        --decor-opacity: .48;
+    }
+    .page-decor--quiet { --decor-opacity: .34; }
+}
+@media print {
+    .page-decor__art { display: none; }
+}

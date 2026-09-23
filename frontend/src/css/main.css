@@ -81,3 +81,6 @@
 ==================================================== */
 
 @import './pages/program-finder-results.css';
+
+/* Shared ambient shapes, explicitly enabled on content sections. */
+@import './components/page-decor.css';
