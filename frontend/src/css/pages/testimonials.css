@@ -918,7 +918,7 @@
 
 /* ====================================================
    GALLERY
-   Diseño masonry editorial
+   Carrusel editorial
 ==================================================== */
 
 .testimonials-gallery {
@@ -945,39 +945,6 @@
             #f2fbfa 100%);
 
     overflow: hidden;
-}
-
-
-/* ====================================================
-   DECORACIÓN: CÍRCULO GRANDE
-==================================================== */
-
-.testimonials-gallery::before {
-    content: "";
-
-    position: absolute;
-
-    z-index: 0;
-
-    top: 170px;
-    right: -160px;
-
-    width: 440px;
-    height: 440px;
-
-    border-radius: 50%;
-
-    border:
-        1px solid rgba(83, 102, 245, 0.09);
-
-    box-shadow:
-        0 0 0 42px rgba(83, 102, 245, 0.018),
-        0 0 0 84px rgba(37, 199, 187, 0.015);
-
-    animation:
-        testimonials-gallery-ring 10s ease-in-out infinite;
-
-    pointer-events: none;
 }
 
 
@@ -1047,8 +1014,7 @@
 
     pointer-events: none;
 
-    animation:
-        testimonials-gallery-plane 9s ease-in-out infinite;
+
 }
 
 
@@ -1116,670 +1082,181 @@
 }
 
 
-/* ====================================================
-   MASONRY
-==================================================== */
-
-.testimonials-gallery__grid {
+/* Editorial photo carousel; unenhanced content remains a scrollable gallery. */
+.testimonials-gallery__carousel {
+    --gallery-width: min(410px, 60vw);
+    --gallery-gap: 20px;
     position: relative;
-
-    z-index: 3;
-
     width: 100%;
-
-    columns: 4;
-
-    column-gap: 18px;
+    margin-inline: auto;
+    isolation: isolate;
 }
-
-
-/* ====================================================
-   GALLERY ITEM
-==================================================== */
-
+/* Keep the next outer cards visible where three cards nearly fill the viewport. */
+@media (min-width: 1300px) and (max-width: 1400px) {
+    .testimonials-gallery__carousel { --gallery-gap: 14px; }
+}
+/* Static organic panel stays behind the photos and never intercepts input. */
+.testimonials-gallery__carousel::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    left: -6%;
+    width: 112%;
+    height: calc(var(--gallery-width) * 1.25 + 104px);
+    border-radius: 42% 58% 36% 64% / 38% 34% 66% 62%;
+    background: linear-gradient(125deg, #dedff8 8%, #d9e4f6 50%, #cceee7 92%);
+    border: 1px solid rgba(83, 102, 245, .06);
+    transform: rotate(-3deg);
+    pointer-events: none;
+}
+.testimonials-gallery__viewport {
+    position: relative;
+    display: flex;
+    gap: var(--gallery-gap);
+    overflow: auto;
+    padding: 32px 0 48px;
+    touch-action: pan-y pinch-zoom;
+}
 .testimonials-gallery__item {
-    --gallery-rotation: 0deg;
-
     position: relative;
-
     display: block;
-
-    width: 100%;
-
-    margin:
-        0 0 18px;
-
+    flex: 0 0 var(--gallery-width);
+    width: var(--gallery-width);
+    aspect-ratio: 4 / 5;
     overflow: hidden;
-
-    break-inside: avoid;
-
-    border:
-        1px solid rgba(83, 102, 245, 0.09);
-
-    border-radius: 22px;
-
-    background:
-        rgba(255, 255, 255, 0.82);
-
-    box-shadow:
-        0 16px 38px rgba(32, 39, 98, 0.085);
-
-    text-decoration: none;
-
-    transform-origin:
-        center;
-
-    transition:
-        opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-
-        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-
-        box-shadow 0.42s ease,
-
-        border-color 0.42s ease;
-
-    will-change:
-        transform;
+    border: 1px solid rgba(83, 102, 245, .12);
+    border-radius: 26px;
+    background: #edf0fa;
+    box-shadow: 0 20px 40px rgba(23, 32, 92, .12);
+    transition: transform 700ms cubic-bezier(.22, 1, .36, 1), opacity 700ms ease, translate 350ms ease;
 }
-
-
-/* ====================================================
-   PROPORCIONES EDITORIALES
-
-   Las diferentes proporciones generan un mosaico
-   orgánico sin huecos.
-==================================================== */
-
-.testimonials-gallery__item:nth-child(1) {
-    aspect-ratio:
-        16 / 11;
-
-    --gallery-rotation:
-        -0.5deg;
+.testimonials-gallery__carousel.is-ready .testimonials-gallery__viewport {
+    display: block;
+    height: calc(var(--gallery-width) * 1.25 + 80px);
+    overflow: clip;
 }
-
-
-.testimonials-gallery__item:nth-child(2) {
-    aspect-ratio:
-        4 / 5;
-
-    --gallery-rotation:
-        0.35deg;
+.testimonials-gallery__carousel.is-ready .testimonials-gallery__item {
+    position: absolute;
+    top: 32px;
+    left: calc(50% - var(--gallery-width) / 2);
+    transform: translate3d(calc(var(--gallery-slot) * (100% + var(--gallery-gap))), 0, 0) scale(.94);
+    opacity: .78;
 }
-
-
-.testimonials-gallery__item:nth-child(3) {
-    aspect-ratio:
-        4 / 3;
-
-    --gallery-rotation:
-        -0.3deg;
+.testimonials-gallery__carousel.is-ready .testimonials-gallery__item.is-active {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+    z-index: 1;
 }
-
-
-.testimonials-gallery__item:nth-child(4) {
-    aspect-ratio:
-        4 / 5;
-
-    --gallery-rotation:
-        0.45deg;
-}
-
-
-.testimonials-gallery__item:nth-child(5) {
-    aspect-ratio:
-        4 / 5;
-
-    --gallery-rotation:
-        -0.4deg;
-}
-
-
-.testimonials-gallery__item:nth-child(6) {
-    aspect-ratio:
-        16 / 10;
-
-    --gallery-rotation:
-        0.3deg;
-}
-
-
-.testimonials-gallery__item:nth-child(7) {
-    aspect-ratio:
-        4 / 3;
-
-    --gallery-rotation:
-        -0.25deg;
-}
-
-
-.testimonials-gallery__item:nth-child(8) {
-    aspect-ratio:
-        4 / 5;
-
-    --gallery-rotation:
-        0.35deg;
-}
-
-
-.testimonials-gallery__item:nth-child(9) {
-    aspect-ratio:
-        4 / 3;
-
-    --gallery-rotation:
-        -0.4deg;
-}
-
-
-.testimonials-gallery__item:nth-child(10) {
-    aspect-ratio:
-        4 / 5;
-
-    --gallery-rotation:
-        0.3deg;
-}
-
-
-.testimonials-gallery__item:nth-child(11) {
-    aspect-ratio:
-        16 / 11;
-
-    --gallery-rotation:
-        -0.25deg;
-}
-
-
-/* ====================================================
-   IMAGEN
-==================================================== */
-
 .testimonials-gallery__item img {
     display: block;
-
     width: 100%;
     height: 100%;
-
     object-fit: cover;
-    object-position: center;
-
-    transform:
-        scale(1.002);
-
-    transition:
-        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-
-        filter 0.45s ease;
+    transition: transform 650ms cubic-bezier(.22, 1, .36, 1);
 }
-
-
-/* ====================================================
-   TONO LIGERO
-==================================================== */
-
-.testimonials-gallery__item::before {
-    content: "";
-
-    position: absolute;
-
-    z-index: 2;
-
-    inset: 0;
-
-    background:
-        linear-gradient(180deg,
-            transparent 58%,
-            rgba(18, 26, 79, 0.08));
-
-    opacity: 0.6;
-
-    pointer-events: none;
-
-    transition:
-        opacity 0.4s ease;
-}
-
-
-/* ====================================================
-   DESTELLO
-==================================================== */
-
-.testimonials-gallery__item::after {
-    content: "";
-
-    position: absolute;
-
-    z-index: 4;
-
-    top: -35%;
-    left: -65%;
-
-    width: 42%;
-    height: 175%;
-
-    background:
-        linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.24),
-            transparent);
-
-    transform:
-        rotate(18deg) translateX(-160%);
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.25s ease;
-}
-
-
-/* ====================================================
-   HOVER DE LA TARJETA
-==================================================== */
-
-.testimonials-gallery__item:hover,
-.testimonials-gallery__item:focus-visible {
-    z-index: 8;
-
-    border-color:
-        rgba(83, 102, 245, 0.18);
-
-    transform:
-        translateY(-9px) rotate(var(--gallery-rotation)) scale(1.018);
-
-    box-shadow:
-        0 28px 58px rgba(31, 38, 99, 0.16);
-}
-
-
-.testimonials-gallery__item:hover::before,
-.testimonials-gallery__item:focus-visible::before {
-    opacity: 0.22;
-}
-
-
-.testimonials-gallery__item:hover::after,
-.testimonials-gallery__item:focus-visible::after {
-    opacity: 1;
-
-    transform:
-        rotate(18deg) translateX(520%);
-}
-
-
-.testimonials-gallery__item:hover img,
-.testimonials-gallery__item:focus-visible img {
-    transform:
-        scale(1.075);
-
-    filter:
-        brightness(0.74) saturate(1.06);
-}
-
-
-/* ====================================================
-   OVERLAY
-==================================================== */
-
 .testimonials-gallery__overlay {
     position: absolute;
-
-    z-index: 3;
-
     inset: 0;
-
-    display: grid;
-
-    place-items: center;
-
-    background:
-        radial-gradient(circle at 50% 50%,
-            rgba(37, 199, 187, 0.09),
-            transparent 36%),
-        linear-gradient(135deg,
-            rgba(83, 102, 245, 0.16),
-            rgba(23, 32, 92, 0.30));
-
-    opacity: 0;
-
-    transition:
-        opacity 0.4s ease;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 24px;
+    background: linear-gradient(180deg, transparent 60%, rgba(23, 32, 92, .35));
+    opacity: .8;
+    transition: opacity 350ms ease;
 }
-
-
-/* ====================================================
-   BOTÓN +
-==================================================== */
-
 .testimonials-gallery__overlay span {
-    position: relative;
-
     display: grid;
-
     place-items: center;
-
-    width: 52px;
-    height: 52px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.38);
-
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, .6);
     border-radius: 50%;
-
-    background:
-        rgba(23, 32, 92, 0.70);
-
-    box-shadow:
-        0 13px 30px rgba(13, 18, 59, 0.24);
-
-    backdrop-filter:
-        blur(10px);
-
-    -webkit-backdrop-filter:
-        blur(10px);
-
-    font-family:
-        var(--font-body);
-
-    font-size: 27px;
-    font-weight: 300;
-
-    line-height: 1;
-
-    color: #ffffff;
-
-    transform:
-        translateY(12px) scale(0.72) rotate(-22deg);
-
-    opacity: 0;
-
-    transition:
-        opacity 0.35s ease,
-        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    background: rgba(23, 32, 92, .65);
+    color: white;
+    font-size: 26px;
+    transition: transform 350ms ease;
 }
-
-
-/* ====================================================
-   ARO DEL BOTÓN
-==================================================== */
-
-.testimonials-gallery__overlay span::after {
-    content: "";
-
-    position: absolute;
-
-    inset: -7px;
-
-    border:
-        1px solid rgba(255, 255, 255, 0.16);
-
-    border-radius: inherit;
-
-    transform:
-        scale(0.7);
-
-    opacity: 0;
-
-    transition:
-        opacity 0.4s ease,
-        transform 0.5s ease;
+.testimonials-gallery__item:focus-visible,
+.testimonials-gallery__carousel button:focus-visible {
+    outline: 3px solid var(--testimonials-purple);
+    outline-offset: 4px;
 }
-
-
-/* ====================================================
-   OVERLAY ACTIVO
-==================================================== */
-
-.testimonials-gallery__item:hover .testimonials-gallery__overlay,
-.testimonials-gallery__item:focus-visible .testimonials-gallery__overlay {
-    opacity: 1;
+@media (hover: hover) {
 }
-
-
-.testimonials-gallery__item:hover .testimonials-gallery__overlay span,
-.testimonials-gallery__item:focus-visible .testimonials-gallery__overlay span {
-    opacity: 1;
-
-    transform:
-        translateY(0) scale(1) rotate(0deg);
+.testimonials-gallery__controls { display: none; }
+.is-ready .testimonials-gallery__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
-
-
-.testimonials-gallery__item:hover .testimonials-gallery__overlay span::after,
-.testimonials-gallery__item:focus-visible .testimonials-gallery__overlay span::after {
-    opacity: 1;
-
-    transform:
-        scale(1);
+.testimonials-gallery__control {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgba(23, 32, 92, .14);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .85);
+    color: var(--testimonials-navy);
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
 }
-
-
-/* ====================================================
-   MICRODETALLES DE COLOR
-
-   Agrega pequeños acentos sin saturar la galería.
-==================================================== */
-
-.testimonials-gallery__item:nth-child(4n + 1) {
-    border-bottom-color:
-        rgba(83, 102, 245, 0.22);
+.testimonials-gallery__control:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--testimonials-purple);
+    box-shadow: 0 6px 16px rgba(23, 32, 92, .08);
 }
-
-
-.testimonials-gallery__item:nth-child(4n + 2) {
-    border-bottom-color:
-        rgba(37, 199, 187, 0.23);
+.testimonials-gallery__control:active:not(:disabled) { transform: scale(.96); }
+.testimonials-gallery__control:disabled { opacity: .4; cursor: default; }
+.testimonials-gallery__dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    margin-top: 6px;
 }
-
-
-.testimonials-gallery__item:nth-child(4n + 3) {
-    border-bottom-color:
-        rgba(255, 122, 34, 0.23);
+.testimonials-gallery__dot {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: transparent;
+    cursor: pointer;
 }
-
-
-.testimonials-gallery__item:nth-child(4n + 4) {
-    border-bottom-color:
-        rgba(232, 77, 152, 0.18);
+.testimonials-gallery__dot::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #c8cce0;
+    transition: transform 250ms ease, background-color 250ms ease;
 }
-
-
-/* ====================================================
-   KEYFRAMES DE GALERÍA
-==================================================== */
-
-@keyframes testimonials-gallery-ring {
-
-    0%,
-    100% {
-        transform:
-            translate3d(0, 0, 0) scale(1);
-    }
-
-    50% {
-        transform:
-            translate3d(-12px, 10px, 0) scale(1.035);
-    }
-
+.testimonials-gallery__dot[aria-current='true']::before {
+    transform: scale(1.5);
+    background: var(--testimonials-purple);
 }
-
-
-@keyframes testimonials-gallery-plane {
-
-    0%,
-    100% {
-        transform:
-            rotate(-14deg) translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform:
-            rotate(-11deg) translate3d(-8px, 10px, 0);
-    }
-
+@media (max-width: 600px) {
+    .testimonials-gallery__carousel { --gallery-width: min(320px, 80vw); --gallery-gap: 12px; }
 }
-
-
-/* ====================================================
-   TABLET GRANDE
-==================================================== */
-
-@media (max-width: 1050px) {
-
-    .testimonials-gallery__grid {
-        columns: 3;
-
-        column-gap: 16px;
-    }
-
-
-    .testimonials-gallery__item {
-        margin-bottom: 16px;
-    }
-
-}
-
-
-/* ====================================================
-   TABLET
-==================================================== */
-
-@media (max-width: 760px) {
-
-    .testimonials-gallery {
-        padding:
-            85px 0 90px;
-    }
-
-
-    .testimonials-gallery__header {
-        margin-bottom:
-            42px;
-    }
-
-
-    .testimonials-gallery__grid {
-        columns: 2;
-
-        column-gap: 13px;
-    }
-
-
-    .testimonials-gallery__item {
-        margin-bottom: 13px;
-
-        border-radius: 17px;
-    }
-
-
-    .testimonials-gallery::before {
-        right: -190px;
-
-        width: 340px;
-        height: 340px;
-    }
-
-
-    .testimonials-gallery__watermark {
-        top: 32px;
-
-        font-size: 130px;
-    }
-
-}
-
-
-/* ====================================================
-   MÓVIL
-==================================================== */
-
-@media (max-width: 480px) {
-
-    .testimonials-gallery {
-        padding:
-            70px 0 75px;
-    }
-
-
-    .testimonials-gallery__grid {
-        columns: 1;
-    }
-
-
-    .testimonials-gallery__item {
-        width: 100%;
-
-        margin-bottom: 14px;
-
-        aspect-ratio: 4 / 3 !important;
-
-        border-radius: 18px;
-    }
-
-
-    .testimonials-gallery__item:nth-child(2),
-    .testimonials-gallery__item:nth-child(4),
-    .testimonials-gallery__item:nth-child(5),
-    .testimonials-gallery__item:nth-child(8),
-    .testimonials-gallery__item:nth-child(10) {
-        aspect-ratio: 4 / 5 !important;
-    }
-
-
-    .testimonials-gallery__watermark {
-        right: -15px;
-
-        font-size: 105px;
-
-        opacity: 0.65;
-    }
-
-
-    .testimonials-gallery::before {
-        display: none;
-    }
-
-
-    .testimonials-gallery__overlay span {
-        width: 46px;
-        height: 46px;
-
-        font-size: 24px;
-    }
-
-}
-
-
-/* ====================================================
-   MOVIMIENTO REDUCIDO
-==================================================== */
-
 @media (prefers-reduced-motion: reduce) {
-
+    .testimonials-gallery__item:hover { translate: none; }
+    .testimonials-gallery__item:hover img,
+    .testimonials-gallery__item:hover .testimonials-gallery__overlay span { transform: none; }
+    .testimonials-gallery__control:hover:not(:disabled),
+    .testimonials-gallery__control:active:not(:disabled) { transform: none; }
+    .testimonials-gallery__carousel *,
+    .testimonials-gallery__carousel *::before { transition: none !important; }
     .testimonials-gallery::before,
-    .testimonials-gallery__watermark {
-        animation: none;
-    }
-
-
-    .testimonials-gallery__item,
-    .testimonials-gallery__item::before,
-    .testimonials-gallery__item::after,
-    .testimonials-gallery__item img,
-    .testimonials-gallery__overlay,
-    .testimonials-gallery__overlay span,
-    .testimonials-gallery__overlay span::after {
-        transition: none;
-    }
-
-
-    .testimonials-gallery__item:hover,
-    .testimonials-gallery__item:focus-visible {
-        transform: none;
-    }
-
+    .testimonials-gallery__watermark { animation: none; }
 }
 
 
@@ -2219,19 +1696,6 @@ body.testimonials-lightbox-open {
     }
 
 
-    .testimonials-gallery__grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-        grid-auto-rows: 180px;
-    }
-
-
-    .testimonials-gallery__item:nth-child(1),
-    .testimonials-gallery__item:nth-child(6) {
-        grid-column: span 2;
-    }
-
 }
 
 
@@ -2362,28 +1826,6 @@ body.testimonials-lightbox-open {
     }
 
 
-    .testimonials-gallery__grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        grid-auto-rows: 150px;
-
-        gap: 12px;
-    }
-
-
-    .testimonials-gallery__item:nth-child(1),
-    .testimonials-gallery__item:nth-child(6) {
-        grid-column: span 2;
-    }
-
-
-    .testimonials-gallery__item:nth-child(4),
-    .testimonials-gallery__item:nth-child(9) {
-        grid-row: span 1;
-    }
-
-
     .testimonials-cta {
         padding:
             60px 0 70px;
@@ -2427,33 +1869,6 @@ body.testimonials-lightbox-open {
 
 
 /* ====================================================
-   MÓVIL PEQUEÑO
-==================================================== */
-
-@media (max-width: 420px) {
-
-    .testimonials-gallery__grid {
-        grid-template-columns: 1fr;
-
-        grid-auto-rows: 240px;
-    }
-
-
-    .testimonials-gallery__item:nth-child(1),
-    .testimonials-gallery__item:nth-child(6) {
-        grid-column: span 1;
-        grid-row: span 1;
-    }
-
-
-    .testimonials-gallery__item {
-        min-height: 240px;
-    }
-
-}
-
-
-/* ====================================================
    MOVIMIENTO REDUCIDO
 ==================================================== */
 
@@ -2490,6 +1905,7 @@ body.testimonials-lightbox-open {
     }
 
 
+
     .testimonials-gallery__item img,
     .testimonials-gallery__overlay,
     .testimonials-gallery__overlay span,
@@ -2498,5 +1914,4 @@ body.testimonials-lightbox-open {
     .testimonials-cta__button {
         transition: none;
     }
-
 }
