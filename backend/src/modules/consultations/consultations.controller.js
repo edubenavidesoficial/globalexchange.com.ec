@@ -1,0 +1,13 @@
+import { createConsultation } from './consultations.service.js';
+
+export async function createConsultationRequest(req, res, next) {
+    try {
+        const consultation = await createConsultation(req.body);
+
+        res.status(201).json({
+            data: consultation,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
