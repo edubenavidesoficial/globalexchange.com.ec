@@ -1,3 +1,5 @@
+import { createConsultation } from '../api/consultations.js';
+
 // ====================================================
 // SERVICES
 //
@@ -12,7 +14,7 @@
 // - Resumen sincronizado.
 // - Programa de interés.
 // - Modalidad de asesoría.
-// - Solicitud por WhatsApp.
+// - Registro de solicitud y complemento por WhatsApp.
 // ====================================================
 
 
@@ -95,6 +97,12 @@ function initServicesCarousel() {
     const selectedServiceInput =
         document.querySelector(
             '[data-selected-service-input]'
+        );
+
+
+    const selectedServiceCodeInput =
+        document.querySelector(
+            '[data-selected-service-code-input]'
         );
 
 
@@ -393,6 +401,14 @@ function initServicesCarousel() {
 
             selectedServiceText.textContent =
                 name;
+
+        }
+
+
+        if (selectedServiceCodeInput) {
+
+            selectedServiceCodeInput.value =
+                card.dataset.serviceCode || '';
 
         }
 
@@ -1073,6 +1089,9 @@ function initServicesConsultation() {
         if (modeInput) {
 
             modeInput.value =
+                mode;
+
+            modeInput.dataset.consultLabel =
                 label;
 
         }
@@ -1102,11 +1121,18 @@ function initServicesConsultation() {
        FORM
     ================================================== */
 
+    const submitButton = form.querySelector('[type=submit]');
+    let isSubmitting = false;
+
     form.addEventListener(
         'submit',
-        (event) => {
+        async (event) => {
 
             event.preventDefault();
+
+            if (isSubmitting) {
+                return;
+            }
 
 
             if (
@@ -1131,8 +1157,8 @@ function initServicesConsultation() {
                 'No especificado';
 
 
-            const mode =
-                data.get('consultMode') ||
+            const modeLabel =
+                modeInput?.dataset.consultLabel ||
                 'No especificado';
 
 
@@ -1166,12 +1192,51 @@ function initServicesConsultation() {
                 'Sin comentario adicional';
 
 
+            const payload = {
+                programCode: data.get('programCode') || '',
+                fullName: data.get('name') || '',
+                phone: data.get('phone') || '',
+                email: data.get('email') || '',
+                city: data.get('city') || '',
+                mode: data.get('consultMode') || '',
+                preferredDate: data.get('date') || '',
+                preferredTime: data.get('time') || '',
+                message: data.get('message') || ''
+            };
+
+            isSubmitting = true;
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+            if (status) {
+                status.textContent = 'Enviando solicitud…';
+            }
+
+            try {
+                await createConsultation(payload);
+            } catch (error) {
+                if (status) {
+                    status.textContent = error.message;
+                }
+                return;
+            } finally {
+                isSubmitting = false;
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+            }
+
+            if (status) {
+                status.textContent =
+                    'Tu solicitud fue registrada. Global Exchange confirmará contigo la disponibilidad de fecha y hora.';
+            }
+
             const text =
                 [
                     'Hola, quiero solicitar una asesoría con Global Exchange.',
                     '',
                     `Programa de interés: ${program}`,
-                    `Modalidad: ${mode}`,
+                    `Modalidad: ${modeLabel}`,
                     '',
                     `Nombre: ${name}`,
                     `Teléfono: ${phone}`,
@@ -1188,19 +1253,25 @@ function initServicesConsultation() {
                 `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 
 
-            if (status) {
+            // WhatsApp es complementario: un fallo aquí no cambia el registro exitoso.
+            try {
+                if (status) {
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.textContent = 'Continuar por WhatsApp';
+                    status.append(' ', link);
+                }
 
-                status.textContent =
-                    'Abriremos WhatsApp para enviar tu solicitud. Nuestro equipo confirmará la disponibilidad contigo.';
-
+                window.open(
+                    url,
+                    '_blank',
+                    'noopener,noreferrer'
+                );
+            } catch {
+                // La confirmación de registro y los datos del formulario se conservan.
             }
-
-
-            window.open(
-                url,
-                '_blank',
-                'noopener,noreferrer'
-            );
 
         }
     );
