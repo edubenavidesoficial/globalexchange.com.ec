@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { errorHandler } from './middlewares/error-handler.js';
+import authRouter from './modules/auth/auth.routes.js';
 import consultationsRouter from './modules/consultations/consultations.routes.js';
 import programsRouter from './modules/programs/programs.routes.js';
 
@@ -17,6 +18,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/consultations', consultationsRouter);
 app.use('/api/programs', programsRouter);
+app.use('/api/auth', authRouter);
 
 app.use(errorHandler);
 
