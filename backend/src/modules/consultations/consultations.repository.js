@@ -1,5 +1,33 @@
 import supabase from '../../config/supabase.js';
 
+export async function findConsultations() {
+    const { data, error } = await supabase
+        .from('consultation_requests')
+        .select(`
+            id,
+            program_id,
+            full_name,
+            phone,
+            email,
+            city,
+            mode,
+            preferred_date,
+            preferred_time,
+            message,
+            status,
+            created_at,
+            program:programs (id, code, name)
+        `)
+        .order('created_at', { ascending: false })
+        .order('id', { ascending: false });
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
 export async function findActiveProgramByCode(programCode) {
     const { data, error } = await supabase
         .from('programs')

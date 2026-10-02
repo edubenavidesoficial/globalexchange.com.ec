@@ -1,7 +1,31 @@
 import {
     createConsultationRequest,
     findActiveProgramByCode,
+    findConsultations,
 } from './consultations.repository.js';
+
+export async function listConsultations() {
+    const consultations = await findConsultations();
+
+    return consultations.map((consultation) => ({
+        id: consultation.id,
+        program: {
+            id: consultation.program.id,
+            code: consultation.program.code,
+            name: consultation.program.name,
+        },
+        fullName: consultation.full_name,
+        phone: consultation.phone,
+        email: consultation.email,
+        city: consultation.city,
+        mode: consultation.mode,
+        preferredDate: consultation.preferred_date,
+        preferredTime: consultation.preferred_time,
+        message: consultation.message,
+        status: consultation.status,
+        createdAt: consultation.created_at,
+    }));
+}
 
 const VALID_MODES = new Set([
     'online',
