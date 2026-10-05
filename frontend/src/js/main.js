@@ -144,6 +144,13 @@ document.addEventListener(
     'DOMContentLoaded',
     async () => {
 
+        // El login usa el mismo bootstrap, sin inicializar el sitio público.
+        if (document.querySelector('[data-login]')) {
+            const { initLogin } = await import('./modules/login.js');
+            initLogin();
+            return;
+        }
+
         // ============================================
         // 1. INTERNACIONALIZACIÓN
         //

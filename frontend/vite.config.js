@@ -211,6 +211,13 @@ export default defineConfig({
                 ),
 
 
+                /* LOGIN INTERNO */
+
+                login: resolve(
+                    process.cwd(),
+                    'pages/login/index.html'
+                ),
+
                 /* CONTACTOS */
 
                 contactos: resolve(

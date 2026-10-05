@@ -1,0 +1,47 @@
+<main class="login" data-login>
+    <div class="login__container">
+        <div class="login__brand">
+            <span class="login__mark" aria-hidden="true">G</span>
+            <p class="login__company">GLOBAL EXCHANGE</p>
+            <p class="login__product">CRM</p>
+            <p class="login__tagline">Tu espacio de gestión comercial</p>
+        </div>
+
+        <section class="login__card" aria-labelledby="login-title">
+            <h1 class="login__title" id="login-title">Iniciar sesión</h1>
+            <p class="login__intro">Utiliza tu cuenta de Global Exchange para acceder al sistema interno.</p>
+
+            <p class="login__message" data-login-message role="status" aria-live="polite" aria-atomic="true">Comprobando sesión…</p>
+
+            <form class="login__form" data-login-form aria-busy="true">
+                <div class="login__field">
+                    <label for="login-email">Correo electrónico</label>
+                    <input id="login-email" name="email" type="email" autocomplete="username"
+                        inputmode="email" autocapitalize="none" spellcheck="false" required disabled>
+                </div>
+                <div class="login__field">
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" name="password" type="password"
+                        autocomplete="current-password" required disabled>
+                </div>
+                <button class="login__button login__button--primary" type="submit" data-login-submit disabled>Iniciar sesión</button>
+            </form>
+
+            <div class="login__verified" data-login-verified hidden>
+                <h2 class="login__verified-title" tabindex="-1" data-login-heading>Acceso verificado</h2>
+                <dl class="login__profile">
+                    <div><dt>Nombre</dt><dd data-login-name></dd></div>
+                    <div><dt>Rol</dt><dd data-login-role></dd></div>
+                </dl>
+                <p class="login__note">Tu acceso está confirmado. El área de trabajo estará disponible en la siguiente fase.</p>
+            </div>
+
+            <div class="login__actions" data-login-actions hidden>
+                <button class="login__button login__button--primary" type="button" data-login-retry hidden>Reintentar verificación</button>
+                <button class="login__button login__button--secondary" type="button" data-login-logout>Cerrar sesión</button>
+            </div>
+            <noscript><p class="login__message">Activa JavaScript para iniciar sesión.</p></noscript>
+        </section>
+        <p class="login__footer">Global Exchange CRM · Panel comercial</p>
+    </div>
+</main>
