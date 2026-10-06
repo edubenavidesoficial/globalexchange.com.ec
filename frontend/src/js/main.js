@@ -151,6 +151,12 @@ document.addEventListener(
             return;
         }
 
+        if (document.querySelector('[data-crm]')) {
+            const { initCRM } = await import('./modules/crm.js');
+            initCRM();
+            return;
+        }
+
         // ============================================
         // 1. INTERNACIONALIZACIÓN
         //

@@ -135,6 +135,7 @@ export function initLogin() {
             find('role').textContent = user.role;
             mode = 'verified';
             announce('Acceso verificado.');
+            window.location.replace('/pages/crm/');
         } catch (error) {
             if (!operation.isCurrent()) return;
             const code = error?.code ?? 'unavailable';

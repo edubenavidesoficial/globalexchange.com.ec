@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/images/favicon2.png">
+    <title>Dashboard Comercial | Global Exchange CRM</title>
+    <link rel="stylesheet" href="/src/css/layouts/crm.css">
+</head>
+<body class="crm-page" data-crm>
+    <section class="crm-gate" data-crm-gate aria-labelledby="access-title">
+        <div class="crm-card crm-gate__card">
+            <span class="crm-brand__mark" aria-hidden="true">G</span>
+            <p class="crm-eyebrow">GLOBAL EXCHANGE · CRM</p>
+            <h1 id="access-title">Acceso al panel comercial</h1>
+            <p data-crm-message role="status" aria-live="polite" aria-atomic="true">Verificando acceso…</p>
+            <div class="crm-gate__actions" data-crm-actions hidden>
+                <button class="crm-button crm-button--primary" type="button" data-crm-retry>Reintentar</button>
+                <button class="crm-button" type="button" data-crm-logout>Cerrar sesión</button>
+            </div>
+            <noscript><p>Activa JavaScript para verificar tu acceso.</p></noscript>
+        </div>
+    </section>
+
+    <div class="crm-shell" data-crm-shell hidden inert>
+        @@include('../../src/components/crm/CRM_Sidebar.html')
+        <div class="crm-overlay" data-crm-overlay hidden aria-hidden="true"></div>
+        <div class="crm-workspace" data-crm-workspace>
+            <a class="crm-skip" href="#crm-main">Saltar al contenido</a>
+            @@include('../../src/components/crm/CRM_Topbar.html')
+            <main class="crm-main" id="crm-main" tabindex="-1">
+                @@include('../../src/components/pages/crm/CRM_Home.html')
+            </main>
+        </div>
+    </div>
+    <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>

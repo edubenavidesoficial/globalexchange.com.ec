@@ -218,6 +218,13 @@ export default defineConfig({
                     'pages/login/index.html'
                 ),
 
+                /* SHELL CRM */
+
+                crm: resolve(
+                    process.cwd(),
+                    'pages/crm/index.html'
+                ),
+
                 /* CONTACTOS */
 
                 contactos: resolve(

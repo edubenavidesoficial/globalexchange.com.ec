@@ -1,4 +1,4 @@
-import { getSupabaseClient } from '../../config/supabase.js';
+import { getSupabaseClient, withAuthMutation, withAuthStorageLock } from '../../config/supabase.js';
 
 export class AuthError extends Error {
     constructor(code) {
@@ -10,8 +10,8 @@ export class AuthError extends Error {
 function authClient() {
     try {
         return getSupabaseClient().auth;
-    } catch {
-        throw new AuthError('configuration');
+    } catch (error) {
+        throw new AuthError(error.message === 'AUTH_COORDINATION' ? 'unavailable' : 'configuration');
     }
 }
 
@@ -37,27 +37,45 @@ async function sdkCall(operation, fallback) {
     return result.data;
 }
 
-export async function signIn(email, password) {
-    const data = await sdkCall(
-        () => authClient().signInWithPassword({ email, password }),
-        'credentials',
-    );
-    if (!data?.session?.access_token) throw new AuthError('unavailable');
-    return data.session;
+async function coordinate(action) {
+    try {
+        return await withAuthMutation(action);
+    } catch (error) {
+        if (error instanceof AuthError) throw error;
+        throw new AuthError('unavailable');
+    }
 }
 
-export async function getSession() {
+export async function signIn(email, password) {
+    return coordinate(async () => {
+        const auth = authClient();
+        // Inicializar antes de tomar el lock que también utiliza la inicialización.
+        await auth.initialize();
+        const data = await withAuthStorageLock(() => sdkCall(
+            () => auth.signInWithPassword({ email, password }), 'credentials',
+        ));
+        if (!data?.session?.access_token) throw new AuthError('unavailable');
+        return data.session;
+    });
+}
+
+async function readSession() {
     const data = await sdkCall(() => authClient().getSession(), 'expired');
     return data?.session ?? null;
+}
+
+export function getSession() {
+    // getSession puede refrescar tokens: participa también en la coordinación.
+    return coordinate(readSession);
 }
 
 function assertCurrent(operation) {
     if (!operation.isCurrent()) throw new AuthError('stale');
 }
 
-async function confirmSession(operation) {
+async function confirmSession(operation, coordinated = false) {
     assertCurrent(operation);
-    const current = await getSession();
+    const current = await (coordinated ? readSession() : getSession());
     assertCurrent(operation);
     if (current?.access_token !== operation.session?.access_token ||
         current?.user?.id !== operation.session?.user?.id) {
@@ -66,7 +84,12 @@ async function confirmSession(operation) {
 }
 
 export async function signOut(operation) {
-    await confirmSession(operation);
+    return coordinate(() => closeSession(operation));
+}
+
+async function closeSession(operation) {
+    // Revalidar DESPUÉS de esperar turno. Nunca cerrar una cuenta nueva en cola.
+    await confirmSession(operation, true);
     assertCurrent(operation);
     try {
         await sdkCall(() => authClient().signOut({ scope: 'local' }), 'logout');
@@ -74,7 +97,7 @@ export async function signOut(operation) {
         // Un fallo remoto no implica que el SDK conserve la sesión local.
         let remaining;
         try {
-            remaining = await getSession();
+            remaining = await readSession();
         } catch {
             throw new AuthError('logoutUnknown');
         }
@@ -132,18 +155,20 @@ export async function validateInternalUser(operation) {
         if (!failure) return user;
         if (failure.code !== 'expired' || attempt === 1) throw failure;
 
-        assertCurrent(operation);
-        const previous = operation.session;
-        // Refrescar explícitamente A, nunca la sesión implícita que pudiera ser B.
-        const data = await sdkCall(
-            () => authClient().refreshSession({ refresh_token: previous.refresh_token }),
-            'expired',
-        );
-        assertCurrent(operation);
-        if (!data?.session?.access_token) throw new AuthError('expired');
-        if (data.session.user?.id !== previous.user?.id) throw new AuthError('stale');
-        operation.session = data.session;
-        await confirmSession(operation);
+        await coordinate(async () => {
+            await confirmSession(operation, true);
+            const previous = operation.session;
+            // Refrescar A solo si sigue vigente al adquirir el turno.
+            const data = await sdkCall(
+                () => authClient().refreshSession({ refresh_token: previous.refresh_token }),
+                'expired',
+            );
+            assertCurrent(operation);
+            if (!data?.session?.access_token) throw new AuthError('expired');
+            if (data.session.user?.id !== previous.user?.id) throw new AuthError('stale');
+            operation.session = data.session;
+            await confirmSession(operation, true);
+        });
     }
 }
 
