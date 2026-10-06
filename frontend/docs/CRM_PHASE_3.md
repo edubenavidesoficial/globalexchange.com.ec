@@ -13,7 +13,7 @@ Fuentes: `backend/src/modules/consultations/consultations.admin.routes.js`, cont
 ## Integración y seguridad
 
 - `main.js` carga primero el módulo de página y pasa sus callbacks a `initCRM`. `crm.js` sigue siendo el único guard: solo invoca `onAuthorized` tras `/api/auth/me` autorizado y vigente; `block` llama a `onInvalidate` sincrónicamente.
-- `getInternal` centraliza GET internos con `getSession` existente, Bearer, `cache: no-store`, sin cookies ni redirecciones y señal combinada con timeout de 15 segundos. Comprueba cuenta/token antes y después del transporte, sin almacenar tokens adicionales de forma permanente. No accede a tablas Supabase ni decide permisos a partir de roles locales.
+- `getInternal` centraliza GET internos con `getSession` existente, Bearer, `cache: no-store`, sin cookies ni redirecciones y señal combinada con timeout de 15 segundos. Tanto el transporte HTTP como las esperas de `getSession` responden a timeout/cancelación desde el consumidor. La operación Auth subyacente no se cancela ni libera sus Web Locks y puede completar después. Se comprueba cuenta/token antes y después del transporte, sin almacenar tokens adicionales de forma permanente. No accede a tablas Supabase ni decide permisos a partir de roles locales.
 - `auth.js`, configuración Supabase y sus Web Locks no cambian. El helper usa la infraestructura coordinada de Fase 2; no implementa otro refresh ni ejecuta el transporte HTTP bajo locks.
 - Un 401/403 vigente limpia la bandeja y bloquea el shell. Reintentar es manual y pasa otra vez por el guard antes de cargar datos; no hay loop automático ni logout propio del módulo. El guard conserva su refresh limitado y su limpieza condicional si `/api/auth/me` rechaza el acceso.
 - 5xx, red, timeout o cuerpo inválido limpian resultados y muestran «No fue posible cargar las solicitudes.» con Reintentar. Shell y sesión se conservan.
@@ -55,11 +55,13 @@ Modificados:
 ## Validación
 
 - `node --check`: ocho JS/MJS nuevos o modificados correctos.
-- `npm run test:crm`: 55/55. Se mantienen los 31 casos previos; únicamente se actualizan las expectativas de navegación de los casos 16/17 (dos rutas funcionales, nueve futuras) y la URL del fixture del caso 25.
+- `npm run test:crm`: 64/64. Se mantienen las 31 pruebas de las fases anteriores y se amplía la cobertura de Solicitudes, incluida la cancelación y timeout durante las esperas de sesión. En los casos previos solo se actualizaron las expectativas de navegación de los casos 16/17 y la URL del fixture del caso 25.
 - Casos 32–49: espera de autorización, datos/resumen, vacío, null, estados, modalidades, 500, red, retry, doble actualización, respuesta antigua A, limpieza A → B, rutas activas, módulos futuros, XSS, fechas y bfcache.
 - Casos adicionales: 401 y 403 bloquean sin loops y revalidan con reintento manual; rechazo viejo A sin evento; logout con respuesta pendiente; cuerpo inválido; timeout recuperable.
+- Casos 56–64: timeout durante `getSession` inicial y final, cancelación externa como `stale`, resolución/rechazo tardío sin efectos sobre otra cuenta, conservación de la coordinación Auth, recuperación de la UI y reintento, señales previamente abortadas y limpieza de listeners.
 - `npm run build`: correcto; genera `dist/pages/crm/index.html`, `dist/pages/crm/solicitudes/index.html` y `dist/pages/login/index.html`.
-- Navegador integrado con fixtures: 1440×900, 768×1024 y 390×844 sin scroll horizontal; actualización, mensaje expandible, navegación Dashboard/Solicitudes, drawer y Escape correctos. Sin errores de consola observados. No se verificó esta nueva bandeja contra el servicio remoto.
+- Navegador integrado con fixtures: 1440×900, 768×1024 y 390×844 sin scroll horizontal; actualización, mensaje expandible, navegación Dashboard/Solicitudes, drawer y Escape correctos.
+- Validación manual real completada: login interno, autorización del shell, carga de solicitudes mediante `GET /api/admin/consultations`, resumen, actualización, F5/revalidación, navegación Dashboard/Solicitudes, responsive y logout funcionaron correctamente contra el backend configurado.
 - `git diff --check`: sin errores. No se añadieron dependencias.
 
 Backend, Supabase remoto, configuración local de entorno y prototipo no fueron modificados. El preview sirve fixtures únicamente en localhost y no forma parte de las entradas de producción. Las capturas y el diff completo se entregan en `dist/` como artefactos locales ignorados por Git; un nuevo build puede reemplazarlos.
