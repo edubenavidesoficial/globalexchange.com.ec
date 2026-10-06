@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
+import { consultationsFixture } from './fixtures/consultations.mjs';
 
 // DOM simulado; auth.js, crm.js y login.js se ejecutan sin modificar su código.
 // Se simulan SDK, fetch, navegación y matchMedia. No se leen archivos de entorno.
@@ -48,7 +49,7 @@ async function setup(options = {}, page = 'crm') {
     for (const timer of timers) clearTimeout(timer);
     timers.clear();
     dom?.window.close();
-    const fixture = { session: A, user: userA, responses: [], page, ...options };
+    const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture, page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
     // jsdom no refleja inert aún; el atributo inicial y sus cambios siguen HTML.
     if (!('inert' in dom.window.HTMLElement.prototype)) {
@@ -69,7 +70,7 @@ async function setup(options = {}, page = 'crm') {
         innerWidth: viewport,
         addEventListener: dom.window.addEventListener.bind(dom.window),
         MutationObserver: dom.window.MutationObserver,
-        AbortController, AbortSignal, Response,
+        AbortController, AbortSignal: options.shortTimeout ? { any: AbortSignal.any, timeout: () => AbortSignal.timeout(100) } : AbortSignal, Response,
         setTimeout(callback, delay) {
             const timer = setTimeout(() => { timers.delete(timer); callback(); }, delay);
             timers.add(timer);
@@ -81,9 +82,11 @@ async function setup(options = {}, page = 'crm') {
     sandbox.window = sandbox;
     context = vm.createContext(sandbox);
     vm.runInContext(`
-        window.calls = { me: 0, refresh: 0, logout: 0, login: 0 };
+        window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0 };
         window.events = [];
         window.pending = [];
+        window.pendingConsultations = [];
+        window.requestSignals = [];
         window.current = fixture.session;
         window.emitAuth = (event, session) => {
             current = session;
@@ -116,6 +119,18 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (url === '/api/admin/consultations') {
+                calls.consultations++;
+                requestSignals.push(options.signal);
+                window.consultationRequest = { method: options.method, cache: options.cache, authorization: options.headers.Authorization };
+                const response = fixture.consultationResponses.shift() || {};
+                if (response.network) throw new TypeError('Fixture network failure');
+                if (response.hold) await new Promise(resolve => pendingConsultations.push(resolve));
+                if (response.timeout) {
+                    await new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new Error('Fixture timeout')), { once: true }));
+                }
+                return new Response(JSON.stringify(response.body ?? { data: response.data ?? fixture.consultations }), { status: response.status || 200 });
+            }
             if (url !== '/api/auth/me') throw new Error('Unexpected request');
             calls.me++;
             window.lastAuthorization = options.headers.Authorization;
@@ -142,10 +157,18 @@ async function setup(options = {}, page = 'crm') {
     }, { context });
     const auth = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/auth.js'), 'utf8'), { context });
     await auth.link(() => config);
-    const module = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules', `${page}.js`), 'utf8'), { context });
+    const module = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules', `${page === 'login' ? 'login' : 'crm'}.js`), 'utf8'), { context });
     await module.link(() => auth);
     await module.evaluate();
-    module.namespace[page === 'crm' ? 'initCRM' : 'initLogin']();
+    let hooks;
+    if (page === 'crm/solicitudes') {
+        const api = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context });
+        await api.link(() => auth);
+        const consultations = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-consultations.js'), 'utf8'), { context });
+        await consultations.link(() => api); await consultations.evaluate();
+        hooks = consultations.namespace.initCRMConsultations();
+    }
+    module.namespace[page === 'login' ? 'initLogin' : 'initCRM'](hooks);
 }
 async function click(selector) { await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`); }
 async function key(key, shiftKey = false) {
@@ -245,13 +268,13 @@ test('15 · Escape cierra drawer y devuelve foco', async () => {
 });
 test('16 · módulos futuros sin enlaces ni activación de teclado', async () => {
     await setup(); await until(shellVisible);
-    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 10);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 9);
     assert.equal(await evaluate("[...document.querySelectorAll('.crm-nav [aria-disabled=true]')].every(e => !e.hasAttribute('href') && e.tabIndex === -1)"), true);
 });
-test('17 · Dashboard es la única ruta y tiene aria-current', async () => {
+test('17 · Dashboard conserva aria-current entre las rutas habilitadas', async () => {
     await setup(); await until(shellVisible);
     assert.equal(await evaluate("document.querySelector('.crm-nav a').getAttribute('aria-current')"), 'page');
-    assert.equal(await evaluate("document.querySelectorAll('.crm-nav a[href]').length"), 1);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav a[href]').length"), 2);
 });
 test('18 · login autorizado redirige a CRM', async () => {
     await setup({ session: null, loginSession: A }, 'login');
@@ -428,7 +451,7 @@ test('25 · SDK real y CRM: B espera y ningún SIGNED_OUT tardío desautoriza su
     let redirected = false;
     Object.assign(a.realm, {
         document: page.window.document, window: { matchMedia: () => ({ matches: false, addEventListener() {} }),
-            addEventListener() {}, location: { replace() { redirected = true; } } },
+            addEventListener() {}, location: { pathname: '/pages/crm/', replace() { redirected = true; } } },
         AbortController, setTimeout, clearTimeout,
     });
     const module = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm.js'), 'utf8'), { context: a.realm });
@@ -523,4 +546,348 @@ test('31 · refresh interno pendiente impide que signIn escriba concurrentemente
     assert.equal(fixture.read().user.id, 'B');
     assert.deepEqual(fixture.requests, ['refresh_token', 'password']);
     await fixture.close();
+});
+
+const loaded = "!document.querySelector('[data-consultations-summary]').hidden";
+const loadError = "!document.querySelector('[data-consultations-retry]').hidden";
+const rowText = "document.querySelector('[data-consultations-rows]').textContent";
+const inbox = options => setup(options, 'crm/solicitudes');
+
+test('32 · Solicitudes espera autorización del shell', async () => {
+    await inbox({ responses: [{ hold: true }] }); await until('pending.length === 1');
+    assert.equal(await evaluate('calls.consultations'), 0);
+    await evaluate('pending.shift()()'); await until(loaded);
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+test('33 · 200 renderiza contrato real, resumen y GET autenticado', async () => {
+    await inbox(); await until(loaded);
+    assert.match(await evaluate(rowText), /Solicitante de Prueba 1/);
+    assert.match(await evaluate(rowText), /Programa de idiomas de prueba/);
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('[data-count]')].map(e => e.textContent)"), ['3', '1', '1', '1']);
+    assert.deepEqual(await evaluate('consultationRequest'), { method: 'GET', cache: 'no-store', authorization: `Bearer ${A.access_token}` });
+    assert.doesNotMatch(await evaluate(rowText), /fixture-request|fixture-program/);
+});
+test('34 · data vacío muestra empty state y resumen en cero', async () => {
+    await inbox({ consultations: [] }); await until(loaded);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'No hay solicitudes registradas todavía.');
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('[data-count]')].map(e => e.textContent)"), ['0', '0', '0', '0']);
+});
+test('35 · email/message null se presentan como raya', async () => {
+    await inbox({ consultations: [consultationsFixture[1]] }); await until(loaded);
+    assert.doesNotMatch(await evaluate(rowText), /null|undefined/);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-rows] details p').textContent"), '—');
+});
+test('36 · estados reales se traducen', async () => {
+    await inbox(); await until(loaded);
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('.consultations-badge')].map(e => e.textContent)"), ['Pendiente', 'Convertida', 'Cancelada']);
+});
+test('37 · modalidades reales se traducen', async () => {
+    await inbox(); await until(loaded);
+    for (const mode of ['En línea', 'Teléfono', 'Oficina']) assert.ok((await evaluate(rowText)).includes(mode));
+});
+test('38 · 500 conserva shell y sesión, borra resultados anteriores', async () => {
+    await inbox(); await until(loaded);
+    await evaluate('fixture.consultationResponses.push({ status: 500 })'); await click('[data-consultations-refresh]'); await until(loadError);
+    assert.equal(await evaluate(rowText), '');
+    assert.equal(await evaluate(shellVisible), true);
+    assert.deepEqual(await evaluate('[calls.logout, !!current]'), [0, true]);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'No fue posible cargar las solicitudes.');
+});
+test('39 · red muestra error recuperable', async () => {
+    await inbox({ consultationResponses: [{ network: true }] }); await until(loadError);
+    assert.equal(await evaluate(shellVisible), true);
+    assert.equal(await evaluate('calls.logout'), 0);
+});
+test('40 · Reintentar vuelve a consultar', async () => {
+    await inbox({ consultationResponses: [{ status: 500 }] }); await until(loadError);
+    await click('[data-consultations-retry]'); await until(loaded);
+    assert.equal(await evaluate('calls.consultations'), 2);
+});
+test('41 · Actualizar evita doble request y muestra disabled/aria-busy', async () => {
+    await inbox(); await until(loaded);
+    await evaluate('fixture.consultationResponses.push({ hold: true })');
+    await click('[data-consultations-refresh]'); await click('[data-consultations-refresh]');
+    await until('pendingConsultations.length === 1');
+    assert.deepEqual(await evaluate("[calls.consultations, document.querySelector('[data-consultations-refresh]').disabled, document.querySelector('[data-consultations-refresh]').getAttribute('aria-busy')]"), [2, true, 'true']);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'Cargando solicitudes…');
+    await evaluate('pendingConsultations.shift()()'); await until(loaded);
+});
+test('42 · respuesta vieja A no renderiza sobre B aunque transporte ignore abort', async () => {
+    await inbox({ consultationResponses: [{ hold: true, data: [{ ...consultationsFixture[0], fullName: 'Solicitud A' }] }] });
+    await until('pendingConsultations.length === 1');
+    await evaluate(`fixture.consultations = [{ fullName: 'Solicitud B' }]; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until(loaded); await evaluate('pendingConsultations.shift()()');
+    await new Promise(resolve => setTimeout(resolve, 30));
+    assert.match(await evaluate(rowText), /Solicitud B/);
+    assert.doesNotMatch(await evaluate(rowText), /Solicitud A/);
+    assert.equal(await evaluate('requestSignals[0].aborted'), true);
+});
+test('43 · A → B limpia inmediatamente filas y resumen antes de autorizar B', async () => {
+    await inbox(); await until(loaded);
+    await evaluate(`fixture.responses.push({ hold: true }); emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    assert.equal(await evaluate(rowText), '');
+    assert.equal(await evaluate(loaded), false);
+    await until('pending.length === 1');
+    assert.equal(await evaluate('calls.consultations'), 1);
+    await evaluate('pending.shift()()'); await until(loaded);
+});
+test('44 · Dashboard activo en su ruta', async () => {
+    await setup(); await until(shellVisible);
+    assert.equal(await evaluate("document.querySelector('.crm-nav [aria-current]').getAttribute('href')"), '/pages/crm/');
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-current]').length"), 1);
+});
+test('45 · Solicitudes activa en su ruta', async () => {
+    await inbox(); await until(loaded);
+    assert.equal(await evaluate("document.querySelector('.crm-nav [aria-current]').getAttribute('href')"), '/pages/crm/solicitudes/');
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-current]').length"), 1);
+});
+test('46 · nueve módulos futuros deshabilitados; Solicitudes es enlace real', async () => {
+    await inbox(); await until(loaded);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 9);
+    assert.equal(await evaluate("document.querySelector('.crm-nav a[href=\"/pages/crm/solicitudes/\"]').textContent"), 'Solicitudes');
+});
+test('47 · HTML malicioso es texto en todos los campos de usuario', async () => {
+    const evil = '<img src=x onerror=alert(1)><script>evil()</script>';
+    await inbox({ consultations: [{ ...consultationsFixture[0], fullName: evil, phone: evil, email: evil, city: evil, message: evil, program: { name: evil } }] });
+    await until(loaded);
+    assert.equal(await evaluate("document.querySelectorAll('[data-consultations-rows] img, [data-consultations-rows] script').length"), 0);
+    assert.equal((await evaluate(rowText)).split(evil).length - 1, 6);
+});
+test('48 · fecha calendario conserva día; createdAt usa Ecuador', async () => {
+    await inbox({ consultations: [{ ...consultationsFixture[0], preferredDate: '2026-01-01', createdAt: '2026-01-01T02:30:00Z' }] }); await until(loaded);
+    assert.match(await evaluate(rowText), /01\/01\/2026/);
+    assert.match(await evaluate(rowText), /31\/12\/2025/);
+});
+test('49 · bfcache invalida bandeja hasta nueva autorización', async () => {
+    await inbox(); await until(loaded);
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    assert.equal(await evaluate(rowText), '');
+    await evaluate('fixture.responses.push({ hold: true })');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    await until('pending.length === 1');
+    assert.equal(await evaluate('calls.consultations'), 1);
+    assert.equal(await evaluate(loaded), false);
+    await evaluate('pending.shift()()'); await until(loaded);
+    assert.equal(await evaluate('calls.consultations'), 2);
+});
+for (const status of [401, 403]) {
+    test(`${status} · bloquea shell sin loop; reintento manual revalida primero`, async () => {
+        await inbox(); await until(loaded);
+        await evaluate(`fixture.consultationResponses.push({ status: ${status} })`);
+        await click('[data-consultations-refresh]'); await until(blocked);
+        assert.equal(await evaluate(rowText), '');
+        assert.equal(await evaluate(shellVisible), false);
+        await new Promise(resolve => setTimeout(resolve, 30));
+        assert.deepEqual(await evaluate('[calls.consultations, calls.me, calls.refresh, calls.logout]'), [2, 1, 0, 0]);
+        await evaluate('fixture.responses.push({ hold: true })'); await click('[data-crm-retry]');
+        await until('pending.length === 1');
+        assert.equal(await evaluate('calls.consultations'), 2);
+        await evaluate('pending.shift()()'); await until(loaded);
+        assert.equal(await evaluate('calls.consultations'), 3);
+    });
+}
+test('52 · rechazo viejo A no bloquea B sin evento Auth todavía', async () => {
+    await inbox({ consultationResponses: [{ status: 403, hold: true }] }); await until('pendingConsultations.length === 1');
+    await evaluate(`current = ${JSON.stringify(B)}; fixture.consultations = [{ fullName: 'Solicitud B' }]; pendingConsultations.shift()()`);
+    await until(loaded);
+    assert.match(await evaluate(rowText), /Solicitud B/);
+    assert.equal(await evaluate('calls.logout'), 0);
+    assert.equal(await evaluate('calls.me'), 2);
+});
+test('53 · logout y respuesta pendiente no dejan datos en DOM', async () => {
+    await inbox({ consultationResponses: [{ hold: true }] }); await until('pendingConsultations.length === 1');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    await evaluate('pendingConsultations.shift()()');
+    await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.body.textContent.includes('Solicitante de Prueba')"), false);
+});
+test('54 · cuerpo inválido produce error, no vacío ni resumen inventado', async () => {
+    await inbox({ consultationResponses: [{ body: { data: null } }] }); await until(loadError);
+    assert.equal(await evaluate(loaded), false);
+    assert.equal(await evaluate('calls.logout'), 0);
+});
+
+test('55 · timeout permite reintentar sin cerrar sesión ni recargar en bucle', async () => {
+    await inbox({ shortTimeout: true, consultationResponses: [{ timeout: true }] }); await until(loadError);
+    assert.equal(await evaluate(shellVisible), true);
+    assert.deepEqual(await evaluate('[calls.consultations, calls.logout, calls.me]'), [1, 0, 1]);
+    await click('[data-consultations-retry]'); await until(loaded);
+});
+
+// internal.js y auth.js originales; solo se retiene la respuesta del SDK.
+async function sessionWaitFixture(holdRead = 1) {
+    let reads = 0;
+    let fetches = 0;
+    let active = 0;
+    let release;
+    let fail;
+    let reached;
+    const listeners = new Set();
+    const held = new Promise(resolve => { reached = resolve; });
+    let tail = Promise.resolve();
+    const coordinate = action => {
+        const result = tail.then(async () => {
+            active += 1;
+            try { return await action(); } finally { active -= 1; }
+        });
+        tail = result.catch(() => {});
+        return result;
+    };
+    const realm = vm.createContext({
+        AbortSignal: {
+            any(signals) {
+                const signal = AbortSignal.any(signals);
+                const add = signal.addEventListener.bind(signal);
+                const remove = signal.removeEventListener.bind(signal);
+                signal.addEventListener = (type, listener, options) => {
+                    if (type === 'abort') listeners.add(listener);
+                    add(type, listener, options);
+                };
+                signal.removeEventListener = (type, listener, options) => {
+                    if (type === 'abort') listeners.delete(listener);
+                    remove(type, listener, options);
+                };
+                return signal;
+            },
+            timeout: () => AbortSignal.timeout(30),
+        },
+        fetch: async () => { fetches += 1; return new Response('{"data":[]}', { status: 200 }); },
+    });
+    const config = new vm.SyntheticModule(['getSupabaseClient', 'withAuthMutation', 'withAuthStorageLock'], function () {
+        this.setExport('getSupabaseClient', () => ({ auth: { getSession: async () => {
+            reads += 1;
+            if (reads === holdRead) {
+                await new Promise((resolve, reject) => { release = resolve; fail = reject; reached(); });
+            }
+            return { data: { session: A } };
+        } } }));
+        this.setExport('withAuthMutation', coordinate);
+        this.setExport('withAuthStorageLock', coordinate);
+    }, { context: realm });
+    const auth = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/auth.js'), 'utf8'), { context: realm });
+    await auth.link(() => config);
+    const api = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context: realm });
+    await api.link(() => auth); await api.evaluate();
+    const controller = new AbortController();
+    const guard = new AbortController();
+    return {
+        controller, guard, held, auth: auth.namespace,
+        start: () => api.namespace.getInternal('/api/admin/consultations', {
+            session: A, signal: guard.signal, isCurrent: () => true,
+        }, controller.signal).then(() => 'resolved', error => error.code),
+        release: () => release?.(), fail: () => fail?.(new Error('Fixture SDK failure')),
+        state: () => ({ reads, fetches, active }),
+        listenerCount: () => listeners.size,
+    };
+}
+async function boundedResult(promise) {
+    let timer;
+    try {
+        return await Promise.race([promise, new Promise(resolve => { timer = setTimeout(() => resolve('still-pending'), 200); })]);
+    } finally { clearTimeout(timer); }
+}
+for (const [number, holdRead, abort] of [[56, 1, false], [57, 2, false], [58, 1, true], [59, 2, true]]) {
+    test(`${number} · getSession ${holdRead === 1 ? 'inicial' : 'final'} pendiente: ${abort ? 'abort → stale' : 'timeout'}`, async () => {
+        const fixture = await sessionWaitFixture(holdRead);
+        const result = fixture.start();
+        try {
+            await fixture.held;
+            if (abort) fixture.controller.abort();
+            assert.equal(await boundedResult(result), abort ? 'stale' : 'timeout');
+            assert.equal(fixture.state().fetches, holdRead - 1);
+        } finally { fixture.release(); await result; }
+    });
+}
+
+test('60 · getSession A termina o rechaza tarde sin render sobre B ni rejection no manejada', async () => {
+    for (const rejects of [false, true]) {
+        await inbox(); await until(loaded);
+        await evaluate(`
+            window.releaseSession = null;
+            let first = true;
+            mockAuth.getSession = async () => {
+                if (first) {
+                    first = false;
+                    await new Promise((resolve, reject) => { releaseSession = () => ${rejects ? "reject(new Error('Fixture late failure'))" : 'resolve()'}; });
+                    return { data: { session: fixture.session } };
+                }
+                return { data: { session: current } };
+            };
+            void 0;
+        `);
+        await click('[data-consultations-refresh]'); await until('!!releaseSession');
+        await evaluate(`fixture.consultations = [{ fullName: 'Solicitud B' }]; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+        await until(loaded);
+        const before = await evaluate("[document.querySelector('[data-consultations-rows]').textContent, document.querySelector('[data-consultations-status]').textContent, document.querySelector('[data-count=total]').textContent]");
+        await evaluate('releaseSession()'); await new Promise(resolve => setTimeout(resolve, 30));
+        assert.deepEqual(await evaluate("[document.querySelector('[data-consultations-rows]').textContent, document.querySelector('[data-consultations-status]').textContent, document.querySelector('[data-count=total]').textContent]"), before);
+        assert.deepEqual(await evaluate('errors'), []);
+    }
+});
+
+test('61 · timeout no libera coordinación Auth: la operación subyacente conserva su turno', async () => {
+    const fixture = await sessionWaitFixture();
+    const result = fixture.start();
+    try {
+        await fixture.held;
+        assert.equal(await boundedResult(result), 'timeout');
+        const next = fixture.auth.getSession();
+        await new Promise(resolve => setTimeout(resolve, 10));
+        assert.deepEqual(fixture.state(), { reads: 1, fetches: 0, active: 1 });
+        fixture.release();
+        assert.equal((await next).user.id, A.user.id);
+        assert.deepEqual(fixture.state(), { reads: 2, fetches: 0, active: 0 });
+    } finally { fixture.release(); await result; }
+});
+
+test('62 · timeout de sesión inicial/final libera UI y admite retry sin efectos tardíos', async () => {
+    for (const holdRead of [1, 2]) {
+        await inbox({ shortTimeout: true }); await until(loaded);
+        await evaluate(`
+            let reads = 0;
+            window.releaseSession = null;
+            mockAuth.getSession = async () => {
+                if (++reads === ${holdRead}) await new Promise(resolve => { releaseSession = resolve; });
+                return { data: { session: current } };
+            };
+            void 0;
+        `);
+        await click('[data-consultations-refresh]'); await until('!!releaseSession'); await until(loadError);
+        assert.equal(await evaluate(shellVisible), true);
+        assert.deepEqual(await evaluate("[document.querySelector('[data-consultations-refresh]').disabled, document.querySelector('[data-consultations-refresh]').getAttribute('aria-busy'), calls.logout, !!current]"), [false, 'false', 0, true]);
+        assert.equal(await evaluate(rowText), '');
+        await evaluate('releaseSession()'); await new Promise(resolve => setTimeout(resolve, 20));
+        assert.equal(await evaluate(rowText), '');
+        await click('[data-consultations-retry]'); await until(loaded);
+    }
+});
+
+test('63 · señales ya abortadas y abort del guard terminan como stale', async () => {
+    for (const source of ['controller', 'guard']) {
+        const early = await sessionWaitFixture(); early[source].abort();
+        assert.equal(await early.start(), 'stale');
+        assert.equal(early.state().reads, 0);
+        const fixture = await sessionWaitFixture(); const result = fixture.start();
+        try {
+            await fixture.held; fixture[source].abort();
+            assert.equal(await boundedResult(result), 'stale');
+            fixture.fail();
+        } finally { fixture.release(); await result; }
+    }
+});
+
+test('64 · espera retira listeners al resolver, rechazar, cancelar o vencer', async () => {
+    for (const action of ['resolve', 'reject', 'abort', 'timeout']) {
+        const fixture = await sessionWaitFixture(); const result = fixture.start();
+        try {
+            await fixture.held;
+            assert.equal(fixture.listenerCount(), 1);
+            if (action === 'resolve') fixture.release();
+            if (action === 'reject') fixture.fail();
+            if (action === 'abort') fixture.controller.abort();
+            assert.equal(await boundedResult(result), { resolve: 'resolved', reject: 'expired', abort: 'stale', timeout: 'timeout' }[action]);
+            assert.equal(fixture.listenerCount(), 0);
+            if (['abort', 'timeout'].includes(action)) fixture.fail();
+        } finally { fixture.release(); await result; }
+    }
 });

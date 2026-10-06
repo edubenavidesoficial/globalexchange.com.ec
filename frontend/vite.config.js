@@ -225,6 +225,13 @@ export default defineConfig({
                     'pages/crm/index.html'
                 ),
 
+                /* BANDEJA CRM */
+
+                crmSolicitudes: resolve(
+                    process.cwd(),
+                    'pages/crm/solicitudes/index.html'
+                ),
+
                 /* CONTACTOS */
 
                 contactos: resolve(

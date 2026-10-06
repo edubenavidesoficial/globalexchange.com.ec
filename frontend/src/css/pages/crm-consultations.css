@@ -1,0 +1,41 @@
+.consultations-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.consultations-heading .crm-intro { max-width: 580px; }
+.consultations-heading > button { flex-shrink: 0; }
+.consultations-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0 0 24px; }
+.consultations-summary > div { padding: 20px; border: 1px solid var(--crm-border); border-radius: 16px; background: white; }
+.consultations-summary dt { font-size: 13px; color: var(--crm-muted); }
+.consultations-summary dd { margin: 6px 0 0; font-size: 28px; font-weight: 750; color: var(--crm-navy); }
+.consultations-status { color: var(--crm-muted); }
+.consultations-status:empty { display: none; }
+.consultations-table-wrap { border: 1px solid var(--crm-border); border-radius: 18px; background: white; box-shadow: 0 6px 24px #18286106; }
+.consultations-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+.consultations-table caption { text-align: left; padding: 20px; font-weight: 650; color: var(--crm-navy); }
+.consultations-table th { text-align: left; background: #f7f9fd; color: var(--crm-muted); font-size: 12px; }
+.consultations-table th, .consultations-table td { padding: 16px 10px; vertical-align: top; overflow-wrap: anywhere; border-top: 1px solid var(--crm-border); }
+.consultations-table th:first-child { width: 17%; }
+.consultations-table th:nth-child(3) { width: 19%; }
+.consultations-table td > strong, .consultations-secondary { display: block; }
+.consultations-secondary { margin-top: 6px; color: var(--crm-muted); }
+.consultations-table details { margin-top: 12px; }
+.consultations-table summary { cursor: pointer; color: var(--crm-blue); padding: 4px 0; }
+.consultations-table details p { white-space: pre-wrap; }
+.consultations-badge { display: inline-block; padding: 4px 7px; border-radius: 20px; font-size: 11px; font-weight: 650; background: #edf0f5; }
+.consultations-badge--pending { background: #fff2df; color: #86530a; }
+.consultations-badge--converted { background: #e2f7f2; color: #086658; }
+.consultations-badge--cancelled { background: #f5e9ed; color: #903952; }
+@media (max-width: 1199px) {
+    .consultations-table-wrap { border: 0; background: transparent; box-shadow: none; }
+    .consultations-table, .consultations-table tbody { display: block; }
+    .consultations-table caption { display: block; padding: 0 0 16px; }
+    .consultations-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .consultations-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 16px; border: 1px solid var(--crm-border); border-radius: 18px; background: white; padding: 8px; }
+    .consultations-table td { display: block; padding: 12px; border: 0; }
+    .consultations-table td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 700; color: var(--crm-muted); margin-bottom: 6px; }
+}
+@media (max-width: 560px) {
+    .consultations-heading { flex-direction: column; gap: 0; margin-bottom: 24px; }
+    .consultations-heading .crm-intro { margin-bottom: 18px; }
+    .consultations-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .consultations-summary > div { padding: 16px; }
+    .consultations-table td:nth-child(3) { grid-column: 1 / -1; }
+}

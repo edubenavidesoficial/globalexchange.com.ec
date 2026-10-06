@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { consultationsFixture } from './fixtures/consultations.mjs';
 
 // Solo inspección visual local. No carga Vite, .env ni conexiones Supabase.
 // Nunca incluir este servidor de fixtures en un despliegue.
@@ -34,10 +35,13 @@ const server = createServer(async (request, response) => {
             response.end(JSON.stringify({ data: { id: 'fixture', fullName: 'Usuario de Prueba', role: 'admin' } }));
         } else if (pathname === '/src/js/main.js') {
             response.setHeader('Content-Type', 'text/javascript');
-            response.end("import { initCRM } from '/src/js/modules/crm.js'; initCRM();");
-        } else if (pathname === '/pages/crm/') {
+            response.end("import { initCRM } from '/src/js/modules/crm.js'; import { initCRMConsultations } from '/src/js/modules/crm-consultations.js'; initCRM(document.querySelector('[data-consultations]') ? initCRMConsultations() : undefined);");
+        } else if (pathname === '/api/admin/consultations') {
+            response.setHeader('Content-Type', 'application/json');
+            response.end(JSON.stringify({ data: consultationsFixture }));
+        } else if (['/pages/crm/', '/pages/crm/solicitudes/'].includes(pathname)) {
             response.setHeader('Content-Type', 'text/html; charset=utf-8');
-            response.end(await includes(resolve(root, 'pages/crm/index.html')));
+            response.end(await includes(resolve(root, `.${pathname}index.html`)));
         } else if (pathname.startsWith('/src/')) {
             const path = resolve(root, `.${pathname}`);
             if (!path.startsWith(`${root}${sep}src${sep}`) || !/\.(css|js)$/.test(path)) {

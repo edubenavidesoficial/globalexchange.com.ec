@@ -1,0 +1,26 @@
+<section data-consultations aria-labelledby="consultations-title">
+    <div class="consultations-heading">
+        <div>
+            <p class="crm-eyebrow">Panel comercial</p>
+            <h1 class="crm-title" id="consultations-title" data-crm-heading tabindex="-1">Solicitudes</h1>
+            <p class="crm-intro">Las personas interesadas en nuestros programas, en un solo lugar.</p>
+        </div>
+        <button class="crm-button" type="button" data-consultations-refresh disabled aria-busy="false">Actualizar</button>
+    </div>
+    <dl class="consultations-summary" data-consultations-summary hidden>
+        <div><dt>Total</dt><dd data-count="total">0</dd></div>
+        <div><dt>Pendientes</dt><dd data-count="pending">0</dd></div>
+        <div><dt>Convertidas</dt><dd data-count="converted">0</dd></div>
+        <div><dt>Canceladas</dt><dd data-count="cancelled">0</dd></div>
+    </dl>
+    <p class="consultations-status" data-consultations-status role="status" aria-live="polite" aria-atomic="true"></p>
+    <button class="crm-button crm-button--primary" type="button" data-consultations-retry hidden>Reintentar</button>
+    <div class="consultations-table-wrap" data-consultations-results hidden>
+        <table class="consultations-table">
+            <caption>Solicitudes registradas · más recientes primero</caption>
+            <thead><tr><th scope="col">Solicitante</th><th scope="col">Programa</th><th scope="col">Contacto</th><th scope="col">Preferencia</th><th scope="col">Modalidad</th><th scope="col">Estado</th><th scope="col">Recibida</th></tr></thead>
+            <tbody data-consultations-rows></tbody>
+        </table>
+    </div>
+    <p class="crm-note">La fecha y hora indicadas son preferencias, no reuniones confirmadas.</p>
+</section>

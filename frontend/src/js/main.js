@@ -153,7 +153,10 @@ document.addEventListener(
 
         if (document.querySelector('[data-crm]')) {
             const { initCRM } = await import('./modules/crm.js');
-            initCRM();
+            const page = document.querySelector('[data-consultations]')
+                ? (await import('./modules/crm-consultations.js')).initCRMConsultations()
+                : undefined;
+            initCRM(page);
             return;
         }
 

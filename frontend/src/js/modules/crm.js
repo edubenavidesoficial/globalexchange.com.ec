@@ -2,7 +2,7 @@ import { getSession, signOut, validateInternalUser, onAuthSessionChange } from '
 
 // Guard compartido por cualquier página que componga el shell [data-crm].
 // La sesión identifica la operación; solo Express autoriza el contenido.
-export function initCRM() {
+export function initCRM({ onAuthorized = () => {}, onInvalidate = () => {} } = {}) {
     const root = document.querySelector('[data-crm]');
     if (!root || root.dataset.initialized) return;
     root.dataset.initialized = 'true';
@@ -24,7 +24,15 @@ export function initCRM() {
     let timer;
     let drawerOpen = false;
     let denied = false;
+    let authorized = false;
     const keyOf = (session) => session ? `${session.user?.id}:${session.access_token}` : null;
+
+    const route = (path) => path.replace(/\/index\.html$/, '/').replace(/\/?$/, '/');
+    sidebar.querySelectorAll('.crm-nav a[href]').forEach((link) => {
+        if (route(link.getAttribute('href')) === route(window.location.pathname)) {
+            link.setAttribute('aria-current', 'page');
+        } else link.removeAttribute('aria-current');
+    });
 
     function drawer(open, restoreFocus = true) {
         drawerOpen = open && mobile.matches && !shell.hidden;
@@ -47,6 +55,8 @@ export function initCRM() {
     }
 
     function block(text, canAct = false) {
+        authorized = false;
+        onInvalidate();
         drawer(false, false);
         shell.hidden = true;
         shell.inert = true;
@@ -114,6 +124,26 @@ export function initCRM() {
             shell.inert = false;
             shell.hidden = false;
             find('heading')?.focus();
+            authorized = true;
+            // Capacidad temporal: una página solo carga tras autorización de Express.
+            const isCurrent = () => authorized && operation.isCurrent();
+            onAuthorized({
+                session: operation.session,
+                signal: operation.signal,
+                isCurrent,
+                revalidate() {
+                    if (!isCurrent()) return;
+                    invalidate();
+                    schedule();
+                },
+                blockAccess() {
+                    if (!isCurrent()) return;
+                    invalidate();
+                    block('No fue posible validar el acceso a esta sección. Vuelve a intentarlo.', true);
+                    busy(false);
+                    retry.focus();
+                },
+            });
         } catch (error) {
             if (!operation.isCurrent()) return;
             if (error?.code === 'stale') { schedule(); return; }
