@@ -4,6 +4,7 @@ import {
 } from '@supabase/supabase-js';
 
 import supabase from '../config/supabase.js';
+import { AppError } from '../errors/app-error.js';
 import { findInternalUserById } from '../modules/internal-users/internal-users.repository.js';
 
 const INVALID_IDENTITY_CODES = new Set([
@@ -16,9 +17,7 @@ const INVALID_IDENTITY_CODES = new Set([
 ]);
 
 function authenticationError() {
-    const error = new Error('Se requiere una autenticación válida.');
-    error.statusCode = 401;
-    return error;
+    return new AppError(401, 'Se requiere una autenticación válida.');
 }
 
 function isInvalidIdentity(error) {
@@ -74,9 +73,7 @@ export async function authenticate(req, res, next) {
     }
 
     if (!internalUser || internalUser.active !== true) {
-        const error = new Error('No tienes acceso al sistema interno.');
-        error.statusCode = 403;
-        return next(error);
+        return next(new AppError(403, 'No tienes acceso al sistema interno.'));
     }
 
     req.user = {

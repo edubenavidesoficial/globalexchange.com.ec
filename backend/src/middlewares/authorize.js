@@ -1,3 +1,5 @@
+import { AppError } from '../errors/app-error.js';
+
 const VALID_ROLES = new Set(['admin', 'agendadora', 'vendedora']);
 
 export function authorize(...allowedRoles) {
@@ -12,15 +14,11 @@ export function authorize(...allowedRoles) {
         const role = req.user?.role;
 
         if (typeof role !== 'string' || role.trim() === '') {
-            const error = new Error('Se requiere una autenticación válida.');
-            error.statusCode = 401;
-            return next(error);
+            return next(new AppError(401, 'Se requiere una autenticación válida.'));
         }
 
         if (!roles.has(role)) {
-            const error = new Error('No tienes permisos para realizar esta acción.');
-            error.statusCode = 403;
-            return next(error);
+            return next(new AppError(403, 'No tienes permisos para realizar esta acción.'));
         }
 
         next();

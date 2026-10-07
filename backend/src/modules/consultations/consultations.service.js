@@ -1,3 +1,4 @@
+import { AppError } from '../../errors/app-error.js';
 import {
     createConsultationRequest,
     findActiveProgramByCode,
@@ -34,10 +35,7 @@ const VALID_MODES = new Set([
 ]);
 
 function createValidationError(message) {
-    const error = new Error(message);
-    error.statusCode = 400;
-
-    return error;
+    return new AppError(400, message);
 }
 
 function normalizeText(value, label, maxLength) {
