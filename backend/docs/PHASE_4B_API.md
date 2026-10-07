@@ -1,4 +1,4 @@
-# Fase 4B.2: confirmar reunión desde una solicitud
+# Fases 4B.2 y 4B.4A: confirmación de reuniones y selector de vendedoras
 
 Endpoint implementado: `POST /api/admin/consultations/:id/meeting`.
 Complementa `PHASE_4B_DATABASE.md`; no modifica migraciones ni la RPC desplegada.
@@ -136,7 +136,7 @@ App, Express, rutas, middlewares, controllers, services y repositories son reale
 solo se sustituye el cliente Supabase antes de cargar su configuración. No se
 evalúa env.js ni dotenv. HTTP se prueba únicamente en loopback con puerto efímero.
 
-124 pruebas (109 anteriores y 15 nuevas) cubren roles, identidad, campos obligatorios, valores inválidos,
+Las 124 pruebas de Fase 4B.2 cubren roles, identidad, campos obligatorios, valores inválidos,
 cabeceras duplicadas, normalización/hash, once argumentos, códigos RPC, logs,
 respuesta/replay 201 y regresiones de GET solicitudes, auth/me, health y validación
 pública. Incluyen cinco variantes de Content-Type y diez pruebas directas del
@@ -151,3 +151,84 @@ remoto ni vuelven a probar los locks PostgreSQL. La prueba end-to-end real queda
 pendiente de una vendedora real activa, una solicitud controlada y autorización
 explícita. No se crean datos ficticios en producción. Frontend, Agenda,
 reprogramación, cancelación y asistencia quedan fuera de esta fase.
+
+## Fase 4B.4A: vendedoras activas para asignación
+
+`GET /api/admin/internal-users?role=vendedora&active=true`
+
+Cadena: authenticate -> authorize('admin', 'agendadora') -> controller -> service
+-> repository existente de internal-users -> Supabase. La identidad y el rol
+proceden del perfil interno, no de query, body ni metadata JWT.
+
+El service exige exactamente los parámetros role=vendedora y active=true como
+strings, sin trim, coerción ni conversión de mayúsculas. Rechaza parámetros
+ausentes, desconocidos, valores distintos y nombres duplicados, incluso si los
+valores duplicados coinciden. No es un listado genérico de personal.
+
+El controller extrae la cadena posterior al primer `?` de `req.originalUrl`,
+que conserva la URL original dentro del router montado. El service la procesa
+con URLSearchParams de node:url, sin límite de pares ni dependencia de req.query.
+Exige dos pares en total, una ocurrencia de cada nombre y los valores exactos.
+Los nombres codificados se cuentan después de decodificarlos. Así se rechazan
+también duplicados o extras tras 1000 separadores que el parser simple de Express
+podría omitir. No se cambia el parser global ni se utiliza un host sintético.
+
+El repository impone la consulta fija, independientemente de los valores HTTP:
+
+```js
+supabase.from('internal_users')
+    .select('id, full_name, role')
+    .eq('role', 'vendedora')
+    .eq('active', true)
+    .order('full_name', { ascending: true })
+    .order('id', { ascending: true });
+```
+
+Se ejecuta una consulta de listado además de la consulta de perfil propia de
+authenticate. No se consulta auth.users ni meetings y no se invoca ninguna RPC.
+El service mapea explícitamente solo id, fullName y role; no devuelve active,
+email, timestamps, metadata, tokens ni datos de Supabase Auth.
+
+Antes de mapear, valida que el resultado sea un array y cada fila sea un objeto
+no nulo, no array, con id UUID canónico 8-4-4-4-12 (la convención del proyecto),
+full_name string no vacío tras trim y role exactamente vendedora. El esquema
+también exige nombre no vacío. No se transforma ni repara ninguna fila: una
+estructura inválida lanza un Error interno y devuelve 500 sanitizado para todo
+el resultado, sin registrar filas ni datos personales. Los campos adicionales
+en filas válidas se descartan mediante el mapping explícito de tres campos.
+
+Respuesta 200 ilustrativa (datos sintéticos):
+
+```json
+{
+  "data": [
+    {
+      "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "fullName": "Persona de prueba",
+      "role": "vendedora"
+    }
+  ]
+}
+```
+
+Sin resultados devuelve 200 con `{"data":[]}`.
+
+| HTTP | Situación |
+|---|---|
+| 400 | Filtros incorrectos; AppError con mensaje fijo, sin reflejar valores |
+| 401 | Autenticación ausente o inválida |
+| 403 | Vendedora, rol no permitido o perfil interno inexistente/inactivo |
+| 500 | Fallo inesperado de Supabase/transporte; mensaje genérico sanitizado |
+
+Se conserva el handler global y su logging limitado a evento, estado y código
+seguro. No se registra query, nombres, cabeceras ni errores completos.
+
+La suite suma 184 pruebas: las 124 anteriores, 32 iniciales para este endpoint
+y 28 regresiones para query completa y estructura DB,
+reutilizando el harness de meetings.test.mjs. Verifican roles, identidad, filtros
+estrictos/duplicados, respuesta vacía, mapeo mínimo aun si el mock devuelve campos
+extra, selección/filtros/órdenes exactos y fallos sanitizados. Las regresiones de
+consultations, confirmación de reuniones, auth/me y health continúan pasando.
+No se contactó Supabase remoto ni se crearon usuarios. La consulta real remota
+no se ha verificado en esta fase. La RPC conserva la validación de elegibilidad
+al confirmar: el listado por sí solo no garantiza que el perfil siga activo.

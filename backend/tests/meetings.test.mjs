@@ -29,12 +29,23 @@ const fake = {
     from(table) {
         state.queries.push(table);
         assert.ok(['internal_users', 'consultation_requests'].includes(table), 'Unexpected direct table access');
+        const operations = [];
         const query = {
-            select() { return query; },
-            eq(field, value) { assert.equal(field, 'id'); assert.equal(value, actor); return query; },
-            async maybeSingle() { return { data: state.profile, error: null }; },
-            order() { return query; },
-            then(resolve) { resolve({ data: [], error: null }); },
+            select(columns) { operations.push(['select', columns]); return query; },
+            eq(field, value) { operations.push(['eq', field, value]); return query; },
+            async maybeSingle() {
+                assert.deepEqual(operations, [['select', 'id, full_name, role, active'], ['eq', 'id', actor]]);
+                return { data: state.profile, error: null };
+            },
+            order(field, options) { operations.push(['order', field, clone(options)]); return query; },
+            then(resolve, reject) {
+                if (table === 'internal_users') {
+                    state.listQueries.push(operations);
+                    if (state.listThrow) return reject(state.listThrow);
+                    return resolve({ data: state.saleswomen, error: state.listError });
+                }
+                resolve({ data: [], error: null });
+            },
         };
         return query;
     },
@@ -72,7 +83,7 @@ await new Promise(resolve => server.once('listening', resolve));
 after(() => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())));
 beforeEach(() => {
     state = { profile: { id: actor, full_name: 'Persona de prueba', role: 'admin', active: true },
-        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result) };
+        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), listQueries: [], saleswomen: [] };
 });
 function send(options = {}) {
     const payload = options.raw ?? JSON.stringify(options.body === undefined ? body : options.body);
@@ -260,3 +271,152 @@ test('validación POST público conserva error.message', async () => {
 test('el grafo de pruebas nunca carga env.js ni dotenv', () => {
     assert.ok(![...modules.keys()].some(id => id.endsWith('/env.js') || id.includes('dotenv')));
 });
+
+// Fase 4B.4A: comparte app, transporte HTTP y frontera Supabase simulada.
+const usersPath = '/api/admin/internal-users';
+const validFilters = '?role=vendedora&active=true';
+const listUsers = (options = {}) => send({ method: 'GET', path: usersPath + validFilters, ...options });
+const expectedListQuery = [
+    ['select', 'id, full_name, role'],
+    ['eq', 'role', 'vendedora'],
+    ['eq', 'active', true],
+    ['order', 'full_name', { ascending: true }],
+    ['order', 'id', { ascending: true }],
+];
+
+for (const role of ['admin', 'agendadora']) {
+    test(`internal-users ${role}: mapeo mínimo y consulta exacta`, async () => {
+        state.profile.role = role;
+        state.saleswomen = [assigned, consultation].map(id => ({
+            id, full_name: 'Persona de prueba', role: 'vendedora', active: true,
+            email: 'PRIVATE_EMAIL', created_at: 'PRIVATE_CREATED', updated_at: 'PRIVATE_UPDATED',
+            metadata: 'PRIVATE_METADATA', token: 'PRIVATE_TOKEN', password: 'PRIVATE_PASSWORD',
+        }));
+        const response = await listUsers();
+        assert.deepEqual(response, { status: 200, body: { data: [assigned, consultation].map(id => ({
+            id, fullName: 'Persona de prueba', role: 'vendedora',
+        })) } });
+        assert.deepEqual(state.listQueries, [expectedListQuery]);
+        assert.deepEqual(state.queries, ['internal_users', 'internal_users']);
+        assert.equal(state.calls.length, 0);
+        assert.deepEqual(state.logs, []);
+    });
+}
+
+test('internal-users: cero resultados es 200 con lista vacía', async () => {
+    assert.deepEqual(await listUsers(), { status: 200, body: { data: [] } });
+    assert.deepEqual(state.listQueries, [expectedListQuery]);
+});
+
+test('internal-users: vendedora rechazada antes de validar filtros; body y metadata no autorizan', async () => {
+    state.profile.role = 'vendedora';
+    const response = await listUsers({ path: usersPath + '?role=admin', body: { role: 'admin' } });
+    assert.equal(response.status, 403);
+    assert.deepEqual(state.listQueries, []);
+    assert.deepEqual(state.queries, ['internal_users']);
+});
+
+test('internal-users: sin autenticación no consulta DB', async () => {
+    assert.equal((await listUsers({ auth: false })).status, 401);
+    assert.equal(state.authCalls, 0);
+    assert.deepEqual(state.queries, []);
+});
+
+test('internal-users: token inválido no consulta DB', async () => {
+    const { AuthApiError } = await import('@supabase/supabase-js');
+    state.authError = new AuthApiError('PRIVATE_TOKEN', 401, 'bad_jwt');
+    assert.equal((await listUsers()).status, 401);
+    assert.deepEqual(state.queries, []);
+});
+
+for (const profile of [null, { id: actor, role: 'admin', active: false }]) {
+    test(`internal-users: perfil ${profile === null ? 'inexistente' : 'inactivo'} rechazado`, async () => {
+        state.profile = profile;
+        assert.equal((await listUsers()).status, 403);
+        assert.deepEqual(state.queries, ['internal_users']);
+        assert.deepEqual(state.listQueries, []);
+    });
+}
+
+for (const filters of [
+    '', '?active=true', '?role=vendedora',
+    '?role=admin&active=true', '?role=agendadora&active=true', '?role=Vendedora&active=true',
+    '?role=vendedora&active=false', '?role=vendedora&active=1', '?role=vendedora&active=yes',
+    '?role=vendedora&active=True', '?role=&active=true', '?role=vendedora&active=',
+    '?role=%20vendedora&active=true', '?role=vendedora&active=true%20',
+    '?role=vendedora&active=true&extra=PRIVATE_SENTINEL',
+    '?role=vendedora&role=admin&active=true', '?role=vendedora&active=true&active=false',
+    '?role=vendedora&role=vendedora&active=true', '?role=vendedora&active=true&active=true',
+    '?role[]=vendedora&active=true', '?role=vendedora&active[]=true',
+    '?role=vendedora&active=true&__proto__=PRIVATE_SENTINEL',
+]) {
+    test(`internal-users: filtros inválidos ${filters || 'ausentes'}`, async () => {
+        const response = await listUsers({ path: usersPath + filters });
+        assert.deepEqual(response, { status: 400, body: { error: {
+            message: 'Los filtros deben ser role=vendedora y active=true.',
+        } } });
+        assert.deepEqual(state.listQueries, []);
+        assert.deepEqual(state.queries, ['internal_users']);
+        assert.equal(state.calls.length, 0);
+        assert.deepEqual(state.logs, []);
+    });
+}
+
+for (const suffix of ['role=admin', 'active=false', 'extra=x', '%72ole=vendedora', '%61ctive=true']) {
+    test(`internal-users: query completa tras 1000 separadores, ${suffix}`, async () => {
+        const response = await listUsers({ path: usersPath + validFilters + '&'.repeat(1000) + suffix });
+        assert.equal(response.status, 400);
+        assert.deepEqual(state.listQueries, []);
+        assert.deepEqual(state.queries, ['internal_users']);
+        assert.deepEqual(state.logs, []);
+    });
+}
+
+for (const filters of ['?%72ole=vendedora&%61ctive=true', '?active=true&role=vendedora']) {
+    test(`internal-users: query equivalente válida ${filters}`, async () => {
+        assert.deepEqual(await listUsers({ path: usersPath + filters }), { status: 200, body: { data: [] } });
+        assert.deepEqual(state.listQueries, [expectedListQuery]);
+    });
+}
+
+const validSaleswoman = { id: assigned, full_name: 'Persona sintética', role: 'vendedora' };
+const invalidRows = [
+    {}, 123, null, undefined, [],
+    { full_name: 'PRIVATE_NAME', role: 'vendedora' },
+    { id: assigned, role: 'vendedora' },
+    { id: assigned, full_name: 'PRIVATE_NAME' },
+    { ...validSaleswoman, role: 'admin' },
+    { ...validSaleswoman, id: 'invalid-uuid' },
+    { ...validSaleswoman, id: assigned + '\n' },
+    { ...validSaleswoman, id: 123 },
+    { ...validSaleswoman, full_name: null },
+    { ...validSaleswoman, full_name: 123 },
+    { ...validSaleswoman, full_name: '' },
+    { ...validSaleswoman, full_name: '   ' },
+];
+for (const [index, data] of [null, undefined, {}, 123, ...invalidRows.map(row => [row]),
+    [validSaleswoman, {}]].entries()) {
+    test(`internal-users: estructura DB inválida ${index} -> 500 sin respuesta parcial`, async () => {
+        state.saleswomen = data;
+        assert.deepEqual(await listUsers(), { status: 500, body: { error: {
+            message: 'Ocurrió un error interno en el servidor.',
+        } } });
+        assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+        assert.deepEqual(state.listQueries, [expectedListQuery]);
+    });
+}
+
+for (const transportFailure of [false, true]) {
+    test(`internal-users: ${transportFailure ? 'rechazo de transporte' : 'error Supabase 400'} sanitizado`, async () => {
+        const error = Object.assign(new Error('password=PRIVATE_SECRET SELECT * FROM users'), {
+            statusCode: 400, code: 'PRIVATE_CODE', details: 'PRIVATE_DETAILS', hint: 'PRIVATE_HINT',
+        });
+        if (transportFailure) state.listThrow = error;
+        else state.listError = error;
+        const response = await listUsers();
+        assert.deepEqual(response, { status: 500, body: { error: { message: 'Ocurrió un error interno en el servidor.' } } });
+        assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+        assert.deepEqual(state.listQueries, [expectedListQuery]);
+        assert.equal(state.calls.length, 0);
+    });
+}
