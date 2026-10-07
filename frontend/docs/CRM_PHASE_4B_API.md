@@ -5,6 +5,52 @@ Agendar reunión. Importar los módulos no inicia peticiones. Backend,
 configuración Supabase y locks permanecen intactos; el guard expone también el
 perfil validado por Express en el contexto autorizado.
 
+## Cierre de Fase 4B y evidencia E2E real
+
+La E2E real fue completada exitosamente, según la validación confirmada por el
+responsable del proyecto. Esta edición registra el resultado comunicado; no
+vuelve a ejecutar el flujo ni crea registros.
+
+| Subfase | Alcance | Estado final |
+|---|---|---|
+| 4B.1 | DB + RPC transaccional | COMPLETADA |
+| 4B.2 | POST backend confirmar reunión | COMPLETADA |
+| 4B.3 | Prueba E2E real | COMPLETADA |
+| 4B.4A | GET vendedoras disponibles | COMPLETADA |
+| 4B.4B | API frontend reuniones | COMPLETADA |
+| 4B.4C | UI Agendar reunión | COMPLETADA |
+
+Con administrador autenticado, vendedora activa disponible y solicitud real
+pending, se abrió Agendar reunión, se seleccionó la vendedora y una fecha/hora
+futura. El POST autenticado respondió exitosamente. Se verificaron la creación
+de una meeting scheduled, el cambio de consultation_request de pending a
+converted, la auditoría persistida y la idempotencia persistida. El frontend
+volvió a consultar la bandeja y mostró el estado Convertida.
+
+Esta evidencia no incluye UUID reales, correos del administrador o la vendedora,
+tokens, Idempotency-Key real, request_hash real, datos personales del solicitante,
+notas reales ni credenciales. Véase también el
+[cierre backend](../../backend/docs/PHASE_4B_API.md#cierre-de-fase-4b).
+
+Una solicitud puede tener varias reuniones/intentos durante su ciclo de vida,
+con solo una meeting scheduled simultánea. Reprogramar será actualizar la misma
+meeting; cancelled/no_show podrá permitir otro intento posterior, mientras que
+completed bloquea nuevas reuniones en esta fase. converted indica al menos una
+reunión confirmada, no una venta ni un cliente. La UI actual solo agenda desde
+pending; los workflows posteriores se implementarán desde Agenda.
+
+El rol se resuelve en backend mediante internal_users; el frontend no usa
+metadata ni el rol del JWT como autorización. La Idempotency-Key permanece en
+memoria durante el intento y el retry incierto conserva misma key y mismo
+payload. Los secretos Supabase permanecen en backend; el frontend solo utiliza
+credenciales públicas autorizadas, sin registrar aquí sus valores.
+
+## Siguiente fase: Agenda de reuniones
+
+Consultar reuniones persistidas desde meetings y construir la vista operativa
+del CRM. Quedan pendientes las decisiones de acceso de la vendedora sobre la
+Agenda. No se definen todavía endpoints definitivos ni permisos no aprobados.
+
 ## UI de Solicitudes · Fase 4B.4C
 
 Agendar reunión aparece solo para admin/agendadora según `/api/auth/me` y filas

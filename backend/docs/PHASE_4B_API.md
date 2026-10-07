@@ -1,7 +1,64 @@
-# Fases 4B.2 y 4B.4A: confirmación de reuniones y selector de vendedoras
+# Fase 4B: confirmación de reuniones, selector de vendedoras y cierre E2E
 
 Endpoint implementado: `POST /api/admin/consultations/:id/meeting`.
 Complementa `PHASE_4B_DATABASE.md`; no modifica migraciones ni la RPC desplegada.
+
+## Cierre de Fase 4B
+
+La prueba E2E real fue completada exitosamente, según la validación confirmada
+por el responsable del proyecto. Este cierre registra esa evidencia; no implica
+una nueva ejecución E2E, consultas remotas ni creación de registros durante la
+edición documental.
+
+| Subfase | Alcance | Estado final |
+|---|---|---|
+| 4B.1 | DB + RPC transaccional | COMPLETADA |
+| 4B.2 | POST backend confirmar reunión | COMPLETADA |
+| 4B.3 | Prueba E2E real | COMPLETADA |
+| 4B.4A | GET vendedoras disponibles | COMPLETADA |
+| 4B.4B | API frontend reuniones | COMPLETADA |
+| 4B.4C | UI Agendar reunión | COMPLETADA |
+
+### Evidencia E2E real
+
+La validación confirmó un administrador autenticado, una vendedora activa
+disponible y una solicitud real pending. Se abrió el modal Agendar reunión,
+se seleccionó la vendedora y una fecha/hora futura, y se realizó el POST
+autenticado con respuesta exitosa.
+
+Se comprobó la creación de una meeting scheduled, el cambio de
+consultation_request de pending a converted y la persistencia de auditoría e
+idempotencia. El frontend volvió a consultar la bandeja y mostró Convertida.
+
+Se excluyen deliberadamente UUID reales, correos del administrador y de la
+vendedora, tokens, Idempotency-Key real, request_hash real, datos personales del
+solicitante, notas reales y credenciales. Los ejemplos de contrato existentes
+siguen siendo sintéticos.
+
+### Decisiones de negocio y seguridad
+
+- Una solicitud puede tener varias reuniones/intentos durante su ciclo de vida,
+  pero solo una meeting scheduled simultánea.
+- Reprogramar será una actualización de la misma meeting. cancelled/no_show
+  podrá permitir otro intento posterior; completed bloquea nuevas reuniones
+  en esta fase.
+- converted significa que existe al menos una reunión confirmada; no significa
+  venta ni cliente.
+- La UI actual Agendar reunión se limita a solicitudes pending. Los workflows
+  posteriores se implementarán desde Agenda.
+- El rol se resuelve en backend mediante internal_users. El frontend usa el
+  perfil autorizado por Express, no metadata ni el rol del JWT como autorización.
+- La Idempotency-Key del intento se mantiene en memoria en el frontend. Un retry
+  de resultado incierto conserva la misma key y el mismo payload; el registro de
+  idempotencia se persiste en backend/DB.
+- Los secretos Supabase permanecen en backend. El frontend solo utiliza
+  credenciales públicas autorizadas; no se documentan valores reales.
+
+### Siguiente fase: Agenda de reuniones
+
+Consultar reuniones persistidas desde meetings y construir la vista operativa
+del CRM. Quedan pendientes las decisiones de acceso de la vendedora sobre la
+Agenda. Este cierre no define endpoints definitivos ni permisos nuevos.
 
 ## Arquitectura y autorización
 
@@ -146,11 +203,11 @@ advertencia experimental de Node y la advertencia
 de Express sobre Promise de otro contexto; no ocurren por esta causa en producción.
 No hay dependencias nuevas ni comando lint preexistente en backend.
 
-No se ejecutó SQL ni se contactó Supabase. Las pruebas no acreditan el despliegue
-remoto ni vuelven a probar los locks PostgreSQL. La prueba end-to-end real queda
-pendiente de una vendedora real activa, una solicitud controlada y autorización
-explícita. No se crean datos ficticios en producción. Frontend, Agenda,
-reprogramación, cancelación y asistencia quedan fuera de esta fase.
+Durante estas pruebas automatizadas no se ejecutó SQL ni se contactó Supabase.
+La suite por sí sola no acredita el despliegue remoto ni vuelve a probar los
+locks PostgreSQL. La E2E real posterior está completada y registrada en la sección
+de cierre. Frontend se completó en 4B.4B/4B.4C; Agenda, reprogramación, cancelación
+y asistencia siguen fuera del alcance implementado de Fase 4B.
 
 ## Fase 4B.4A: vendedoras activas para asignación
 
@@ -229,6 +286,9 @@ reutilizando el harness de meetings.test.mjs. Verifican roles, identidad, filtro
 estrictos/duplicados, respuesta vacía, mapeo mínimo aun si el mock devuelve campos
 extra, selección/filtros/órdenes exactos y fallos sanitizados. Las regresiones de
 consultations, confirmación de reuniones, auth/me y health continúan pasando.
-No se contactó Supabase remoto ni se crearon usuarios. La consulta real remota
-no se ha verificado en esta fase. La RPC conserva la validación de elegibilidad
-al confirmar: el listado por sí solo no garantiza que el perfil siga activo.
+Durante la suite no se contactó Supabase remoto ni se crearon usuarios. La E2E
+real posterior confirmó la disponibilidad y selección de una vendedora activa.
+La RPC conserva la validación de elegibilidad al confirmar: el listado por sí
+solo no garantiza que el perfil siga activo. Se conserva el último total
+documentado de 184 pruebas backend; no se reejecutó la suite para este cierre
+puramente documental.
