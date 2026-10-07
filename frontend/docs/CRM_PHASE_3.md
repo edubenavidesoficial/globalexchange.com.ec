@@ -8,7 +8,7 @@ Implementación de solo lectura en `/pages/crm/solicitudes/`. Estado inicial ver
 
 Cada elemento contiene `id`, `program: { id, code, name }`, `fullName`, `phone`, `email`, `city`, `mode`, `preferredDate`, `preferredTime`, `message`, `status`, `createdAt`. La interfaz muestra el nombre del programa, nunca UUIDs. `email` y `message` pueden ser null y se representan con «—».
 
-Fuentes: `backend/src/modules/consultations/consultations.admin.routes.js`, controller, service, repository y `backend/supabase/migrations/005_create_consultation_requests.sql`. El service transforma snake_case a camelCase. Estados válidos: pending → Pendiente, converted → Convertida, cancelled → Cancelada. Modalidades: online → En línea, phone → Teléfono, office → Oficina. No se implementan mutaciones, agenda, reuniones ni clientes.
+Fuentes: `backend/src/modules/consultations/consultations.admin.routes.js`, controller, service, repository y `backend/supabase/migrations/20260923005317_create_consultation_requests.sql`. El service transforma snake_case a camelCase. Estados válidos: pending → Pendiente, converted → Convertida, cancelled → Cancelada. Modalidades: online → En línea, phone → Teléfono, office → Oficina. No se implementan mutaciones, agenda, reuniones ni clientes.
 
 ## Integración y seguridad
 
