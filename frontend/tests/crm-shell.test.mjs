@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { webcrypto } from 'node:crypto';
 import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
 import { consultationsFixture } from './fixtures/consultations.mjs';
@@ -49,8 +50,13 @@ async function setup(options = {}, page = 'crm') {
     for (const timer of timers) clearTimeout(timer);
     timers.clear();
     dom?.window.close();
-    const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture, page, ...options };
+    const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture,
+        salespeople: [{ id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', fullName: 'Vendedora de prueba', role: 'vendedora' }],
+        salesResponses: [], meetingResponses: [], page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
+    // Solo pruebas: el navegador real proporciona top layer, foco y Escape nativos.
+    dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+    dom.window.HTMLDialogElement.prototype.close = function () { this.open = false; };
     // jsdom no refleja inert aún; el atributo inicial y sus cambios siguen HTML.
     if (!('inert' in dom.window.HTMLElement.prototype)) {
         Object.defineProperty(dom.window.HTMLElement.prototype, 'inert', {
@@ -70,6 +76,7 @@ async function setup(options = {}, page = 'crm') {
         innerWidth: viewport,
         addEventListener: dom.window.addEventListener.bind(dom.window),
         MutationObserver: dom.window.MutationObserver,
+        URLSearchParams, crypto: webcrypto, Event: dom.window.Event,
         AbortController, AbortSignal: options.shortTimeout ? { any: AbortSignal.any, timeout: () => AbortSignal.timeout(100) } : AbortSignal, Response,
         setTimeout(callback, delay) {
             const timer = setTimeout(() => { timers.delete(timer); callback(); }, delay);
@@ -82,7 +89,8 @@ async function setup(options = {}, page = 'crm') {
     sandbox.window = sandbox;
     context = vm.createContext(sandbox);
     vm.runInContext(`
-        window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0 };
+        window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0 };
+        window.pendingSales = []; window.pendingMeetings = []; window.meetingRequests = [];
         window.events = [];
         window.pending = [];
         window.pendingConsultations = [];
@@ -119,6 +127,21 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (url === '/api/admin/internal-users?role=vendedora&active=true' || /^\\/api\\/admin\\/consultations\\/[^/]+\\/meeting$/.test(url)) {
+                const sales = url.includes('internal-users');
+                calls[sales ? 'sales' : 'meetings']++;
+                const response = (sales ? fixture.salesResponses : fixture.meetingResponses).shift() || {};
+                if (!sales) meetingRequests.push({ url, key: options.headers['Idempotency-Key'], body: options.body });
+                if (response.hold) await new Promise(resolve => (sales ? pendingSales : pendingMeetings).push(resolve));
+                if (response.network) throw new TypeError('Fixture network');
+                if (response.timeout) await new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new Error('Fixture timeout')), { once: true }));
+                const status = response.status || (sales ? 200 : 201);
+                if (!sales && status === 201) {
+                    const consultationId = url.split('/')[4];
+                    fixture.consultations = fixture.consultations.map(item => item.id === consultationId ? { ...item, status: 'converted' } : item);
+                }
+                return new Response(JSON.stringify(response.body ?? { data: sales ? (response.data ?? fixture.salespeople) : { consultation: {}, meeting: {} } }), { status });
+            }
             if (url === '/api/admin/consultations') {
                 calls.consultations++;
                 requestSignals.push(options.signal);
@@ -165,7 +188,11 @@ async function setup(options = {}, page = 'crm') {
         const api = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context });
         await api.link(() => auth);
         const consultations = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-consultations.js'), 'utf8'), { context });
-        await consultations.link(() => api); await consultations.evaluate();
+        const meetings = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/meetings.js'), 'utf8'), { context });
+        await meetings.link(() => api);
+        const dialog = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-meeting-dialog.js'), 'utf8'), { context });
+        await dialog.link(() => meetings);
+        await consultations.link(specifier => specifier.endsWith('internal.js') ? api : dialog); await consultations.evaluate();
         hooks = consultations.namespace.initCRMConsultations();
     }
     module.namespace[page === 'login' ? 'initLogin' : 'initCRM'](hooks);
@@ -890,4 +917,242 @@ test('64 · espera retira listeners al resolver, rechazar, cancelar o vencer', a
             if (['abort', 'timeout'].includes(action)) fixture.fail();
         } finally { fixture.release(); await result; }
     }
+});
+
+const modalOpen = "document.querySelector('[data-meeting-dialog]').open";
+const headingFocused = "document.activeElement.id === 'consultations-title' && document.activeElement.isConnected";
+const sellersReady = "!document.querySelector('[name=assignedTo]').disabled";
+const modalMessage = "document.querySelector('[data-meeting-message]').textContent";
+async function openMeeting(options = {}) {
+    await inbox(options); await until(loaded); await click('[data-meeting-open]');
+}
+async function fillMeeting() {
+    await until(sellersReady);
+    await evaluate("document.querySelector('[name=assignedTo]').selectedIndex = 1; document.querySelector('[name=notes]').value = 'Nota de prueba'; void 0;");
+}
+async function submitMeeting() {
+    await evaluate("document.querySelector('[data-meeting-form]').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))");
+}
+
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`UI meetings: rol Express ${role} y solo pending`, async () => {
+    await inbox({ user: { ...userA, role }, session: { ...A, user: { ...A.user, user_metadata: { role: role === 'vendedora' ? 'admin' : 'vendedora' } } } });
+    await until(loaded);
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), role === 'vendedora' ? 0 : 1);
+    assert.equal(await evaluate('calls.sales'), 0);
+});
+test('UI meetings: contexto, prefill, labels, foco inicial, cancelar y Escape', async () => {
+    await openMeeting(); await until(sellersReady);
+    assert.equal(await evaluate(modalOpen), true);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-applicant]').textContent"), consultationsFixture[0].fullName);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-program]').textContent"), consultationsFixture[0].program.name);
+    assert.deepEqual(await evaluate("['date','time','mode','durationMinutes'].map(n => document.querySelector('[name='+n+']').value)"), ['2026-10-10', '09:30', 'online', '45']);
+    assert.equal(await evaluate("document.activeElement.name"), 'date');
+    assert.ok((await evaluate("document.querySelector('[data-meeting-dialog]').textContent")).includes('America/Guayaquil'));
+    assert.equal(await evaluate("[...document.querySelectorAll('[data-meeting-fields] input, [data-meeting-fields] select, [data-meeting-fields] textarea')].every(e => e.closest('label'))"), true);
+    await click('[data-meeting-cancel]'); assert.equal(await evaluate(modalOpen), false);
+    assert.equal(await evaluate("document.activeElement.hasAttribute('data-meeting-open')"), true);
+    await click('[data-meeting-open]');
+    dom.window.document.querySelector('[data-meeting-dialog]').dispatchEvent(new dom.window.Event('cancel', { cancelable: true }));
+    assert.equal(await evaluate(modalOpen), false);
+});
+test('UI meetings: carga y vacío no inventan opciones', async () => {
+    await openMeeting({ salesResponses: [{ hold: true, data: [] }] }); await until('pendingSales.length === 1');
+    assert.equal(await evaluate(modalMessage), 'Cargando vendedoras…');
+    assert.equal(await evaluate("document.querySelector('[data-meeting-confirm]').disabled"), true);
+    await evaluate('pendingSales.shift()()'); await until(`${modalMessage} === 'No hay vendedoras disponibles.'`);
+    assert.equal(await evaluate("document.querySelector('[name=assignedTo]').options.length"), 0);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-confirm]').disabled"), true);
+});
+test('UI meetings: XSS en solicitud/programa/vendedoras siempre texto', async () => {
+    const danger = '<img src=x onerror=alert(1)>';
+    await openMeeting({ consultations: [{ ...consultationsFixture[0], fullName: danger, program: { name: danger } }],
+        salespeople: [1, 2].map(n => ({ id: `bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb${n}`, fullName: danger, role: 'vendedora', email: 'PRIVATE_EMAIL' })) });
+    await until(sellersReady);
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-dialog] img').length"), 0);
+    assert.equal(await evaluate("document.querySelector('[name=assignedTo]').options.length"), 3);
+    assert.ok(!(await evaluate("document.querySelector('[data-meeting-dialog]').textContent")).includes('PRIVATE_EMAIL'));
+});
+test('UI meetings: error y reintento de carga sin cerrar CRM', async () => {
+    await openMeeting({ salesResponses: [{ network: true }] });
+    await until("!document.querySelector('[data-meeting-reload]').hidden");
+    assert.equal(await evaluate(shellVisible), true);
+    await click('[data-meeting-reload]'); await until(sellersReady);
+    assert.deepEqual(await evaluate('[calls.sales,calls.logout]'), [2,0]);
+});
+test('UI meetings: validar campos antes de generar/enviar intento', async () => {
+    await openMeeting(); await until(sellersReady); await submitMeeting();
+    assert.equal(await evaluate('calls.meetings'), 0);
+    assert.match(await evaluate(modalMessage), /Completa/);
+    await fillMeeting(); await evaluate("document.querySelector('[name=durationMinutes]').value = '1.5'"); await submitMeeting();
+    assert.equal(await evaluate('calls.meetings'), 0);
+});
+test('UI meetings: payload exacto, doble envío, 201 cierra y refresca desde backend', async () => {
+    await openMeeting({ meetingResponses: [{ hold: true }] }); await fillMeeting();
+    await submitMeeting(); await submitMeeting(); await until('pendingMeetings.length === 1');
+    assert.equal(await evaluate('calls.meetings'), 1);
+    const request = (await evaluate('meetingRequests'))[0];
+    assert.deepEqual(JSON.parse(request.body), { date:'2026-10-10', time:'09:30', timeZone:'America/Guayaquil', durationMinutes:45, mode:'online',
+        assignedTo:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', notes:'Nota de prueba' });
+    assert.match(request.key, /^[a-f0-9-]{36}$/);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-fields]').disabled"), true);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-cancel]').disabled"), true);
+    await evaluate('pendingMeetings.shift()()'); await until('calls.consultations === 2'); await until(loaded);
+    assert.equal(await evaluate(modalOpen), false);
+    assert.equal(await evaluate("document.querySelector('[name=notes]').value"), '');
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), 0);
+    assert.match(await evaluate("document.querySelector('[data-meeting-announcement]').textContent"), /confirmada/);
+});
+for (const response of [{ network:true }, { timeout:true }, { status:500 }, { body:{data:null} }]) {
+    test(`UI meetings: resultado incierto ${JSON.stringify(response)} conserva key y payload`, async () => {
+        await openMeeting({ shortTimeout: true, meetingResponses:[response, {}] }); await fillMeeting(); await submitMeeting();
+        await until("!document.querySelector('[data-meeting-discard]').hidden");
+        assert.match(await evaluate(modalMessage), /No fue posible confirmar si/);
+        assert.equal(await evaluate("document.querySelector('[data-meeting-fields]').disabled"), true);
+        await click('[data-meeting-cancel]');
+        dom.window.document.querySelector('[data-meeting-dialog]').dispatchEvent(new dom.window.Event('cancel', { cancelable:true }));
+        assert.equal(await evaluate(modalOpen), true);
+        // Incluso si cambia programáticamente el DOM, retry usa el snapshot.
+        await evaluate("document.querySelector('[name=notes]').value = 'NO ENVIAR'");
+        await submitMeeting(); await until('calls.consultations === 2');
+        const requests = await evaluate('meetingRequests');
+        assert.equal(requests.length,2); assert.equal(requests[0].key,requests[1].key); assert.equal(requests[0].body,requests[1].body);
+    });
+}
+for (const status of [400,422]) test(`UI meetings: ${status}, corregir crea nueva clave`, async () => {
+    await openMeeting({ meetingResponses:[{status}, {}] }); await fillMeeting(); await submitMeeting();
+    await until(`${modalMessage}.includes('Revisa la fecha')`);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-fields]').disabled"), false);
+    await evaluate("document.querySelector('[name=date]').value = '2028-03-01'"); await submitMeeting(); await until('calls.consultations === 2');
+    const requests = await evaluate('meetingRequests'); assert.notEqual(requests[0].key,requests[1].key);
+    assert.equal(JSON.parse(requests[1].body).date,'2028-03-01');
+});
+for (const status of [404,409]) test(`UI meetings: ${status} obliga a actualizar sin retry ciego`, async () => {
+    await openMeeting({ meetingResponses:[{status}] }); await fillMeeting(); await submitMeeting();
+    await until("!document.querySelector('[data-meeting-update]').hidden");
+    await submitMeeting(); assert.equal(await evaluate('calls.meetings'),1);
+    await click('[data-meeting-update]'); await until('calls.consultations === 2'); assert.equal(await evaluate(modalOpen),false);
+});
+test('UI meetings: POST 403 conserva sesión y bloquea acción en autorización actual', async () => {
+    await openMeeting({ meetingResponses:[{status:403}] }); await fillMeeting(); await submitMeeting();
+    await until(`${modalMessage}.includes('No tienes permiso')`);
+    assert.equal(await evaluate(shellVisible),true); assert.equal(await evaluate('calls.logout'),0);
+    await click('[data-meeting-cancel]'); assert.equal(await evaluate("document.querySelector('[data-meeting-open]').disabled"),true);
+});
+for (const source of ['sales','meeting']) test(`UI meetings: 401 ${source} delega al guard y limpia modal`, async () => {
+    await openMeeting(source === 'sales' ? { salesResponses:[{status:401}] } : {meetingResponses:[{status:401}]});
+    if(source === 'meeting') { await fillMeeting(); await submitMeeting(); }
+    await until(blocked); assert.equal(await evaluate(modalOpen),false); assert.equal(await evaluate('calls.logout'),0);
+    assert.equal(await evaluate("document.querySelector('[name=notes]').value"),'');
+});
+test('UI meetings: GET 403 bloquea acceso, no se confunde con POST forbidden', async () => {
+    await openMeeting({salesResponses:[{status:403}]}); await until(blocked); assert.equal(await evaluate(modalOpen),false);
+});
+test('UI meetings: descartar incierto es explícito, limpia y actualiza', async () => {
+    await openMeeting({meetingResponses:[{network:true}]}); await fillMeeting(); await submitMeeting();
+    await until("!document.querySelector('[data-meeting-discard]').hidden");
+    assert.match(await evaluate("document.querySelector('[data-meeting-uncertain]').textContent"),/no cancela/);
+    await click('[data-meeting-discard]'); await until('calls.consultations === 2');
+    assert.equal(await evaluate(modalOpen),false);
+});
+for (const stage of ['sales','201','422']) test(`UI meetings: A → B durante ${stage} descarta respuesta tardía`, async () => {
+    await openMeeting(stage === 'sales' ? {salesResponses:[{hold:true}]} : {meetingResponses:[{hold:true,status:Number(stage)}]});
+    if(stage === 'sales') await until('pendingSales.length === 1');
+    else { await fillMeeting(); await submitMeeting(); await until('pendingMeetings.length === 1'); }
+    await evaluate(`fixture.user = ${JSON.stringify(userB)}; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`); await until(loaded);
+    assert.equal(await evaluate(modalOpen),false);
+    await evaluate(stage === 'sales' ? 'pendingSales.shift()()' : 'pendingMeetings.shift()()');
+    await new Promise(resolve => setTimeout(resolve,30));
+    assert.equal(await evaluate(modalOpen),false); assert.equal(await evaluate(modalMessage),'');
+    assert.equal(await evaluate("document.querySelector('[data-meeting-announcement]').textContent"),'');
+    assert.equal(await evaluate("document.querySelector('[name=assignedTo]').options.length"),0);
+});
+test('UI meetings: logout y pagehide abortan y borran formulario', async () => {
+    await openMeeting(); await fillMeeting();
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide'));
+    assert.equal(await evaluate(modalOpen),false); assert.equal(await evaluate("document.querySelector('[name=notes]').value"),'');
+    await openMeeting(); await fillMeeting();
+    // Logout desde otra pestaña: disponible aunque el diálogo mantenga el fondo inert.
+    await evaluate("emitAuth('SIGNED_OUT', null)"); await until(loginReached);
+    assert.equal(await evaluate("document.querySelector('[data-meeting-dialog]')"),null);
+});
+
+for (const status of [404, 409]) for (const closing of ['cancel', 'escape']) {
+    test(`UI meetings: ${status} sobrevive ${closing}, bloquea todas las filas hasta GET exitoso`, async () => {
+        await openMeeting({ meetingResponses: [{ status }], consultations: [consultationsFixture[0],
+            { ...consultationsFixture[1], status: 'pending' }] });
+        await fillMeeting(); await submitMeeting();
+        await until("!document.querySelector('[data-meeting-update]').hidden");
+        if (closing === 'cancel') await click('[data-meeting-cancel]');
+        else dom.window.document.querySelector('[data-meeting-dialog]').dispatchEvent(new dom.window.Event('cancel', { cancelable: true }));
+        assert.equal(await evaluate(modalOpen), false);
+        assert.equal(await evaluate(headingFocused), true);
+        assert.equal(await evaluate("[...document.querySelectorAll('[data-meeting-open]')].every(b => b.disabled)"), true);
+        // Ni alterar disabled en el DOM ni emitir click evita la autoridad en memoria.
+        await evaluate("document.querySelectorAll('[data-meeting-open]').forEach(b => { b.disabled = false; b.click(); })");
+        await submitMeeting();
+        assert.equal(await evaluate(modalOpen), false);
+        assert.equal(await evaluate('calls.meetings'), 1);
+        await evaluate("fixture.consultationResponses.push({ hold: true, data: [{ ...fixture.consultations[0], status: 'converted' }, fixture.consultations[1]] })");
+        await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+        assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), 0);
+        await evaluate('pendingConsultations.shift()()'); await until(loaded);
+        assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), 1);
+        await click('[data-meeting-open]'); await fillMeeting(); await submitMeeting();
+        await until('calls.meetings === 2');
+        assert.equal((await evaluate('meetingRequests'))[1].url, `/api/admin/consultations/${consultationsFixture[1].id}/meeting`);
+    });
+}
+
+for (const failure of [{ network: true }, { status: 500 }, { timeout: true }]) {
+    test(`UI meetings: conflicto y GET fallido ${JSON.stringify(failure)} mantiene bloqueo y foco útil`, async () => {
+        await openMeeting({ shortTimeout: true, meetingResponses: [{ status: 409 }] });
+        await fillMeeting(); await submitMeeting();
+        await until("!document.querySelector('[data-meeting-update]').hidden");
+        await evaluate(`fixture.consultationResponses.push(${JSON.stringify(failure)})`);
+        await click('[data-meeting-update]'); await until(loadError);
+        assert.equal(await evaluate(headingFocused), true);
+        await submitMeeting(); assert.equal(await evaluate('calls.meetings'), 1);
+        assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), 0);
+        await click('[data-consultations-retry]'); await until(loaded);
+        await click('[data-meeting-open]'); await fillMeeting(); await submitMeeting();
+        await until('calls.meetings === 2');
+    });
+}
+
+for (const outcome of ['conflict', 'uncertain']) {
+    test(`UI meetings: recarga desde ${outcome} mantiene foco en heading durante y después`, async () => {
+        await openMeeting({ meetingResponses: [outcome === 'conflict' ? { status: 409 } : { network: true }] });
+        await fillMeeting(); await submitMeeting();
+        const action = outcome === 'conflict' ? 'update' : 'discard';
+        await until(`!document.querySelector('[data-meeting-${action}]').hidden`);
+        await evaluate('fixture.consultationResponses.push({ hold: true })');
+        await click(`[data-meeting-${action}]`); await until('pendingConsultations.length === 1');
+        assert.equal(await evaluate(headingFocused), true);
+        await evaluate('pendingConsultations.shift()()'); await until(loaded);
+        assert.equal(await evaluate(headingFocused), true);
+    });
+}
+
+test('UI meetings: mock 201 cambia solo A y preserva B pending y cancelled', async () => {
+    const fixtures = [consultationsFixture[0], { ...consultationsFixture[1], status: 'pending' }, consultationsFixture[2]];
+    await openMeeting({ consultations: fixtures }); await fillMeeting(); await submitMeeting();
+    await until('calls.consultations === 2'); await until(loaded);
+    const result = await evaluate('fixture.consultations');
+    assert.deepEqual(result[0], { ...fixtures[0], status: 'converted' });
+    assert.deepEqual(result.slice(1), fixtures.slice(1));
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), 1);
+});
+
+test('UI meetings: conflicto de A no transfiere bloqueo ni respuesta GET tardía a B', async () => {
+    await openMeeting({ meetingResponses: [{ status: 409 }] }); await fillMeeting(); await submitMeeting();
+    await until("!document.querySelector('[data-meeting-update]').hidden");
+    await evaluate('fixture.consultationResponses.push({ hold: true, data: [] })');
+    await click('[data-meeting-update]'); await until('pendingConsultations.length === 1');
+    await evaluate(`fixture.user = { ...fixture.user, role: 'agendadora' }; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until(loaded);
+    await evaluate('pendingConsultations.shift()()');
+    await new Promise(resolve => setTimeout(resolve, 30));
+    await click('[data-meeting-open]'); await fillMeeting();
+    assert.equal(await evaluate(modalOpen), true);
+    await submitMeeting(); await until('calls.meetings === 2');
 });

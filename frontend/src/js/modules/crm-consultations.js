@@ -1,4 +1,5 @@
 import { getInternal } from '../api/internal.js';
+import { initMeetingDialog } from './crm-meeting-dialog.js';
 
 const statuses = { pending: 'Pendiente', converted: 'Convertida', cancelled: 'Cancelada' };
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
@@ -34,6 +35,25 @@ export function initCRMConsultations() {
     let access = null;
     let generation = 0;
     let pending = null;
+    let schedulingDenied = false;
+    let refreshRequired = false;
+    const focusHeading = () => {
+        const heading = root.querySelector('#consultations-title');
+        if (access?.isCurrent() && heading?.isConnected) heading.focus();
+    };
+    const meeting = initMeetingDialog(root, { async reload() {
+        const current = access;
+        focusHeading();
+        await load();
+        if (access === current) focusHeading();
+    }, requireRefresh() {
+        refreshRequired = true;
+        rows.querySelectorAll('[data-meeting-open]').forEach(button => { button.disabled = true; });
+        find('status').textContent = 'La bandeja debe actualizarse antes de agendar otra reunión.';
+    }, forbid() {
+        schedulingDenied = true;
+        rows.querySelectorAll('[data-meeting-open]').forEach(button => { button.disabled = true; });
+    } });
 
     function clear() {
         rows.replaceChildren();
@@ -50,6 +70,9 @@ export function initCRMConsultations() {
         root.setAttribute('aria-busy', String(value));
     }
     function invalidate() {
+        meeting.invalidate();
+        schedulingDenied = false;
+        refreshRequired = false;
         generation += 1;
         pending?.abort();
         pending = null;
@@ -82,6 +105,14 @@ export function initCRMConsultations() {
             if (Object.hasOwn(statuses, item.status)) badge.classList.add(`consultations-badge--${item.status}`);
             cell('Estado').append(badge);
             cell('Recibida').append(node('span', createdDate(item.createdAt)));
+            const action = cell('Acción');
+            if (item.status === 'pending' && ['admin', 'agendadora'].includes(access?.user?.role)) {
+                const button = node('button', 'Agendar reunión', 'crm-button consultations-meeting-open');
+                button.type = 'button'; button.dataset.meetingOpen = '';
+                button.disabled = schedulingDenied || refreshRequired;
+                button.addEventListener('click', () => { if (!schedulingDenied && !refreshRequired) meeting.open(item, access, button); });
+                action.append(button);
+            }
             fragment.append(row);
         }
         rows.replaceChildren(fragment);
@@ -108,6 +139,7 @@ export function initCRMConsultations() {
             if (!Array.isArray(body?.data) || body.data.some(item => !item || typeof item !== 'object' || Array.isArray(item))) {
                 throw new Error('Invalid response');
             }
+            refreshRequired = false;
             render(body.data);
         } catch (error) {
             if (version !== generation || !current.isCurrent()) return;

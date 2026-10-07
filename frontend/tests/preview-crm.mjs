@@ -39,6 +39,9 @@ const server = createServer(async (request, response) => {
         } else if (pathname === '/api/admin/consultations') {
             response.setHeader('Content-Type', 'application/json');
             response.end(JSON.stringify({ data: consultationsFixture }));
+        } else if (pathname === '/api/admin/internal-users') {
+            response.setHeader('Content-Type', 'application/json');
+            response.end(JSON.stringify({ data: [] }));
         } else if (['/pages/crm/', '/pages/crm/solicitudes/'].includes(pathname)) {
             response.setHeader('Content-Type', 'text/html; charset=utf-8');
             response.end(await includes(resolve(root, `.${pathname}index.html`)));

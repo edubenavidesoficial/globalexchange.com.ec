@@ -128,6 +128,7 @@ export function initCRM({ onAuthorized = () => {}, onInvalidate = () => {} } = {
             // Capacidad temporal: una página solo carga tras autorización de Express.
             const isCurrent = () => authorized && operation.isCurrent();
             onAuthorized({
+                user: { fullName: user.fullName, role: user.role },
                 session: operation.session,
                 signal: operation.signal,
                 isCurrent,

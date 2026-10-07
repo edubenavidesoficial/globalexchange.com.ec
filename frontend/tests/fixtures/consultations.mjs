@@ -1,6 +1,6 @@
 // Exclusivo de pruebas y preview local; nunca importado por producción.
 export const consultationsFixture = ['pending', 'converted', 'cancelled'].map((status, index) => ({
-    id: `fixture-request-${index}`,
+    id: `aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa${index}`,
     program: { id: 'fixture-program', code: 'fixture-language', name: 'Programa de idiomas de prueba' },
     fullName: `Solicitante de Prueba ${index + 1}`,
     phone: '0000000000',

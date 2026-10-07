@@ -14,13 +14,39 @@
         <div><dt>Canceladas</dt><dd data-count="cancelled">0</dd></div>
     </dl>
     <p class="consultations-status" data-consultations-status role="status" aria-live="polite" aria-atomic="true"></p>
+    <p class="consultations-status" data-meeting-announcement role="status" aria-live="polite" aria-atomic="true"></p>
     <button class="crm-button crm-button--primary" type="button" data-consultations-retry hidden>Reintentar</button>
     <div class="consultations-table-wrap" data-consultations-results hidden>
         <table class="consultations-table">
             <caption>Solicitudes registradas · más recientes primero</caption>
-            <thead><tr><th scope="col">Solicitante</th><th scope="col">Programa</th><th scope="col">Contacto</th><th scope="col">Preferencia</th><th scope="col">Modalidad</th><th scope="col">Estado</th><th scope="col">Recibida</th></tr></thead>
+            <thead><tr><th scope="col">Solicitante</th><th scope="col">Programa</th><th scope="col">Contacto</th><th scope="col">Preferencia</th><th scope="col">Modalidad</th><th scope="col">Estado</th><th scope="col">Recibida</th><th scope="col">Acción</th></tr></thead>
             <tbody data-consultations-rows></tbody>
         </table>
     </div>
     <p class="crm-note">La fecha y hora indicadas son preferencias, no reuniones confirmadas.</p>
+    <dialog class="consultations-meeting" data-meeting-dialog aria-labelledby="meeting-title" aria-describedby="meeting-context">
+        <h2 id="meeting-title" tabindex="-1">Agendar reunión</h2>
+        <p id="meeting-context"><strong>Solicitante:</strong> <span data-meeting-applicant></span><br><strong>Programa:</strong> <span data-meeting-program></span></p>
+        <p class="crm-note">Zona horaria: Ecuador (America/Guayaquil)</p>
+        <form data-meeting-form novalidate>
+            <fieldset class="consultations-meeting-fields" data-meeting-fields>
+                <legend>Datos de la reunión</legend>
+                <label>Fecha<input name="date" type="date" required></label>
+                <label>Hora<input name="time" type="time" required></label>
+                <label>Modalidad<select name="mode" required><option value="">Selecciona una modalidad</option><option value="online">En línea</option><option value="phone">Teléfono</option><option value="office">Oficina</option></select></label>
+                <label>Duración (minutos)<input name="durationMinutes" type="number" min="1" step="1" required></label>
+                <label class="consultations-meeting-wide">Vendedora asignada<select name="assignedTo" required disabled></select></label>
+                <label class="consultations-meeting-wide">Notas<textarea name="notes" rows="3"></textarea></label>
+            </fieldset>
+            <p data-meeting-message class="consultations-meeting-message" role="status" aria-live="polite" aria-atomic="true"></p>
+            <p data-meeting-uncertain hidden>Antes de descartar el intento, conviene actualizar la bandeja para comprobar si la reunión fue registrada. Descartar no cancela una reunión que ya se haya guardado.</p>
+            <div class="consultations-meeting-actions">
+                <button class="crm-button" type="button" data-meeting-cancel>Cancelar</button>
+                <button class="crm-button" type="button" data-meeting-reload hidden>Reintentar carga</button>
+                <button class="crm-button" type="button" data-meeting-update hidden>Actualizar bandeja</button>
+                <button class="crm-button" type="button" data-meeting-discard hidden>Descartar intento y actualizar bandeja</button>
+                <button class="crm-button crm-button--primary" type="submit" data-meeting-confirm disabled>Confirmar reunión</button>
+            </div>
+        </form>
+    </dialog>
 </section>

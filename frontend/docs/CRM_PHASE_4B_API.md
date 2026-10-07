@@ -1,7 +1,54 @@
-# Fase 4B: infraestructura API frontend de reuniones
+# Fase 4B: API frontend y UI de reuniones (4B.4C)
 
-Solo infraestructura; no integra pantallas ni inicia peticiones al importar los
-módulos. Backend, Auth, configuración Supabase, locks y UI permanecen intactos.
+La infraestructura API se integra ahora con Solicitudes mediante el diálogo
+Agendar reunión. Importar los módulos no inicia peticiones. Backend,
+configuración Supabase y locks permanecen intactos; el guard expone también el
+perfil validado por Express en el contexto autorizado.
+
+## UI de Solicitudes · Fase 4B.4C
+
+Agendar reunión aparece solo para admin/agendadora según `/api/auth/me` y filas
+pending. No usa metadata, storage ni datasets como autoridad. Vendedora y filas
+converted/cancelled no muestran acción. Esta restricción es UX de esta fase:
+no define ni implementa el workflow de reuniones posteriores. El backend sigue
+siendo autoridad de permisos, calendario y elegibilidad.
+
+El dialog nativo tiene título, labels, mensajes live y aria-busy. Solo muestra
+solicitante y programa como contexto. Prefill: fecha preferida válida, hora HH:mm
+y modalidad válida. Envía date, time, timeZone, durationMinutes, mode, assignedTo
+y notes. America/Guayaquil es fija; 45 minutos es un default UX editable que se
+envía explícitamente. No serializa la solicitud completa ni añade auditoría.
+
+Al abrir carga vendedoras activas con getAvailableSalespeople. Presenta UUID y
+fullName, sin email ni fallback. Loading deshabilita selector/confirmación;
+el vacío muestra «No hay vendedoras disponibles.» y no permite confirmar.
+Los errores recuperables ofrecen reintento; los errores Auth delegan al guard.
+
+Cada intento captura un payload congelado y una crypto.randomUUID. No admite
+doble submit. Red, timeout, server e invalid_response son resultados inciertos:
+retry conserva exactamente la misma key y el mismo payload sin releer inputs.
+Se bloquean edición, Cancelar y Escape durante POST o incertidumbre. Descartar
+advierte que no cancela una reunión persistida y exige recargar la bandeja.
+400/422 permiten corregir con nueva clave; POST 403 conserva sesión y bloquea
+las acciones para esa autorización. 401 utiliza el mecanismo CRM existente.
+
+404/409 activan refreshRequired en memoria en crm-consultations.js, no solo en
+el diálogo. Todas las acciones de agendamiento quedan bloqueadas incluso si se
+cierra con Cancelar/Escape, se reabre o se altera disabled en el DOM. El diálogo
+conserva su mensaje seguro y ofrece Actualizar bandeja. Descartar un intento
+incierto reutiliza esta obligación de recarga; el retry incierto no la activa.
+refreshRequired solo se limpia tras GET /api/admin/consultations exitoso, con
+contrato válido y acceso/generación vigentes, antes de reconstruir las filas.
+No se limpia al iniciar la carga ni ante error, timeout o resultado stale.
+La invalidación elimina todo estado de la cuenta anterior, incluida esta bandera;
+B obtiene su propia autorización y carga, sin heredar bloqueos de A.
+
+Las recargas iniciadas desde el diálogo enfocan el heading estable Solicitudes
+(tabindex=-1) durante la carga y después de éxito/error si el acceso sigue vigente.
+Cancelar normal devuelve el foco al opener conectado y habilitado; cuando ya
+no lo está se usa el heading. Un 201 limpia intento/formulario, anuncia éxito y
+recarga por el flujo existente, sin asignar converted manualmente en producción.
+El modal conserva scroll interno y el diseño adaptable existente.
 
 ## GET internos
 
@@ -45,7 +92,7 @@ mensajes/códigos arbitrarios de respuestas de error ni se registran datos.
 
 ## Errores y coordinación
 
-| Caso | Clasificación | Responsabilidad del consumidor futuro |
+| Caso | Clasificación | Responsabilidad del consumidor |
 |---|---|---|
 | 401 | AuthError expired | Revalidar/bloquear mediante el guard existente |
 | GET 403 | AuthError denied, como antes | Mantener política previa del CRM |
@@ -72,8 +119,8 @@ inicial/final, fetch y lectura JSON, incluso si una promesa ignora AbortSignal.
 Cancelar la espera no cancela Auth ni libera sus Web Locks. Se conserva el orden
 de coordinación original. Cuenta, token, access.isCurrent y señales se comprueban
 antes y después del transporte; un 401 tardío de A también se descarta como stale.
-La futura UI debe además comprobar su generación/acceso al aplicar el resultado,
-como hace la bandeja actual, y abortar su señal al navegar o invalidarse.
+La UI comprueba su generación/acceso al aplicar el resultado y aborta su señal
+al navegar o invalidarse.
 
 Tokens, claves, notas y payloads no se guardan por estos helpers en storage,
 datasets ni URLs. Se mantienen únicamente durante la operación en memoria;
@@ -82,8 +129,13 @@ la persistencia Auth preexistente del SDK no cambia.
 ## Validación
 
 `npm run test:crm` ejecuta la suite anterior y `crm-meetings-api.test.mjs`.
-150 pruebas: las 130 anteriores (actualizando JSON inválido 201 al contrato
-invalid_response solicitado) y 20 regresiones para forma de query y respuestas.
+Última ejecución: 187 pruebas, 187 pass, 0 fail. Incluye las 150 de infraestructura,
+26 de UI y 11 regresiones de esta corrección: 404/409 con Cancelar/Escape,
+bloqueo entre filas y ante cambios DOM, recarga fallida por red/server/timeout,
+foco durante/después de recargar, aislamiento A → B y mock 201 por consultationId.
+El mock actualiza solo la solicitud confirmada y conserva otra pending y una
+cancelled. La mini auditoría de cierre/reapertura y recuperación se reproduce
+en memoria mediante estos tests, sin reuniones reales.
 Los módulos Auth/API reales se prueban
 con SDK/fetch simulados, sin cargar .env ni contactar Supabase. Cubren query,
 contratos, minimización, POST exacto, retry/replay, errores, cancelación, timeout
