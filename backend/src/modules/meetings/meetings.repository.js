@@ -1,5 +1,30 @@
 import supabase from '../../config/supabase.js';
 
+export async function findMeetings({ fromUTC, toUTC, assignedUserId }) {
+    // Hints por columnas FK declaradas en las migraciones, no por inferencia
+    // entre las tres relaciones meetings -> internal_users.
+    let query = supabase.from('meetings').select(`
+        id, consultation_request_id, scheduled_at, time_zone, duration_minutes,
+        mode, status, version,
+        consultation:consultation_requests!consultation_request_id (
+            id, full_name, phone, email,
+            program:programs!program_id (id, code, name)
+        ),
+        assigned_user:internal_users!assigned_to (id, full_name)
+    `, { count: 'exact' })
+        .gte('scheduled_at', fromUTC).lt('scheduled_at', toUTC);
+    if (assignedUserId !== null) query = query.eq('assigned_to', assignedUserId);
+    const { data, error, count } = await query
+        .order('scheduled_at', { ascending: true }).order('id', { ascending: true });
+    if (error) throw error;
+    // PostgREST puede limitar filas por configuración. Nunca presentar un
+    // calendario parcial como si estuviese completo, ni paginar silenciosamente.
+    if (!Array.isArray(data) || !Number.isInteger(count) || count !== data.length) {
+        throw new Error('Incomplete meetings response');
+    }
+    return data;
+}
+
 export async function createConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
     const { data, error } = await supabase.rpc('create_consultation_meeting', {
         p_actor_id: actorId,

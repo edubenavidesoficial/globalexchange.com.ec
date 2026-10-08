@@ -28,17 +28,25 @@ const fake = {
     } },
     from(table) {
         state.queries.push(table);
-        assert.ok(['internal_users', 'consultation_requests'].includes(table), 'Unexpected direct table access');
+        assert.ok(['internal_users', 'consultation_requests', 'meetings'].includes(table), 'Unexpected direct table access');
         const operations = [];
         const query = {
-            select(columns) { operations.push(['select', columns]); return query; },
+            select(columns, options) { operations.push(options ? ['select', columns, clone(options)] : ['select', columns]); return query; },
             eq(field, value) { operations.push(['eq', field, value]); return query; },
+            gte(field, value) { operations.push(['gte', field, value]); return query; },
+            lt(field, value) { operations.push(['lt', field, value]); return query; },
             async maybeSingle() {
                 assert.deepEqual(operations, [['select', 'id, full_name, role, active'], ['eq', 'id', actor]]);
                 return { data: state.profile, error: null };
             },
             order(field, options) { operations.push(['order', field, clone(options)]); return query; },
             then(resolve, reject) {
+                if (table === 'meetings') {
+                    state.meetingQueries.push(operations);
+                    if (state.meetingThrow) return reject(state.meetingThrow);
+                    return resolve({ data: state.meetings, error: state.meetingError,
+                        count: state.meetingCount === undefined ? state.meetings?.length : state.meetingCount });
+                }
                 if (table === 'internal_users') {
                     state.listQueries.push(operations);
                     if (state.listThrow) return reject(state.listThrow);
@@ -83,7 +91,7 @@ await new Promise(resolve => server.once('listening', resolve));
 after(() => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())));
 beforeEach(() => {
     state = { profile: { id: actor, full_name: 'Persona de prueba', role: 'admin', active: true },
-        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), listQueries: [], saleswomen: [] };
+        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
 });
 function send(options = {}) {
     const payload = options.raw ?? JSON.stringify(options.body === undefined ? body : options.body);
@@ -420,3 +428,135 @@ for (const transportFailure of [false, true]) {
         assert.equal(state.calls.length, 0);
     });
 }
+
+// Fase 4C.1: HTTP y módulos reales, sin configuración ni transporte remoto.
+const agendaPath = '/api/admin/meetings';
+const rangeQuery = '?from=2026-10-01T00:00:00-05:00&to=2026-11-01T00:00:00-05:00';
+const agenda = options => send({ method: 'GET', path: agendaPath + rangeQuery, ...options });
+const meetingRow = {
+    id: key, consultation_request_id: consultation, scheduled_at: '2026-10-07T15:00:00+00:00',
+    time_zone: 'America/Guayaquil', duration_minutes: 45, mode: 'online', status: 'scheduled', version: 1,
+    consultation: { id: consultation, full_name: 'Solicitante sintético', phone: '0000000000', email: null,
+        program: { id: assigned, code: 'fixture', name: 'Programa sintético' } },
+    assigned_user: { id: actor, full_name: 'Vendedora sintética' },
+};
+const meetingSelect = 'id, consultation_request_id, scheduled_at, time_zone, duration_minutes, mode, status, version, consultation:consultation_requests!consultation_request_id ( id, full_name, phone, email, program:programs!program_id (id, code, name) ), assigned_user:internal_users!assigned_to (id, full_name)';
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`agenda ${role}: scope DB, joins explícitos y contrato mínimo`, async () => {
+    state.profile.role = role;
+    state.meetings = [clone(meetingRow)];
+    const response = await agenda({ body: { role: 'admin', assignedTo: assigned, viewerId: assigned }, extraHeaders: ['X-User-Id', assigned, 'X-Role', 'admin'] });
+    assert.deepEqual(response, { status: 200, body: { data: [{ id: key, consultationRequestId: consultation,
+        scheduledAt: meetingRow.scheduled_at, timeZone: 'America/Guayaquil', durationMinutes: 45,
+        mode: 'online', status: 'scheduled', version: 1,
+        consultation: { id: consultation, fullName: 'Solicitante sintético', phone: '0000000000', email: null,
+            program: { id: assigned, code: 'fixture', name: 'Programa sintético' } },
+        assignedTo: { id: actor, fullName: 'Vendedora sintética' } }] } });
+    const operations = state.meetingQueries[0];
+    assert.equal(operations[0][1].trim().replace(/\s+/g, ' '), meetingSelect);
+    assert.deepEqual(operations[0][2], { count: 'exact' });
+    assert.deepEqual(operations.slice(1), [
+        ['gte', 'scheduled_at', '2026-10-01T05:00:00.000000Z'],
+        ['lt', 'scheduled_at', '2026-11-01T05:00:00.000000Z'],
+        ...(role === 'vendedora' ? [['eq', 'assigned_to', actor]] : []),
+        ['order', 'scheduled_at', { ascending: true }], ['order', 'id', { ascending: true }],
+    ]);
+    assert.deepEqual(state.queries, ['internal_users', 'meetings']);
+    assert.equal(state.calls.length, 0);
+});
+test('agenda: vacío es 200', async () => assert.deepEqual(await agenda(), { status: 200, body: { data: [] } }));
+test('agenda: sin auth 401', async () => {
+    assert.equal((await agenda({ auth: false })).status, 401); assert.deepEqual(state.queries, []);
+});
+test('agenda: token inválido 401', async () => {
+    const { AuthApiError } = await import('@supabase/supabase-js');
+    state.authError = new AuthApiError('synthetic', 401, 'bad_jwt');
+    assert.equal((await agenda()).status, 401); assert.deepEqual(state.queries, []);
+});
+for (const profile of [null, { id: actor, role: 'vendedora', active: false }, { id: actor, role: 'other', active: true }]) test('agenda: perfil no autorizado 403 sin listado', async () => {
+    state.profile = profile; assert.equal((await agenda()).status, 403); assert.deepEqual(state.meetingQueries, []);
+});
+const range = (from, to) => '?' + new URLSearchParams({ from, to });
+for (const query of [
+    '', '?from=2026-10-01T00:00:00Z', '?to=2026-11-01T00:00:00Z',
+    range('', '2026-11-01T00:00:00Z'), range('2026-10-01T00:00:00Z', ''),
+    ...['from', 'to', '%66rom', '%74o'].map(name => rangeQuery + '&' + name + '=2026-10-01T00:00:00Z'),
+    ...['extra', 'role', 'assignedTo', 'viewerId', 'userId', 'sellerId', 'status'].map(name => rangeQuery + '&' + name + '=' + assigned),
+    ...['extra=x', '%66rom=bad', 'to=bad'].map(suffix => rangeQuery + '&'.repeat(1000) + suffix),
+]) test(`agenda: query rechazada ${query.slice(-85)}`, async () => {
+    state.profile.role = 'vendedora';
+    assert.equal((await agenda({ path: agendaPath + query })).status, 400);
+    assert.deepEqual(state.meetingQueries, []); assert.deepEqual(state.logs, []);
+});
+for (const from of ['2026-10-07T10:00:00', '2026-02-30T10:00:00Z', '1900-02-29T00:00:00Z',
+    '2026-10-07T24:00:00Z', '2026-10-07T10:60:00Z', '2026-10-07T10:00:60Z', 'arbitrary',
+    '2026-10-07T10:00:00+24:00', '2026-10-07T10:00:00+01:60', '2026-10-07T10:00:00-00:00',
+    '2026-10-07T10:00:00Z\n', '2026-10-07T10:00:00.1234567Z', '0000-01-01T00:00:00Z']) {
+    test(`agenda: timestamp inválido ${JSON.stringify(from)}`, async () => {
+        assert.equal((await agenda({ path: agendaPath + range(from, '2026-11-01T00:00:00Z') })).status, 400);
+        assert.deepEqual(state.meetingQueries, []);
+    });
+}
+for (const [from, to, status] of [
+    ['2026-10-07T10:00:00-05:00', '2026-10-07T15:00:00Z', 400],
+    ['2026-10-08T00:00:00Z', '2026-10-07T00:00:00Z', 400],
+    ['2026-10-01T00:00:00Z', '2026-11-15T00:00:00Z', 200],
+    ['2026-10-01T00:00:00Z', '2026-11-15T00:00:00.000001Z', 400],
+    ['2026-10-01T00:00:00.000001Z', '2026-10-01T00:00:00.000002Z', 200],
+    ['2000-02-29t00:00:00z', '2000-03-01T00:00:00+00:00', 200],
+]) test(`agenda: rango ${from} / ${to}`, async () => {
+    assert.equal((await agenda({ path: agendaPath + range(from, to) })).status, status);
+    assert.equal(state.meetingQueries.length, status === 200 ? 1 : 0);
+});
+test('agenda: orden inverso y nombres codificados válidos', async () => {
+    assert.equal((await agenda({ path: agendaPath + '?%74o=2026-11-01T05:00:00Z&%66rom=2026-10-01T06:00:00%2B01:00' })).status, 200);
+    assert.deepEqual(state.meetingQueries[0].slice(1, 3), [['gte', 'scheduled_at', '2026-10-01T05:00:00.000000Z'], ['lt', 'scheduled_at', '2026-11-01T05:00:00.000000Z']]);
+});
+test('agenda: todos los estados y asignada histórica inactiva; extras nunca expuestos', async () => {
+    state.meetings = ['scheduled', 'completed', 'cancelled', 'no_show'].map(status => ({
+        ...clone(meetingRow), status, notes: 'PRIVATE', created_by: 'PRIVATE', updated_by: 'PRIVATE',
+        created_at: 'PRIVATE', updated_at: 'PRIVATE', audit: 'PRIVATE', idempotency: 'PRIVATE',
+        consultation: { ...clone(meetingRow.consultation), email: 'fixture@example.invalid', message: 'PRIVATE', city: 'PRIVATE' },
+        assigned_user: { ...meetingRow.assigned_user, active: false, email: 'PRIVATE', metadata: 'PRIVATE' },
+    }));
+    const response = await agenda(); assert.equal(response.status, 200);
+    assert.deepEqual(response.body.data.map(row => row.status), ['scheduled', 'completed', 'cancelled', 'no_show']);
+    assert.ok(!JSON.stringify(response).includes('PRIVATE'));
+    assert.equal(state.meetingQueries[0].some(op => op[0] === 'eq'), false);
+});
+const badMeetingRows = [null, [], {},
+    ...Object.entries({ id: 'bad', consultation_request_id: 'bad', scheduled_at: '2026-02-30T00:00:00Z',
+        time_zone: ' ', duration_minutes: 0, version: 1.5, mode: 'bad', status: 'bad',
+        consultation: null, assigned_user: [] }).map(([field, value]) => ({ ...clone(meetingRow), [field]: value })),
+    ...[{}, [], null, { id: assigned, code: 'x', name: '' }].map(program => ({ ...clone(meetingRow), consultation: { ...clone(meetingRow.consultation), program } })),
+    ...[{ email: 123 }, { phone: null }, { full_name: '' }, { id: assigned }].map(patch => ({ ...clone(meetingRow), consultation: { ...clone(meetingRow.consultation), ...patch } })),
+    { ...clone(meetingRow), assigned_user: { id: 'bad', full_name: 'Name' } },
+    { ...clone(meetingRow), scheduled_at: '2026-11-01T05:00:00Z' },
+];
+for (const [i, row] of badMeetingRows.entries()) test(`agenda: fila/relación inválida ${i}, sin respuesta parcial`, async () => {
+    state.meetings = [clone(meetingRow), row];
+    assert.equal((await agenda()).status, 500);
+    assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+});
+for (const data of [null, {}, 'bad']) test('agenda: listado no array', async () => {
+    state.meetings = data; assert.equal((await agenda()).status, 500);
+});
+test('agenda: respuesta fuera del scope falla cerrada', async () => {
+    state.profile.role = 'vendedora'; state.meetings = [{ ...clone(meetingRow), assigned_user: { id: assigned, full_name: 'Other' } }];
+    assert.equal((await agenda()).status, 500);
+    assert.ok(state.meetingQueries[0].some(op => op[0] === 'eq' && op[2] === actor));
+});
+test('agenda: el scope usa id del perfil interno, no metadata ni cabeceras', async () => {
+    state.profile = { id: assigned, full_name: 'Perfil interno sintético', role: 'vendedora', active: true };
+    state.meetings = [{ ...clone(meetingRow), assigned_user: { id: assigned, full_name: 'Asignada' } }];
+    assert.equal((await agenda({ body: { userId: actor, role: 'admin' }, extraHeaders: ['X-User-Id', actor] })).status, 200);
+    assert.ok(state.meetingQueries[0].some(op => op[0] === 'eq' && op[1] === 'assigned_to' && op[2] === assigned));
+});
+for (const count of [null, 1]) test('agenda: conteo ausente o truncado nunca devuelve éxito parcial', async () => {
+    state.meetingCount = count; assert.equal((await agenda()).status, 500);
+});
+for (const transport of [false, true]) test(`agenda: error proveedor/transporte ${transport} sanitizado`, async () => {
+    const error = Object.assign(new Error('PRIVATE_SQL'), { statusCode: 400, details: 'PRIVATE', hint: 'PRIVATE', cause: 'PRIVATE' });
+    if (transport) state.meetingThrow = error; else state.meetingError = error;
+    const response = await agenda(); assert.deepEqual(response, { status: 500, body: { error: { message: 'Ocurrió un error interno en el servidor.' } } });
+    assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+});

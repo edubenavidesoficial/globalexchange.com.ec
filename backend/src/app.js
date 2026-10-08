@@ -6,6 +6,7 @@ import consultationsAdminRouter from './modules/consultations/consultations.admi
 import consultationsRouter from './modules/consultations/consultations.routes.js';
 import programsRouter from './modules/programs/programs.routes.js';
 import internalUsersAdminRouter from './modules/internal-users/internal-users.admin.routes.js';
+import meetingsAdminRouter from './modules/meetings/meetings.admin.routes.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/programs', programsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin/consultations', consultationsAdminRouter);
 app.use('/api/admin/internal-users', internalUsersAdminRouter);
+app.use('/api/admin/meetings', meetingsAdminRouter);
 
 app.use(errorHandler);
 

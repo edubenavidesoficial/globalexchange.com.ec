@@ -1,5 +1,15 @@
-import { confirmMeeting } from './meetings.service.js';
+import { confirmMeeting, listMeetings } from './meetings.service.js';
 import { MeetingError } from './meetings.errors.js';
+
+export async function getMeetings(req, res, next) {
+    try {
+        const start = req.originalUrl.indexOf('?');
+        const data = await listMeetings(start < 0 ? '' : req.originalUrl.slice(start + 1), req.user);
+        res.status(200).json({ data });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export async function postConsultationMeeting(req, res, next) {
     try {
