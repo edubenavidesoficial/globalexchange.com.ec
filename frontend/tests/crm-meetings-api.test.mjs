@@ -13,6 +13,11 @@ const A = { user: { id: 'A' }, access_token: 'synthetic-A' };
 const B = { user: { id: 'B' }, access_token: 'synthetic-B' };
 const deferred = () => { let resolve, reject; const promise = new Promise((a, b) => { resolve = a; reject = b; }); return { promise, resolve, reject }; };
 const clone = value => JSON.parse(JSON.stringify(value));
+const agendaRow = { id, consultationRequestId: key, scheduledAt: '2026-10-01T10:00:00-05:00',
+    timeZone: 'America/Guayaquil', durationMinutes: 45, mode: 'online', status: 'scheduled', version: 1,
+    consultation: { id: key, fullName: 'Solicitante sintético', phone: '', email: null,
+        program: { id, code: 'SYNTH', name: 'Programa sintético' } },
+    assignedTo: { id, fullName: 'Persona sintética' } };
 async function bounded(promise) {
     let timer;
     try { return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(Error('Still pending')), 1000); })]); }
@@ -28,10 +33,10 @@ async function fixture(options = {}) {
     let tail = Promise.resolve();
     const guard = new AbortController();
     const external = new AbortController();
-    const realm = vm.createContext({ URLSearchParams, crypto: webcrypto,
-        AbortSignal: { any: AbortSignal.any, timeout: ms => {
+    const realm = vm.createContext({ URLSearchParams, crypto: webcrypto, AbortController,
+        AbortSignal: new Proxy(AbortSignal, { get: (target, property) => property === 'timeout' ? ms => {
             assert.equal(ms, 15000); return AbortSignal.timeout(options.shortTimeout ? 30 : ms);
-        } },
+        } : Reflect.get(target, property) }),
         fetch: async (url, request) => {
             state.requests.push({ url, ...request });
             if (state.holdFetch) { held.resolve(); await release.promise; }
@@ -78,6 +83,10 @@ async function fixture(options = {}) {
         }),
         get: query => internal.namespace.getInternal('/api/admin/consultations', access, external.signal, query),
         list: () => meetings.namespace.getAvailableSalespeople(access, external.signal),
+        agenda: (overrides = {}) => meetings.namespace.getAgendaMeetings({
+            from: '2026-10-01T00:00:00-05:00', to: '2026-10-02T00:00:00-05:00',
+            access, signal: external.signal, ...overrides,
+        }),
     };
 }
 
@@ -250,3 +259,116 @@ for (const rawBody of ['', '{invalid', '<html>PRIVATE</html>', 'PRIVATE text']) 
             error.message === 'invalid_response' && !JSON.stringify(error).includes('PRIVATE'));
     });
 }
+
+test('Agenda GET exacto, codificación, autenticación y signal opcional', async () => {
+    const f = await fixture({ status: 200, response: { data: [agendaRow] } });
+    const from = '2026-10-01T00:00:00+05:30';
+    const to = '2026-10-02T00:00:00Z&role=admin#fragment';
+    assert.deepEqual(clone(await f.agenda({ from, to, signal: undefined })), [agendaRow]);
+    const r = f.state.requests[0];
+    const url = new URL(r.url, 'https://synthetic.invalid');
+    assert.equal(url.pathname, '/api/admin/meetings'); assert.equal(url.hash, '');
+    assert.deepEqual([...url.searchParams], [['from', from], ['to', to]]);
+    assert.ok(r.url.includes('%2B05%3A30')); assert.ok(r.url.includes('%26role%3Dadmin%23fragment'));
+    assert.equal(r.method, 'GET'); assert.equal(r.body, undefined);
+    assert.deepEqual(clone(r.headers), { Authorization: 'Bearer synthetic-A' });
+    assert.equal(r.cache, 'no-store'); assert.equal(r.credentials, 'omit'); assert.equal(r.redirect, 'error');
+    assert.ok(r.signal instanceof AbortSignal); assert.equal(f.state.reads, 2);
+});
+
+test('Agenda vacío, modalidades/estados, orden y copias profundas con whitelist', async () => {
+    const f = await fixture({ status: 200, response: { data: [] } });
+    assert.deepEqual(clone(await f.agenda()), []);
+    const rows = ['no_show', 'completed', 'cancelled', 'scheduled'].map((status, index) => ({
+        ...clone(agendaRow), status, id: index % 2 ? id : key,
+        mode: ['office', 'phone', 'online'][index % 3],
+        scheduledAt: index % 2 ? '2026-10-01T10:00:00.123456Z' : agendaRow.scheduledAt,
+    }));
+    rows[0].consultation.email = 'synthetic@example.invalid';
+    const expected = clone(rows);
+    const extras = Object.fromEntries(['notes', 'message', 'city', 'createdBy', 'updatedBy',
+        'createdAt', 'updatedAt', 'active', 'internalEmail', 'privateSentinel'].map(name => [name, 'PRIVATE']));
+    for (const row of rows) for (const object of [row, row.consultation, row.consultation.program, row.assignedTo]) Object.assign(object, extras);
+    f.state.response = { data: rows, ...extras };
+    const actual = await f.agenda();
+    assert.deepEqual(clone(actual), expected); assert.ok(!JSON.stringify(actual).includes('PRIVATE'));
+    actual[0].consultation.program.name = 'changed'; actual[0].assignedTo.fullName = 'changed';
+    actual[0].consultation.fullName = 'changed'; actual[0].status = 'changed';
+    assert.deepEqual(clone(await f.agenda()), expected);
+});
+
+for (const options of [undefined, null, [], 'invalid', 42]) test('Agenda options inválidas', async () => {
+    const f = await fixture(); await assert.rejects(f.api.getAgendaMeetings(options), { code: 'invalid_input' });
+    assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+});
+for (const overrides of [{ from: '' }, { from: '  ' }, { from: new Date() }, { to: null }, { to: [] },
+    { to: ' ' }, { access: null }, { access: {} }, { signal: null }, { signal: {} },
+    ...['role', 'userId', 'viewerId', 'sellerId', 'assignedTo', 'path', 'url', 'query', 'fragment'].map(name => ({ [name]: 'PRIVATE' }))]) {
+    test(`Agenda rechaza entrada/scope ${Object.keys(overrides)}`, async () => {
+        const f = await fixture(); await assert.rejects(f.agenda(overrides), { code: 'invalid_input' });
+        assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+    });
+}
+for (const field of ['session', 'signal', 'isCurrent']) test(`Agenda access sin ${field}`, async () => {
+    const f = await fixture(); const access = { ...f.access }; delete access[field];
+    await assert.rejects(f.agenda({ access }), { code: 'invalid_input' }); assert.equal(f.state.reads, 0);
+});
+for (const response of [null, [], {}, { data: null }, { data: {} }, { data: [null] }]) test('Agenda envelope inválido', async () => {
+    const f = await fixture({ status: 200, response }); await assert.rejects(f.agenda(), { code: 'invalid_response' });
+});
+for (const [path, value] of [
+    ['id', 'bad'], ['consultationRequestId', 'bad'], ['scheduledAt', 'tomorrow'],
+    ['scheduledAt', '2026-10-01T10:00:00'], ['scheduledAt', '2026-10-01T25:00:00Z'],
+    ['scheduledAt', '2026-10-01T10:00:00Z\n'], ['timeZone', ' '], ['durationMinutes', 0],
+    ['durationMinutes', 1.5], ['mode', 'unknown'], ['status', 'unknown'], ['version', 0], ['version', 1.5],
+    ['consultation', undefined], ['consultation', []], ['consultation.id', 'bad'],
+    ['consultation.fullName', ' '], ['consultation.phone', null], ['consultation.email', 42],
+    ['consultation.email', undefined], ['consultation.program', null], ['consultation.program', []],
+    ['consultation.program.id', 'bad'], ['consultation.program.code', ''], ['consultation.program.name', ' '],
+    ['assignedTo', null], ['assignedTo', []], ['assignedTo.id', 'bad'], ['assignedTo.fullName', ' '],
+]) test(`Agenda fila inválida ${path}: ${JSON.stringify(value)} invalida toda la lista`, async () => {
+    const row = clone(agendaRow); const keys = path.split('.');
+    const field = keys.pop(); const parent = keys.reduce((object, name) => object[name], row); parent[field] = value;
+    const f = await fixture({ status: 200, response: { data: [agendaRow, row, agendaRow] } });
+    await assert.rejects(f.agenda(), { code: 'invalid_response' });
+});
+for (const [status, code] of [[400, 'unavailable'], [401, 'expired'], [403, 'denied'], [500, 'server']]) {
+    test(`Agenda HTTP ${status} conserva ${code}`, async () => {
+        const f = await fixture({ status, response: { error: 'PRIVATE' } });
+        await assert.rejects(f.agenda(), error => error.code === code && error.message === code && !JSON.stringify(error).includes('PRIVATE'));
+        assert.equal(f.state.logout, 0); assert.equal(f.state.refresh, 0); assert.equal(f.state.requests.length, 1);
+    });
+}
+for (const options of [{ network: true }, { badJSON: true }]) test('Agenda red/JSON ilegible conserva network', async () => {
+    const f = await fixture({ status: 200, ...options }); await assert.rejects(f.agenda(), { code: 'network' });
+});
+for (const status of [200, 201, 202, 206]) test(`Agenda GET ${status} acepta contrato válido`, async () => {
+    const f = await fixture({ status, response: { data: [] } }); assert.deepEqual(clone(await f.agenda()), []);
+});
+test('Agenda 204 sin JSON conserva network', async () => {
+    const f = await fixture({ status: 204, badJSON: true }); await assert.rejects(f.agenda(), { code: 'network' });
+});
+for (const hold of [{ holdRead: 1 }, { holdRead: 2 }, { holdFetch: true }, { holdBody: true }]) {
+    for (const cancel of [false, true]) test(`Agenda espera ${JSON.stringify(hold)}: ${cancel ? 'abort' : 'timeout'}`, async () => {
+        const f = await fixture({ status: 200, response: { data: [] }, ...hold, shortTimeout: true });
+        const outcome = f.agenda().catch(error => error.code); await f.held;
+        if (cancel) f.external.abort();
+        assert.equal(await bounded(outcome), cancel ? 'stale' : 'timeout');
+        f.release.reject(Error('PRIVATE late rejection'));
+        await new Promise(resolve => setTimeout(resolve, 5)); assert.equal(f.state.logout, 0);
+    });
+}
+for (const change of ['account', 'token', 'guard', 'current', 'logout']) test(`Agenda descarta respuesta tardía: ${change}`, async () => {
+    const f = await fixture({ status: 200, response: { data: [agendaRow] }, holdFetch: true });
+    const outcome = f.agenda().catch(error => error.code); await f.held;
+    if (change === 'account') f.state.session = B;
+    if (change === 'token') f.state.session = { ...A, access_token: 'rotated' };
+    if (change === 'guard') f.guard.abort();
+    if (change === 'current') f.state.current = false;
+    if (change === 'logout') { f.state.session = null; f.guard.abort(); }
+    f.release.resolve(); assert.equal(await outcome, 'stale'); assert.equal(f.state.logout, 0);
+});
+test('Agenda señal ya abortada evita Auth y fetch', async () => {
+    const f = await fixture(); f.external.abort(); await assert.rejects(f.agenda(), { code: 'stale' });
+    assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+});
