@@ -49,13 +49,28 @@ export async function getInternal(path, access, signal, query) {
 }
 
 export async function postInternal(path, access, signal, payload, idempotencyKey) {
+    return mutateInternal(path, access, signal, payload, idempotencyKey, 'POST', 201);
+}
+
+export async function patchInternal(path, access, signal, payload, idempotencyKey) {
+    return mutateInternal(path, access, signal, payload, idempotencyKey, 'PATCH', 200);
+}
+
+// Solo PATCH reconoce estos códigos, vinculados a su estado HTTP esperado.
+const patchDomainCodes = new Map([
+    ['MEETING_VERSION_CONFLICT', 409], ['IDEMPOTENCY_KEY_REUSED', 409],
+    ['MEETING_NOT_FOUND', 404], ['MEETING_NOT_SCHEDULED', 409],
+    ['MEETING_NOT_IN_FUTURE', 422], ['INVALID_TIME_ZONE', 422], ['INVALID_LOCAL_TIME', 422],
+]);
+
+function mutateInternal(path, access, signal, payload, idempotencyKey, method, successStatus) {
     internalPath(path);
     if (typeof idempotencyKey !== 'string' || idempotencyKey.length !== 36 ||
         !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idempotencyKey)) {
         throw new AuthError('configuration');
     }
     return requestInternal(path, access, signal, {
-        body: JSON.stringify(payload), idempotencyKey,
+        body: JSON.stringify(payload), idempotencyKey, method, successStatus,
     });
 }
 
@@ -85,10 +100,11 @@ async function requestInternal(path, access, signal, mutation) {
     const session = await confirm();
     let response;
     let body;
+    let domainCode;
     let failure;
     try {
         response = await waitFor(fetch(path, {
-            method: mutation ? 'POST' : 'GET',
+            method: mutation ? mutation.method : 'GET',
             headers: { Authorization: `Bearer ${session.access_token}`,
                 ...(mutation ? { 'Content-Type': 'application/json', 'Idempotency-Key': mutation.idempotencyKey } : {}),
             },
@@ -98,13 +114,23 @@ async function requestInternal(path, access, signal, mutation) {
             redirect: 'error',
             signal: requestSignal,
         }), requestSignal);
-        // POST solo lee JSON para 201. El estado se clasifica tras confirmar sesión.
-        if (response.ok && (!mutation || response.status === 201)) {
+        // Cada mutation exige su estado exacto. Clasificar tras confirmar sesión.
+        if (response.ok && (!mutation || response.status === mutation.successStatus)) {
             try {
                 body = await waitFor(response.json(), requestSignal);
             } catch (error) {
                 if (!mutation || requestSignal.aborted) throw error;
                 failure = new InternalMutationError('invalid_response', response.status);
+            }
+        }
+        if (mutation?.method === 'PATCH' && [400, 404, 409, 422].includes(response.status)) {
+            try {
+                const errorBody = await waitFor(response.json(), requestSignal);
+                const candidate = errorBody?.error?.code;
+                if (patchDomainCodes.get(candidate) === response.status) domainCode = candidate;
+            } catch {
+                // Un error HTTP con JSON ilegible conserva su clasificación por status.
+                if (requestSignal.aborted) throw new AuthError('timeout');
             }
         }
     } catch {
@@ -126,9 +152,14 @@ async function requestInternal(path, access, signal, mutation) {
     if (failure) throw failure;
     if (response.status === 401) throw new AuthError('expired');
     if (mutation) {
-        if (!response.ok) throw new InternalMutationError(response.status >= 500 ? 'server'
-            : response.status === 403 ? 'forbidden' : 'operation', response.status);
-        if (response.status !== 201) throw new InternalMutationError('invalid_response', response.status);
+        if (!response.ok) {
+            const error = new InternalMutationError(response.status >= 500 ? 'server'
+                : response.status === 403 ? 'forbidden' : 'operation', response.status);
+            // code sigue siendo la clasificación existente; nunca copiar el error bruto.
+            if (domainCode !== undefined) error.domainCode = domainCode;
+            throw error;
+        }
+        if (response.status !== mutation.successStatus) throw new InternalMutationError('invalid_response', response.status);
     }
     if (response.status === 403) throw new AuthError('denied');
     if (!response.ok) throw new AuthError(response.status >= 500 ? 'server' : 'unavailable');

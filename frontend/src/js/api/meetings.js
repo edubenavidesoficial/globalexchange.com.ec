@@ -1,4 +1,4 @@
-import { getInternal, postInternal, InternalMutationError } from './internal.js';
+import { getInternal, postInternal, patchInternal, InternalMutationError } from './internal.js';
 
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const isUUID = value => typeof value === 'string' && value.length === 36 &&
@@ -96,4 +96,49 @@ export async function createConsultationMeeting({ consultationId, idempotencyKey
         throw new InternalMutationError('invalid_response');
     }
     return response.data;
+}
+
+const rescheduleOptions = new Set(['meetingId', 'idempotencyKey', 'payload', 'access', 'signal']);
+const scheduleFields = ['date', 'time', 'timeZone', 'durationMinutes', 'mode', 'expectedVersion'];
+
+// Leer solo campos propios de datos: no ejecutar getters ni serializar extras.
+function dataFields(value, allowedFields, requiredFields) {
+    if (!isObject(value)) return null;
+    const descriptors = Object.getOwnPropertyDescriptors(value);
+    if (Reflect.ownKeys(descriptors).some(key => !allowedFields.has(key) ||
+        !Object.hasOwn(descriptors[key], 'value')) ||
+        requiredFields.some(key => !Object.hasOwn(descriptors, key))) return null;
+    return Object.fromEntries(Object.keys(descriptors).map(key => [key, descriptors[key].value]));
+}
+
+export async function rescheduleMeeting(options) {
+    const input = dataFields(options, rescheduleOptions, ['meetingId', 'idempotencyKey', 'payload', 'access']);
+    const payload = input && dataFields(input.payload, new Set(scheduleFields), scheduleFields);
+    const access = input?.access;
+    if (!input || !isUUID(input.meetingId) || !isUUID(input.idempotencyKey) || !payload ||
+        typeof payload.date !== 'string' || payload.date.length !== 10 || !/^\d{4}-\d{2}-\d{2}$/.test(payload.date) ||
+        typeof payload.time !== 'string' || payload.time.length !== 5 || !/^([01]\d|2[0-3]):[0-5]\d$/.test(payload.time) ||
+        !nonBlank(payload.timeZone) || !Number.isInteger(payload.durationMinutes) || payload.durationMinutes <= 0 ||
+        !['online', 'phone', 'office'].includes(payload.mode) ||
+        !Number.isInteger(payload.expectedVersion) || payload.expectedVersion <= 0 ||
+        !isObject(access) || !isObject(access.session) || !nonBlank(access.session.user?.id) ||
+        !nonBlank(access.session.access_token) || typeof access.isCurrent !== 'function' ||
+        !(access.signal instanceof AbortSignal) || (input.signal !== undefined && !(input.signal instanceof AbortSignal))) {
+        throw new InternalMutationError('invalid_input');
+    }
+    const body = Object.fromEntries(scheduleFields.map(field => [field, payload[field]]));
+    const response = await patchInternal(`/api/admin/meetings/${input.meetingId.toLowerCase()}/schedule`,
+        access, input.signal ?? new AbortController().signal, body, input.idempotencyKey.toLowerCase());
+    const meeting = response?.data;
+    if (!isObject(response) || !isObject(meeting) || !isUUID(meeting.id) ||
+        meeting.id.toLowerCase() !== input.meetingId.toLowerCase() || !isUUID(meeting.consultationRequestId) ||
+        !isTimestamp(meeting.scheduledAt) || !nonBlank(meeting.timeZone) ||
+        !Number.isInteger(meeting.durationMinutes) || meeting.durationMinutes <= 0 ||
+        !['online', 'phone', 'office'].includes(meeting.mode) || meeting.status !== 'scheduled' ||
+        !Number.isInteger(meeting.version) || meeting.version <= 0) {
+        throw new InternalMutationError('invalid_response');
+    }
+    return { id: meeting.id, consultationRequestId: meeting.consultationRequestId,
+        scheduledAt: meeting.scheduledAt, timeZone: meeting.timeZone,
+        durationMinutes: meeting.durationMinutes, mode: meeting.mode, status: meeting.status, version: meeting.version };
 }
