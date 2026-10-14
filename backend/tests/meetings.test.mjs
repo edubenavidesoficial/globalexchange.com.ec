@@ -60,7 +60,7 @@ const fake = {
     async rpc(name, args) {
         state.calls.push({ name, args: clone(args) });
         if (state.rpcThrow) throw state.rpcThrow;
-        return { data: state.data, error: state.rpcError };
+        return { data: name === 'reschedule_consultation_meeting' ? state.scheduleData : state.data, error: state.rpcError };
     },
 };
 const context = vm.createContext({ console: { error: (...args) => state.logs.push(clone(args)) } });
@@ -91,7 +91,7 @@ await new Promise(resolve => server.once('listening', resolve));
 after(() => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())));
 beforeEach(() => {
     state = { profile: { id: actor, full_name: 'Persona de prueba', role: 'admin', active: true },
-        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
+        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), scheduleData: clone(rescheduled), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
 });
 function send(options = {}) {
     const payload = options.raw ?? JSON.stringify(options.body === undefined ? body : options.body);
@@ -559,4 +559,153 @@ for (const transport of [false, true]) test(`agenda: error proveedor/transporte 
     if (transport) state.meetingThrow = error; else state.meetingError = error;
     const response = await agenda(); assert.deepEqual(response, { status: 500, body: { error: { message: 'Ocurrió un error interno en el servidor.' } } });
     assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+});
+
+// Fase 4D.1B: mismo harness HTTP/VM; RPC completamente simulada.
+const meetingId = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+const scheduleBody = { date: '2028-02-29', time: '10:30', timeZone: 'America/Guayaquil', durationMinutes: 45, mode: 'online', expectedVersion: 1 };
+const rescheduled = { id: meetingId, consultationRequestId: consultation, scheduledAt: '2028-02-29T15:30:00+00:00', timeZone: 'America/Guayaquil', durationMinutes: 45, mode: 'online', status: 'scheduled', version: 2 };
+const patchSchedule = (options = {}) => send({ method: 'PATCH', path: `/api/admin/meetings/${options.id ?? meetingId}/schedule`, body: scheduleBody, ...options });
+async function invalidSchedule(options, code = 'INVALID_MEETING_INPUT') {
+    const r = await patchSchedule(options);
+    assert.equal(r.status, 400); assert.equal(r.body.error.code, code);
+    assert.equal(state.calls.length, 0);
+}
+for (const role of ['admin', 'agendadora']) test(`schedule ${role}: 200, diez argumentos y una RPC sin queries comerciales`, async () => {
+    state.profile.role = role;
+    const r = await patchSchedule({ path: `/api/admin/meetings/${meetingId}/schedule?actorId=${assigned}`, extraHeaders: ['X-Actor-Id', assigned] });
+    assert.deepEqual(r, { status: 200, body: { data: rescheduled } });
+    const canonical = { meetingId, expectedVersion: 1, date: scheduleBody.date, time: scheduleBody.time, timeZone: scheduleBody.timeZone, durationMinutes: 45, mode: 'online' };
+    assert.deepEqual(state.calls, [{ name: 'reschedule_consultation_meeting', args: {
+        p_actor_id: actor, p_meeting_id: meetingId, p_idempotency_key: key,
+        p_request_hash: createHash('sha256').update(JSON.stringify(canonical), 'utf8').digest('hex'),
+        p_expected_version: 1, p_scheduled_date: scheduleBody.date, p_scheduled_time: scheduleBody.time,
+        p_time_zone: scheduleBody.timeZone, p_duration_minutes: 45, p_mode: 'online',
+    } }]);
+    assert.deepEqual(state.queries, ['internal_users']);
+});
+test('schedule vendedora: 403 antes de body/key, metadata y headers no autorizan', async () => {
+    state.profile.role = 'vendedora';
+    assert.equal((await patchSchedule({ body: { role: 'admin' }, key: null, extraHeaders: ['X-Role', 'admin'] })).status, 403);
+    assert.equal(state.calls.length, 0);
+});
+test('schedule sin token: 401 y cero RPC', async () => {
+    assert.equal((await patchSchedule({ auth: false })).status, 401); assert.equal(state.calls.length, 0);
+});
+test('schedule token inválido: 401 y cero RPC', async () => {
+    const { AuthApiError } = await import('@supabase/supabase-js');
+    state.authError = new AuthApiError('synthetic', 401, 'bad_jwt');
+    assert.equal((await patchSchedule()).status, 401); assert.equal(state.calls.length, 0);
+});
+for (const profile of [null, { id: actor, role: 'admin', active: false }]) test('schedule perfil ausente/inactivo: 403', async () => {
+    state.profile = profile; assert.equal((await patchSchedule()).status, 403); assert.equal(state.calls.length, 0);
+});
+for (const contentType of ['application/json', 'application/json; charset=utf-8']) test(`schedule Content-Type ${contentType}`, async () => {
+    assert.equal((await patchSchedule({ contentType })).status, 200);
+});
+for (const contentType of [null, 'text/plain', 'application/x-www-form-urlencoded', 'application/xml']) test(`schedule rechaza Content-Type ${contentType}`, () => invalidSchedule({ contentType }, 'INVALID_REQUEST'));
+for (const id of ['bad', meetingId.slice(1), `%20${meetingId}`, `${meetingId}%0A`]) test(`schedule UUID inválido ${id}`, () => invalidSchedule({ id }, 'INVALID_MEETING_ID'));
+for (const value of [null, '', 'bad', key + ',' + key]) test(`schedule key inválida ${value}`, () => invalidSchedule({ key: value }, 'INVALID_IDEMPOTENCY_KEY'));
+test('schedule key duplicada con otro casing', () => invalidSchedule({ extraHeaders: ['iDEMPOTENCY-kEY', key] }, 'INVALID_IDEMPOTENCY_KEY'));
+test('schedule nombre de header case-insensitive', async () => assert.equal((await patchSchedule({ keyName: 'iDEMPOTENCY-kEY' })).status, 200));
+for (const value of [null, [], 'text', 1]) test(`schedule body no objeto ${JSON.stringify(value)}`, async () => {
+    assert.equal((await patchSchedule({ body: value })).status, 400); assert.equal(state.calls.length, 0);
+});
+for (const field of Object.keys(scheduleBody)) test(`schedule obligatorio ${field}`, async () => {
+    const body = { ...scheduleBody }; delete body[field]; await invalidSchedule({ body });
+});
+for (const field of ['assignedTo', 'notes', 'status', 'version', 'scheduledAt', 'consultationRequestId', 'actorId', 'createdBy', 'updatedBy', 'requestHash', 'idempotencyKey', '__proto__', 'constructor']) {
+    test(`schedule propiedad extra ${field}`, () => invalidSchedule({ body: { ...scheduleBody, [field]: 'PRIVATE' } }, 'INVALID_REQUEST'));
+}
+for (const [field, values] of Object.entries({
+    expectedVersion: [null, 0, -1, 1.5, '1', 2147483648],
+    date: ['0000-01-01', '1900-02-29', '2027-02-29', '2028-04-31', '2028-13-01', '2028-00-01', '2028-02-00', '2028-2-1', '2028-02-29\n', null],
+    time: ['24:00', '1:00', '12:60', '12:00:00', '12:00Z', '12:00 ', null],
+    timeZone: ['', ' ', 'UTC\u0000', 'x'.repeat(101), 1, null],
+    durationMinutes: [0, -1, 1.5, '45', 2147483648, null], mode: ['presencial', 'ONLINE', 1, null],
+})) for (const [i, value] of values.entries()) test(`schedule ${field} inválido ${i}`, () => invalidSchedule({ body: { ...scheduleBody, [field]: value } }));
+test('schedule JSON malformado sanitizado', async () => {
+    const r = await patchSchedule({ raw: '{"PRIVATE":"' });
+    assert.equal(r.status, 400); assert.equal(r.body.error.code, 'INVALID_JSON');
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE')); assert.equal(state.calls.length, 0);
+});
+test('schedule hash: orden JSON, UUID casing y normalización', async () => {
+    await patchSchedule();
+    assert.equal((await patchSchedule({ id: meetingId.toUpperCase(), key: key.toUpperCase(), body: {
+        mode: ' online ', expectedVersion: 1, durationMinutes: 45, timeZone: ' America/Guayaquil ', time: '10:30', date: '2028-02-29',
+    } })).status, 200);
+    assert.deepEqual(state.calls[0], state.calls[1]);
+    assert.match(state.calls[0].args.p_request_hash, /^[a-f0-9]{64}$/);
+});
+test('schedule hash: todos los campos canónicos lo modifican', async () => {
+    await patchSchedule(); const baseline = state.calls[0].args.p_request_hash;
+    for (const [field, value] of Object.entries({ expectedVersion: 2, date: '2028-03-01', time: '11:00', timeZone: 'UTC', durationMinutes: 60, mode: 'phone' })) {
+        await patchSchedule({ body: { ...scheduleBody, [field]: value } });
+        assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+    }
+    state.scheduleData = { ...rescheduled, id: assigned };
+    await patchSchedule({ id: assigned }); assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+});
+test('schedule hash excluye actor y clave; actor siempre del perfil', async () => {
+    await patchSchedule(); state.profile.id = assigned;
+    await patchSchedule({ key: actor });
+    assert.equal(state.calls[0].args.p_request_hash, state.calls[1].args.p_request_hash);
+    assert.equal(state.calls[1].args.p_actor_id, assigned); assert.equal(state.calls[1].args.p_idempotency_key, actor);
+});
+test('schedule delega futuro, IANA y versión actual; admite límites representacionales', async () => {
+    for (const time of ['00:00', '23:59']) assert.equal((await patchSchedule({ body: { ...scheduleBody, date: '2000-02-29', time, timeZone: 'Unknown/Zone', expectedVersion: 2147483647, durationMinutes: 2147483647 } })).status, 200);
+    assert.deepEqual(state.queries, ['internal_users', 'internal_users']);
+});
+test('schedule replay simulado: mismo 200 y misma RPC sin nueva key', async () => {
+    const first = await patchSchedule(), second = await patchSchedule();
+    assert.deepEqual(first, { status: 200, body: { data: rescheduled } }); assert.deepEqual(second, first);
+    assert.equal(state.calls.length, 2); assert.deepEqual(state.calls[0], state.calls[1]);
+});
+const scheduleMapping = { INVALID_REQUEST: 400, INVALID_MEETING_INPUT: 400, ACTOR_NOT_ALLOWED: 403,
+    MEETING_NOT_FOUND: 404, MEETING_NOT_SCHEDULED: 409, MEETING_VERSION_CONFLICT: 409,
+    IDEMPOTENCY_KEY_REUSED: 409, CONSULTATION_STATE_INCONSISTENT: 409, CONSULTATION_ALREADY_SCHEDULED: 409,
+    INVALID_TIME_ZONE: 422, INVALID_LOCAL_TIME: 422, MEETING_NOT_IN_FUTURE: 422,
+    WORKFLOW_ISOLATION_NOT_SUPPORTED: 500, INTERNAL_ERROR: 500 };
+for (const [code, status] of Object.entries(scheduleMapping)) test(`schedule RPC ${code} -> ${status}`, async () => {
+    state.rpcError = { code: 'P0001', message: code, details: 'PRIVATE_SQL', hint: 'PRIVATE_TOKEN' };
+    const r = await patchSchedule(); assert.equal(r.status, status); assert.equal(r.body.error.code, code);
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+for (const error of [{ code: 'P0001', message: 'PRIVATE_UNKNOWN' }, { code: '23505', message: 'MEETING_NOT_FOUND' }, { code: 'P0001', message: 'toString' }, { statusCode: 403, message: 'PRIVATE' }]) test('schedule error desconocido sanitizado', async () => {
+    state.rpcError = error; const r = await patchSchedule();
+    assert.equal(r.status, 500); assert.equal(r.body.error.code, 'INTERNAL_ERROR');
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+test('schedule transporte rechazado sanitizado', async () => {
+    state.rpcThrow = new Error('PRIVATE_SECRET'); const r = await patchSchedule();
+    assert.equal(r.status, 500); assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+for (const [i, value] of [null, [], {}, 'bad', ...Object.entries({
+    id: 'bad', consultationRequestId: 'bad', scheduledAt: 'now', timeZone: ' ', durationMinutes: 0,
+    mode: 'bad', status: 'completed', version: 0,
+}).map(([k, v]) => ({ ...rescheduled, [k]: v })),
+    ...Object.keys(rescheduled).map(k => { const r = { ...rescheduled }; delete r[k]; return r; }),
+    ...['cancelled', 'no_show', null].map(status => ({ ...rescheduled, status })),
+    ...['1', 1.5, 2147483648, null].map(version => ({ ...rescheduled, version })),
+    ...['2028-02-30T15:30:00Z', '2028-02-29T15:30:00', '2028-02-29T15:30:00.1234567Z'].map(scheduledAt => ({ ...rescheduled, scheduledAt })),
+    { ...rescheduled, id: assigned },
+].entries()) test(`schedule respuesta inválida ${i}: 500`, async () => {
+    state.scheduleData = value; const r = await patchSchedule();
+    assert.equal(r.status, 500); assert.equal(r.body.error.code, 'INTERNAL_ERROR');
+    assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+});
+test('schedule minimiza extras y acepta timestamp PostgreSQL con microsegundos', async () => {
+    const safe = { ...rescheduled, scheduledAt: '2028-02-29T15:30:00.123456+00:00' };
+    state.scheduleData = { ...safe, assignedTo: 'PRIVATE', notes: 'PRIVATE', createdBy: 'PRIVATE', updatedBy: 'PRIVATE', audit: 'PRIVATE', requestHash: 'PRIVATE', idempotency: 'PRIVATE' };
+    assert.deepEqual(await patchSchedule(), { status: 200, body: { data: safe } });
+});
+test('schedule normalizador rechaza instancias, herencia, getters y símbolos sin ejecutar getter', () => {
+    const service = modules.get(pathToFileURL(resolve(root, 'src/modules/meetings/meetings.service.js')).href).namespace;
+    let reads = 0;
+    const accessor = { ...scheduleBody }; Object.defineProperty(accessor, 'date', { get() { reads++; return '2028-02-29'; } });
+    for (const candidate of [Object.assign(Object.create({}), scheduleBody), Object.create(scheduleBody), Object.assign(new Date(), scheduleBody), accessor, { ...scheduleBody, [Symbol('extra')]: 1 }]) {
+        assert.throws(() => service.normalizeReschedule(meetingId, candidate), e => e.code === 'INVALID_REQUEST');
+    }
+    assert.equal(reads, 0); assert.equal(state.calls.length, 0);
+    assert.equal(service.normalizeReschedule(meetingId, { ...scheduleBody }).meetingId, meetingId);
 });

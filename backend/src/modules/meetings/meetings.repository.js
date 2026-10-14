@@ -1,5 +1,17 @@
 import supabase from '../../config/supabase.js';
 
+export async function rescheduleConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
+    const { data, error } = await supabase.rpc('reschedule_consultation_meeting', {
+        p_actor_id: actorId, p_meeting_id: payload.meetingId,
+        p_idempotency_key: idempotencyKey, p_request_hash: requestHash,
+        p_expected_version: payload.expectedVersion, p_scheduled_date: payload.date,
+        p_scheduled_time: payload.time, p_time_zone: payload.timeZone,
+        p_duration_minutes: payload.durationMinutes, p_mode: payload.mode,
+    });
+    if (error) throw error;
+    return data;
+}
+
 export async function findMeetings({ fromUTC, toUTC, assignedUserId }) {
     // Hints por columnas FK declaradas en las migraciones, no por inferencia
     // entre las tres relaciones meetings -> internal_users.

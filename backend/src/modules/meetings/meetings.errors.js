@@ -3,6 +3,10 @@ import { AppError } from '../../errors/app-error.js';
 const errors = {
     INVALID_REQUEST: [400, 'Los datos de la solicitud no son válidos.'],
     INVALID_CONSULTATION_ID: [400, 'El identificador de la solicitud no es válido.'],
+    INVALID_MEETING_ID: [400, 'El identificador de la reunión no es válido.'],
+    MEETING_NOT_FOUND: [404, 'La reunión no existe.'],
+    MEETING_NOT_SCHEDULED: [409, 'Solo se puede reprogramar una reunión programada.'],
+    MEETING_VERSION_CONFLICT: [409, 'La reunión cambió. Vuelve a consultar sus datos.'],
     INVALID_IDEMPOTENCY_KEY: [400, 'Se requiere una única Idempotency-Key con formato UUID.'],
     INVALID_MEETING_INPUT: [400, 'Los datos de la reunión no son válidos.'],
     ACTOR_NOT_ALLOWED: [403, 'No tienes permisos para confirmar reuniones.'],
@@ -26,6 +30,7 @@ const rpcCodes = new Set([
     'CONSULTATION_COMPLETED', 'CONSULTATION_STATE_INCONSISTENT', 'IDEMPOTENCY_KEY_REUSED',
     'ASSIGNEE_NOT_ELIGIBLE', 'INVALID_TIME_ZONE', 'INVALID_LOCAL_TIME',
     'MEETING_NOT_IN_FUTURE', 'WORKFLOW_ISOLATION_NOT_SUPPORTED',
+    'MEETING_NOT_FOUND', 'MEETING_NOT_SCHEDULED', 'MEETING_VERSION_CONFLICT', 'INTERNAL_ERROR',
 ]);
 
 export class MeetingError extends AppError {

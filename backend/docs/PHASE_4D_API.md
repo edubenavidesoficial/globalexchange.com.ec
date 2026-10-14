@@ -1,8 +1,8 @@
-# Fase 4D.1A: PostgreSQL para reprogramar reuniones
+# Fase 4D: reprogramación de reuniones
 
 Migración `20261013211621_reschedule_meeting_workflow.sql` aplicada correctamente
-a Supabase remoto; historial local/remoto alineado. Todavía NO existe el endpoint Express
-`PATCH /api/admin/meetings/:id/schedule`; su implementación corresponde a 4D.1B.
+a Supabase remoto; historial local/remoto alineado en 4D.1A. El endpoint Express
+`PATCH /api/admin/meetings/:id/schedule` está implementado localmente en 4D.1B.
 No hay cambios frontend ni en la RPC histórica de creación.
 
 ## Contrato RPC
@@ -16,8 +16,8 @@ public.reschedule_consultation_meeting(
 ) returns jsonb
 ```
 
-El futuro HTTP admitirá admin/agendadora y rechazará vendedora antes de RPC.
-El actor deberá derivarse del perfil interno autenticado; la DB vuelve a exigir
+El endpoint HTTP admite admin/agendadora y rechaza vendedora antes de RPC.
+El actor deriva del perfil interno autenticado; la DB vuelve a exigir
 actor activo admin/agendadora bajo FOR SHARE, incluso para replay. El backend
 con service_role es la frontera de confianza: no aceptar actor ni hash del cliente.
 
@@ -53,7 +53,7 @@ Version 2147483647 falla con INTERNAL_ERROR sin envolver ni reiniciar el contado
 
 Operation nueva: `reschedule_consultation_meeting`. La clave UUID es obligatoria;
 no se genera en DB. La RPC compara/persiste exactamente el hash recibido, sin
-recalcularlo. Sigue el requisito actual de hash no vacío. En 4D.1B será SHA-256
+recalcularlo. Sigue el requisito actual de hash no vacío. En 4D.1B se calcula SHA-256
 UTF-8 de JSON.stringify de un objeto normalizado con orden fijo:
 meetingId, expectedVersion, date, time, timeZone, durationMinutes, mode.
 UUID lowercase; actor y clave fuera del hash. No cambiar ese contrato después
@@ -82,7 +82,7 @@ distinto del integer positivo existente. No se validan fechas antes del replay.
 
 Se conserva meetings_one_scheduled_per_consultation_idx. Solo una unique_violation
 identificada por ese nombre se traduce a CONSULTATION_ALREADY_SCHEDULED.
-Otros errores de integridad se propagan y requieren sanitización en el futuro HTTP.
+Otros errores de integridad se propagan y se sanitizan en el adaptador HTTP.
 
 ## Auditoría y respuesta
 
@@ -101,7 +101,7 @@ Respuesta y response_payload son el mismo JSONB:
 
 No contiene assignedTo, notas, actores, auditoría ni idempotencia. El registro
 guarda actor, operation, clave, hash, ID del padre y esa fotografía original.
-El futuro HTTP responderá 200 con {data: resultado} tanto en éxito como en replay.
+El endpoint HTTP responde 200 con {data: resultado} tanto en éxito como en replay.
 La futura UI debe volver a consultar Agenda, sin incrementar versión localmente.
 
 ## Errores y seguridad
@@ -123,8 +123,8 @@ Contrato existente: SQLSTATE P0001 y message igual al código estable, sin PII:
 - WORKFLOW_ISOLATION_NOT_SUPPORTED
 - INTERNAL_ERROR (fotografía corrupta o versión agotada)
 
-No hay mapping HTTP nuevo todavía. El adaptador futuro debe reconocer códigos
-por lista cerrada; jamás interpretar texto libre ni reenviar detalles SQL.
+El adaptador HTTP reconoce códigos por lista cerrada, con SQLSTATE P0001;
+jamás interpreta texto libre ni reenvía detalles SQL.
 Errores de casteo previos a la función e integridad desconocida también requieren
 sanitización. No se incluyen payloads o valores sensibles en mensajes de la RPC.
 
@@ -205,11 +205,130 @@ confirmaron cero solicitudes, reuniones, eventos y registros idempotentes para
 los identificadores del fixture. No quedó ningún fixture sintético persistido
 ni se modificó ninguna reunión real. El caso opcional de estado terminal se omitió.
 
+## 4D.1B Endpoint Express
+
+Implementado localmente: `PATCH /api/admin/meetings/:id/schedule` dentro del router
+meetings ya montado. Cadena: authenticate → authorize('admin', 'agendadora') →
+controller → service → repository → una RPC `reschedule_consultation_meeting`.
+Vendedora recibe 403 antes del controller; sin token/token inválido recibe 401,
+y sin perfil/perfil inactivo recibe 403. Actor exclusivamente desde `req.user.id`.
+
+Se exige `Content-Type: application/json`, también con `charset=utf-8`.
+`:id` y la única cabecera `Idempotency-Key` deben ser UUID completos, normalizados
+a lowercase sin trim. Los duplicados se detectan en rawHeaders sin distinguir
+mayúsculas. Ausencias, valores inválidos y duplicados no llegan a RPC.
+
+Objeto JSON plano obligatorio, con exactamente estos seis campos:
+
+```json
+{
+  "date": "2027-01-20",
+  "time": "10:30",
+  "timeZone": "America/Guayaquil",
+  "durationMinutes": 45,
+  "mode": "online",
+  "expectedVersion": 1
+}
+```
+
+Fecha gregoriana real YYYY-MM-DD, años 0001–9999; hora HH:mm entre 00:00 y 23:59.
+Zona estructural: trim, 1–100 caracteres, sin controles; modalidad con trim:
+online/phone/office. Duración y expectedVersion son enteros 1–2147483647 sin
+coerción. Campos adicionales, heredados o accesores se rechazan. No se aceptan
+actor, notas, asignación, estado, hash ni clave dentro del body.
+
+El service normaliza, calcula SHA-256 hexadecimal lowercase sobre JSON.stringify
+UTF-8 con orden fijo meetingId, expectedVersion, date, time, timeZone,
+durationMinutes, mode; excluye actor y clave. Llama una vez al repository,
+traduce errores, valida respuesta y reconstruye la whitelist de ocho campos.
+El repository pasa exactamente los diez parámetros de la firma RPC documentada,
+sin SELECT/UPDATE auxiliar ni reconstrucción desde tablas. La autenticación
+conserva su consulta al perfil interno.
+
+PostgreSQL sigue siendo autoridad de estado actual, versión, zona horaria,
+hora local, futuro, atomicidad, auditoría e idempotencia. Express no consulta
+la reunión ni compara su versión actual, no valida futuro ni reintenta la RPC.
+
+Éxito y replay: HTTP 200 con `{ data: { id, consultationRequestId, scheduledAt,
+timeZone, durationMinutes, mode, status, version } }`. UUID válidos, id de la
+reunión solicitada, timestamp estructural compatible con PostgreSQL (incluidos
+offset y microsegundos), zona no vacía, enteros positivos compatibles con integer,
+modalidad válida y status scheduled son obligatorios. Estructura inválida:
+500 sanitizado, nunca respuesta parcial. Extras del proveedor no se propagan.
+
+| HTTP | Códigos públicos controlados |
+| --- | --- |
+| 400 | INVALID_REQUEST, INVALID_MEETING_INPUT, INVALID_MEETING_ID, INVALID_IDEMPOTENCY_KEY, INVALID_JSON |
+| 403 | ACTOR_NOT_ALLOWED |
+| 404 | MEETING_NOT_FOUND |
+| 409 | MEETING_NOT_SCHEDULED, MEETING_VERSION_CONFLICT, IDEMPOTENCY_KEY_REUSED, CONSULTATION_STATE_INCONSISTENT, CONSULTATION_ALREADY_SCHEDULED |
+| 422 | INVALID_TIME_ZONE, INVALID_LOCAL_TIME, MEETING_NOT_IN_FUTURE |
+| 500 | WORKFLOW_ISOLATION_NOT_SUPPORTED, INTERNAL_ERROR |
+
+ACTOR_NOT_ALLOWED desde RPC sigue siendo 403 si el perfil cambió después del
+middleware. Errores desconocidos o rechazos de transporte son INTERNAL_ERROR;
+message/details/hint/stack del proveedor no se exponen. JSON malformado conserva
+el error global INVALID_JSON sin reflejar el body. Logs mantienen sanitización.
+
+Validación local: 408 tests backend aprobados, 0 fallos (base 265; 143 nuevos).
+Cubren autorización, cabeceras, body, hash canónico, argumentos y conteo de RPC,
+replay simulado, cada mapping relevante, respuestas inválidas y minimización.
+Pasan las regresiones de creación (201 y contrato/hash conservados) y Agenda
+(admin/agendadora all scope, vendedora own scope). Supabase usa fakes existentes.
+La implementación y auditoría locales no contactaron Supabase ni ejecutaron
+SQL/RPC remota o crearon fixtures. Los resultados remotos de secciones anteriores
+corresponden exclusivamente a 4D.1A. El E2E HTTP posterior se documenta a continuación.
+
+## 4D.1B: E2E HTTP remoto validado
+
+Ejecutado el 2026-10-14 mediante un ejecutor temporal fuera del repositorio.
+Express real escuchó en 127.0.0.1:3000 con la configuración normal del backend.
+Health y authenticate reales aprobados; sesión de admin activo obtenida mediante
+entrada interactiva oculta, con token en memoria. Sin mocks ni bypass de middleware.
+psql 18.6 usó la conexión al proyecto vinculado exigiendo TLS en el cliente.
+
+Se creó una consultation converted y una meeting scheduled/version 1, ambas
+sintéticas con la marca TEST 4D1B HTTP E2E, UUID nuevos y fechas relativas al reloj
+de PostgreSQL, a 30/31 días. Admin, vendedora y programa existentes se usaron solo
+como referencias FK. El fixture se verificó y confirmó temporalmente mediante
+COMMIT para hacerlo visible a la conexión HTTP independiente.
+
+Resultados confirmados por HTTP y consultas PostgreSQL acotadas al fixture:
+
+- Primer PATCH: 200, exactamente ocho campos públicos, misma meeting y versión
+  1→2; nuevo instante, duración 45→60 y modalidad online→phone.
+- Campos fuera de la whitelist de actualización preservados, incluyendo asignada,
+  creador, fecha de creación, notas y relación. La solicitud completa permaneció
+  idéntica y converted.
+- Exactamente un meeting_rescheduled, actor correcto y metadata old/new exacta,
+  sin PII, clave ni hash; operation_id independiente de las claves.
+- Exactamente un registro K1 con operación/actor correctos, hash canónico y
+  response_payload idéntico a la respuesta pública.
+- Replay con K1 y expectedVersion=1: 200 y body idéntico; meeting, solicitud,
+  auditoría e idempotencia permanecieron idénticas.
+- K1 con duración distinta: 409 IDEMPOTENCY_KEY_REUSED, sin mutación adicional.
+- K2 con expectedVersion=1: 409 MEETING_VERSION_CONFLICT, sin registro K2 ni
+  cambios adicionales en la base.
+- Sin Authorization: 401 y estado del fixture sin cambios. No se ejecutó E2E
+  HTTP de vendedora ni se solicitaron sus credenciales.
+
+El finally ejecutó limpieza transaccional con revalidación de identidad sintética
+y deletes exactos: idempotencia, auditoría, meeting y solicitud. Tras COMMIT,
+consultas independientes confirmaron consultation=0, meeting=0, audit=0 e
+idempotency=0. No quedaron fixtures persistidos. Ninguna reunión o solicitud real,
+internal_user ni program fue modificado. No se registraron secretos, IDs reales
+ni datos personales en esta documentación. El backend temporal se cerró.
+
+El primer intento se detuvo antes de insertar por una comprobación que confundía
+TLS del cliente al pooler con el salto pooler/PostgreSQL. Se corrigió únicamente
+el ejecutor temporal: se mantuvo sslmode=require y se comprobaron por separado
+permisos de inserción y limpieza. El segundo intento completó todo el E2E.
+
 ## Validaciones todavía pendientes
 
-Esta prueba secuencial NO valida dos sesiones simultáneas: quedan pendientes
+Estas pruebas secuenciales NO validan dos sesiones simultáneas: quedan pendientes
 same-key concurrent real y different-key simultaneous version conflict real.
 Tampoco acredita toda la matriz de revocación/permisos, replay vencido/tras cambio
 de estado, fotografía corrupta, overflow, padre inconsistente, estados terminales,
 DST, fecha vencida esperando locks ni fallos inducidos de audit/idempotencia.
-El rollback total del fixture sí quedó comprobado empíricamente.
+El rollback de 4D.1A y el cleanup con COMMIT de 4D.1B quedaron comprobados.

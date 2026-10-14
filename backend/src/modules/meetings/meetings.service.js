@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { createConsultationMeeting, findMeetings } from './meetings.repository.js';
+import { createConsultationMeeting, findMeetings, rescheduleConsultationMeeting } from './meetings.repository.js';
 import { URLSearchParams } from 'node:url';
 import { AppError } from '../../errors/app-error.js';
 import { MeetingError, translateMeetingError } from './meetings.errors.js';
@@ -87,6 +87,17 @@ export function normalizeMeeting(consultationRequestId, body) {
         || Object.keys(body).some(key => !fields.has(key))) {
         throw new MeetingError('INVALID_REQUEST');
     }
+    const { timeZone, mode } = normalizeSchedule(body);
+    const assignedTo = uuid(body.assignedTo, 'INVALID_MEETING_INPUT');
+    if (body.notes !== undefined && body.notes !== null && typeof body.notes !== 'string') throw new MeetingError('INVALID_MEETING_INPUT');
+    const notes = body.notes?.trim() || null;
+    if (notes && (notes.length > 2000 || notes.includes('\u0000'))) throw new MeetingError('INVALID_MEETING_INPUT');
+    // Conservar exactamente el orden y normalización del hash de creación.
+    return { consultationRequestId: id, date: body.date, time: body.time, timeZone,
+        durationMinutes: body.durationMinutes, mode, assignedTo, notes };
+}
+
+function normalizeSchedule(body) {
     const invalid = () => { throw new MeetingError('INVALID_MEETING_INPUT'); };
     if (typeof body.date !== 'string' || body.date.length !== 10 || !/^\d{4}-\d{2}-\d{2}$/.test(body.date)) invalid();
     const [year, month, day] = body.date.split('-').map(Number);
@@ -103,15 +114,52 @@ export function normalizeMeeting(consultationRequestId, body) {
     if (typeof body.mode !== 'string') invalid();
     const mode = body.mode.trim();
     if (!['online', 'phone', 'office'].includes(mode)) invalid();
-    const assignedTo = uuid(body.assignedTo, 'INVALID_MEETING_INPUT');
-    if (body.notes !== undefined && body.notes !== null && typeof body.notes !== 'string') invalid();
-    const notes = body.notes?.trim() || null;
-    // Mismo límite de texto libre que consultation_requests.message en su service.
-    if (notes && (notes.length > 2000 || notes.includes('\u0000'))) invalid();
+    return { date: body.date, time: body.time, timeZone, durationMinutes: body.durationMinutes, mode };
+}
 
-    // Orden fijo: este objeto, y no el body original, define el contrato del hash.
-    return { consultationRequestId: id, date: body.date, time: body.time, timeZone,
-        durationMinutes: body.durationMinutes, mode, assignedTo, notes };
+export function normalizeReschedule(meetingId, body) {
+    const id = uuid(meetingId, 'INVALID_MEETING_ID');
+    const keys = ['date', 'time', 'timeZone', 'durationMinutes', 'mode', 'expectedVersion'];
+    if (!body || typeof body !== 'object' || Array.isArray(body)) throw new MeetingError('INVALID_REQUEST');
+    const prototype = Object.getPrototypeOf(body);
+    // Aceptar objetos JSON de otros realms, pero no instancias ni propiedades heredadas.
+    if (prototype !== null && (Object.getPrototypeOf(prototype) !== null
+        || !Object.hasOwn(prototype, 'constructor') || typeof prototype.constructor !== 'function'
+        || Function.prototype.toString.call(prototype.constructor) !== Function.prototype.toString.call(Object))) {
+        throw new MeetingError('INVALID_REQUEST');
+    }
+    const descriptors = Object.getOwnPropertyDescriptors(body);
+    if (Reflect.ownKeys(descriptors).some(key => !keys.includes(key) || !Object.hasOwn(descriptors[key], 'value'))) {
+        throw new MeetingError('INVALID_REQUEST');
+    }
+    if (keys.some(key => !Object.hasOwn(descriptors, key))) throw new MeetingError('INVALID_MEETING_INPUT');
+    const schedule = normalizeSchedule(body);
+    if (!Number.isInteger(body.expectedVersion) || body.expectedVersion <= 0 || body.expectedVersion > 2147483647) {
+        throw new MeetingError('INVALID_MEETING_INPUT');
+    }
+    return { meetingId: id, expectedVersion: body.expectedVersion, ...schedule };
+}
+
+export async function rescheduleMeeting({ actorId, meetingId, idempotencyKey, body }) {
+    const key = uuid(idempotencyKey, 'INVALID_IDEMPOTENCY_KEY');
+    const payload = normalizeReschedule(meetingId, body);
+    const requestHash = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
+    try {
+        const data = await rescheduleConsultationMeeting({ actorId, idempotencyKey: key, requestHash, payload });
+        const isUUID = value => typeof value === 'string' && value.length === 36 && UUID.test(value);
+        const positive = value => Number.isInteger(value) && value > 0 && value <= 2147483647;
+        if (!data || typeof data !== 'object' || Array.isArray(data)
+            || !isUUID(data.id) || data.id.toLowerCase() !== payload.meetingId
+            || !isUUID(data.consultationRequestId) || !timestamp(data.scheduledAt)
+            || typeof data.timeZone !== 'string' || !data.timeZone.trim()
+            || !positive(data.durationMinutes) || !positive(data.version)
+            || !['online', 'phone', 'office'].includes(data.mode) || data.status !== 'scheduled') {
+            throw new Error('Invalid RPC response');
+        }
+        return { id: data.id, consultationRequestId: data.consultationRequestId,
+            scheduledAt: data.scheduledAt, timeZone: data.timeZone, durationMinutes: data.durationMinutes,
+            mode: data.mode, status: data.status, version: data.version };
+    } catch (error) { throw translateMeetingError(error); }
 }
 
 export async function confirmMeeting({ actorId, consultationRequestId, idempotencyKey, body }) {
