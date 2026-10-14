@@ -8,6 +8,7 @@ import { webcrypto } from 'node:crypto';
 import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
 import { consultationsFixture } from './fixtures/consultations.mjs';
+import { agendaFixture } from './fixtures/agenda.mjs';
 
 // DOM simulado; auth.js, crm.js y login.js se ejecutan sin modificar su código.
 // Se simulan SDK, fetch, navegación y matchMedia. No se leen archivos de entorno.
@@ -52,7 +53,7 @@ async function setup(options = {}, page = 'crm') {
     dom?.window.close();
     const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture,
         salespeople: [{ id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', fullName: 'Vendedora de prueba', role: 'vendedora' }],
-        salesResponses: [], meetingResponses: [], page, ...options };
+        salesResponses: [], meetingResponses: [], agendaResponses: [], agenda: agendaFixture(), page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
     // Solo pruebas: el navegador real proporciona top layer, foco y Escape nativos.
     dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
@@ -77,7 +78,9 @@ async function setup(options = {}, page = 'crm') {
         addEventListener: dom.window.addEventListener.bind(dom.window),
         MutationObserver: dom.window.MutationObserver,
         URLSearchParams, crypto: webcrypto, Event: dom.window.Event,
-        AbortController, AbortSignal: options.shortTimeout ? { any: AbortSignal.any, timeout: () => AbortSignal.timeout(100) } : AbortSignal, Response,
+        AbortController, AbortSignal: options.shortTimeout ? new Proxy(AbortSignal, {
+            get: (target, name) => name === 'timeout' ? () => AbortSignal.timeout(100) : Reflect.get(target, name),
+        }) : AbortSignal, Response,
         setTimeout(callback, delay) {
             const timer = setTimeout(() => { timers.delete(timer); callback(); }, delay);
             timers.add(timer);
@@ -89,7 +92,8 @@ async function setup(options = {}, page = 'crm') {
     sandbox.window = sandbox;
     context = vm.createContext(sandbox);
     vm.runInContext(`
-        window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0 };
+        window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0, agenda: 0 };
+        window.pendingAgenda = []; window.agendaRequests = []; window.agendaSignals = [];
         window.pendingSales = []; window.pendingMeetings = []; window.meetingRequests = [];
         window.events = [];
         window.pending = [];
@@ -127,6 +131,17 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (url.startsWith('/api/admin/meetings?')) {
+                calls.agenda++;
+                agendaRequests.push({ url, method: options.method, cache: options.cache,
+                    credentials: options.credentials, authorization: options.headers.Authorization });
+                agendaSignals.push(options.signal);
+                const response = fixture.agendaResponses.shift() || {};
+                if (response.hold) await new Promise(resolve => pendingAgenda.push(resolve));
+                if (response.network) throw new TypeError('Fixture network');
+                if (response.timeout) await new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new Error('Timeout')), { once: true }));
+                return new Response(JSON.stringify(response.body ?? { data: response.data ?? fixture.agenda }), { status: response.status || 200 });
+            }
             if (url === '/api/admin/internal-users?role=vendedora&active=true' || /^\\/api\\/admin\\/consultations\\/[^/]+\\/meeting$/.test(url)) {
                 const sales = url.includes('internal-users');
                 calls[sales ? 'sales' : 'meetings']++;
@@ -184,6 +199,17 @@ async function setup(options = {}, page = 'crm') {
     await module.link(() => auth);
     await module.evaluate();
     let hooks;
+    if (page === 'crm/agenda') {
+        const internal = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context });
+        await internal.link(() => auth);
+        const meetings = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/meetings.js'), 'utf8'), { context });
+        await meetings.link(() => internal);
+        const dates = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-agenda-date.js'), 'utf8'), { context });
+        await dates.link(() => { throw Error('Unexpected import'); });
+        const agenda = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-agenda.js'), 'utf8'), { context });
+        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : dates);
+        await agenda.evaluate(); hooks = agenda.namespace.initCRMAgenda();
+    }
     if (page === 'crm/solicitudes') {
         const api = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context });
         await api.link(() => auth);
@@ -295,13 +321,13 @@ test('15 · Escape cierra drawer y devuelve foco', async () => {
 });
 test('16 · módulos futuros sin enlaces ni activación de teclado', async () => {
     await setup(); await until(shellVisible);
-    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 9);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 8);
     assert.equal(await evaluate("[...document.querySelectorAll('.crm-nav [aria-disabled=true]')].every(e => !e.hasAttribute('href') && e.tabIndex === -1)"), true);
 });
 test('17 · Dashboard conserva aria-current entre las rutas habilitadas', async () => {
     await setup(); await until(shellVisible);
     assert.equal(await evaluate("document.querySelector('.crm-nav a').getAttribute('aria-current')"), 'page');
-    assert.equal(await evaluate("document.querySelectorAll('.crm-nav a[href]').length"), 2);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav a[href]').length"), 3);
 });
 test('18 · login autorizado redirige a CRM', async () => {
     await setup({ session: null, loginSession: A }, 'login');
@@ -668,9 +694,9 @@ test('45 · Solicitudes activa en su ruta', async () => {
     assert.equal(await evaluate("document.querySelector('.crm-nav [aria-current]').getAttribute('href')"), '/pages/crm/solicitudes/');
     assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-current]').length"), 1);
 });
-test('46 · nueve módulos futuros deshabilitados; Solicitudes es enlace real', async () => {
+test('46 · ocho módulos futuros deshabilitados; Solicitudes es enlace real', async () => {
     await inbox(); await until(loaded);
-    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 9);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 8);
     assert.equal(await evaluate("document.querySelector('.crm-nav a[href=\"/pages/crm/solicitudes/\"]').textContent"), 'Solicitudes');
 });
 test('47 · HTML malicioso es texto en todos los campos de usuario', async () => {
@@ -1155,4 +1181,170 @@ test('UI meetings: conflicto de A no transfiere bloqueo ni respuesta GET tardía
     await click('[data-meeting-open]'); await fillMeeting();
     assert.equal(await evaluate(modalOpen), true);
     await submitMeeting(); await until('calls.meetings === 2');
+});
+
+const agendaPage = options => setup(options, 'crm/agenda');
+const agendaLoaded = "document.querySelector('[data-agenda-summary]').textContent !== ''";
+const agendaText = "document.querySelector('[data-agenda-rows]').textContent";
+const agendaError = "!document.querySelector('[data-agenda-retry]').hidden";
+async function selectAgendaDate(day) {
+    await evaluate(`document.querySelector('[data-agenda-date]').value = ${JSON.stringify(day)}; document.querySelector('[data-agenda-date]').dispatchEvent(new Event('change', { bubbles: true }))`);
+}
+
+test('Agenda UI: espera auth y consulta una vez con query exacta, sin scope', async () => {
+    await agendaPage({ responses: [{ hold: true }] }); await until('pending.length === 1');
+    assert.equal(await evaluate('calls.agenda'), 0); assert.equal(await evaluate(agendaText), '');
+    assert.equal(await evaluate(shellVisible), false);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    const requests = await evaluate('agendaRequests'); assert.equal(requests.length, 1);
+    const url = new URL(requests[0].url, 'https://fixture.invalid');
+    const day = await evaluate("document.querySelector('[data-agenda-date]').value");
+    assert.deepEqual([...url.searchParams.keys()], ['from', 'to']);
+    assert.equal(url.searchParams.get('from'), `${day}T00:00:00-05:00`);
+    assert.equal(Date.parse(url.searchParams.get('to')) - Date.parse(url.searchParams.get('from')), 86400000);
+    assert.deepEqual({ ...requests[0], url: undefined }, { url: undefined, method: 'GET', cache: 'no-store', credentials: 'omit', authorization: `Bearer ${A.access_token}` });
+});
+test('Agenda UI: sin sesión no consulta', async () => {
+    await agendaPage({ session: null }); await until(loginReached); assert.equal(await evaluate('calls.agenda'), 0);
+});
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Agenda UI: navegación accesible para ${role}`, async () => {
+    await agendaPage({ user: { ...userA, role } }); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('.crm-nav [aria-current]').getAttribute('href')"), '/pages/crm/agenda/');
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-current]').length"), 1);
+    assert.equal(await evaluate("document.querySelector('.crm-nav a[href=\"/pages/crm/agenda/\"]').tabIndex"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('.crm-nav [aria-disabled=true]').length"), 8);
+});
+test('Agenda UI: estados, modalidades, hora Ecuador y datos sin IDs', async () => {
+    const data = agendaFixture(); data[0].scheduledAt = '2026-10-13T14:30:00+00:00';
+    await agendaPage({ agenda: data }); await until(agendaLoaded);
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('.agenda-badge')].map(e => e.textContent)"), ['Programada', 'Completada', 'Cancelada', 'No asistió']);
+    const text = await evaluate(agendaText);
+    for (const word of ['09:30', '45 min', 'En línea', 'Teléfono', 'Oficina', 'Vendedora de Prueba', 'contacto@example.invalid', '000 000 0000', 'Idiomas en el extranjero']) assert.ok(text.includes(word), word);
+    for (const row of data) for (const value of [row.id, row.consultationRequestId, row.assignedTo.id, row.consultation.program.id]) assert.ok(!text.includes(value));
+    assert.equal(await evaluate("document.querySelectorAll('.agenda-details dt').length"), 15);
+    assert.doesNotMatch(text, /null|undefined/);
+});
+for (const count of [0, 1]) test(`Agenda UI: ${count} reuniones y controles disponibles`, async () => {
+    await agendaPage({ agenda: agendaFixture().slice(0, count) }); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-summary]').textContent"), count ? '1 reunión' : '0 reuniones');
+    assert.equal(await evaluate("document.querySelector('[data-agenda-next]').disabled"), false);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-date]').disabled"), false);
+    if (!count) assert.match(await evaluate("document.querySelector('[data-agenda-status]').textContent"), /No hay reuniones programadas/);
+});
+test('Agenda UI: XSS en todos los campos se presenta como texto; code no se muestra', async () => {
+    const evil = '<img src=x onerror=alert(1)><script>evil()</script>';
+    const row = agendaFixture()[0];
+    Object.assign(row.consultation, { fullName: evil, phone: evil, email: evil });
+    Object.assign(row.consultation.program, { name: evil, code: 'PRIVATE_CODE<script>evil()</script>' });
+    row.assignedTo.fullName = evil;
+    await agendaPage({ agenda: [row] }); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelectorAll('[data-agenda-rows] img, [data-agenda-rows] script, [data-agenda-rows] a').length"), 0);
+    assert.equal((await evaluate(agendaText)).split(evil).length - 1, 5);
+    assert.doesNotMatch(await evaluate(agendaText), /PRIVATE_CODE/);
+});
+test('Agenda UI: conserva orden del API sin sorting', async () => {
+    const data = agendaFixture().reverse(); await agendaPage({ agenda: data }); await until(agendaLoaded);
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('.agenda-person h3')].map(e => e.textContent)"), data.map(row => row.consultation.fullName));
+});
+test('Agenda UI: día anterior, siguiente, Hoy y input válido sin duplicar mismo día', async () => {
+    await agendaPage(); await until(agendaLoaded);
+    const today = await evaluate("document.querySelector('[data-agenda-date]').value");
+    await selectAgendaDate('2028-02-28'); await until(agendaLoaded);
+    await click('[data-agenda-next]'); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-date]').value"), '2028-02-29');
+    await click('[data-agenda-previous]'); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-date]').value"), '2028-02-28');
+    await click('[data-agenda-today]'); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-date]').value"), today);
+    const count = await evaluate('calls.agenda'); await selectAgendaDate(today); await click('[data-agenda-today]');
+    assert.equal(await evaluate('calls.agenda'), count);
+    await selectAgendaDate(''); assert.equal(await evaluate('calls.agenda'), count);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-date]').value"), today);
+});
+for (const failure of [false, true]) test(`Agenda UI: día A tardío ${failure ? 'falla' : 'responde'} nunca sobrescribe B`, async () => {
+    await agendaPage(); await until(agendaLoaded);
+    await evaluate(`fixture.agendaResponses.push({ hold: true, network: ${failure}, data: [] })`);
+    await selectAgendaDate('2026-10-15'); await until('pendingAgenda.length === 1');
+    assert.equal(await evaluate(agendaText), '');
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').getAttribute('aria-busy')"), 'true');
+    await selectAgendaDate('2026-10-16'); await until(agendaLoaded);
+    assert.equal(await evaluate('agendaSignals[1].aborted'), true);
+    const before = await evaluate("document.querySelector('[data-agenda]').textContent");
+    await evaluate('pendingAgenda.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').textContent"), before);
+    assert.equal(await evaluate(agendaError), false);
+});
+for (const failure of [{ status: 500 }, { network: true }, { timeout: true }, { status: 400 }, { body: { data: null } }]) {
+    test(`Agenda UI: error recuperable ${JSON.stringify(failure)}, retry misma fecha sin duplicados`, async () => {
+        await agendaPage({ shortTimeout: true, agendaResponses: [failure, { hold: true }] }); await until(agendaError);
+        assert.equal(await evaluate(shellVisible), true); assert.equal(await evaluate('calls.logout'), 0);
+        const url = await evaluate('agendaRequests[0].url');
+        await click('[data-agenda-retry]'); await click('[data-agenda-retry]'); await until('pendingAgenda.length === 1');
+        assert.equal(await evaluate('calls.agenda'), 2); assert.equal(await evaluate('agendaRequests[1].url'), url);
+        assert.equal(await evaluate("document.activeElement.hasAttribute('data-agenda-day')"), true);
+        await evaluate('pendingAgenda.shift()()'); await until(agendaLoaded);
+    });
+}
+for (const status of [401, 403]) test(`Agenda UI: ${status} bloquea por guard sin logout ni bucle`, async () => {
+    await agendaPage({ agendaResponses: [{ status }] }); await until(blocked);
+    assert.equal(await evaluate(shellVisible), false); assert.equal(await evaluate(agendaText), '');
+    assert.deepEqual(await evaluate('[calls.agenda, calls.me, calls.logout]'), [1, 1, 0]);
+    await click('[data-crm-retry]'); await until(agendaLoaded);
+    assert.deepEqual(await evaluate('[calls.agenda, calls.me]'), [2, 2]);
+});
+test('Agenda UI: cambio de cuenta limpia antes de autorizar B y descarta A pendiente', async () => {
+    await agendaPage({ agendaResponses: [{ hold: true, data: [] }] }); await until('pendingAgenda.length === 1');
+    await evaluate(`fixture.responses.push({ hold: true }); emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    assert.equal(await evaluate(agendaText), ''); await until('pending.length === 1');
+    assert.equal(await evaluate('agendaSignals[0].aborted'), true); assert.equal(await evaluate('calls.agenda'), 1);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    const text = await evaluate(agendaText); await evaluate('pendingAgenda.shift()()');
+    await new Promise(resolve => setTimeout(resolve, 30)); assert.equal(await evaluate(agendaText), text);
+});
+test('Agenda UI: stale sin evento Auth revalida sin error visible', async () => {
+    await agendaPage({ agendaResponses: [{ hold: true, status: 403 }] }); await until('pendingAgenda.length === 1');
+    await evaluate(`current = ${JSON.stringify(B)}; pendingAgenda.shift()()`); await until(agendaLoaded);
+    assert.equal(await evaluate('calls.me'), 2); assert.equal(await evaluate(agendaError), false);
+    assert.equal(await evaluate('calls.logout'), 0);
+});
+test('Agenda UI: logout durante request aborta y limpia', async () => {
+    await agendaPage({ agendaResponses: [{ hold: true }] }); await until('pendingAgenda.length === 1');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(await evaluate('agendaSignals[0].aborted'), true);
+    await evaluate('pendingAgenda.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.querySelector('[data-agenda]')"), null);
+});
+test('Agenda UI: pagehide aborta y bfcache exige nueva autorización', async () => {
+    await agendaPage(); await until(agendaLoaded);
+    await evaluate('fixture.agendaResponses.push({ hold: true })'); await click('[data-agenda-next]');
+    await until('pendingAgenda.length === 1');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    assert.equal(await evaluate('agendaSignals[1].aborted'), true); assert.equal(await evaluate(agendaText), '');
+    await evaluate('fixture.responses.push({ hold: true })');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    await until('pending.length === 1'); assert.equal(await evaluate('calls.agenda'), 2);
+    assert.equal(await evaluate(shellVisible), false);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    await evaluate('pendingAgenda.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 3); assert.equal(await evaluate(agendaError), false);
+});
+test('Agenda UI: labels, estados anunciables y controles nativos', async () => {
+    await agendaPage(); await until(agendaLoaded);
+    assert.equal(await evaluate("!!document.querySelector('[data-agenda-date]').closest('label')"), true);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-status]').getAttribute('role')"), 'status');
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').getAttribute('aria-busy')"), 'false');
+    assert.equal(await evaluate("document.querySelectorAll('.agenda-navigation button').length"), 3);
+    assert.deepEqual(await evaluate('errors'), []);
+});
+
+test('Agenda UI: retry usa el día seleccionado tras navegar; mismo input pendiente no duplica', async () => {
+    await agendaPage(); await until(agendaLoaded);
+    await evaluate('fixture.agendaResponses.push({ status: 500 }, { hold: true })');
+    await selectAgendaDate('2028-02-29'); await until(agendaError);
+    await click('[data-agenda-retry]'); await until('pendingAgenda.length === 1');
+    await selectAgendaDate('2028-02-29');
+    assert.equal(await evaluate('calls.agenda'), 3);
+    const url = new URL(await evaluate('agendaRequests[2].url'), 'https://fixture.invalid');
+    assert.deepEqual([...url.searchParams], [['from', '2028-02-29T00:00:00-05:00'], ['to', '2028-03-01T00:00:00-05:00']]);
+    await evaluate('pendingAgenda.shift()()'); await until(agendaLoaded);
 });

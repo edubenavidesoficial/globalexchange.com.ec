@@ -1,0 +1,21 @@
+<section data-agenda aria-labelledby="agenda-title" aria-busy="false">
+    <p class="crm-eyebrow">Panel comercial</p>
+    <h1 class="crm-title" id="agenda-title" data-crm-heading tabindex="-1">Agenda</h1>
+    <p class="crm-intro">Las reuniones del día, con la información que necesitas para acompañar cada oportunidad.</p>
+    <div class="agenda-toolbar">
+        <div class="agenda-navigation" role="group" aria-label="Navegar por día">
+            <button class="crm-button" type="button" data-agenda-previous disabled>← Día anterior</button>
+            <button class="crm-button" type="button" data-agenda-today disabled>Hoy</button>
+            <button class="crm-button" type="button" data-agenda-next disabled>Día siguiente →</button>
+        </div>
+        <label class="agenda-date">Ir a una fecha<input type="date" min="0001-01-01" max="9999-12-30" data-agenda-date disabled></label>
+    </div>
+    <p class="crm-note agenda-zone">Hora de Ecuador · America/Guayaquil (UTC−05:00)</p>
+    <div class="agenda-day-heading">
+        <h2 data-agenda-day tabindex="-1"></h2>
+        <span data-agenda-summary></span>
+    </div>
+    <p class="agenda-status" data-agenda-status role="status" aria-live="polite" aria-atomic="true"></p>
+    <button class="crm-button crm-button--primary" type="button" data-agenda-retry hidden>Reintentar</button>
+    <ol class="agenda-list" data-agenda-rows aria-label="Reuniones del día"></ol>
+</section>

@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { consultationsFixture } from './fixtures/consultations.mjs';
+import { agendaFixture } from './fixtures/agenda.mjs';
 
 // Solo inspección visual local. No carga Vite, .env ni conexiones Supabase.
 // Nunca incluir este servidor de fixtures en un despliegue.
@@ -35,14 +36,22 @@ const server = createServer(async (request, response) => {
             response.end(JSON.stringify({ data: { id: 'fixture', fullName: 'Usuario de Prueba', role: 'admin' } }));
         } else if (pathname === '/src/js/main.js') {
             response.setHeader('Content-Type', 'text/javascript');
-            response.end("import { initCRM } from '/src/js/modules/crm.js'; import { initCRMConsultations } from '/src/js/modules/crm-consultations.js'; initCRM(document.querySelector('[data-consultations]') ? initCRMConsultations() : undefined);");
+            response.end("import { initCRM } from '/src/js/modules/crm.js'; import { initCRMConsultations } from '/src/js/modules/crm-consultations.js'; import { initCRMAgenda } from '/src/js/modules/crm-agenda.js'; initCRM(document.querySelector('[data-consultations]') ? initCRMConsultations() : document.querySelector('[data-agenda]') ? initCRMAgenda() : undefined);");
+        } else if (pathname === '/api/admin/meetings') {
+            const scenario = new URL(request.headers.referer || '/', 'http://localhost').searchParams.get('scenario');
+            const day = new URL(request.url, 'http://localhost').searchParams.get('from')?.slice(0, 10);
+            if (scenario === 'loading') await new Promise(resolve => setTimeout(resolve, 10000));
+            response.setHeader('Content-Type', 'application/json');
+            if (scenario === 'error') { response.writeHead(500); response.end('{}'); return; }
+            const rows = agendaFixture(day);
+            response.end(JSON.stringify({ data: scenario === 'empty' ? [] : scenario === 'one' ? rows.slice(0, 1) : rows }));
         } else if (pathname === '/api/admin/consultations') {
             response.setHeader('Content-Type', 'application/json');
             response.end(JSON.stringify({ data: consultationsFixture }));
         } else if (pathname === '/api/admin/internal-users') {
             response.setHeader('Content-Type', 'application/json');
             response.end(JSON.stringify({ data: [] }));
-        } else if (['/pages/crm/', '/pages/crm/solicitudes/'].includes(pathname)) {
+        } else if (['/pages/crm/', '/pages/crm/solicitudes/', '/pages/crm/agenda/'].includes(pathname)) {
             response.setHeader('Content-Type', 'text/html; charset=utf-8');
             response.end(await includes(resolve(root, `.${pathname}index.html`)));
         } else if (pathname.startsWith('/src/')) {

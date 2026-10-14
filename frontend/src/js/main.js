@@ -155,7 +155,9 @@ document.addEventListener(
             const { initCRM } = await import('./modules/crm.js');
             const page = document.querySelector('[data-consultations]')
                 ? (await import('./modules/crm-consultations.js')).initCRMConsultations()
-                : undefined;
+                : document.querySelector('[data-agenda]')
+                    ? (await import('./modules/crm-agenda.js')).initCRMAgenda()
+                    : undefined;
             initCRM(page);
             return;
         }

@@ -232,6 +232,8 @@ export default defineConfig({
                     'pages/crm/solicitudes/index.html'
                 ),
 
+                crmAgenda: resolve(process.cwd(), 'pages/crm/agenda/index.html'),
+
                 /* CONTACTOS */
 
                 contactos: resolve(

@@ -87,3 +87,91 @@ package.json actual; no se modifica la configuración para añadirlo.
 Resultado de esta fase: 276 pruebas aprobadas, 0 fallos (89 pruebas nuevas).
 `node --check` pasó para meetings.js y crm-meetings-api.test.mjs;
 `git diff --check` pasó sin errores.
+
+## 4C.3: UI de Agenda diaria
+
+Ruta: `/pages/crm/agenda/`, con entrada HTML propia registrada en Vite, includes
+del sidebar/topbar compartidos y bootstrap en main.js. Agenda es un enlace real
+para admin, agendadora y vendedora. Dashboard y Solicitudes mantienen su ruta;
+los ocho módulos futuros continúan deshabilitados. crm.js sigue resolviendo
+aria-current y autorización sin modificaciones.
+
+El módulo crm-agenda.js entrega onAuthorized/onInvalidate al shell, igual que
+Solicitudes. Solo consulta tras autorización de `/api/auth/me`, usando
+getAgendaMeetings. No lee metadata/storage ni envía filtros de identidad.
+El backend conserva toda la autoridad de scope.
+
+### Día operativo y navegación
+
+Hoy se obtiene con Intl.DateTimeFormat en America/Guayaquil. El selector maneja
+fechas calendario, nunca Date implícitos en zona local. Los helpers de
+crm-agenda-date.js calculan anterior/siguiente con aritmética UTC de calendario
+y forman strings con el offset operativo actual de Ecuador continental:
+`YYYY-MM-DDT00:00:00-05:00` hasta la medianoche del día siguiente, intervalo
+`[from, to)`. No se convierte el día seleccionado a UTC para enviarlo.
+El máximo representable del selector es 9999-12-30 para poder expresar el fin.
+No se pretende reconstruir offsets históricos de Ecuador.
+
+Anterior, Hoy, Siguiente y el input date consultan sin recargar la página.
+Seleccionar de nuevo el mismo día no duplica consultas. Cambiar de día aborta
+la petición anterior, incrementa una generación y limpia inmediatamente los
+datos. Una respuesta o error tardíos no pueden actualizar el día nuevo.
+
+La hora visible interpreta scheduledAt como instante mediante Intl en
+America/Guayaquil; no corta el timestamp. La fecha se muestra en español.
+Se mantiene exactamente el orden recibido y solo se resume el número de reuniones.
+
+### Información, estados y accesibilidad
+
+Cada reunión muestra hora, duración, solicitante, nombre del programa,
+modalidad, vendedora, estado, teléfono y email cuando no es null. Las modalidades
+conservan el vocabulario existente: En línea, Teléfono y Oficina. Los estados
+son Programada, Completada, Cancelada y No asistió, siempre con texto visible.
+No se muestran UUID, version, program.code, notas ni auditoría.
+
+Todo contenido remoto se inserta con createElement/textContent. Contactos son
+texto, sin acciones tel/mailto. No se usa innerHTML ni se construyen URLs con
+datos del backend. Se reutilizan colores, tipografía, botones y foco del CRM.
+Una sola lista semántica usa filas amplias en desktop y tarjetas en móvil;
+el contacto largo puede partir líneas sin generar scroll horizontal.
+
+Carga: mensaje y aria-busy, resultados anteriores borrados. Vacío: cero reuniones
+y mensaje explícito, conservando navegación. Error: mensaje genérico y Reintentar
+para la fecha vigente; el foco pasa al encabezado del día para no perderse al
+ocultar ese botón. 400/unavailable, 500, network, timeout e invalid_response
+permiten retry sin logout. 401/403 delegan a blockAccess del guard existente.
+Stale de la consulta vigente solicita revalidación silenciosa; operaciones ya
+sustituidas se descartan sin alterar la cuenta actual.
+
+Logout, cambio de cuenta y pagehide abortan y borran la Agenda por onInvalidate.
+Al regresar de bfcache el shell exige nueva autorización antes de cargar datos.
+Los controles nativos tienen nombres y labels; los mensajes usan role=status
+y aria-live. No se habilitan acciones para modificar reuniones.
+
+### Preview y pruebas
+
+Desde frontend: `node tests/preview-crm.mjs`, luego abrir
+`http://127.0.0.1:4178/pages/crm/agenda/`. Este servidor solo utiliza fixtures
+sintéticos; no carga Vite, archivos .env ni conexiones Supabase. Opciones de la
+URL de preview: `?scenario=one`, `?scenario=empty`, `?scenario=error` y
+`?scenario=loading` (demora de 10 segundos). Sin parámetro muestra cuatro reuniones.
+Los parámetros de preview no forman parte de la API de producción.
+
+Los tests de fechas cubren el cambio de día en Ecuador, mes/año, bisiestos,
+rango exacto y formato de hora con offset +00:00. Las pruebas del shell ejecutan
+Agenda, meetings, internal, auth y guard reales con SDK/fetch simulados:
+autorización, roles, navegación, datos, XSS, orden, errores/retry, carreras entre
+días y cuentas, logout, pagehide y bfcache. Se conserva la suite previa.
+
+Validación 4C.3: `npm run test:crm` dio 321 pruebas aprobadas, 0 fallos
+(45 nuevas sobre las 276 previas). node --check pasó en los ocho JS/MJS
+nuevos/modificados y git diff --check no reportó errores. Preview local
+inspeccionado en 1440×900 y 390×640: reuniones, vacío, error y carga legibles,
+sin overflow horizontal; navegación móvil comprobada. Sin E2E remoto.
+
+### Límites de esta fase
+
+Vista exclusivamente diaria: sin semana/mes, búsqueda, paginación ni filtro
+por vendedora. No crea, reprograma, cancela ni cambia estado de reuniones.
+La validación remota previa corresponde al backend de 4C.1; esta UI se valida
+localmente con mocks, sin reuniones reales ni cambios de base de datos.
