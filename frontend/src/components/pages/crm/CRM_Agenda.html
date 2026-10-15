@@ -18,4 +18,39 @@
     <p class="agenda-status" data-agenda-status role="status" aria-live="polite" aria-atomic="true"></p>
     <button class="crm-button crm-button--primary" type="button" data-agenda-retry hidden>Reintentar</button>
     <ol class="agenda-list" data-agenda-rows aria-label="Reuniones del día"></ol>
+    <p data-reschedule-announcement role="status" aria-live="polite" aria-atomic="true"></p>
+    <dialog class="reschedule-dialog" data-reschedule-dialog aria-labelledby="reschedule-title" aria-describedby="reschedule-zone">
+        <h2 id="reschedule-title">Reprogramar reunión</h2>
+        <dl class="reschedule-context">
+            <div><dt>Cliente</dt><dd data-reschedule-client></dd></div>
+            <div><dt>Programa</dt><dd data-reschedule-program></dd></div>
+            <div><dt>Vendedora asignada</dt><dd data-reschedule-seller></dd></div>
+            <div><dt>Estado actual</dt><dd data-reschedule-status></dd></div>
+            <div><dt>Fecha y hora actuales</dt><dd data-reschedule-schedule></dd></div>
+        </dl>
+        <p id="reschedule-zone" data-reschedule-zone></p>
+        <form data-reschedule-form>
+            <fieldset data-reschedule-fields>
+                <legend>Nuevo horario</legend>
+                <label for="reschedule-date">Fecha</label>
+                <input id="reschedule-date" name="date" type="date" required>
+                <label for="reschedule-time">Hora</label>
+                <input id="reschedule-time" name="time" type="time" required>
+                <label for="reschedule-duration">Duración en minutos</label>
+                <input id="reschedule-duration" name="durationMinutes" type="number" min="1" step="1" required>
+                <label for="reschedule-mode">Modalidad</label>
+                <select id="reschedule-mode" name="mode" required>
+                    <option value="">Selecciona una modalidad</option>
+                    <option value="online">En línea</option><option value="phone">Teléfono</option><option value="office">Oficina</option>
+                </select>
+            </fieldset>
+            <p data-reschedule-message role="status" aria-live="polite" aria-atomic="true"></p>
+            <p data-reschedule-uncertain hidden>Los datos permanecen bloqueados para reintentar el mismo cambio. Descartar requiere actualizar la Agenda porque el cambio pudo haberse aplicado.</p>
+            <div class="reschedule-actions">
+                <button class="crm-button" type="button" data-reschedule-cancel>Cancelar</button>
+                <button class="crm-button" type="button" data-reschedule-discard hidden>Descartar intento y actualizar</button>
+                <button class="crm-button crm-button--primary" type="submit" data-reschedule-confirm>Confirmar reprogramación</button>
+            </div>
+        </form>
+    </dialog>
 </section>

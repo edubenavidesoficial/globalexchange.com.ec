@@ -1,4 +1,5 @@
 import { getAgendaMeetings } from '../api/meetings.js';
+import { initRescheduleDialog } from './crm-reschedule-dialog.js';
 import { agendaToday, shiftAgendaDay, agendaDayRange, agendaDayLabel, agendaHour } from './crm-agenda-date.js';
 
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
@@ -18,6 +19,19 @@ export function initCRMAgenda() {
     let access = null;
     let pending = null;
     let generation = 0;
+    let reschedulingDenied = false;
+    let refreshRequired = false;
+    const canOpen = () => Boolean(access?.isCurrent()) && !pending && !refreshRequired && !reschedulingDenied;
+    const dialog = initRescheduleDialog(root, {
+        canOpen,
+        forbid() { reschedulingDenied = true; controls(); },
+        reload() {
+            refreshRequired = true;
+            generation++;
+            pending?.abort(); pending = null;
+            return load();
+        },
+    });
 
     function clear() {
         rows.replaceChildren();
@@ -33,12 +47,15 @@ export function initCRMAgenda() {
         // Sigue disponible si la pestaña permanece abierta al cambiar de día.
         find('today').disabled = !access;
         retry.disabled = !access || Boolean(pending);
+        for (const button of rows.querySelectorAll('[data-agenda-reschedule]')) button.disabled = !canOpen();
     }
     function showDate() {
         date.value = day;
         find('day').textContent = agendaDayLabel(day);
     }
     function invalidate() {
+        dialog.invalidate();
+        reschedulingDenied = false; refreshRequired = false;
         generation++;
         pending?.abort();
         pending = null;
@@ -66,6 +83,16 @@ export function initCRMAgenda() {
             if (meeting.consultation.email !== null) field('Email', meeting.consultation.email);
             const badge = node('span', statuses[meeting.status], `agenda-badge agenda-badge--${meeting.status}`);
             item.append(time, person, badge, details);
+            if (['admin', 'agendadora'].includes(access.user.role) && meeting.status === 'scheduled') {
+                const button = node('button', 'Reprogramar', 'crm-button agenda-reschedule-open');
+                button.type = 'button'; button.dataset.agendaReschedule = '';
+                button.setAttribute('aria-label', `Reprogramar reunión de ${meeting.consultation.fullName}`);
+                const owner = access, renderedGeneration = generation;
+                button.addEventListener('click', () => {
+                    if (canOpen() && owner === access && renderedGeneration === generation) dialog.open(meeting, owner, button);
+                });
+                item.append(button);
+            }
             fragment.append(item);
         }
         rows.replaceChildren(fragment);
@@ -84,6 +111,7 @@ export function initCRMAgenda() {
         try {
             const data = await getAgendaMeetings({ ...agendaDayRange(day), access: current, signal: controller.signal });
             if (version !== generation || !current.isCurrent()) return;
+            refreshRequired = false;
             render(data);
         } catch (error) {
             if (version !== generation || !current.isCurrent()) return;
@@ -103,6 +131,7 @@ export function initCRMAgenda() {
             return;
         }
         if (day === next) return;
+        dialog.invalidate();
         generation++;
         pending?.abort();
         pending = null;

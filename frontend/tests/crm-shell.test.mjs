@@ -9,6 +9,7 @@ import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
 import { consultationsFixture } from './fixtures/consultations.mjs';
 import { agendaFixture } from './fixtures/agenda.mjs';
+import { shiftAgendaDay } from '../src/js/modules/crm-agenda-date.js';
 
 // DOM simulado; auth.js, crm.js y login.js se ejecutan sin modificar su código.
 // Se simulan SDK, fetch, navegación y matchMedia. No se leen archivos de entorno.
@@ -53,7 +54,7 @@ async function setup(options = {}, page = 'crm') {
     dom?.window.close();
     const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture,
         salespeople: [{ id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', fullName: 'Vendedora de prueba', role: 'vendedora' }],
-        salesResponses: [], meetingResponses: [], agendaResponses: [], agenda: agendaFixture(), page, ...options };
+        salesResponses: [], meetingResponses: [], agendaResponses: [], rescheduleResponses: [], agenda: agendaFixture(), page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
     // Solo pruebas: el navegador real proporciona top layer, foco y Escape nativos.
     dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
@@ -94,6 +95,7 @@ async function setup(options = {}, page = 'crm') {
     vm.runInContext(`
         window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0, agenda: 0 };
         window.pendingAgenda = []; window.agendaRequests = []; window.agendaSignals = [];
+        window.pendingReschedules = []; window.rescheduleRequests = []; window.rescheduleSignals = [];
         window.pendingSales = []; window.pendingMeetings = []; window.meetingRequests = [];
         window.events = [];
         window.pending = [];
@@ -131,6 +133,13 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (options.method === 'PATCH' && url.startsWith('/api/admin/meetings/') && url.endsWith('/schedule')) {
+                rescheduleRequests.push({ url, key: options.headers['Idempotency-Key'], body: options.body });
+                rescheduleSignals.push(options.signal);
+                const response = fixture.rescheduleResponses.shift() || {};
+                if (response.hold) await new Promise(resolve => pendingReschedules.push(resolve));
+                return new Response(JSON.stringify(response.body ?? { data: fixture.agenda[0] }), { status: response.status || 200 });
+            }
             if (url.startsWith('/api/admin/meetings?')) {
                 calls.agenda++;
                 agendaRequests.push({ url, method: options.method, cache: options.cache,
@@ -207,7 +216,9 @@ async function setup(options = {}, page = 'crm') {
         const dates = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-agenda-date.js'), 'utf8'), { context });
         await dates.link(() => { throw Error('Unexpected import'); });
         const agenda = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-agenda.js'), 'utf8'), { context });
-        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : dates);
+        const reschedule = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-reschedule-dialog.js'), 'utf8'), { context });
+        await reschedule.link(() => meetings);
+        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : dates);
         await agenda.evaluate(); hooks = agenda.namespace.initCRMAgenda();
     }
     if (page === 'crm/solicitudes') {
@@ -1263,11 +1274,14 @@ test('Agenda UI: día anterior, siguiente, Hoy y input válido sin duplicar mism
 });
 for (const failure of [false, true]) test(`Agenda UI: día A tardío ${failure ? 'falla' : 'responde'} nunca sobrescribe B`, async () => {
     await agendaPage(); await until(agendaLoaded);
+    const initialDay = await evaluate("document.querySelector('[data-agenda-date]').value");
+    const dayA = shiftAgendaDay(initialDay, 1);
+    const dayB = shiftAgendaDay(initialDay, 2);
     await evaluate(`fixture.agendaResponses.push({ hold: true, network: ${failure}, data: [] })`);
-    await selectAgendaDate('2026-10-15'); await until('pendingAgenda.length === 1');
+    await selectAgendaDate(dayA); await until('pendingAgenda.length === 1');
     assert.equal(await evaluate(agendaText), '');
     assert.equal(await evaluate("document.querySelector('[data-agenda]').getAttribute('aria-busy')"), 'true');
-    await selectAgendaDate('2026-10-16'); await until(agendaLoaded);
+    await selectAgendaDate(dayB); await until(agendaLoaded);
     assert.equal(await evaluate('agendaSignals[1].aborted'), true);
     const before = await evaluate("document.querySelector('[data-agenda]').textContent");
     await evaluate('pendingAgenda.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
@@ -1347,4 +1361,54 @@ test('Agenda UI: retry usa el día seleccionado tras navegar; mismo input pendie
     const url = new URL(await evaluate('agendaRequests[2].url'), 'https://fixture.invalid');
     assert.deepEqual([...url.searchParams], [['from', '2028-02-29T00:00:00-05:00'], ['to', '2028-03-01T00:00:00-05:00']]);
     await evaluate('pendingAgenda.shift()()'); await until(agendaLoaded);
+});
+
+const rescheduleOpen = "document.querySelector('[data-reschedule-dialog]').open";
+async function startReschedule(options = {}) {
+    await agendaPage(options); await until(agendaLoaded);
+    await click('[data-agenda-reschedule]');
+    await evaluate("document.querySelector('[data-reschedule-form]').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))");
+}
+test('4D.1D shell: API real con PATCH simulado, éxito recarga y cierra', async () => {
+    await startReschedule(); await until('calls.agenda === 2'); await until(agendaLoaded);
+    assert.equal(await evaluate(rescheduleOpen), false);
+    assert.equal(await evaluate('rescheduleRequests.length'), 1);
+    assert.equal(await evaluate('JSON.parse(rescheduleRequests[0].body).expectedVersion'), 1);
+    assert.equal(await evaluate('calls.logout'), 0);
+});
+test('4D.1D shell: logout aborta PATCH simulado y limpia el diálogo', async () => {
+    await startReschedule({ rescheduleResponses: [{ hold: true }] }); await until('pendingReschedules.length === 1');
+    const dialog = dom.window.document.querySelector('[data-reschedule-dialog]');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(dialog.open, false); assert.equal(dialog.querySelector('[data-reschedule-client]').textContent, '');
+    assert.equal(dialog.querySelector('[name=date]').value, '');
+    assert.equal(await evaluate('rescheduleSignals[0].aborted'), true);
+    await evaluate('pendingReschedules.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 1);
+});
+test('4D.1D shell: pagehide limpia PATCH/modal y BFCache espera autorización nueva', async () => {
+    await startReschedule({ rescheduleResponses: [{ hold: true }] }); await until('pendingReschedules.length === 1');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    assert.equal(await evaluate(rescheduleOpen), false);
+    assert.equal(await evaluate("document.querySelector('[data-reschedule-client]').textContent"), '');
+    assert.equal(await evaluate('rescheduleSignals[0].aborted'), true);
+    await evaluate('fixture.responses.push({ hold: true })');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    await until('pending.length === 1'); assert.equal(await evaluate('calls.agenda'), 1);
+    assert.equal(await evaluate(shellVisible), false);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    await evaluate('pendingReschedules.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 2); assert.equal(await evaluate(rescheduleOpen), false);
+});
+test('4D.1D shell: cambio Auth A→B invalida PATCH antes de autorizar B', async () => {
+    await startReschedule({ rescheduleResponses: [{ hold: true, status: 409 }] }); await until('pendingReschedules.length === 1');
+    await evaluate(`fixture.responses.push({ hold: true, user: ${JSON.stringify(userB)} }); emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until('pending.length === 1'); assert.equal(await evaluate(rescheduleOpen), false);
+    assert.equal(await evaluate('rescheduleSignals[0].aborted'), true);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-reschedule]')"), null);
+    const html = await evaluate("document.querySelector('[data-agenda]').innerHTML");
+    await evaluate('pendingReschedules.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').innerHTML"), html);
+    assert.equal(await evaluate('calls.agenda'), 2);
 });
