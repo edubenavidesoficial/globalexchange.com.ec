@@ -324,7 +324,7 @@ TLS del cliente al pooler con el salto pooler/PostgreSQL. Se corrigió únicamen
 el ejecutor temporal: se mantuvo sslmode=require y se comprobaron por separado
 permisos de inserción y limpieza. El segundo intento completó todo el E2E.
 
-## Validaciones todavía pendientes
+## Validaciones todavía pendientes de reprogramación (4D.1)
 
 Estas pruebas secuenciales NO validan dos sesiones simultáneas: quedan pendientes
 same-key concurrent real y different-key simultaneous version conflict real.
@@ -332,3 +332,269 @@ Tampoco acredita toda la matriz de revocación/permisos, replay vencido/tras cam
 de estado, fotografía corrupta, overflow, padre inconsistente, estados terminales,
 DST, fecha vencida esperando locks ni fallos inducidos de audit/idempotencia.
 El rollback de 4D.1A y el cleanup con COMMIT de 4D.1B quedaron comprobados.
+
+## 4D.2B — Cancelación: PostgreSQL + RPC completada y validada
+
+Estado: **4D.2B TÉCNICAMENTE COMPLETADA Y VALIDADA**. Migración forward-only
+`20261015120000_cancel_meeting_workflow.sql` implementada y aplicada a Supabase
+remoto, con historial local/remoto alineado según la evidencia manual aportada
+por el usuario. Validación local mediante suite backend y auditoría estática;
+validación PostgreSQL remota mediante fixtures sintéticos, atomicidad inducida
+y concurrencia real en dos sesiones, con cleanup y cero residuos.
+No se modifican las migraciones aplicadas de creación/reprogramación.
+**4D.2 completa NO está terminada**: quedan las capas de cancelación Express,
+frontend API/UI y E2E de la funcionalidad completa; este cierre es PostgreSQL + RPC.
+
+### Contrato y permisos
+
+```text
+public.cancel_consultation_meeting(
+  p_actor_id uuid, p_meeting_id uuid, p_idempotency_key uuid,
+  p_request_hash text, p_expected_version integer, p_reason text
+) returns jsonb
+```
+
+PL/pgSQL, VOLATILE, SECURITY INVOKER, search_path=pg_catalog,pg_temp y timezone=UTC.
+Exige READ COMMITTED. REVOKE ALL sobre la firma exacta a PUBLIC, anon,
+authenticated y service_role; GRANT EXECUTE solo a service_role. No amplía grants
+de tablas ni altera RLS. Actor activo admin/agendadora bajo FOR SHARE; vendedora
+no puede cancelar ni recuperar un replay. El backend futuro debe derivar el actor
+de req.user.id y calcular el hash; la RPC confía en esa frontera service_role.
+
+Se preservan consultation_request/consultation_converted y
+meeting/meeting_created|meeting_rescheduled en audit_events_entity_action_valid,
+añadiendo meeting/meeting_cancelled. idempotency_records_operation_valid conserva
+create_consultation_meeting y reschedule_consultation_meeting y añade
+cancel_consultation_meeting. La migración completa requiere runner transaccional,
+nunca ejecución parcial; ya está aplicada remotamente. Esta fase no implementa
+el endpoint Express ni frontend.
+
+### Motivo, estado e invariantes
+
+Reason es un código controlado obligatorio: client_request, staff_unavailable,
+duplicate, administrative u other. No es texto libre. Se comparan valores exactos,
+sin trim, traducción, case folding ni normalización. NULL y cualquier valor fuera
+de la lista producen INVALID_MEETING_INPUT en un comando nuevo.
+
+Solo scheduled → cancelled. expectedVersion es integer positivo y debe coincidir
+con la versión bloqueada. El padre debe estar converted; no se modifica ninguna
+de sus columnas, incluido updated_at. No se comprueba futuro ni elegibilidad de
+la asignada histórica. Se preservan horario, zona, duración, modalidad, notas,
+asignada, identidad, relación, creador y fecha de creación.
+
+El único UPDATE cambia status='cancelled', updated_by=actor,
+updated_at=clock_timestamp() y version=version+1. Versión 2147483647 produce
+INTERNAL_ERROR antes de escribir. El índice parcial queda intacto: una cancelación
+libera la exclusividad scheduled. No se crea otra meeting automáticamente; una
+creación posterior sigue las reglas 4B (sin scheduled ni completed en el historial).
+La UI actual de Solicitudes sigue limitada a pending; habilitar nuevos intentos
+desde converted pertenece a otra fase.
+
+### Orden, replay y precedencia
+
+1. Exigir aislamiento y validar actor/IDs/clave/hash básicos.
+2. Advisory lock transaccional por operation/actor/key, sin lock advisory de meeting.
+3. Actor FOR SHARE y validación de existencia, active y role.
+4. Buscar (actor_id, operation, idempotency_key). Hash distinto:
+   IDEMPOTENCY_KEY_REUSED. Hash igual: validar y devolver fotografía persistida.
+5. Sin replay: validar expectedVersion y reason, descubrir ID del padre sin lock.
+6. Padre FOR UPDATE → meeting FOR UPDATE; revalidar existencia y relación.
+7. Validar status scheduled → versión esperada → padre converted → overflow.
+8. UPDATE, INSERT audit, construir respuesta, INSERT idempotency y retornar.
+
+Precedencia intencional: si otra cancelación ganó con otra clave, el nuevo comando
+recibe MEETING_NOT_SCHEDULED aunque su versión también sea antigua. Si ganó una
+reprogramación y sigue scheduled, recibe MEETING_VERSION_CONFLICT. La misma clave
+y hash exitosos recuperan el resultado original sin validar estado/versión/padre
+actuales, sin nuevo audit ni incremento. Actor revocado no accede al replay.
+
+La fotografía exige exactamente ocho campos públicos, objeto y tipos correctos,
+estado cancelled, modalidad válida, zona no vacía, timestamp finito, duración
+integer positiva y versión integer >=2. El ID del padre debe coincidir con el
+registro idempotente. Un ID de meeting distinto del solicitado produce
+IDEMPOTENCY_KEY_REUSED, como 4D.1; estructura/casts corruptos producen INTERNAL_ERROR.
+La RPC compara/persiste el hash recibido y no lo recalcula. Contrato futuro del
+backend: SHA-256 UTF-8 de JSON.stringify con orden meetingId (UUID lowercase),
+expectedVersion, reason exacto; actor y clave fuera del hash.
+
+Una operación por transacción. Fallos de audit/idempotencia deben revertir todo;
+no se capturan para retornar éxito. Errores controlados usan P0001 y códigos fijos,
+sin datos internos. Errores de integridad desconocidos se propagan para sanitización
+en el adaptador futuro. No hay SQL dinámico ni efectos externos.
+
+### Auditoría y respuesta
+
+Exactamente un evento meeting/meeting_cancelled, entity_id de la meeting,
+actor_id interno y operation_id generado independientemente de Idempotency-Key.
+Metadata exacta: consultationRequestId, previousStatus, newStatus,
+previousVersion, newVersion, reason. Sin PII, contactos, notes, key, hash ni actor
+duplicado. Reason solo se persiste en esa metadata; no en response_payload.
+
+```text
+{ id, consultationRequestId, scheduledAt, timeZone,
+  durationMinutes, mode, status: "cancelled", version }
+```
+
+La misma respuesta JSONB se retorna y persiste en idempotency_records junto con
+actor, operation, key, hash y consultation_request_id. No se persisten errores.
+El endpoint futuro PATCH /api/admin/meetings/:id/cancel usará 200 y {data: resultado}.
+
+### Evidencia local inicial
+
+Baseline manual informada por el usuario en PowerShell local: **408 tests,
+408 pass, 0 fail**. El intento anterior de Codex falló por connect EACCES en
+127.0.0.1; no se repitió la suite HTTP restringida ni se atribuye esa baseline
+a una ejecución exitosa de Codex.
+
+La implementación inicial añadió 16 tests estáticos en tests/cancel-meeting-migration.test.mjs, incluidos
+automáticamente por el script npm test existente. Cubren constraints, firma,
+permisos, aislamiento, orden actor/replay/locks, fotografía, reason exacto,
+precedencia estado/versión, padre, overflow, whitelist, audit y respuesta.
+Codex ejecutó `node --test tests/cancel-meeting-migration.test.mjs
+tests/error-handler.test.mjs`: **26 tests, 26 pass, 0 fail** (16 nuevos + 10 existentes).
+Son lecturas/aserciones locales sin DB, fixtures, sockets ni imports del proveedor.
+
+Estos tests comprueban el contrato textual, no compilan ni ejecutan PL/pgSQL y no
+demuestran rollback, concurrencia ni grants efectivos. Posteriormente el usuario
+ejecutó manualmente la suite backend completa en PowerShell: **424 tests,
+424 pass, 0 fail**, antes de la corrección de replay descrita abajo. Este resultado
+no se atribuye a Codex ni equivale a validación PostgreSQL real.
+Estas ejecuciones iniciales fueron exclusivamente locales. La batería PostgreSQL
+real posterior se registra abajo; no se atribuye a los tests estáticos ni acredita
+casos adicionales de revocación/permisos no reportados. El E2E de navegador
+esperará las fases de endpoint/API/UI.
+
+### Corrección local del replay — 2026-10-16
+
+Antes de aplicar la nueva migración remotamente, se amplió exclusivamente
+el handler del bloque de interpretación de la fotografía persistida para traducir
+a P0001 / INTERNAL_ERROR estas condiciones PostgreSQL:
+
+- 22P02 / invalid_text_representation (UUID/entero inválido).
+- 22003 / numeric_value_out_of_range.
+- 22007 / invalid_datetime_format.
+- 22008 / datetime_field_overflow.
+- 22009 / invalid_time_zone_displacement_value (offset fuera de rango).
+- 22023 / invalid_parameter_value (por ejemplo, zona inexistente).
+- F0000 / config_file_error (resolución de abreviaturas de zona configuradas).
+
+No hay WHEN OTHERS ni captura de P0001/raise_exception. El handler está dentro
+del replay y no cubre consultas, locks ni escrituras. El conflicto de hash sigue
+fuera del bloque; el conflicto explícito de ID sigue propagando
+IDEMPOTENCY_KEY_REUSED porque no pertenece a las condiciones capturadas.
+No se absorben fallos de auditoría/idempotencia ni errores de otras operaciones.
+
+Antes del cast, scheduledAt debe tener el prefijo ISO
+`^[0-9]{4,}-[0-9]{2}-[0-9]{2}T`, compatible con la serialización JSONB del
+timestamptz de la RPC, incluidos años de más de cuatro dígitos. Esto rechaza
+now, today, tomorrow, yesterday, epoch, allballs e infinity/-infinity, sin
+normalizar ni reinterpretar tokens especiales. No es un parser RFC3339 completo:
+el cast PostgreSQL valida calendario/hora/zona y isfinite sigue exigiendo finitud.
+La comprobación no recorta microsegundos ni exige un año limitado a cuatro dígitos.
+
+Se conservan los 16 tests y se añaden tres: condiciones de error, alcance del
+handler sin absorción de códigos de dominio y prefijo previo al cast con ejemplos
+de tokens rechazados/salidas admitidas. Los ejemplos de regex se evalúan en JS;
+no constituyen ejecución SQL. Codex ejecutó los **19 tests estáticos: 19 pass,
+0 fail**, y node --check. Un primer intento detectó un espacio final en la
+aserción del handler; se corrigió la aserción antes de la ejecución aprobada.
+Estas comprobaciones estáticas no acreditan compilación PostgreSQL, rollback,
+concurrencia ni E2E. La suite completa del cierre local y la evidencia PostgreSQL
+real posterior se distinguen a continuación.
+
+Deuda técnica separada: reschedule_consultation_meeting de 4D.1 conserva el
+handler anterior y la validación temporal permisiva del replay. No se modificó
+su migración ya aplicada; su corrección requiere una tarea y migración futura.
+
+### Cierre local — 2026-10-16
+
+Codex ejecutó la suite completa con `npm test`, definida en package.json como
+`node --experimental-vm-modules --test tests/*.test.mjs`: **427 tests, 427 pass,
+0 fail**, sin cancelados ni omitidos; duración reportada 703.7909 ms. El primer
+intento en sandbox falló por connect EACCES en loopback; tras revisar el harness
+sin modificarlo, la repetición autorizada fuera de esa restricción pasó completa.
+Supabase permanece simulado y no se carga .env. Los 19 tests de la migración
+actual siguen cubriendo el contrato textual; no sustituyen las pruebas remotas.
+La revisión conserva SECURITY INVOKER, configuración segura, grants restringidos,
+handler acotado al replay sin WHEN OTHERS, precedencia estado/versión, reason
+exacto, respuesta de ocho campos y ausencia de UPDATE sobre consultation.
+
+### Validación PostgreSQL remota completada
+
+Evidencia de ejecución manual comunicada por el usuario para el cierre del
+2026-10-16. Se usaron fixtures sintéticos controlados; usuarios internos y programa
+existentes solo se referenciaron. El cierre documental no repite pruebas mutantes
+remotas ni aplica migraciones. El catálogo remoto confirmó firma exacta, retorno
+jsonb, VOLATILE, SECURITY INVOKER, search_path=pg_catalog,pg_temp, TimeZone=UTC,
+EXECUTE para service_role y ausencia de EXECUTE para authenticated/anon.
+
+Resultados confirmados:
+
+- Éxito: scheduled/version 1 → cancelled/version 2. Se preservaron scheduled_at,
+  time_zone, duration_minutes, mode, notes, assigned_to, created_by y created_at;
+  updated_by quedó en el actor admin. Consultation siguió converted con updated_at
+  intacto. Reason no se escribió en notes ni en la respuesta de ocho campos.
+- Exactamente un meeting_cancelled con metadata exacta: consultationRequestId,
+  previousStatus/newStatus, previousVersion/newVersion y reason; operation_id
+  independiente de las Idempotency-Key. Exactamente un registro idempotente.
+- Replay con mismo actor/operación/clave/hash devolvió la respuesta persistida
+  exacta, sin incrementar versión ni duplicar audit/idempotencia. Misma clave
+  con payload/hash distinto produjo IDEMPOTENCY_KEY_REUSED sin cambios adicionales.
+- Negativos: ACTOR_NOT_ALLOWED, INVALID_MEETING_INPUT, MEETING_VERSION_CONFLICT,
+  IDEMPOTENCY_KEY_REUSED y MEETING_NOT_SCHEDULED; fotografía con offset +25:00 y
+  literal especial now produjo INTERNAL_ERROR. Antes de cancelar no hubo mutación
+  ni inserts; después se preservaron cancelled/version 2, un audit y una idempotencia.
+- Estados especiales: MEETING_NOT_FOUND, CONSULTATION_STATE_INCONSISTENT y
+  overflow desde 2147483647 → INTERNAL_ERROR, sin mutaciones parciales.
+- Los cinco reasons exactos produjeron scheduled → cancelled, versión 1→2 y
+  metadata.reason correspondiente: client_request, staff_unavailable, duplicate,
+  administrative y other.
+- Nuevo intento: la cancelación liberó el índice único parcial de scheduled y se
+  comprobó una nueva meeting scheduled para la misma consultation; no se crea
+  automáticamente por la RPC de cancelación.
+- Atomicidad inducida: un trigger temporal limitado al fixture provocó
+  GE_4D_4B2B_INDUCED_IDEMPOTENCY_FAILURE al insertar idempotencia, después del
+  UPDATE y del INSERT audit. PostgreSQL revirtió todo: meeting scheduled/version 1,
+  updated_at/updated_by originales, audit=0, idempotencia=0 y consultation converted
+  con updated_at intacto. El rollback final dejó cero residuos, incluido el trigger.
+
+### Concurrencia real y cleanup
+
+Misma clave/hash, dos sesiones PostgreSQL: A canceló y mantuvo abierta la
+transacción; B esperó hasta COMMIT A y devolvió exactamente la misma respuesta
+idempotente cancelled/version 2. Resultado: un meeting_cancelled, un registro
+idempotente y una meeting cancelled/version 2. Cleanup explícito con cero residuos.
+
+Claves diferentes, dos sesiones psql y harness temporal fuera del repositorio:
+A canceló con clave A y reason client_request; B intentó cancelar la misma meeting
+con clave/hash B diferentes, expectedVersion=1 y reason administrative. Antes del
+COMMIT A se comprobó exactamente una B activa, wait_event_type=Lock y A entre
+pg_blocking_pids(B), con la salida:
+
+```text
+PASS real blocking: one active B, wait_event_type Lock, A in blocking PIDs
+PASS A COMMITTED - B SHOULD NOW UNBLOCK
+PASS concurrent different key -> MEETING_NOT_SCHEDULED
+PASS B COMMITTED
+```
+
+B obtuvo exactamente SQLSTATE P0001 / MEETING_NOT_SCHEDULED después del COMMIT A:
+el estado cancelled precedió a la versión obsoleta. No hubo
+MEETING_VERSION_CONFLICT ni segunda cancelación. Se verificaron meeting
+cancelled/version 2, consultation converted con updated_at original, exactamente
+un audit con versiones 1→2 y reason client_request, y exactamente una idempotencia
+de clave A con hash correcto y respuesta coincidente; clave B ausente.
+
+Tras revalidar identidad sintética, el cleanup transaccional eliminó únicamente
+idempotencia, auditoría, meeting y consultation del fixture. Después de COMMIT:
+
+```text
+PASS consultation_residue = 0
+PASS meeting_residue = 0
+PASS idempotency_residue = 0
+PASS audit_residue = 0
+PASS VERIFIED AND CLEANED - ZERO RESIDUE
+```
+
+La batería real de concurrencia de cancelación 4D.2B está completada. El harness
+temporal no forma parte del código de producción ni se incorpora al repositorio.
