@@ -1,5 +1,15 @@
 import supabase from '../../config/supabase.js';
 
+export async function cancelConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
+    const { data, error } = await supabase.rpc('cancel_consultation_meeting', {
+        p_actor_id: actorId, p_meeting_id: payload.meetingId,
+        p_idempotency_key: idempotencyKey, p_request_hash: requestHash,
+        p_expected_version: payload.expectedVersion, p_reason: payload.reason,
+    });
+    if (error) throw error;
+    return data;
+}
+
 export async function rescheduleConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
     const { data, error } = await supabase.rpc('reschedule_consultation_meeting', {
         p_actor_id: actorId, p_meeting_id: payload.meetingId,

@@ -598,3 +598,185 @@ PASS VERIFIED AND CLEANED - ZERO RESIDUE
 
 La batería real de concurrencia de cancelación 4D.2B está completada. El harness
 temporal no forma parte del código de producción ni se incorpora al repositorio.
+
+## 4D.2C — Backend Express de cancelación — 2026-10-16
+
+Implementado localmente y pendiente de revisión final, staging, commit y push:
+`PATCH /api/admin/meetings/:id/cancel`. **4D.2 completa sigue pendiente**:
+faltan frontend API, frontend UI y E2E completo de cancelación. No se modifican
+PostgreSQL, migraciones, frontend ni los middleware globales.
+
+### Arquitectura y autorización
+
+Router meetings ya montado → authenticate → authorize('admin', 'agendadora') →
+patchMeetingCancel → cancelMeeting → cancelConsultationMeeting → una RPC
+cancel_consultation_meeting. Vendedora recibe 403. Sin token/token inválido:
+401; sin perfil interno/perfil inactivo: 403. Actor exclusivamente de req.user.id,
+obtenido del perfil interno; nunca de body, headers arbitrarios o metadata cliente.
+La RPC vuelve a validar al actor, incluso en replay.
+
+El repository pasa exactamente p_actor_id, p_meeting_id, p_idempotency_key,
+p_request_hash, p_expected_version y p_reason; devuelve data o lanza el mismo
+error recibido, sin interpretarlo. No hay consultas comerciales adicionales,
+escrituras directas, comparación de versión actual, locks, reintentos ni replay
+local. La consulta de autenticación a internal_users permanece.
+
+### Contrato HTTP y hash
+
+Headers: Authorization: Bearer <token>, Content-Type: application/json
+(también charset=utf-8), y exactamente una Idempotency-Key UUID.
+Los duplicados se detectan en rawHeaders sin distinguir casing. Id y clave usan
+el validador UUID existente: 36 caracteres, sin coerción ni trim, lowercase.
+Node HTTP puede eliminar OWS periférico de headers y rechaza CR/LF antes del
+service; los valores sin normalizar se prueban directamente en este último.
+
+Body JSON plano con exactamente dos campos:
+
+```json
+{ "expectedVersion": 1, "reason": "client_request" }
+```
+
+expectedVersion: Number integer entre 1 y 2147483647, sin coerción.
+reason: exactamente client_request, staff_unavailable, duplicate, administrative
+u other; sin trim, lowercase ni alias. Estructura/campos extra: INVALID_REQUEST;
+campos ausentes/valores inválidos: INVALID_MEETING_INPUT. Se rechazan arrays,
+instancias, herencia personalizada, símbolos y accesores sin ejecutarlos.
+Se reutiliza la validación estricta de reprogramación mediante un helper local;
+el descriptor de constructor evita ejecutar un getter en el prototipo.
+
+JSON malformado mantiene INVALID_JSON del error-handler. express.json() precede
+a authenticate, por lo que ese 400 puede preceder a la comprobación del token.
+
+normalizeCancellation construye en este orden exacto:
+
+```js
+{ meetingId: normalizedMeetingId, expectedVersion, reason }
+```
+
+Hash SHA-256 de JSON.stringify(payload), UTF-8, hexadecimal lowercase.
+No incluye actor, clave ni operation. PostgreSQL separa operaciones mediante
+(actor_id, operation, idempotency_key), con operation cancel_consultation_meeting.
+No se modificaron expresiones de hash ni payloads históricos de creación o
+reprogramación; sus pruebas de hash existentes siguen pasando.
+
+### Respuesta y errores
+
+Éxito y replay: HTTP 200 con {data: resultado}. El service valida y proyecta
+explícitamente los ocho campos: id, consultationRequestId, scheduledAt, timeZone,
+durationMinutes, mode, status y version. Exige el id solicitado, UUID válidos,
+timestamp válido, zona no vacía, duración integer positiva hasta 2147483647,
+modalidad online/phone/office, status cancelled y versión integer 2–2147483647.
+Reason, notes, assignedTo, actores, audit, metadata y extras del proveedor no se
+exponen. Reason se envía únicamente como argumento de RPC; su persistencia en
+audit_events.metadata.reason sigue siendo responsabilidad de PostgreSQL.
+
+Se reutiliza la proyección de reprogramación con estado esperado explícito,
+preservando sus garantías de tipos. Timestamp válido se devuelve sin reformatear
+y puede estar en el pasado. Tras la corrección P2 descrita abajo, las respuestas
+de cancelación/reprogramación admiten años 0001–10000; los filtros de Agenda
+conservan 0001–9999. No se amplía el contrato a todo el rango PostgreSQL.
+
+| Código público | HTTP | Mensaje |
+| --- | --- | --- |
+| ACTOR_NOT_ALLOWED | 403 | No tienes permisos para cancelar reuniones. |
+| MEETING_NOT_FOUND | 404 | La reunión no existe. |
+| MEETING_NOT_SCHEDULED | 409 | Solo se puede cancelar una reunión programada. |
+| MEETING_VERSION_CONFLICT | 409 | La reunión cambió. Vuelve a consultar sus datos. |
+| IDEMPOTENCY_KEY_REUSED | 409 | La clave de idempotencia ya corresponde a otros datos. |
+| CONSULTATION_STATE_INCONSISTENT | 409 | La solicitud requiere revisión antes de cancelar la reunión. |
+| INVALID_MEETING_INPUT | 400 | Los datos de la reunión no son válidos. |
+| INVALID_REQUEST | 400 | Los datos de la solicitud no son válidos. |
+| WORKFLOW_ISOLATION_NOT_SUPPORTED | 500 | Ocurrió un error interno en el servidor. |
+| INTERNAL_ERROR | 500 | Ocurrió un error interno en el servidor. |
+
+Errores controlados mantienen {error: {code, message}}. UUID de reunión inválido:
+INVALID_MEETING_ID; clave ausente/inválida/duplicada: INVALID_IDEMPOTENCY_KEY;
+JSON malformado: INVALID_JSON, todos 400 con los mensajes existentes.
+Los middleware de auth conservan sus respuestas sin code: 401 con
+"Se requiere una autenticación válida."; 403 por rol con
+"No tienes permisos para realizar esta acción." y por perfil con
+"No tienes acceso al sistema interno.".
+
+MeetingError/translateMeetingError aceptan un contexto opcional cancel que cambia
+solo los tres mensajes específicos de la operación. El default preserva los
+mensajes históricos. Se mantiene la allowlist existente: solo SQLSTATE P0001 y
+message exacto permitido. Otros errores, rechazos de transporte o respuesta
+inválida producen INTERNAL_ERROR. No se propagan details, hint, cause, stack ni
+mensajes arbitrarios; los logs mantienen la sanitización global existente.
+
+### Validación local Express
+
+166 tests nuevos en tests/meetings.test.mjs sobre el harness HTTP/VM existente:
+route/métodos, auth, cabeceras, JSON, UUID, body estricto, motivos, límites,
+hash canónico, inputs inmutables, seis argumentos RPC, propagación del error en
+repository, mensajes contextualizados y regresión de mensajes históricos,
+allowlist, 50 respuestas inválidas, whitelist pública y replay HTTP simulado.
+
+Comandos ejecutados desde backend:
+
+```text
+node --experimental-vm-modules --test --test-name-pattern=cancel tests/meetings.test.mjs
+npm test
+```
+
+El primer intento focalizado en sandbox falló por connect EACCES en 127.0.0.1.
+Se repitió el mismo comando con permisos para loopback, sin modificar los tests:
+166 tests, 166 pass, 0 fail, duración 458.9277 ms.
+Suite completa mediante el script real de package.json, con loopback habilitado:
+593 tests, 593 pass, 0 fail, 0 cancelados/omitidos, duración 918.3023 ms.
+Se conservan los 427 tests de baseline, incluidos creación, reprogramación,
+Agenda, auth, error-handler y contrato estático de migración.
+
+La ejecución emite avisos de VM Modules experimental y de Promise-like handlers
+del harness VM. No hubo fallos funcionales en la ejecución con loopback habilitado.
+Supabase se sustituye antes de evaluar config; no se carga .env, no se contacta
+la DB ni se ejecuta SQL remoto. El replay simulado comprueba dos respuestas y
+argumentos iguales, sin cambio local de versión/clave; no demuestra locking,
+concurrencia ni atomicidad PostgreSQL. Esa evidencia pertenece a 4D.2B.
+Después de la suite solo se añadió esta documentación; no se repite la suite
+porque no cambia runtime ni tests. La revisión final incluye git diff --check
+y revisión del alcance y del diff, sin staging, commit ni push.
+
+### Corrección P2 de respuesta temporal — 2026-10-19
+
+La revisión detectó un caso alcanzable mediante las APIs: 9999-12-31 23:30 en
+America/Guayaquil corresponde a 10000-01-01 04:30 UTC. La fecha local pasaba
+validación y PostgreSQL podía escribirla; el parser HTTP de cuatro dígitos
+rechazaba la respuesta después del éxito de la RPC. Cancelación y replay
+devolvían 500 persistentemente; reprogramación compartía el defecto.
+
+Corrección limitada al parser usado por la proyección de respuestas: admite
+cuatro dígitos (0001–9999) o el literal 10000 sin signo, como la representación
+PostgreSQL simulada `10000-01-01T04:30:00+00:00`. El año escrito y el instante UTC
+deben estar entre 1 y 10000. Es el menor límite superior por años que cubre el
+cruce desde fechas locales de cuatro dígitos: un desfase horario puede cruzar
+al año siguiente, no saltar hasta 10001. No se añade conversión IANA a producción.
+Se admite el año 10000 completo como rango representacional, sin inferir qué
+fechas concretas provienen de creación ni consultar la DB.
+
+Se conserva calendario gregoriano (incluido 10000 bisiesto por divisibilidad
+entre 400), hora 00–23, minutos/segundos 00–59, fracción opcional de 1–6 dígitos,
+T/t y Z/z u offset ±HH:mm con HH≤23 y mm≤59; -00:00 sigue rechazado. Sin trim,
+tokens especiales, Date.parse ni zona del host. Date se construye mediante
+setUTCFullYear/setUTCHours dentro de un rango que soporta; la serialización
+interna ya no recorta posiciones fijas que truncarían el año ampliado.
+La proyección conserva el string original, sin convertirlo al formato +010000
+de JavaScript. Agenda conserva sus límites; creación no se refactoriza.
+
+38 tests añadidos: creación 201 y hash con fecha local límite; reprogramación
+200 y argumentos exactos; cancelación/replay 200 con respuestas y argumentos
+idénticos; bisiesto 10000, microsegundos, offsets, pasado y límites UTC;
+fechas/horas/offsets imposibles, fracciones inválidas, tokens y formatos fuera
+de contrato; filtros Agenda sin ampliación. El antiguo caso negativo del año
+10000 se actualizó a 10001 conforme al nuevo límite; el año 10000 tiene ahora
+cobertura positiva explícita. Se conservan las regresiones de hashes y errores.
+
+Ejecuciones con loopback habilitado por el EACCES del sandbox ya constatado:
+`node --experimental-vm-modules --test --test-name-pattern="timestamp response" tests/meetings.test.mjs`:
+38 tests, 38 pass, 0 fail, 1046.6196 ms. Suite completa `npm test`:
+631 tests, 631 pass, 0 fail, 0 cancelados/omitidos, 1859.5401 ms.
+Supabase simulado; la conversión se comprueba localmente con Node/Intl y los
+contratos SQL se inspeccionan, sin ejecución PostgreSQL ni validación remota nueva.
+No cambian hashes, idempotencia, autorización, RPCs ni migraciones. El P2 queda
+corregido localmente, pendiente de reauditoría final. Frontend API/UI y E2E
+completo siguen pendientes. Después de la suite solo cambió documentación.

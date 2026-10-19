@@ -33,14 +33,22 @@ const rpcCodes = new Set([
     'MEETING_NOT_FOUND', 'MEETING_NOT_SCHEDULED', 'MEETING_VERSION_CONFLICT', 'INTERNAL_ERROR',
 ]);
 
+const cancellationMessages = {
+    ACTOR_NOT_ALLOWED: 'No tienes permisos para cancelar reuniones.',
+    MEETING_NOT_SCHEDULED: 'Solo se puede cancelar una reunión programada.',
+    CONSULTATION_STATE_INCONSISTENT: 'La solicitud requiere revisión antes de cancelar la reunión.',
+};
+
 export class MeetingError extends AppError {
-    constructor(code) {
+    constructor(code, context) {
         const safeCode = Object.hasOwn(errors, code) ? code : 'INTERNAL_ERROR';
-        super(errors[safeCode][0], errors[safeCode][1], safeCode);
+        const message = context === 'cancel' && Object.hasOwn(cancellationMessages, safeCode)
+            ? cancellationMessages[safeCode] : errors[safeCode][1];
+        super(errors[safeCode][0], message, safeCode);
     }
 }
 
-export function translateMeetingError(error) {
+export function translateMeetingError(error, context) {
     return new MeetingError(error?.code === 'P0001' && rpcCodes.has(error.message)
-        ? error.message : 'INTERNAL_ERROR');
+        ? error.message : 'INTERNAL_ERROR', context);
 }

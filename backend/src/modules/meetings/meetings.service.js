@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { createConsultationMeeting, findMeetings, rescheduleConsultationMeeting } from './meetings.repository.js';
+import { cancelConsultationMeeting, createConsultationMeeting, findMeetings, rescheduleConsultationMeeting } from './meetings.repository.js';
 import { URLSearchParams } from 'node:url';
 import { AppError } from '../../errors/app-error.js';
 import { MeetingError, translateMeetingError } from './meetings.errors.js';
@@ -7,17 +7,18 @@ import { MeetingError, translateMeetingError } from './meetings.errors.js';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const fields = new Set(['date', 'time', 'timeZone', 'durationMinutes', 'mode', 'assignedTo', 'notes']);
 
-// RFC3339 con precisión PostgreSQL (microsegundos), sin normalización de
-// calendarios imposibles ni dependencia de la zona horaria del servidor.
-function timestamp(value) {
+// RFC3339 con microsegundos; las respuestas RPC admiten además el año 10000
+// sin signo de PostgreSQL (9999 local puede cruzar de año al convertir a UTC).
+// Los filtros de Agenda conservan 0001–9999. Sin Date.parse ni zona del servidor.
+function timestamp(value, maxYear = 9999) {
     if (typeof value !== 'string') return null;
-    const match = /^(\d{4})-(\d{2})-(\d{2})[Tt](\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?([Zz]|[+-]\d{2}:\d{2})$/.exec(value);
+    const match = /^(\d{4}|10000)-(\d{2})-(\d{2})[Tt](\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?([Zz]|[+-]\d{2}:\d{2})$/.exec(value);
     if (!match || match[0] !== value) return null;
     const [, y, mo, d, h, mi, s, fraction = '', zone] = match;
     const [year, month, day, hour, minute, second] = [y, mo, d, h, mi, s].map(Number);
     const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
     const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    if (year < 1 || month < 1 || month > 12 || day < 1 || day > days[month - 1] ||
+    if (year < 1 || year > maxYear || month < 1 || month > 12 || day < 1 || day > days[month - 1] ||
         hour > 23 || minute > 59 || second > 59 || zone === '-00:00') return null;
     let offset = 0;
     if (!/^[Zz]$/.test(zone)) {
@@ -28,8 +29,10 @@ function timestamp(value) {
     const date = new Date(0);
     date.setUTCFullYear(year, month - 1, day);
     date.setUTCHours(hour, minute - offset, second, 0);
-    if (date.getUTCFullYear() < 1 || date.getUTCFullYear() > 9999) return null;
-    return { utc: date.toISOString().slice(0, 19) + '.' + fraction.padEnd(6, '0') + 'Z',
+    if (date.getUTCFullYear() < 1 || date.getUTCFullYear() > maxYear) return null;
+    // Date soporta este rango, pero serializa 10000 como +010000; no truncar
+    // por posición fija ni perder los seis dígitos de precisión PostgreSQL.
+    return { utc: date.toISOString().split('.')[0].replace(/^\+0/, '') + '.' + fraction.padEnd(6, '0') + 'Z',
         micros: BigInt(date.getTime()) * 1000n + BigInt(fraction.padEnd(6, '0')) };
 }
 
@@ -117,15 +120,14 @@ function normalizeSchedule(body) {
     return { date: body.date, time: body.time, timeZone, durationMinutes: body.durationMinutes, mode };
 }
 
-export function normalizeReschedule(meetingId, body) {
-    const id = uuid(meetingId, 'INVALID_MEETING_ID');
-    const keys = ['date', 'time', 'timeZone', 'durationMinutes', 'mode', 'expectedVersion'];
+function requireExactBody(body, keys) {
     if (!body || typeof body !== 'object' || Array.isArray(body)) throw new MeetingError('INVALID_REQUEST');
     const prototype = Object.getPrototypeOf(body);
+    const constructor = prototype === null ? null : Object.getOwnPropertyDescriptor(prototype, 'constructor');
     // Aceptar objetos JSON de otros realms, pero no instancias ni propiedades heredadas.
     if (prototype !== null && (Object.getPrototypeOf(prototype) !== null
-        || !Object.hasOwn(prototype, 'constructor') || typeof prototype.constructor !== 'function'
-        || Function.prototype.toString.call(prototype.constructor) !== Function.prototype.toString.call(Object))) {
+        || !constructor || typeof constructor.value !== 'function'
+        || Function.prototype.toString.call(constructor.value) !== Function.prototype.toString.call(Object))) {
         throw new MeetingError('INVALID_REQUEST');
     }
     const descriptors = Object.getOwnPropertyDescriptors(body);
@@ -133,11 +135,36 @@ export function normalizeReschedule(meetingId, body) {
         throw new MeetingError('INVALID_REQUEST');
     }
     if (keys.some(key => !Object.hasOwn(descriptors, key))) throw new MeetingError('INVALID_MEETING_INPUT');
+}
+
+export function normalizeReschedule(meetingId, body) {
+    const id = uuid(meetingId, 'INVALID_MEETING_ID');
+    requireExactBody(body, ['date', 'time', 'timeZone', 'durationMinutes', 'mode', 'expectedVersion']);
     const schedule = normalizeSchedule(body);
     if (!Number.isInteger(body.expectedVersion) || body.expectedVersion <= 0 || body.expectedVersion > 2147483647) {
         throw new MeetingError('INVALID_MEETING_INPUT');
     }
     return { meetingId: id, expectedVersion: body.expectedVersion, ...schedule };
+}
+
+export function normalizeCancellation(meetingId, body) {
+    const id = uuid(meetingId, 'INVALID_MEETING_ID');
+    requireExactBody(body, ['expectedVersion', 'reason']);
+    if (!Number.isInteger(body.expectedVersion) || body.expectedVersion <= 0 || body.expectedVersion > 2147483647
+        || !['client_request', 'staff_unavailable', 'duplicate', 'administrative', 'other'].includes(body.reason)) {
+        throw new MeetingError('INVALID_MEETING_INPUT');
+    }
+    return { meetingId: id, expectedVersion: body.expectedVersion, reason: body.reason };
+}
+
+export async function cancelMeeting({ actorId, meetingId, idempotencyKey, body }) {
+    const key = uuid(idempotencyKey, 'INVALID_IDEMPOTENCY_KEY');
+    const payload = normalizeCancellation(meetingId, body);
+    const requestHash = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
+    try {
+        const data = await cancelConsultationMeeting({ actorId, idempotencyKey: key, requestHash, payload });
+        return projectMeetingResponse(data, payload.meetingId, 'cancelled');
+    } catch (error) { throw translateMeetingError(error, 'cancel'); }
 }
 
 export async function rescheduleMeeting({ actorId, meetingId, idempotencyKey, body }) {
@@ -146,20 +173,25 @@ export async function rescheduleMeeting({ actorId, meetingId, idempotencyKey, bo
     const requestHash = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
     try {
         const data = await rescheduleConsultationMeeting({ actorId, idempotencyKey: key, requestHash, payload });
-        const isUUID = value => typeof value === 'string' && value.length === 36 && UUID.test(value);
-        const positive = value => Number.isInteger(value) && value > 0 && value <= 2147483647;
-        if (!data || typeof data !== 'object' || Array.isArray(data)
-            || !isUUID(data.id) || data.id.toLowerCase() !== payload.meetingId
-            || !isUUID(data.consultationRequestId) || !timestamp(data.scheduledAt)
-            || typeof data.timeZone !== 'string' || !data.timeZone.trim()
-            || !positive(data.durationMinutes) || !positive(data.version)
-            || !['online', 'phone', 'office'].includes(data.mode) || data.status !== 'scheduled') {
-            throw new Error('Invalid RPC response');
-        }
-        return { id: data.id, consultationRequestId: data.consultationRequestId,
-            scheduledAt: data.scheduledAt, timeZone: data.timeZone, durationMinutes: data.durationMinutes,
-            mode: data.mode, status: data.status, version: data.version };
+        return projectMeetingResponse(data, payload.meetingId, 'scheduled');
     } catch (error) { throw translateMeetingError(error); }
+}
+
+function projectMeetingResponse(data, meetingId, status) {
+    const isUUID = value => typeof value === 'string' && value.length === 36 && UUID.test(value);
+    const positive = value => Number.isInteger(value) && value > 0 && value <= 2147483647;
+    if (!data || typeof data !== 'object' || Array.isArray(data)
+        || !isUUID(data.id) || data.id.toLowerCase() !== meetingId
+        || !isUUID(data.consultationRequestId) || !timestamp(data.scheduledAt, 10000)
+        || typeof data.timeZone !== 'string' || !data.timeZone.trim()
+        || !positive(data.durationMinutes) || !positive(data.version)
+        || !['online', 'phone', 'office'].includes(data.mode) || data.status !== status
+        || (status === 'cancelled' && data.version < 2)) {
+        throw new Error('Invalid RPC response');
+    }
+    return { id: data.id, consultationRequestId: data.consultationRequestId,
+        scheduledAt: data.scheduledAt, timeZone: data.timeZone, durationMinutes: data.durationMinutes,
+        mode: data.mode, status: data.status, version: data.version };
 }
 
 export async function confirmMeeting({ actorId, consultationRequestId, idempotencyKey, body }) {

@@ -60,7 +60,8 @@ const fake = {
     async rpc(name, args) {
         state.calls.push({ name, args: clone(args) });
         if (state.rpcThrow) throw state.rpcThrow;
-        return { data: name === 'reschedule_consultation_meeting' ? state.scheduleData : state.data, error: state.rpcError };
+        return { data: name === 'cancel_consultation_meeting' ? state.cancelData
+            : name === 'reschedule_consultation_meeting' ? state.scheduleData : state.data, error: state.rpcError };
     },
 };
 const context = vm.createContext({ console: { error: (...args) => state.logs.push(clone(args)) } });
@@ -91,7 +92,7 @@ await new Promise(resolve => server.once('listening', resolve));
 after(() => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())));
 beforeEach(() => {
     state = { profile: { id: actor, full_name: 'Persona de prueba', role: 'admin', active: true },
-        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), scheduleData: clone(rescheduled), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
+        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), scheduleData: clone(rescheduled), cancelData: clone(cancelled), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
 });
 function send(options = {}) {
     const payload = options.raw ?? JSON.stringify(options.body === undefined ? body : options.body);
@@ -708,4 +709,312 @@ test('schedule normalizador rechaza instancias, herencia, getters y símbolos si
     }
     assert.equal(reads, 0); assert.equal(state.calls.length, 0);
     assert.equal(service.normalizeReschedule(meetingId, { ...scheduleBody }).meetingId, meetingId);
+});
+
+// Fase 4D.2C: Express real con la misma frontera Supabase simulada; sin PostgreSQL.
+const cancelBody = { expectedVersion: 1, reason: 'client_request' };
+const cancelled = { ...rescheduled, status: 'cancelled' };
+const patchCancel = (options = {}) => send({ method: 'PATCH', path: `/api/admin/meetings/${options.id ?? meetingId}/cancel`, body: cancelBody, ...options });
+const meetingModule = name => modules.get(pathToFileURL(resolve(root, `src/modules/meetings/meetings.${name}.js`)).href).namespace;
+async function invalidCancel(options, code = 'INVALID_MEETING_INPUT') {
+    const r = await patchCancel(options);
+    assert.equal(r.status, 400); assert.equal(r.body.error.code, code);
+    assert.equal(state.calls.length, 0);
+}
+
+for (const role of ['admin', 'agendadora']) test(`cancel ${role}: PATCH 200 y exactamente seis argumentos`, async () => {
+    state.profile.role = role;
+    assert.deepEqual(await patchCancel({ path: `/api/admin/meetings/${meetingId}/cancel?actorId=${assigned}&role=admin`,
+        extraHeaders: ['X-Actor-Id', assigned, 'X-Role', 'admin'] }), { status: 200, body: { data: cancelled } });
+    assert.deepEqual(state.calls, [{ name: 'cancel_consultation_meeting', args: {
+        p_actor_id: actor, p_meeting_id: meetingId, p_idempotency_key: key,
+        p_request_hash: createHash('sha256').update(JSON.stringify({ meetingId, expectedVersion: 1, reason: 'client_request' }), 'utf8').digest('hex'),
+        p_expected_version: 1, p_reason: 'client_request',
+    } }]);
+    assert.deepEqual(state.queries, ['internal_users']);
+});
+for (const method of ['GET', 'POST', 'PUT', 'DELETE']) test(`cancel no registra ${method}`, async () => {
+    await assert.rejects(patchCancel({ method }), /Non-JSON response: HTTP 404/);
+    assert.equal(state.calls.length, 0);
+});
+test('cancel ruta sin id no ejecuta RPC', async () => {
+    await assert.rejects(patchCancel({ path: '/api/admin/meetings/cancel' }), /Non-JSON response: HTTP 404/);
+    assert.equal(state.calls.length, 0);
+});
+test('cancel vendedora: no confiar en metadata, body ni header de rol', async () => {
+    state.profile.role = 'vendedora';
+    assert.deepEqual(await patchCancel({ body: { role: 'admin' }, key: null, extraHeaders: ['X-Role', 'admin'] }),
+        { status: 403, body: { error: { message: 'No tienes permisos para realizar esta acción.' } } });
+    assert.equal(state.calls.length, 0);
+});
+test('cancel sin token: 401', async () => {
+    assert.deepEqual(await patchCancel({ auth: false }),
+        { status: 401, body: { error: { message: 'Se requiere una autenticación válida.' } } });
+    assert.equal(state.authCalls, 0); assert.equal(state.calls.length, 0);
+});
+test('cancel token inválido: 401', async () => {
+    const { AuthApiError } = await import('@supabase/supabase-js');
+    state.authError = new AuthApiError('synthetic', 401, 'bad_jwt');
+    assert.equal((await patchCancel()).status, 401); assert.equal(state.calls.length, 0);
+});
+for (const profile of [null, { id: actor, role: 'admin', active: false }]) test('cancel perfil ausente/inactivo: 403', async () => {
+    state.profile = profile;
+    assert.equal((await patchCancel()).status, 403); assert.equal(state.calls.length, 0);
+});
+test('cancel fallo del proveedor auth: 500 sanitizado', async () => {
+    state.authError = new Error('PRIVATE_TOKEN');
+    const r = await patchCancel(); assert.equal(r.status, 500); assert.equal(state.calls.length, 0);
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+
+for (const contentType of ['application/json', 'application/json; charset=utf-8']) test(`cancel Content-Type ${contentType}`, async () => {
+    assert.equal((await patchCancel({ contentType })).status, 200);
+});
+for (const contentType of [null, 'text/plain', 'application/x-www-form-urlencoded', 'application/xml']) test(`cancel Content-Type rechazado ${contentType}`, () => invalidCancel({ contentType }, 'INVALID_REQUEST'));
+for (const id of ['bad', meetingId.slice(1), `%20${meetingId}`, `${meetingId}%20`, `${meetingId}%0A`]) test(`cancel UUID inválido ${id}`, () => invalidCancel({ id }, 'INVALID_MEETING_ID'));
+// Node HTTP elimina OWS periférico y prohíbe CR/LF en headers; probar esos valores directamente en service.
+for (const value of [null, '', 'bad', key.slice(1), key + ',' + key, key.slice(0, 8) + ' ' + key.slice(9)]) test(`cancel key inválida ${JSON.stringify(value)}`, () => invalidCancel({ key: value }, 'INVALID_IDEMPOTENCY_KEY'));
+for (const name of ['Idempotency-Key', 'iDEMPOTENCY-kEY']) test(`cancel key duplicada ${name}`, () => invalidCancel({ extraHeaders: [name, key] }, 'INVALID_IDEMPOTENCY_KEY'));
+test('cancel nombre de header case-insensitive', async () => {
+    assert.equal((await patchCancel({ keyName: 'iDEMPOTENCY-kEY' })).status, 200);
+});
+for (const value of [` ${key}`, `${key} `, `${key}\n`, `${key}\r`, `${key}\u0000`, 123, null]) test(`cancel service key sin coerción/trim ${JSON.stringify(value)}`, async () => {
+    await assert.rejects(meetingModule('service').cancelMeeting({ actorId: actor, meetingId, idempotencyKey: value, body: cancelBody }), e => e.code === 'INVALID_IDEMPOTENCY_KEY');
+    assert.equal(state.calls.length, 0);
+});
+for (const value of [null, [], 'text', 1, true]) test(`cancel body no objeto ${JSON.stringify(value)}`, async () => {
+    assert.equal((await patchCancel({ body: value })).status, 400); assert.equal(state.calls.length, 0);
+});
+test('cancel JSON malformado: INVALID_JSON sin reflejar body', async () => {
+    const r = await patchCancel({ raw: '{"PRIVATE":"' });
+    assert.deepEqual(r, { status: 400, body: { error: { code: 'INVALID_JSON', message: 'El cuerpo JSON no es válido.' } } });
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE')); assert.equal(state.calls.length, 0);
+});
+for (const field of ['expectedVersion', 'reason']) test(`cancel falta ${field}`, () => {
+    const body = { ...cancelBody }; delete body[field]; return invalidCancel({ body });
+});
+for (const field of ['role', 'actorId', 'notes', 'status', 'requestHash', 'idempotencyKey', 'constructor', '__proto__', 'assignedTo', 'version', 'consultationRequestId']) {
+    test(`cancel extra ${field}`, () => invalidCancel({ body: { ...cancelBody, [field]: 'PRIVATE' } }, 'INVALID_REQUEST'));
+}
+for (const expectedVersion of [1, 2147483647]) test(`cancel versión límite ${expectedVersion} delegada a RPC`, async () => {
+    assert.equal((await patchCancel({ body: { ...cancelBody, expectedVersion } })).status, 200);
+    assert.equal(state.calls[0].args.p_expected_version, expectedVersion);
+});
+for (const expectedVersion of [0, -1, 1.5, '1', true, false, null, 2147483648]) test(`cancel versión inválida ${JSON.stringify(expectedVersion)}`, () => invalidCancel({ body: { ...cancelBody, expectedVersion } }));
+for (const reason of ['client_request', 'staff_unavailable', 'duplicate', 'administrative', 'other']) test(`cancel reason exacto ${reason}`, async () => {
+    assert.equal((await patchCancel({ body: { ...cancelBody, reason } })).status, 200);
+    assert.equal(state.calls[0].args.p_reason, reason);
+});
+for (const reason of [' client_request', 'client_request ', 'CLIENT_REQUEST', 'client-request', 'customer_request', '', null, 1, true, false, 'client_request\n', 'client_request\u0000', {}, []]) test(`cancel reason inválido ${JSON.stringify(reason)}`, () => invalidCancel({ body: { ...cancelBody, reason } }));
+test('cancel normalizador estricto no ejecuta accesores ni acepta símbolos/herencia', () => {
+    const { normalizeCancellation } = meetingModule('service');
+    let reads = 0;
+    const getter = { ...cancelBody }; Object.defineProperty(getter, 'reason', { get() { reads++; return 'other'; } });
+    const setter = { ...cancelBody }; Object.defineProperty(setter, 'reason', { set(_) { reads++; } });
+    const prototype = Object.create(null);
+    Object.defineProperty(prototype, 'constructor', { get() { reads++; return Object; } });
+    for (const candidate of [Object.assign(Object.create({}), cancelBody), Object.create(cancelBody),
+        Object.assign(new Date(), cancelBody), getter, setter, { ...cancelBody, [Symbol('extra')]: 1 },
+        Object.assign(Object.create(prototype), cancelBody)]) {
+        assert.throws(() => normalizeCancellation(meetingId, candidate), e => e.code === 'INVALID_REQUEST');
+    }
+    assert.equal(reads, 0); assert.equal(state.calls.length, 0);
+    assert.deepEqual(clone(normalizeCancellation(meetingId, Object.assign(Object.create(null), cancelBody))), { meetingId, ...cancelBody });
+});
+test('cancel normalizador UUID sin coerción y números no JSON inválidos', () => {
+    const { normalizeCancellation } = meetingModule('service');
+    for (const id of [null, 1, {}, ` ${meetingId}`, `${meetingId}\n`]) {
+        assert.throws(() => normalizeCancellation(id, cancelBody), e => e.code === 'INVALID_MEETING_ID');
+    }
+    for (const expectedVersion of [undefined, NaN, Infinity, -Infinity, 1n]) {
+        assert.throws(() => normalizeCancellation(meetingId, { ...cancelBody, expectedVersion }), e => e.code === 'INVALID_MEETING_INPUT');
+    }
+});
+
+test('cancel hash: orden de body y casing UUID no importan', async () => {
+    await patchCancel();
+    assert.equal((await patchCancel({ id: meetingId.toUpperCase(), key: key.toUpperCase(), body: { reason: 'client_request', expectedVersion: 1 } })).status, 200);
+    assert.deepEqual(state.calls[0], state.calls[1]);
+    assert.match(state.calls[0].args.p_request_hash, /^[a-f0-9]{64}$/);
+});
+test('cancel hash: cada campo canónico modifica el hash', async () => {
+    await patchCancel(); const baseline = state.calls[0].args.p_request_hash;
+    for (const [field, value] of Object.entries({ expectedVersion: 2, reason: 'other' })) {
+        await patchCancel({ body: { ...cancelBody, [field]: value } });
+        assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+    }
+    state.cancelData = { ...cancelled, id: assigned };
+    await patchCancel({ id: assigned }); assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+});
+test('cancel hash excluye actor y clave; actor del perfil interno', async () => {
+    await patchCancel(); const baseline = state.calls[0].args.p_request_hash;
+    state.profile.id = assigned; await patchCancel();
+    assert.equal(state.calls[1].args.p_actor_id, assigned);
+    assert.equal(state.calls[1].args.p_request_hash, baseline);
+    await patchCancel({ key: actor });
+    assert.equal(state.calls[2].args.p_idempotency_key, actor);
+    assert.equal(state.calls[2].args.p_request_hash, baseline);
+});
+test('cancel service no muta inputs y realiza una sola llamada', async () => {
+    const input = Object.freeze({ actorId: actor, meetingId, idempotencyKey: key, body: Object.freeze({ ...cancelBody }) });
+    assert.deepEqual(clone(await meetingModule('service').cancelMeeting(input)), cancelled);
+    assert.deepEqual(input.body, cancelBody); assert.equal(state.calls.length, 1); assert.deepEqual(state.queries, []);
+});
+test('cancel repository devuelve data sin reinterpretarla', async () => {
+    const data = await meetingModule('repository').cancelConsultationMeeting({ actorId: actor, idempotencyKey: key,
+        requestHash: 'synthetic-hash', payload: { meetingId, ...cancelBody } });
+    assert.equal(data, state.cancelData);
+    assert.deepEqual(state.calls, [{ name: 'cancel_consultation_meeting', args: {
+        p_actor_id: actor, p_meeting_id: meetingId, p_idempotency_key: key, p_request_hash: 'synthetic-hash',
+        p_expected_version: 1, p_reason: 'client_request',
+    } }]);
+    assert.deepEqual(state.queries, []);
+});
+test('cancel repository propaga el mismo objeto error', async () => {
+    state.rpcError = { code: 'P0001', message: 'ACTOR_NOT_ALLOWED', details: 'PRIVATE' };
+    await assert.rejects(meetingModule('repository').cancelConsultationMeeting({ actorId: actor, idempotencyKey: key,
+        requestHash: 'synthetic-hash', payload: { meetingId, ...cancelBody } }), e => e === state.rpcError);
+    assert.equal(state.calls.length, 1);
+});
+
+const cancellationMapping = {
+    ACTOR_NOT_ALLOWED: [403, 'No tienes permisos para cancelar reuniones.'],
+    MEETING_NOT_FOUND: [404, 'La reunión no existe.'],
+    MEETING_NOT_SCHEDULED: [409, 'Solo se puede cancelar una reunión programada.'],
+    MEETING_VERSION_CONFLICT: [409, 'La reunión cambió. Vuelve a consultar sus datos.'],
+    IDEMPOTENCY_KEY_REUSED: [409, 'La clave de idempotencia ya corresponde a otros datos.'],
+    CONSULTATION_STATE_INCONSISTENT: [409, 'La solicitud requiere revisión antes de cancelar la reunión.'],
+    INVALID_MEETING_INPUT: [400, 'Los datos de la reunión no son válidos.'],
+    INVALID_REQUEST: [400, 'Los datos de la solicitud no son válidos.'],
+    WORKFLOW_ISOLATION_NOT_SUPPORTED: [500, 'Ocurrió un error interno en el servidor.'],
+    INTERNAL_ERROR: [500, 'Ocurrió un error interno en el servidor.'],
+};
+for (const [code, [status, message]] of Object.entries(cancellationMapping)) test(`cancel RPC ${code}: status/code/message exactos`, async () => {
+    state.rpcError = { code: 'P0001', message: code, details: 'PRIVATE_SQL', hint: 'PRIVATE_TOKEN', cause: 'PRIVATE', stack: 'PRIVATE' };
+    assert.deepEqual(await patchCancel(), { status, body: { error: { code, message } } });
+    assert.equal(state.calls.length, 1);
+    assert.deepEqual(state.logs, status === 500 ? [[{ event: 'request_failed', statusCode: 500, code }]] : []);
+});
+for (const error of [{ code: '23505', message: 'MEETING_NOT_FOUND' }, { code: 'P0001', message: 'PRIVATE_UNKNOWN' },
+    ...['toString', 'constructor', '__proto__'].map(message => ({ code: 'P0001', message })),
+    { code: 'ACTOR_NOT_ALLOWED', statusCode: 403, message: 'PRIVATE' }]) test(`cancel allowlist rechaza ${error.code}/${error.message}`, async () => {
+    state.rpcError = error; const r = await patchCancel();
+    assert.deepEqual(r, { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'Ocurrió un error interno en el servidor.' } } });
+    assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+test('cancel rechazo de transporte: 500 sanitizado, sin retry', async () => {
+    state.rpcThrow = Object.assign(new Error('PRIVATE_SECRET'), { details: 'PRIVATE_SQL', hint: 'PRIVATE_TOKEN', cause: 'PRIVATE' });
+    const r = await patchCancel();
+    assert.deepEqual(r, { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'Ocurrió un error interno en el servidor.' } } });
+    assert.equal(state.calls.length, 1); assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+});
+test('cancel contexto conserva mensajes históricos de creación y schedule', async () => {
+    for (const [code, message] of Object.entries({
+        ACTOR_NOT_ALLOWED: 'No tienes permisos para confirmar reuniones.',
+        MEETING_NOT_SCHEDULED: 'Solo se puede reprogramar una reunión programada.',
+        CONSULTATION_STATE_INCONSISTENT: 'La solicitud requiere revisión antes de agendar.',
+    })) {
+        state.rpcError = { code: 'P0001', message: code };
+        for (const r of [await send(), await patchSchedule()]) {
+            assert.deepEqual(r, { status: cancellationMapping[code][0], body: { error: { code, message } } });
+        }
+    }
+});
+
+const invalidCancellationResponses = [null, [], {}, 'bad',
+    ...Object.keys(cancelled).map(k => { const data = { ...cancelled }; delete data[k]; return data; }),
+    ...Object.entries({
+        id: ['bad', assigned, null], consultationRequestId: ['bad', null],
+        scheduledAt: ['now', '2028-02-30T15:30:00Z', '2028-02-29T15:30:00', '2028-02-29T15:30:00.1234567Z', '2028-02-29T15:30:00+25:00', '10001-01-01T00:00:00Z', null],
+        timeZone: ['', ' ', null, 1], durationMinutes: [0, -1, 1.5, '45', null, 2147483648],
+        mode: ['bad', null, 1], status: ['scheduled', 'completed', 'no_show', 'CANCELLED', null, 1],
+        version: [0, 1, -1, 1.5, '2', null, 2147483648],
+    }).flatMap(([k, values]) => values.map(value => ({ ...cancelled, [k]: value }))),
+];
+for (const [i, data] of invalidCancellationResponses.entries()) test(`cancel respuesta inválida ${i}: INTERNAL_ERROR`, async () => {
+    state.cancelData = data;
+    assert.deepEqual(await patchCancel(), { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'Ocurrió un error interno en el servidor.' } } });
+    assert.deepEqual(state.logs, [[{ event: 'request_failed', statusCode: 500, code: 'INTERNAL_ERROR' }]]);
+});
+test('cancel ocho campos, sin reason/extras; pasado y microsegundos preservados', async () => {
+    const safe = { ...cancelled, scheduledAt: '2000-02-29T15:30:00.123456+00:00', version: 2147483647 };
+    state.cancelData = { ...safe, reason: 'PRIVATE', notes: 'PRIVATE', assignedTo: 'PRIVATE', createdBy: 'PRIVATE',
+        updatedBy: 'PRIVATE', audit: 'PRIVATE', metadata: 'PRIVATE', requestHash: 'PRIVATE', idempotency: 'PRIVATE' };
+    const r = await patchCancel(); assert.deepEqual(r, { status: 200, body: { data: safe } });
+    assert.equal(Object.keys(r.body.data).length, 8); assert.ok(!Object.hasOwn(r.body.data, 'reason'));
+    assert.deepEqual(state.queries, ['internal_users']);
+});
+test('cancel replay HTTP simulado: dos respuestas y argumentos idénticos, sin retry ni nueva key', async () => {
+    const first = await patchCancel(), second = await patchCancel();
+    assert.deepEqual(first, { status: 200, body: { data: cancelled } }); assert.deepEqual(second, first);
+    assert.equal(state.calls.length, 2); assert.deepEqual(state.calls[0], state.calls[1]);
+    assert.deepEqual(state.queries, ['internal_users', 'internal_users']);
+});
+
+// Regresión P2: fecha local admitida -> UTC año 10000 -> respuesta y replay.
+const boundarySchedule = { ...scheduleBody, date: '9999-12-31', time: '23:30' };
+const boundaryTimestamp = '10000-01-01T04:30:00+00:00';
+test('timestamp response: creación 9999 local -> 10000 UTC preserva contrato y hash', async () => {
+    // Comprobación local de la conversión; la RPC se simula, no se ejecuta SQL.
+    const instant = new Date('9999-12-31T23:30:00-05:00');
+    assert.equal(instant.toISOString(), '+010000-01-01T04:30:00.000Z');
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Guayaquil',
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(instant);
+    const local = Object.fromEntries(parts.map(p => [p.type, p.value]));
+    assert.deepEqual([local.year, local.month, local.day, local.hour, local.minute], ['9999', '12', '31', '23', '30']);
+    const input = { ...body, date: '9999-12-31', time: '23:30' };
+    state.data = { ...result, meeting: { ...rescheduled, scheduledAt: boundaryTimestamp, version: 1 } };
+    assert.deepEqual(await send({ body: input }), { status: 201, body: { data: state.data } });
+    assert.equal(state.calls.length, 1);
+    assert.equal(state.calls[0].args.p_request_hash, createHash('sha256').update(JSON.stringify({ consultationRequestId: consultation, ...input }), 'utf8').digest('hex'));
+});
+test('timestamp response: reprogramación 9999 local -> 10000 UTC responde 200', async () => {
+    state.scheduleData = { ...rescheduled, scheduledAt: boundaryTimestamp };
+    assert.deepEqual(await patchSchedule({ body: boundarySchedule }), { status: 200, body: { data: state.scheduleData } });
+    const canonical = { meetingId, expectedVersion: 1, date: '9999-12-31', time: '23:30', timeZone: 'America/Guayaquil', durationMinutes: 45, mode: 'online' };
+    assert.deepEqual(state.calls, [{ name: 'reschedule_consultation_meeting', args: {
+        p_actor_id: actor, p_meeting_id: meetingId, p_idempotency_key: key,
+        p_request_hash: createHash('sha256').update(JSON.stringify(canonical), 'utf8').digest('hex'),
+        p_expected_version: 1, p_scheduled_date: '9999-12-31', p_scheduled_time: '23:30',
+        p_time_zone: 'America/Guayaquil', p_duration_minutes: 45, p_mode: 'online',
+    } }]);
+});
+test('timestamp response: cancelación y replay año 10000 responden 200 idénticos', async () => {
+    state.cancelData = { ...cancelled, scheduledAt: boundaryTimestamp };
+    const first = await patchCancel(), second = await patchCancel();
+    assert.deepEqual(first, { status: 200, body: { data: state.cancelData } });
+    assert.deepEqual(second, first); assert.equal(state.calls.length, 2);
+    assert.deepEqual(state.calls[0], state.calls[1]);
+    assert.equal(state.calls[0].args.p_idempotency_key, key);
+    assert.equal(state.calls[0].args.p_request_hash, createHash('sha256').update(JSON.stringify({ meetingId, ...cancelBody }), 'utf8').digest('hex'));
+    assert.deepEqual(state.queries, ['internal_users', 'internal_users']); assert.deepEqual(state.logs, []);
+});
+for (const scheduledAt of [
+    '10000-02-29T15:30:00.123456+00:00', '10000-01-01T00:00:00+05:00',
+    '9999-12-31T23:30:00-05:00', '10000-12-31T23:59:59.999999Z',
+    '2028-02-29T15:30:00+00:00', '2000-02-29T10:30:00.1-05:00',
+]) test(`timestamp response válido preservado ${scheduledAt}`, async () => {
+    state.cancelData = { ...cancelled, scheduledAt }; state.scheduleData = { ...rescheduled, scheduledAt };
+    assert.deepEqual(await patchCancel(), { status: 200, body: { data: state.cancelData } });
+    assert.deepEqual(await patchSchedule(), { status: 200, body: { data: state.scheduleData } });
+});
+for (const scheduledAt of [
+    '10000-13-01T00:00:00Z', '10000-00-01T00:00:00Z', '10000-02-30T00:00:00Z',
+    '10000-01-00T00:00:00Z', '10000-01-01T24:00:00Z', '10000-01-01T00:60:00Z',
+    '10000-01-01T00:00:60Z', '10000-01-01T00:00:00+25:00', '10000-01-01T00:00:00+01:60',
+    '10000-01-01T00:00:00-00:00', '10000-01-01T00:00:00+xx:00',
+    '10000-01-01T00:00:00.1234567Z', '10000-01-01T00:00:00.Z', '10000-01-01T00:00:00',
+    '10000-01-01T00:00:00Z\n', '10000-12-31T23:30:00-05:00',
+    '10001-01-01T00:00:00Z', '010000-01-01T00:00:00Z', '+010000-01-01T00:00:00Z',
+    '0000-01-01T00:00:00Z', '0001-01-01T00:00:00+01:00', '1900-02-29T00:00:00Z',
+    'now', 'infinity', '-infinity', 'NaN', '', 'arbitrary',
+]) test(`timestamp response inválido ${JSON.stringify(scheduledAt)}`, async () => {
+    state.cancelData = { ...cancelled, scheduledAt }; state.scheduleData = { ...rescheduled, scheduledAt };
+    for (const r of [await patchCancel(), await patchSchedule()]) {
+        assert.deepEqual(r, { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'Ocurrió un error interno en el servidor.' } } });
+    }
+});
+test('timestamp response: filtros Agenda conservan rango de cuatro dígitos', async () => {
+    const r = await send({ method: 'GET', path: '/api/admin/meetings?from=9999-12-31T00:00:00Z&to=10000-01-01T00:00:00Z' });
+    assert.equal(r.status, 400); assert.deepEqual(state.meetingQueries, []);
 });
