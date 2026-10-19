@@ -292,3 +292,124 @@ Tests específicos: **2/2**, cero fallos. Suite completa: **566 tests, 566 pass,
 0 fail**. Los cuatro node --check y git diff --check pasaron. Se mantiene la
 evidencia E2E y cleanup en cero documentada arriba, con sus limitaciones reales.
 Resultado: **APROBADO PARA COMMIT 4D.1D**, sin git add, commit ni push.
+
+## 4D.2D — API frontend de cancelación — 2026-10-19
+
+Implementación local lista para revisión final. Esta subfase incluye solo API,
+pruebas y documentación. 4D.2 no está completa: quedan 4D.2E UI, integración
+visual y E2E completo. No se modifica backend ni su documento transversal.
+
+### Función y request
+
+```js
+const meeting = await cancelMeeting({
+    meetingId,
+    idempotencyKey,
+    payload: { expectedVersion: 1, reason: 'client_request' },
+    access,
+    signal, // Opcional; access.signal es obligatorio.
+});
+```
+
+Exportada desde src/js/api/meetings.js. Reutiliza dataFields y patchInternal.
+Options tiene los mismos campos permitidos/requeridos que rescheduleMeeting.
+Payload exige exactamente expectedVersion y reason como datos propios;
+rechaza extras, símbolos, accesores y requeridos heredados sin ejecutar getters.
+Se preserva el LOW histórico: prototipo personalizado con campos propios válidos
+puede pasar; los campos heredados no se serializan.
+
+expectedVersion es entero 1..2147483647, sin coerción. Reason admite exactamente
+client_request, staff_unavailable, duplicate, administrative u other, sin trim,
+aliases ni cambio de casing. UUID de reunión y clave son obligatorios/completos,
+sin trim ni coerción; se envían lowercase sin modificar el input original.
+
+Una llamada PATCH /api/admin/meetings/<meetingId-lowercase>/cancel, con
+Authorization Bearer, Content-Type application/json e Idempotency-Key lowercase.
+El body contiene únicamente expectedVersion y reason. Se captura/copia antes
+de esperar Auth. No hay GET previo, hash frontend ni reglas de negocio remotas.
+
+La API no genera claves ni incrementa versiones. El caller puede utilizar
+createMeetingIdempotencyKey una vez por intento; retry manual y replay conservan
+clave, payload y versión. No hay retry automático. Se reutilizan confirmación
+de sesión inicial/final, señales, timeout de 15 s, credentials omit, redirect
+error y cache no-store. No se añade refresh, logout ni almacenamiento.
+
+### Response y compatibilidad temporal
+
+Solo HTTP 200 con envelope/data objetos y contrato válido es éxito. Retorna
+una copia explícita de id, consultationRequestId, scheduledAt, timeZone,
+durationMinutes, mode, status y version, sin envelope ni extras del proveedor.
+Reason, notes, audit, metadata y assignedTo no aparecen en el retorno.
+
+Exige UUID válidos, id correspondiente al solicitado, timestamp estructural,
+zona string no vacía, duración entera 1..2147483647, modalidad online/phone/office,
+status cancelled y versión entera 2..2147483647. No compara la versión devuelta
+con expectedVersion + 1: un replay devuelve el snapshot persistido.
+
+La auditoría anterior reprodujo invalid_response en rescheduleMeeting frente
+a un 200 simulado con 10000-01-01T04:30:00+00:00. Ahora isTimestamp permite
+explícitamente cuatro dígitos o el literal 10000 solo para respuestas de
+cancelMeeting/rescheduleMeeting. No acepta 10001, 12345, +10000, -0001 ni 010000.
+Conserva exactamente el string recibido, sin Date.parse ni reformateo.
+
+Es validación estructural, no calendárica: conserva reglas históricas de horas,
+segundos, zona obligatoria, offsets y fracciones de longitud no limitada.
+No acredita calendario real, finitud PostgreSQL ni conversión UTC del instante.
+Agenda usa el modo predeterminado y sigue rechazando filas con año 10000.
+Los filtros from/to siguen validándose como strings no vacíos y delegándose
+al backend; no se introduce una restricción temporal local nueva sobre filtros.
+Creación y presentación visual mantienen su comportamiento anterior.
+
+### Errores y datos propios
+
+error.code y error.message mantienen la clasificación cliente genérica;
+error.domainCode es opcional, reconocido por Map y HTTP compatible. Se añade
+únicamente CONSULTATION_STATE_INCONSISTENT para 409, conservando los códigos
+422 históricos de reprogramación. POST/GET conservan su semántica.
+
+| HTTP/caso | code y mensaje | domainCode en cancelación |
+|---|---|---|
+| 404 MEETING_NOT_FOUND | operation | MEETING_NOT_FOUND |
+| 409 MEETING_NOT_SCHEDULED / MEETING_VERSION_CONFLICT / IDEMPOTENCY_KEY_REUSED / CONSULTATION_STATE_INCONSISTENT | operation | El código reconocido |
+| 400, incluidos INVALID_MEETING_INPUT/INVALID_REQUEST/INVALID_MEETING_ID/INVALID_IDEMPOTENCY_KEY/INVALID_JSON | operation | Omitido |
+| 403, incluido ACTOR_NOT_ALLOWED | forbidden | Omitido |
+| 500, incluidos WORKFLOW_ISOLATION_NOT_SUPPORTED/INTERNAL_ERROR | server | Omitido |
+| 401 | expired | Omitido |
+| Red / timeout / abort o sesión invalidada | network / timeout / stale | Omitido |
+| 200 ilegible, estructura inválida u otro 2xx | invalid_response | Omitido |
+
+Se conservan los status de InternalMutationError cuando el transporte los
+asigna; AuthError no añade status. Errores de forma detectados en meetings.js
+no inventan un status HTTP. No se propagan mensajes, detalles o stack remotos.
+
+La extracción de error y code usa descriptores propios de datos sobre objetos
+no array. No consulta propiedades heredadas ni ejecuta getters. Code debe ser
+string y coincidir con Map/status. toString, constructor y __proto__ no se
+reconocen accidentalmente. Esto corrige el LOW de extracción de dominio, que
+es distinto del LOW aceptado para prototipos de options/payload.
+
+### Validación ejecutada
+
+Desde frontend, baseline antes de editar: npm run test:crm, **566 tests,
+566 pass, 0 fail**, 38929.2122 ms. package.json no define otra suite de tests
+más amplia; test:crm incluye todos los archivos *.test.mjs actuales.
+
+Pruebas focalizadas:
+node --experimental-vm-modules --test --test-name-pattern="4D.2D" tests/crm-meetings-api.test.mjs
+**175 tests, 175 pass, 0 fail**, 1512.442 ms.
+
+Suite final: npm run test:crm, **741 tests, 741 pass, 0 fail**,
+17490.7882 ms; sin cancelados, omitidos ni pendientes. Son 175 pruebas nuevas
+sobre la baseline real de 566. Se conservan las regresiones de creación,
+reprogramación, Agenda, Auth, UI histórica y clasificación de errores.
+
+Las nuevas pruebas cubren request exacto, input estricto, límites, reasons,
+proyección, errores seguros, descriptores/getters, respuesta y replay año 10000,
+regresión temporal de reprogramación/Agenda, captura antes de Auth, inputs
+congelados, sesión/token/guard/caller obsoletos y timeout con retry explícito.
+
+Auth/API reales con SDK/fetch simulados; sin configuración real, llamadas
+remotas ni E2E browser. El replay simulado prueba transporte estable, no locks,
+transacciones ni idempotencia persistida PostgreSQL. Warnings de VM experimental
+y deprecación de lock del SDK en tests históricos no produjeron fallos.
+No se ejecutaron git add, commit, push, db push ni SQL remoto.

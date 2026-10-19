@@ -9,8 +9,9 @@ const allowed = new Set([...required, 'notes']);
 const nonBlank = value => typeof value === 'string' && value.trim().length > 0;
 const agendaOptions = new Set(['from', 'to', 'access', 'signal']);
 // Solo estructura de transporte; el backend valida calendario, zona y rango.
-const isTimestamp = value => typeof value === 'string' &&
-    /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.test(value) &&
+const isTimestamp = (value, mutationResponse = false) => typeof value === 'string' &&
+    (mutationResponse || /^\d{4}-/.test(value)) &&
+    /^(?:\d{4}|10000)-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.test(value) &&
     !/[\r\n]/.test(value);
 
 function isAgendaMeeting(meeting) {
@@ -132,10 +133,41 @@ export async function rescheduleMeeting(options) {
     const meeting = response?.data;
     if (!isObject(response) || !isObject(meeting) || !isUUID(meeting.id) ||
         meeting.id.toLowerCase() !== input.meetingId.toLowerCase() || !isUUID(meeting.consultationRequestId) ||
-        !isTimestamp(meeting.scheduledAt) || !nonBlank(meeting.timeZone) ||
+        !isTimestamp(meeting.scheduledAt, true) || !nonBlank(meeting.timeZone) ||
         !Number.isInteger(meeting.durationMinutes) || meeting.durationMinutes <= 0 ||
         !['online', 'phone', 'office'].includes(meeting.mode) || meeting.status !== 'scheduled' ||
         !Number.isInteger(meeting.version) || meeting.version <= 0) {
+        throw new InternalMutationError('invalid_response');
+    }
+    return { id: meeting.id, consultationRequestId: meeting.consultationRequestId,
+        scheduledAt: meeting.scheduledAt, timeZone: meeting.timeZone,
+        durationMinutes: meeting.durationMinutes, mode: meeting.mode, status: meeting.status, version: meeting.version };
+}
+
+const cancellationFields = ['expectedVersion', 'reason'];
+const cancellationReasons = new Set(['client_request', 'staff_unavailable', 'duplicate', 'administrative', 'other']);
+const pgPositiveInteger = value => Number.isInteger(value) && value > 0 && value <= 2147483647;
+
+export async function cancelMeeting(options) {
+    const input = dataFields(options, rescheduleOptions, ['meetingId', 'idempotencyKey', 'payload', 'access']);
+    const payload = input && dataFields(input.payload, new Set(cancellationFields), cancellationFields);
+    const access = input?.access;
+    if (!input || !isUUID(input.meetingId) || !isUUID(input.idempotencyKey) || !payload ||
+        !pgPositiveInteger(payload.expectedVersion) || !cancellationReasons.has(payload.reason) ||
+        !isObject(access) || !isObject(access.session) || !nonBlank(access.session.user?.id) ||
+        !nonBlank(access.session.access_token) || typeof access.isCurrent !== 'function' ||
+        !(access.signal instanceof AbortSignal) || (input.signal !== undefined && !(input.signal instanceof AbortSignal))) {
+        throw new InternalMutationError('invalid_input');
+    }
+    const body = { expectedVersion: payload.expectedVersion, reason: payload.reason };
+    const response = await patchInternal(`/api/admin/meetings/${input.meetingId.toLowerCase()}/cancel`,
+        access, input.signal ?? new AbortController().signal, body, input.idempotencyKey.toLowerCase());
+    const meeting = response?.data;
+    if (!isObject(response) || !isObject(meeting) || !isUUID(meeting.id) ||
+        meeting.id.toLowerCase() !== input.meetingId.toLowerCase() || !isUUID(meeting.consultationRequestId) ||
+        !isTimestamp(meeting.scheduledAt, true) || !nonBlank(meeting.timeZone) ||
+        !pgPositiveInteger(meeting.durationMinutes) || !['online', 'phone', 'office'].includes(meeting.mode) ||
+        meeting.status !== 'cancelled' || !pgPositiveInteger(meeting.version) || meeting.version < 2) {
         throw new InternalMutationError('invalid_response');
     }
     return { id: meeting.id, consultationRequestId: meeting.consultationRequestId,

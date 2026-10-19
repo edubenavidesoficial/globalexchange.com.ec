@@ -60,8 +60,16 @@ export async function patchInternal(path, access, signal, payload, idempotencyKe
 const patchDomainCodes = new Map([
     ['MEETING_VERSION_CONFLICT', 409], ['IDEMPOTENCY_KEY_REUSED', 409],
     ['MEETING_NOT_FOUND', 404], ['MEETING_NOT_SCHEDULED', 409],
+    ['CONSULTATION_STATE_INCONSISTENT', 409],
     ['MEETING_NOT_IN_FUTURE', 422], ['INVALID_TIME_ZONE', 422], ['INVALID_LOCAL_TIME', 422],
 ]);
+
+// Solo datos propios; no ejecutar accesores ni consultar valores heredados.
+function ownData(value, key) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    return descriptor && Object.hasOwn(descriptor, 'value') ? descriptor.value : undefined;
+}
 
 function mutateInternal(path, access, signal, payload, idempotencyKey, method, successStatus) {
     internalPath(path);
@@ -126,8 +134,8 @@ async function requestInternal(path, access, signal, mutation) {
         if (mutation?.method === 'PATCH' && [400, 404, 409, 422].includes(response.status)) {
             try {
                 const errorBody = await waitFor(response.json(), requestSignal);
-                const candidate = errorBody?.error?.code;
-                if (patchDomainCodes.get(candidate) === response.status) domainCode = candidate;
+                const candidate = ownData(ownData(errorBody, 'error'), 'code');
+                if (typeof candidate === 'string' && patchDomainCodes.get(candidate) === response.status) domainCode = candidate;
             } catch {
                 // Un error HTTP con JSON ilegible conserva su clasificación por status.
                 if (requestSignal.aborted) throw new AuthError('timeout');
