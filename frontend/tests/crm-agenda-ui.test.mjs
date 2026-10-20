@@ -20,12 +20,12 @@ async function setup({ role = 'admin', data = agendaFixture() } = {}) {
     dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
     dom.window.HTMLDialogElement.prototype.close = function () { this.open = false; };
     const context = vm.createContext({ document, Intl, Date, AbortController });
-    const requests = [], gets = [], outcomes = [], loads = [];
+    const requests = [], gets = [], outcomes = [], loads = [], cancellations = [], cancelOutcomes = [];
     let keys = 0, active = true, blocks = 0, revalidations = 0, hooks;
     const access = { user: { id: 'A', role }, isCurrent: () => active,
         blockAccess() { blocks++; active = false; hooks.onInvalidate(); },
         revalidate() { revalidations++; active = false; hooks.onInvalidate(); } };
-    const api = new vm.SyntheticModule(['getAgendaMeetings', 'rescheduleMeeting', 'createMeetingIdempotencyKey'], function () {
+    const api = new vm.SyntheticModule(['getAgendaMeetings', 'rescheduleMeeting', 'cancelMeeting', 'createMeetingIdempotencyKey'], function () {
         this.setExport('getAgendaMeetings', async options => {
             gets.push(options);
             const next = loads.shift();
@@ -38,14 +38,22 @@ async function setup({ role = 'admin', data = agendaFixture() } = {}) {
             if (next instanceof Error) throw next;
             return await next;
         });
+        this.setExport('cancelMeeting', async options => {
+            cancellations.push(options);
+            const next = cancelOutcomes.shift();
+            if (next instanceof Error) throw next;
+            return await next;
+        });
         this.setExport('createMeetingIdempotencyKey', () => `fixture-key-${++keys}`);
     }, { context });
     const dates = new vm.SourceTextModule(await source('src/js/modules/crm-agenda-date.js'), { context });
     await dates.link(() => { throw Error('Unexpected import'); });
     const dialogModule = new vm.SourceTextModule(await source('src/js/modules/crm-reschedule-dialog.js'), { context });
     await dialogModule.link(() => api);
+    const cancelModule = new vm.SourceTextModule(await source('src/js/modules/crm-cancel-dialog.js'), { context });
+    await cancelModule.link(() => api);
     const agenda = new vm.SourceTextModule(await source('src/js/modules/crm-agenda.js'), { context });
-    await agenda.link(path => path.endsWith('meetings.js') ? api : path.endsWith('crm-reschedule-dialog.js') ? dialogModule : dates);
+    await agenda.link(path => path.endsWith('meetings.js') ? api : path.endsWith('crm-reschedule-dialog.js') ? dialogModule : path.endsWith('crm-cancel-dialog.js') ? cancelModule : dates);
     await agenda.evaluate();
     hooks = agenda.namespace.initCRMAgenda();
     hooks.onAuthorized(access); await settle();
@@ -53,7 +61,12 @@ async function setup({ role = 'admin', data = agendaFixture() } = {}) {
     const r = name => q(`[data-reschedule-${name}]`);
     const field = name => r('form').elements.namedItem(name);
     const submit = () => r('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
-    return { dom, document, q, r, field, access, requests, gets, outcomes, loads, hooks,
+    const c = name => q(`[data-cancel-${name}]`);
+    return { c, cancellations, cancelOutcomes,
+        cancelOpen() { q('[data-agenda-cancel]')?.click(); },
+        cancelSubmit() { c('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true })); },
+        cancelEscape() { c('dialog').dispatchEvent(new dom.window.Event('cancel', { cancelable: true })); },
+        dom, document, q, r, field, access, requests, gets, outcomes, loads, hooks,
         get keys() { return keys; }, get blocks() { return blocks; }, get revalidations() { return revalidations; },
         open() { q('[data-agenda-reschedule]')?.click(); }, submit,
         invalidate() { active = false; hooks.onInvalidate(); },
@@ -217,4 +230,173 @@ test('4D.1D: labels, título, estados anunciables, Escape/cancel y retorno de fo
     ui.escape(); assert.equal(ui.r('dialog').open, false); assert.equal(ui.document.activeElement, opener);
     ui.open(); ui.r('cancel').click(); assert.equal(ui.document.activeElement, opener); assert.equal(ui.keys, 0);
     const ids = [...ui.document.querySelectorAll('[id]')].map(node => node.id); assert.equal(new Set(ids).size, ids.length);
+});
+
+// 4D.2E: UI de cancelación con API simulada; no prueba idempotencia PostgreSQL.
+const chooseReason = (ui, value = 'client_request') => { ui.c('form').elements.namedItem('reason').value = value; };
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`4D.2E visibilidad ${role} y estados terminales`, async () => {
+    const ui = await setup({ role });
+    assert.equal(ui.document.querySelectorAll('[data-agenda-cancel]').length, role === 'vendedora' ? 0 : 1);
+    for (const row of [...ui.q('[data-agenda-rows]').children].slice(1)) assert.equal(row.querySelector('[data-agenda-cancel]'), null);
+    ui.cancelOpen(); assert.equal(ui.c('dialog').open, role !== 'vendedora');
+    assert.equal(ui.keys, 0);
+    if (role === 'vendedora') { chooseReason(ui); ui.cancelSubmit(); assert.equal(ui.cancellations.length, 0); }
+});
+test('4D.2E contexto, labels, cinco reasons, foco y cierre limpio', async () => {
+    const data = agendaFixture(), ui = await setup({ data }); const opener = ui.q('[data-agenda-cancel]');
+    opener.focus(); ui.cancelOpen(); const select = ui.c('form').elements.namedItem('reason');
+    assert.equal(select.value, ''); assert.equal(ui.document.activeElement, select); assert.equal(ui.keys, 0);
+    assert.equal(ui.c('client').textContent, data[0].consultation.fullName);
+    assert.equal(ui.c('program').textContent, data[0].consultation.program.name);
+    assert.equal(ui.c('seller').textContent, data[0].assignedTo.fullName);
+    assert.equal(ui.c('status').textContent, 'Programada'); assert.match(ui.c('schedule').textContent, /2026/);
+    assert.deepEqual([...select.options].map(o => [o.value, o.textContent]), [['', 'Selecciona un motivo'],
+        ['client_request', 'Solicitud del cliente'], ['staff_unavailable', 'Asesor no disponible'], ['duplicate', 'Reunión duplicada'],
+        ['administrative', 'Motivo administrativo'], ['other', 'Otro motivo']]);
+    assert.equal(ui.document.getElementById(ui.c('dialog').getAttribute('aria-labelledby')).textContent, 'Cancelar reunión');
+    assert.equal(select.labels[0].textContent, 'Motivo de cancelación');
+    assert.equal(ui.document.getElementById(select.getAttribute('aria-describedby')), ui.c('message'));
+    assert.equal(ui.c('message').getAttribute('role'), 'status'); assert.equal(ui.c('message').getAttribute('aria-live'), 'polite');
+    chooseReason(ui, 'other'); assert.equal(ui.keys, 0); ui.cancelEscape();
+    assert.equal(ui.c('dialog').open, false); assert.equal(select.value, ''); assert.equal(ui.document.activeElement, opener);
+    ui.cancelOpen(); assert.equal(select.value, ''); ui.c('back').click(); assert.equal(ui.c('client').textContent, '');
+    const ids = [...ui.document.querySelectorAll('[id]')].map(n => n.id); assert.equal(new Set(ids).size, ids.length);
+});
+for (const value of ['', 'CLIENT_REQUEST', ' client_request', 'customer_request']) test(`4D.2E reason inválido ${value}`, async () => {
+    const ui = await setup(); ui.cancelOpen();
+    const option = ui.document.createElement('option'); option.value = value; option.textContent = value;
+    ui.c('form').elements.namedItem('reason').append(option); chooseReason(ui, value); ui.cancelSubmit();
+    assert.equal(ui.cancellations.length, 0); assert.equal(ui.keys, 0); assert.match(ui.c('message').textContent, /Selecciona/);
+});
+for (const reason of ['client_request', 'staff_unavailable', 'duplicate', 'administrative', 'other']) test(`4D.2E submit exacto ${reason}, doble click y snapshot`, async () => {
+    const data = agendaFixture(), ui = await setup({ data }), pending = deferred(); ui.cancelOpen();
+    data[0].version = 77; const before = JSON.stringify(data); chooseReason(ui, reason); ui.cancelOutcomes.push(pending.promise);
+    ui.cancelSubmit(); ui.cancelSubmit(); ui.c('confirm').click();
+    assert.equal(ui.cancellations.length, 1); assert.equal(ui.keys, 1);
+    const r = ui.cancellations[0]; assert.equal(r.meetingId, data[0].id); assert.equal(r.access, ui.access);
+    assert.ok(r.signal instanceof AbortSignal); assert.deepEqual({ ...r.payload }, { expectedVersion: 1, reason });
+    assert.deepEqual(Object.keys(r).sort(), ['access', 'idempotencyKey', 'meetingId', 'payload', 'signal']); assert.ok(Object.isFrozen(r.payload));
+    assert.equal(ui.c('fields').disabled, true); assert.equal(ui.c('form').elements.namedItem('reason').matches(':disabled'), true);
+    assert.equal(ui.c('confirm').disabled, true); assert.equal(ui.c('back').disabled, true);
+    assert.equal(ui.c('confirm').textContent, 'Cancelando…'); assert.equal(ui.c('dialog').getAttribute('aria-busy'), 'true');
+    ui.cancelEscape(); ui.c('back').click(); assert.equal(ui.c('dialog').open, true);
+    assert.equal(JSON.stringify(data), before); assert.equal(ui.gets.length, 1);
+    pending.resolve(); await settle(); assert.equal(ui.c('dialog').open, false); assert.equal(ui.gets.length, 2);
+});
+test('4D.2E éxito año10000 ignora PATCH, GET cancelled y mismo día', async () => {
+    const ui = await setup(); const day = ui.q('[data-agenda-date]').value;
+    const updated = agendaFixture(); updated[0].status = 'cancelled'; updated[0].version = 2;
+    let reads = 0;
+    const result = { status: 'cancelled', version: 2, get scheduledAt() { reads++; throw Error('PATCH must not be formatted'); } };
+    ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(result); ui.loads.push(updated); ui.cancelSubmit(); await settle();
+    assert.equal(reads, 0); assert.equal(ui.c('dialog').open, false); assert.equal(ui.gets.length, 2);
+    assert.equal(ui.gets[1].from, ui.gets[0].from); assert.equal(ui.gets[1].to, ui.gets[0].to);
+    assert.equal(ui.q('[data-agenda-date]').value, day); assert.equal(ui.q('[data-agenda-cancel]'), null);
+    assert.equal(ui.q('[data-agenda-reschedule]'), null); assert.equal(ui.q('[data-agenda-rows]').children.length, 4);
+    assert.match(ui.q('[data-agenda-rows]').firstElementChild.textContent, /Cancelada/);
+    assert.match(ui.c('announcement').textContent, /Reunión cancelada/); assert.equal(ui.document.activeElement, ui.q('[data-agenda-day]'));
+    // Además del getter centinela, un snapshot literal año 10000 tampoco se renderiza.
+    ui.loads.push(agendaFixture()); ui.q('[data-agenda-next]').click(); await settle(); ui.cancelOpen(); chooseReason(ui);
+    ui.cancelOutcomes.push({ scheduledAt: '10000-01-01T04:30:00+00:00', status: 'cancelled', version: 2 });
+    ui.cancelSubmit(); await settle(); assert.equal(ui.c('dialog').open, false); assert.equal(ui.cancellations.length, 2);
+});
+test('4D.2E éxito y GET fallido conserva anuncio y retry solo GET', async () => {
+    const ui = await setup(), old = ui.q('[data-agenda-cancel]'), oldSchedule = ui.q('[data-agenda-reschedule]');
+    ui.cancelOpen(); chooseReason(ui); ui.loads.push(error('network')); ui.cancelSubmit(); await settle();
+    assert.match(ui.c('announcement').textContent, /Reunión cancelada/); assert.equal(ui.q('[data-agenda-retry]').hidden, false);
+    old.disabled = oldSchedule.disabled = false; old.click(); oldSchedule.click(); ui.cancelSubmit();
+    assert.equal(ui.cancellations.length, 1); assert.equal(ui.r('dialog').open, false);
+    ui.q('[data-agenda-retry]').click(); await settle(); assert.equal(ui.gets.length, 3); assert.equal(ui.cancellations.length, 1);
+});
+for (const code of ['network', 'timeout', 'server', 'invalid_response', 'unavailable']) test(`4D.2E uncertain ${code} mantiene intento`, async () => {
+    const ui = await setup(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(error(code), error(code));
+    ui.cancelSubmit(); await settle(); const first = ui.cancellations[0];
+    assert.equal(ui.c('fields').disabled, true); assert.equal(ui.c('confirm').textContent, 'Reintentar cancelación');
+    ui.cancelEscape(); ui.c('back').click(); assert.equal(ui.c('dialog').open, true);
+    chooseReason(ui, 'other'); ui.cancelSubmit(); await settle();
+    assert.equal(ui.keys, 1); assert.equal(ui.cancellations.length, 2);
+    for (const k of ['meetingId', 'idempotencyKey', 'payload', 'access', 'signal']) assert.equal(ui.cancellations[1][k], first[k]);
+    assert.doesNotMatch(ui.c('message').textContent, /SECRET/);
+});
+test('4D.2E descarte obliga GET y usa nueva versión/clave en nuevo intento', async () => {
+    const ui = await setup(), pending = deferred(), old = ui.q('[data-agenda-cancel]');
+    ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(error('network')); ui.cancelSubmit(); await settle();
+    ui.loads.push(pending.promise); ui.c('discard').click(); old.disabled = false; old.click(); ui.open();
+    assert.equal(ui.c('dialog').open, false); assert.equal(ui.r('dialog').open, false);
+    const updated = agendaFixture(); updated[0].version = 8; pending.resolve(updated); await settle();
+    old.click(); assert.equal(ui.c('dialog').open, false); ui.cancelOpen(); chooseReason(ui, 'other'); ui.cancelSubmit(); await settle();
+    assert.equal(ui.keys, 2); assert.notEqual(ui.cancellations[0].idempotencyKey, ui.cancellations[1].idempotencyKey);
+    assert.deepEqual({ ...ui.cancellations[1].payload }, { expectedVersion: 8, reason: 'other' });
+});
+for (const [status, domain, message] of [[409, 'MEETING_VERSION_CONFLICT', /cambió/], [409, 'MEETING_NOT_SCHEDULED', /no está programada/],
+    [404, 'MEETING_NOT_FOUND', /no está disponible/], [409, 'IDEMPOTENCY_KEY_REUSED', /intento no pudo completarse/],
+    [409, 'CONSULTATION_STATE_INCONSISTENT', /revisión administrativa/], [409, undefined, /información/]]) {
+    test(`4D.2E conflicto ${domain} bloquea ambas acciones hasta GET`, async () => {
+        const ui = await setup(); const old = ui.q('[data-agenda-cancel]'), schedule = ui.q('[data-agenda-reschedule]');
+        ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(error('operation', status, domain)); ui.loads.push(error('network'));
+        ui.cancelSubmit(); await settle(); assert.equal(ui.c('dialog').open, false); assert.match(ui.c('announcement').textContent, message);
+        assert.equal(ui.keys, 1); assert.equal(ui.cancellations.length, 1); assert.equal(ui.gets.length, 2);
+        old.disabled = schedule.disabled = false; old.click(); schedule.click(); ui.cancelSubmit();
+        assert.equal(ui.c('dialog').open, false); assert.equal(ui.r('dialog').open, false);
+        ui.loads.push([]); ui.q('[data-agenda-retry]').click(); await settle();
+        assert.equal(ui.q('[data-agenda-cancel]'), null); assert.equal(ui.keys, 1);
+    });
+}
+for (const failure of [error('invalid_input'), error('operation', 400)]) test('4D.2E corregir 400 crea intento distinto', async () => {
+    const ui = await setup(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(failure); ui.cancelSubmit(); await settle();
+    assert.equal(ui.c('fields').disabled, false); assert.doesNotMatch(ui.c('message').textContent, /SECRET/);
+    chooseReason(ui, 'other'); ui.cancelSubmit(); await settle(); assert.equal(ui.keys, 2);
+    assert.notEqual(ui.cancellations[0].idempotencyKey, ui.cancellations[1].idempotencyKey);
+});
+test('4D.2E forbidden solo bloquea cancelación hasta nueva autorización', async () => {
+    const ui = await setup(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(error('forbidden', 403)); ui.cancelSubmit(); await settle();
+    assert.equal(ui.c('confirm').disabled, true); assert.equal(ui.c('back').disabled, false); assert.equal(ui.blocks, 0);
+    ui.open(); assert.equal(ui.r('dialog').open, false); ui.c('back').click(); ui.open(); assert.equal(ui.r('dialog').open, true);
+    ui.r('cancel').click(); ui.q('[data-agenda-next]').click(); await settle();
+    assert.equal(ui.q('[data-agenda-cancel]').disabled, true); ui.q('[data-agenda-cancel]').disabled = false; ui.cancelOpen();
+    assert.equal(ui.c('dialog').open, false); ui.invalidate(); ui.authorize(); await settle(); ui.cancelOpen(); assert.equal(ui.c('dialog').open, true);
+});
+for (const code of ['expired', 'stale']) test(`4D.2E ${code} delega en shell`, async () => {
+    const ui = await setup(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(error(code)); ui.cancelSubmit(); await settle();
+    assert.equal(ui.blocks, code === 'expired' ? 1 : 0); assert.equal(ui.revalidations, code === 'stale' ? 1 : 0);
+    assert.equal(ui.c('dialog').open, false); assert.equal(ui.c('form').elements.namedItem('reason').value, ''); assert.equal(ui.cancellations[0].signal.aborted, true);
+});
+for (const first of ['cancel', 'reschedule']) test(`4D.2E exclusión cruzada ${first} editable/sending/uncertain`, async () => {
+    const ui = await setup(), pending = deferred();
+    if (first === 'cancel') { ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(pending.promise); }
+    else { ui.open(); ui.outcomes.push(pending.promise); }
+    const cross = () => { if (first === 'cancel') ui.open(); else ui.cancelOpen(); };
+    cross(); assert.equal(first === 'cancel' ? ui.r('dialog').open : ui.c('dialog').open, false);
+    if (first === 'cancel') ui.cancelSubmit(); else ui.submit(); cross();
+    assert.equal(first === 'cancel' ? ui.r('dialog').open : ui.c('dialog').open, false);
+    pending.reject(error('network')); await settle(); cross();
+    assert.equal(first === 'cancel' ? ui.r('dialog').open : ui.c('dialog').open, false);
+    (first === 'cancel' ? ui.c('discard') : ui.r('discard')).click(); await settle(); cross();
+    assert.equal(first === 'cancel' ? ui.r('dialog').open : ui.c('dialog').open, true);
+});
+for (const lateError of [false, true]) test(`4D.2E sesión nueva ignora respuesta vieja ${lateError}`, async () => {
+    const ui = await setup(), pending = deferred(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(pending.promise); ui.cancelSubmit();
+    ui.invalidate(); assert.equal(ui.cancellations[0].signal.aborted, true);
+    ui.authorize({ ...ui.access, user: { role: 'agendadora' }, isCurrent: () => true }); await settle(); ui.cancelOpen();
+    const before = ui.q('[data-agenda]').innerHTML, count = ui.gets.length;
+    if (lateError) pending.reject(error('operation', 409)); else pending.resolve(); await settle();
+    assert.equal(ui.q('[data-agenda]').innerHTML, before); assert.equal(ui.gets.length, count);
+});
+test('4D.2E cambio de fecha aborta y respuesta vieja no afecta diálogo nuevo', async () => {
+    const ui = await setup(), pending = deferred(); ui.cancelOpen(); chooseReason(ui); ui.cancelOutcomes.push(pending.promise); ui.cancelSubmit();
+    ui.q('[data-agenda-next]').click(); await settle(); assert.equal(ui.cancellations[0].signal.aborted, true);
+    ui.cancelOpen(); const before = ui.q('[data-agenda]').innerHTML; pending.resolve(); await settle();
+    assert.equal(ui.q('[data-agenda]').innerHTML, before); assert.equal(ui.gets.length, 2);
+});
+test('4D.2E GET tardío tras cancelación no pisa nuevo día', async () => {
+    const ui = await setup(), pending = deferred(); ui.cancelOpen(); chooseReason(ui); ui.loads.push(pending.promise); ui.cancelSubmit(); await settle();
+    ui.q('[data-agenda-next]').click(); await settle(); const before = ui.q('[data-agenda]').innerHTML;
+    assert.equal(ui.gets[1].signal.aborted, true); pending.resolve([]); await settle(); assert.equal(ui.q('[data-agenda]').innerHTML, before);
+});
+test('4D.2E contexto XSS usa texto y no expone identificadores', async () => {
+    const data = agendaFixture(), evil = '<img src=x onerror=alert(1)>';
+    data[0].consultation.fullName = data[0].consultation.program.name = data[0].assignedTo.fullName = evil;
+    const ui = await setup({ data }); ui.cancelOpen();
+    for (const name of ['client', 'program', 'seller']) assert.equal(ui.c(name).textContent, evil);
+    assert.equal(ui.c('dialog').querySelector('img'), null); assert.doesNotMatch(ui.c('dialog').textContent, /aaaaaaaa|bbbbbbbb|fixture-key/);
 });

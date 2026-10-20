@@ -54,7 +54,7 @@ async function setup(options = {}, page = 'crm') {
     dom?.window.close();
     const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture,
         salespeople: [{ id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', fullName: 'Vendedora de prueba', role: 'vendedora' }],
-        salesResponses: [], meetingResponses: [], agendaResponses: [], rescheduleResponses: [], agenda: agendaFixture(), page, ...options };
+        salesResponses: [], meetingResponses: [], agendaResponses: [], rescheduleResponses: [], cancelResponses: [], agenda: agendaFixture(), page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
     // Solo pruebas: el navegador real proporciona top layer, foco y Escape nativos.
     dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
@@ -95,6 +95,7 @@ async function setup(options = {}, page = 'crm') {
     vm.runInContext(`
         window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0, agenda: 0 };
         window.pendingAgenda = []; window.agendaRequests = []; window.agendaSignals = [];
+        window.pendingCancels = []; window.cancelRequests = []; window.cancelSignals = [];
         window.pendingReschedules = []; window.rescheduleRequests = []; window.rescheduleSignals = [];
         window.pendingSales = []; window.pendingMeetings = []; window.meetingRequests = [];
         window.events = [];
@@ -133,6 +134,17 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (options.method === 'PATCH' && url.startsWith('/api/admin/meetings/') && url.endsWith('/cancel')) {
+                cancelRequests.push({ url, method: options.method, headers: options.headers, body: options.body });
+                cancelSignals.push(options.signal);
+                const response = fixture.cancelResponses.shift() || {};
+                if (response.hold) await new Promise(resolve => pendingCancels.push(resolve));
+                const row = fixture.agenda[0];
+                const data = { id: row.id, consultationRequestId: row.consultationRequestId,
+                    scheduledAt: row.scheduledAt, timeZone: row.timeZone, durationMinutes: row.durationMinutes,
+                    mode: row.mode, status: 'cancelled', version: row.version + 1 };
+                return new Response(JSON.stringify(response.body ?? { data }), { status: response.status || 200 });
+            }
             if (options.method === 'PATCH' && url.startsWith('/api/admin/meetings/') && url.endsWith('/schedule')) {
                 rescheduleRequests.push({ url, key: options.headers['Idempotency-Key'], body: options.body });
                 rescheduleSignals.push(options.signal);
@@ -218,7 +230,9 @@ async function setup(options = {}, page = 'crm') {
         const agenda = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-agenda.js'), 'utf8'), { context });
         const reschedule = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-reschedule-dialog.js'), 'utf8'), { context });
         await reschedule.link(() => meetings);
-        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : dates);
+        const cancellation = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-cancel-dialog.js'), 'utf8'), { context });
+        await cancellation.link(() => meetings);
+        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : specifier.endsWith('crm-cancel-dialog.js') ? cancellation : dates);
         await agenda.evaluate(); hooks = agenda.namespace.initCRMAgenda();
     }
     if (page === 'crm/solicitudes') {
@@ -1411,4 +1425,59 @@ test('4D.1D shell: cambio Auth A→B invalida PATCH antes de autorizar B', async
     await evaluate('pendingReschedules.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
     assert.equal(await evaluate("document.querySelector('[data-agenda]').innerHTML"), html);
     assert.equal(await evaluate('calls.agenda'), 2);
+});
+
+const cancelOpen = "document.querySelector('[data-cancel-dialog]').open";
+async function startCancel(options = {}) {
+    await agendaPage(options); await until(agendaLoaded); await click('[data-agenda-cancel]');
+    await evaluate("document.querySelector('[name=reason]').value = 'client_request'; document.querySelector('[data-cancel-form]').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))");
+}
+test('4D.2E shell: API real, PATCH año10000, GET cancelled', async () => {
+    const row = agendaFixture()[0], updated = agendaFixture(); updated[0].status = 'cancelled'; updated[0].version = 2;
+    const { id, consultationRequestId, timeZone, durationMinutes, mode } = row;
+    await startCancel({ cancelResponses: [{ body: { data: { id, consultationRequestId, timeZone, durationMinutes, mode,
+        scheduledAt: '10000-01-01T04:30:00+00:00', status: 'cancelled', version: 2 } } }],
+        agendaResponses: [{}, { data: updated }] });
+    await until('calls.agenda === 2'); await until(agendaLoaded);
+    assert.equal(await evaluate(cancelOpen), false); assert.equal(await evaluate('cancelRequests.length'), 1);
+    const request = await evaluate('cancelRequests[0]');
+    assert.equal(request.url, `/api/admin/meetings/${id}/cancel`); assert.equal(request.method, 'PATCH');
+    assert.deepEqual(JSON.parse(request.body), { expectedVersion: 1, reason: 'client_request' });
+    assert.equal(request.headers.Authorization, 'Bearer fixture-token-A'); assert.equal(request.headers['Content-Type'], 'application/json');
+    assert.match(request.headers['Idempotency-Key'], /^[0-9a-f-]{36}$/);
+    assert.equal(await evaluate('rescheduleRequests.length'), 0); assert.equal(await evaluate('calls.logout'), 0);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-cancel]')"), null);
+    assert.match(await evaluate("document.querySelector('[data-agenda-rows]').firstElementChild.textContent"), /Cancelada/);
+});
+test('4D.2E shell: logout invalida cancelación pendiente', async () => {
+    await startCancel({ cancelResponses: [{ hold: true }] }); await until('pendingCancels.length === 1');
+    const dialog = dom.window.document.querySelector('[data-cancel-dialog]');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(dialog.open, false); assert.equal(dialog.querySelector('[name=reason]').value, '');
+    assert.equal(await evaluate('cancelSignals[0].aborted'), true);
+    await evaluate('pendingCancels.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 1);
+});
+test('4D.2E shell: pagehide y BFCache limpian y autorizan nuevamente', async () => {
+    await startCancel({ cancelResponses: [{ hold: true }] }); await until('pendingCancels.length === 1');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    assert.equal(await evaluate(cancelOpen), false); assert.equal(await evaluate('cancelSignals[0].aborted'), true);
+    await evaluate('fixture.responses.push({ hold: true })');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    await until('pending.length === 1'); assert.equal(await evaluate('calls.agenda'), 1);
+    assert.equal(await evaluate(shellVisible), false);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    await evaluate('pendingCancels.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 2); assert.equal(await evaluate(cancelOpen), false);
+});
+test('4D.2E shell: cuenta A tardía no afecta B', async () => {
+    await startCancel({ cancelResponses: [{ hold: true, status: 409, body: { error: { code: 'MEETING_VERSION_CONFLICT' } } }] });
+    await until('pendingCancels.length === 1');
+    await evaluate(`fixture.responses.push({ hold: true, user: ${JSON.stringify(userB)} }); emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until('pending.length === 1'); assert.equal(await evaluate(cancelOpen), false); assert.equal(await evaluate('cancelSignals[0].aborted'), true);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-cancel]')"), null);
+    const html = await evaluate("document.querySelector('[data-agenda]').innerHTML");
+    await evaluate('pendingCancels.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').innerHTML"), html); assert.equal(await evaluate('calls.agenda'), 2);
 });

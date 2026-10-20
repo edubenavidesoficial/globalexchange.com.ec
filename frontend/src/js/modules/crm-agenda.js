@@ -1,4 +1,5 @@
 import { getAgendaMeetings } from '../api/meetings.js';
+import { initCancelDialog } from './crm-cancel-dialog.js';
 import { initRescheduleDialog } from './crm-reschedule-dialog.js';
 import { agendaToday, shiftAgendaDay, agendaDayRange, agendaDayLabel, agendaHour } from './crm-agenda-date.js';
 
@@ -20,17 +21,30 @@ export function initCRMAgenda() {
     let pending = null;
     let generation = 0;
     let reschedulingDenied = false;
+    let cancellationDenied = false;
     let refreshRequired = false;
-    const canOpen = () => Boolean(access?.isCurrent()) && !pending && !refreshRequired && !reschedulingDenied;
+    const available = () => Boolean(access?.isCurrent()) && !pending && !refreshRequired;
+    const canOpen = () => available() &&
+        !root.querySelector('[data-reschedule-dialog]').open && !root.querySelector('[data-cancel-dialog]').open;
+    function reload() {
+        // Conservar el anuncio del diálogo que acaba de cerrar.
+        if (root.querySelector('[data-reschedule-dialog]').open) dialog.invalidate();
+        if (root.querySelector('[data-cancel-dialog]').open) cancellation.invalidate();
+        refreshRequired = true;
+        generation++;
+        pending?.abort(); pending = null;
+        return load();
+    }
     const dialog = initRescheduleDialog(root, {
-        canOpen,
+        canOpen: () => canOpen() && !reschedulingDenied,
         forbid() { reschedulingDenied = true; controls(); },
-        reload() {
-            refreshRequired = true;
-            generation++;
-            pending?.abort(); pending = null;
-            return load();
-        },
+        reload,
+    });
+
+    const cancellation = initCancelDialog(root, {
+        canOpen: () => canOpen() && !cancellationDenied,
+        forbid() { cancellationDenied = true; controls(); },
+        reload,
     });
 
     function clear() {
@@ -47,7 +61,8 @@ export function initCRMAgenda() {
         // Sigue disponible si la pestaña permanece abierta al cambiar de día.
         find('today').disabled = !access;
         retry.disabled = !access || Boolean(pending);
-        for (const button of rows.querySelectorAll('[data-agenda-reschedule]')) button.disabled = !canOpen();
+        for (const button of rows.querySelectorAll('[data-agenda-reschedule]')) button.disabled = !available() || reschedulingDenied;
+        for (const button of rows.querySelectorAll('[data-agenda-cancel]')) button.disabled = !available() || cancellationDenied;
     }
     function showDate() {
         date.value = day;
@@ -55,7 +70,8 @@ export function initCRMAgenda() {
     }
     function invalidate() {
         dialog.invalidate();
-        reschedulingDenied = false; refreshRequired = false;
+        cancellation.invalidate();
+        reschedulingDenied = false; cancellationDenied = false; refreshRequired = false;
         generation++;
         pending?.abort();
         pending = null;
@@ -89,9 +105,16 @@ export function initCRMAgenda() {
                 button.setAttribute('aria-label', `Reprogramar reunión de ${meeting.consultation.fullName}`);
                 const owner = access, renderedGeneration = generation;
                 button.addEventListener('click', () => {
-                    if (canOpen() && owner === access && renderedGeneration === generation) dialog.open(meeting, owner, button);
+                    if (canOpen() && !reschedulingDenied && owner === access && renderedGeneration === generation) dialog.open(meeting, owner, button);
                 });
-                item.append(button);
+                const cancel = node('button', 'Cancelar reunión', 'crm-button');
+                cancel.type = 'button'; cancel.dataset.agendaCancel = '';
+                cancel.setAttribute('aria-label', 'Cancelar reunión de ' + meeting.consultation.fullName);
+                cancel.addEventListener('click', () => {
+                    if (canOpen() && !cancellationDenied && owner === access && renderedGeneration === generation) cancellation.open(meeting, owner, cancel);
+                });
+                const actions = node('div', undefined, 'agenda-meeting-actions');
+                actions.append(button, cancel); item.append(actions);
             }
             fragment.append(item);
         }
@@ -132,6 +155,7 @@ export function initCRMAgenda() {
         }
         if (day === next) return;
         dialog.invalidate();
+        cancellation.invalidate();
         generation++;
         pending?.abort();
         pending = null;

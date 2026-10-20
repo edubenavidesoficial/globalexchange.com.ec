@@ -24,18 +24,18 @@
 .agenda-badge--completed { background: #e2f7f2; color: #086658; }
 .agenda-badge--cancelled { background: #f5e9ed; color: #903952; }
 .agenda-badge--no_show { background: #edf0f5; color: #4e5870; }
-.agenda-reschedule-open { grid-column: 1 / -1; justify-self: end; }
-.reschedule-dialog { box-sizing: border-box; width: min(580px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 28px; border: 1px solid var(--crm-border); border-radius: 18px; color: var(--crm-navy); overflow-wrap: anywhere; }
-.reschedule-dialog::backdrop { background: #14244799; }
-.reschedule-dialog h2 { margin-top: 0; }
-.reschedule-context { display: grid; gap: 12px; }
-.reschedule-context dt { font-size: 12px; color: var(--crm-muted); }
-.reschedule-context dd { margin: 3px 0 0; }
-.reschedule-dialog fieldset { display: grid; gap: 8px; margin: 20px 0; padding: 16px; border: 1px solid var(--crm-border); border-radius: 12px; min-width: 0; }
-.reschedule-dialog input, .reschedule-dialog select { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; padding: 8px; font: inherit; border: 1px solid #c7cfdd; border-radius: 8px; background: white; color: var(--crm-navy); }
-.reschedule-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
-.reschedule-dialog :focus-visible { outline: 3px solid #3979ba; outline-offset: 3px; }
-.reschedule-dialog :disabled { opacity: .65; }
+.agenda-meeting-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+:is(.reschedule-dialog, .cancel-dialog) { box-sizing: border-box; width: min(580px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 28px; border: 1px solid var(--crm-border); border-radius: 18px; color: var(--crm-navy); overflow-wrap: anywhere; }
+:is(.reschedule-dialog, .cancel-dialog)::backdrop { background: #14244799; }
+:is(.reschedule-dialog, .cancel-dialog) h2 { margin-top: 0; }
+:is(.reschedule-context, .cancel-context) { display: grid; gap: 12px; }
+:is(.reschedule-context, .cancel-context) dt { font-size: 12px; color: var(--crm-muted); }
+:is(.reschedule-context, .cancel-context) dd { margin: 3px 0 0; }
+:is(.reschedule-dialog, .cancel-dialog) fieldset { display: grid; gap: 8px; margin: 20px 0; padding: 16px; border: 1px solid var(--crm-border); border-radius: 12px; min-width: 0; }
+:is(.reschedule-dialog, .cancel-dialog) input, :is(.reschedule-dialog, .cancel-dialog) select { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; padding: 8px; font: inherit; border: 1px solid #c7cfdd; border-radius: 8px; background: white; color: var(--crm-navy); }
+:is(.reschedule-actions, .cancel-actions) { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+:is(.reschedule-dialog, .cancel-dialog) :focus-visible { outline: 3px solid #3979ba; outline-offset: 3px; }
+:is(.reschedule-dialog, .cancel-dialog) :disabled { opacity: .65; }
 @media (max-width: 1199px) { .agenda-details { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) {
     .agenda-toolbar { gap: 16px; }

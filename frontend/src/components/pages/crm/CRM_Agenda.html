@@ -53,4 +53,37 @@
             </div>
         </form>
     </dialog>
+    <p data-cancel-announcement role="status" aria-live="polite" aria-atomic="true"></p>
+    <dialog class="cancel-dialog" data-cancel-dialog aria-labelledby="cancel-title" aria-describedby="cancel-zone">
+        <h2 id="cancel-title">Cancelar reunión</h2>
+        <dl class="cancel-context">
+            <div><dt>Cliente</dt><dd data-cancel-client></dd></div>
+            <div><dt>Programa</dt><dd data-cancel-program></dd></div>
+            <div><dt>Persona asignada</dt><dd data-cancel-seller></dd></div>
+            <div><dt>Fecha y hora actuales</dt><dd data-cancel-schedule></dd></div>
+            <div><dt>Estado actual</dt><dd data-cancel-status></dd></div>
+        </dl>
+        <p id="cancel-zone" data-cancel-zone></p>
+        <form data-cancel-form>
+            <fieldset data-cancel-fields>
+                <legend>Motivo</legend>
+                <label for="cancel-reason">Motivo de cancelación</label>
+                <select id="cancel-reason" name="reason" required aria-describedby="cancel-message">
+                    <option value="">Selecciona un motivo</option>
+                    <option value="client_request">Solicitud del cliente</option>
+                    <option value="staff_unavailable">Asesor no disponible</option>
+                    <option value="duplicate">Reunión duplicada</option>
+                    <option value="administrative">Motivo administrativo</option>
+                    <option value="other">Otro motivo</option>
+                </select>
+            </fieldset>
+            <p id="cancel-message" data-cancel-message role="status" aria-live="polite" aria-atomic="true"></p>
+            <p data-cancel-uncertain hidden>El motivo permanece bloqueado para reintentar la misma cancelación. Descartar requiere actualizar la Agenda porque la cancelación pudo haberse aplicado.</p>
+            <div class="cancel-actions">
+                <button class="crm-button" type="button" data-cancel-back>Volver</button>
+                <button class="crm-button" type="button" data-cancel-discard hidden>Descartar intento y actualizar</button>
+                <button class="crm-button crm-button--primary" type="submit" data-cancel-confirm>Confirmar cancelación</button>
+            </div>
+        </form>
+    </dialog>
 </section>

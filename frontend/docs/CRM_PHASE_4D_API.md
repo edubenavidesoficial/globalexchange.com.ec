@@ -413,3 +413,124 @@ remotas ni E2E browser. El replay simulado prueba transporte estable, no locks,
 transacciones ni idempotencia persistida PostgreSQL. Warnings de VM experimental
 y deprecación de lock del SDK en tests históricos no produjeron fallos.
 No se ejecutaron git add, commit, push, db push ni SQL remoto.
+
+## 4D.2E — UI de cancelación en Agenda — 2026-10-19
+
+Implementada localmente y lista para revisión final, sin staging ni commit.
+Sigue pendiente **4D.2F E2E completo**; no se declara cerrada toda 4D.2.
+No se modifican API frontend, backend, SQL, migraciones ni Solicitudes.
+
+### Acción, diálogo y contrato
+
+Agenda muestra Cancelar reunión solo para admin/agendadora autorizados por el
+shell y reuniones scheduled. Vendedora y completed/cancelled/no_show no tienen
+la acción. Handler y apertura comprueban acceso, generación y estado del
+snapshot; la autorización definitiva y concurrencia siguen en backend.
+
+crm-cancel-dialog.js reutiliza cancelMeeting/createMeetingIdempotencyKey de la
+API existente. El diálogo nativo presenta cliente, programa, persona asignada,
+fecha/hora del snapshot en su zona y estado mediante textContent. No muestra
+UUID, clave ni versión. No hay texto libre; select obligatorio inicialmente
+vacío con estos valores exactos, sin normalización:
+
+| Value | Label |
+|---|---|
+| client_request | Solicitud del cliente |
+| staff_unavailable | Asesor no disponible |
+| duplicate | Reunión duplicada |
+| administrative | Motivo administrativo |
+| other | Otro motivo |
+
+Volver cierra sin ambigüedad. Confirmar cancelación envía únicamente el comando
+API con meetingId, idempotencyKey, payload {expectedVersion, reason}, access y
+signal. La versión se captura al abrir; no se suma, modifica ni valida mediante
+GET previo. No hay reglas de futuro, consulta remota previa o hash frontend.
+
+### Intento, coordinación y recuperación
+
+Abrir/cambiar motivo no genera clave. El primer submit válido crea una clave y
+congela intento/payload en memoria. sending se fija antes del await: doble
+submit no genera otra llamada ni clave. Durante envío se deshabilitan fieldset,
+confirmación y Volver; Escape no cierra. El botón indica Cancelando….
+
+network/timeout/server/invalid_response y resultados desconocidos conservan el
+intento; motivo y cierre permanecen bloqueados. Reintentar cancelación reutiliza
+la misma clave, motivo y versión incluso si se altera el select por código.
+No hay retries automáticos. Descartar intento y actualizar limpia y exige GET;
+un nuevo intento explícito posterior genera otra clave. No se comparte intento
+entre operaciones, reuniones o sesiones; no se guarda en storage.
+
+Agenda comparte refreshRequired, reload y generation entre ambos diálogos.
+El guard de apertura impide que se abran simultáneamente, incluso por clicks
+programáticos durante envío, incertidumbre o bloqueo. Un 403 bloquea solo la
+acción correspondiente para esa autorización, sin inferir permisos de la otra.
+Cambiar fecha o invalidar acceso cierra/limpia ambos y aborta las esperas.
+Identidad current, isCurrent y AbortController descartan respuestas tardías.
+Logout/cambio de cuenta/pagehide usan el shell existente; BFCache exige nueva
+autorización/carga. Abortar localmente no prueba rollback del cambio remoto.
+
+| Resultado | Comportamiento |
+|---|---|
+| Success | Cierra, limpia y anuncia Reunión cancelada. Actualizando el día seleccionado…; enfoca encabezado y hace GET del mismo día. |
+| MEETING_VERSION_CONFLICT | Mensaje de reunión cambiada, cierre y GET obligatorio. |
+| MEETING_NOT_SCHEDULED | Mensaje de reunión ya no programada, cierre y GET obligatorio. |
+| MEETING_NOT_FOUND | Mensaje de reunión no disponible, cierre y GET obligatorio. |
+| IDEMPOTENCY_KEY_REUSED | Mensaje de intento no completado, cierre y GET obligatorio; sin clave/retry automático. |
+| CONSULTATION_STATE_INCONSISTENT | Mensaje de revisión administrativa, cierre y GET obligatorio. |
+| Otros operation 404/409 | Fallback de información cambiada y GET obligatorio. |
+| invalid_input / operation 400 | Mensaje controlado, permite corregir; siguiente confirmación crea intento nuevo. |
+| forbidden | Bloquea cancelación hasta nueva autorización, permite Volver; sin logout. |
+| expired / denied | Limpia y delega en blockAccess del shell. |
+| stale vigente | Limpia y delega en revalidate; si el estado ya fue invalidado, ignora respuesta. |
+| network / timeout / server / invalid_response / desconocido | Conserva intento incierto para retry manual o descarte con GET. |
+
+### Refetch y año 10000
+
+Nunca hay actualización optimista ni mezcla de la response PATCH en las tarjetas.
+Se ignora su contenido para render y se consulta Agenda. El GET incluye cancelled:
+normalmente la fila permanece con badge Cancelada y sin acciones. El nuevo
+snapshot/versión procede del GET. Si ese GET falla, permanece el anuncio de
+cancelación aceptada y se ofrece retry de GET; no se repite cancelMeeting ni se
+habilitan acciones sobre tarjetas antiguas.
+
+La API admite 10000-01-01T04:30:00+00:00 en mutations, pero el formateador visual
+histórico no lo soporta. El diálogo nunca lee scheduledAt del PATCH ni lo pasa
+a Date/Intl/agendaHour. Solo formatea el snapshot de apertura obtenido de Agenda.
+Una prueba con getter centinela verifica que no lee el timestamp de la respuesta;
+otras usan el literal año 10000, incluida integración con API real y fetch falso.
+No se amplía el contrato temporal de Agenda ni se cambia crm-agenda-date.js.
+
+### Accesibilidad y estilos
+
+Dialog nativo con showModal, aria-labelledby y descripción de zona; select con
+label, required y aria-describedby al mensaje. Mensajes role=status/aria-live,
+aria-busy en formulario/diálogo, foco inicial en select y retorno al opener
+válido o encabezado estable. Escape/Volver limpian cuando es seguro; estado
+incierto requiere descarte explícito. Si no se puede representar el snapshot,
+se bloquea confirmación y se permite volver. Contexto usa textContent.
+CSS comparte las reglas de reprogramación y agrupa acciones con flex-wrap,
+conservando límites de tamaño, scroll y focus-visible del diálogo existente.
+
+### Pruebas ejecutadas y límites
+
+Baseline antes de editar: npm run test:crm, **741 tests, 741 pass, 0 fail**,
+62831.9076 ms. Regresión inicial de reprogramación: 35/35, 8860.7057 ms.
+
+Focalizados:
+- node --experimental-vm-modules --test tests/crm-agenda-ui.test.mjs:
+  **74 tests, 74 pass, 0 fail**, 15864.8901 ms (35 históricos + 39 nuevos).
+- node --experimental-vm-modules --test --test-name-pattern="4D.2E shell" tests/crm-shell.test.mjs:
+  **4 tests, 4 pass, 0 fail**, 5469.5289 ms.
+
+Suite final npm run test:crm: **784 tests, 784 pass, 0 fail**, 30328.32 ms;
+sin cancelados, omitidos ni pendientes. **741 + 43 = 784**.
+Cobertura nueva: roles/estados, contexto/reasons, foco/labels/XSS, captura de
+versión, doble submit, no mutación, uncertain/retry/discard, errores de dominio,
+GET fallido, exclusión entre diálogos, generación/acceso obsoletos, año 10000,
+logout, cambio de cuenta y pagehide/BFCache. Se conservan regresiones históricas
+de reprogramación, Agenda, API, Auth y shell.
+
+Las pruebas usan jsdom y API o SDK/fetch simulados. No acreditan PostgreSQL,
+locks, idempotencia persistida, E2E remoto ni E2E browser. showModal/close se
+simulan: top layer, focus trap, teclado real y apariencia responsive requieren
+validación posterior en 4D.2F. No se contactaron servicios ni datos reales.
