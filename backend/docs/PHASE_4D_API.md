@@ -866,3 +866,312 @@ observado aquí fue MEETING_VERSION_CONFLICT; no se presenta como un nuevo E2E
 de MEETING_NOT_SCHEDULED ni cambia la precedencia status-before-version.
 No cambian endpoint, roles, reasons, hash, idempotencia, respuesta o errores.
 Solo resta publicar este cierre documental para declarar cerrada toda 4D.2.
+
+## 4D.3B — PostgreSQL / resultado de reuniones
+
+**Implementación PostgreSQL terminada y validación remota principal terminada.**
+La migración está aplicada remotamente. 4D.3B queda cerrada técnicamente con
+las limitaciones de validación remota de Script 5 y actor inactivo aceptadas
+explícitamente y documentadas al final de esta sección; no se declaran PASS.
+Esto no cierra toda 4D.3: Express/backend HTTP, frontend API y UI de resultados
+corresponden a fases posteriores. Migration forward-only:
+`20261020120000_meeting_outcome_workflow.sql`, posterior a cancelación.
+No modifica migrations históricas, datos existentes, tablas, columnas, RLS,
+`meetings_status_valid` ni `meetings_one_scheduled_per_consultation_idx`.
+
+### Contrato de negocio y RPC
+
+Dos funciones independientes de `public`, ambas con esta firma:
+
+```sql
+complete_consultation_meeting(
+  p_actor_id uuid, p_meeting_id uuid, p_idempotency_key uuid,
+  p_request_hash text, p_expected_version integer
+) returns jsonb
+
+mark_consultation_meeting_no_show(
+  p_actor_id uuid, p_meeting_id uuid, p_idempotency_key uuid,
+  p_request_hash text, p_expected_version integer
+) returns jsonb
+```
+
+`completed` significa que la reunión se realizó, sin cerrar la venta ni la
+consultation. `no_show` significa ausencia del cliente. Son transiciones
+irreversibles desde `scheduled` para esa meeting, con el mismo UUID.
+Solo cambian `status`, `version + 1`, `updated_by` y
+`updated_at = clock_timestamp()`. Permanecen intactos horario, zona, duración,
+modo, notas, asignación, creador y fecha de creación.
+La consultation debe seguir `converted`: no se escribe ningún campo suyo,
+incluido `updated_at`. No hay reason, notas adicionales ni siguiente intento
+automático.
+
+Admin activo puede operar sobre cualquier meeting elegible. Vendedora activa
+solo sobre su meeting (`assigned_to = actor`), validado bajo lock. Agendadora,
+actor inactivo, inexistente o nulo y vendedora ajena reciben
+`ACTOR_NOT_ALLOWED`. No se confía en filtros UI ni metadata JWT.
+
+Complete permite `clock_timestamp() >= scheduled_at`. No-show permite
+`clock_timestamp() >= scheduled_at + duration_minutes` minutos. No hay margen
+adicional. El tiempo se comprueba después de los locks, inmediatamente antes
+de escribir. No-show captura exclusivamente overflow de fecha, intervalo y
+número en su bloque aritmético y rechaza un resultado no finito.
+
+### Locks, replay y atomicidad
+
+Se exige READ COMMITTED. Orden: advisory transaccional por operation/actor/key,
+actor `FOR SHARE`, descubrimiento del padre, consultation `FOR UPDATE`,
+meeting `FOR UPDATE`, propiedad, validaciones y efectos. No hay advisory
+adicional por meeting. El orden padre → meeting es compatible con los
+workflows existentes; el bloqueo del actor impide cambios concurrentes de
+rol/active hasta terminar la transacción.
+
+Cada operación usa su propio nombre RPC en `idempotency_records`; se conserva
+la unicidad `(actor_id, operation, idempotency_key)`. Hash diferente o UUID de
+meeting diferente con la misma key produce `IDEMPOTENCY_KEY_REUSED`.
+La fotografía persistida debe contener exactamente los ocho campos de respuesta:
+
+```text
+id, consultationRequestId, scheduledAt, timeZone,
+durationMinutes, mode, status, version
+```
+
+Se verifican UUID, relación con el record y padre actual, timestamp finito
+(incluidos años de más de cuatro dígitos), zona string no vacía según el
+contrato persistido, duración integer positiva, modo permitido, versión
+integer >= 2 y status correspondiente a la operación. Un `id` malformado
+produce `INTERNAL_ERROR`; un `id` con otro UUID válido produce
+`IDEMPOTENCY_KEY_REUSED`: conflicto semántico de reutilización de la misma
+actor/operation/key para otra meeting. Un `consultationRequestId` inconsistente
+o corrupto produce `INTERNAL_ERROR`, como las demás fotografías inválidas que
+no representan ese conflicto válido entre meetings. Los casts se protegen con
+excepciones concretas. Esta distinción fue validada sin cambiar producción.
+
+Antes de devolver cualquier replay se revalidan actor y propiedad actual bajo
+lock. Un replay autorizado devuelve exactamente la fotografía original sin
+revalidar status/version/tiempo ni estado mutable de consultation; no vuelve
+a escribir ni auditar. El comando nuevo valida status antes de comparar
+versión, exige padre converted y protege el máximo integer.
+
+Efectos: UPDATE meeting → INSERT audit → INSERT idempotency → RETURN.
+Cualquier error revierte todos los efectos de la llamada; no se captura
+ampliamente `WHEN OTHERS`. Los fallos de escritura no se convierten en éxito.
+Los errores nativos inesperados de escritura requieren sanitización en la
+capa HTTP de 4D.3C.
+
+### Auditoría, seguridad y creación posterior
+
+Se conservan consultation_request/consultation_converted y
+meeting/meeting_created, meeting_rescheduled, meeting_cancelled. Se añaden
+meeting/meeting_completed y meeting/meeting_no_show; no meeting_reassigned.
+Cada éxito crea exactamente un evento con actor y UUID `operation_id`
+generado por DB independientemente de la key. Metadata exacta:
+`consultationRequestId`, `previousStatus`, `newStatus`, `previousVersion`,
+`newVersion`; sin PII, notas, keys ni hashes.
+
+Se conservan las operations create_consultation_meeting,
+reschedule_consultation_meeting y cancel_consultation_meeting; se añaden
+complete_consultation_meeting y mark_consultation_meeting_no_show.
+
+Funciones VOLATILE, SECURITY INVOKER, search_path pg_catalog, pg_temp y UTC.
+Tablas calificadas con public; sin SQL dinámico. REVOKE de PUBLIC, anon,
+authenticated y service_role, seguido de GRANT EXECUTE solo a service_role
+con firma exacta. Los permisos efectivos de las dos RPC de resultado se
+comprobaron en PostgreSQL remoto; véase la evidencia estructural más abajo.
+
+CREATE OR REPLACE de create_consultation_meeting elimina únicamente la
+detección y rechazo por historial completed. Tras completed, cancelled o
+no_show se permite otro intento si consultation sigue converted y no existe
+scheduled. La nueva fila tiene otro UUID y versión 1; no se reabre ni modifica
+historial. Pending sin historial, validación de assignee, fechas, locks,
+idempotencia histórica, auditoría, respuesta y grants se conservan.
+El índice parcial sigue garantizando una sola scheduled. El error
+CONSULTATION_COMPLETED deja de emitirse por esta definición de creación;
+su mapping Express histórico se conserva para revisión en 4D.3C.
+
+### Errores y contrato futuro de Express
+
+Errores de dominio P0001: ACTOR_NOT_ALLOWED, INVALID_REQUEST,
+INVALID_MEETING_INPUT, WORKFLOW_ISOLATION_NOT_SUPPORTED, MEETING_NOT_FOUND,
+MEETING_NOT_SCHEDULED, MEETING_VERSION_CONFLICT,
+CONSULTATION_STATE_INCONSISTENT, IDEMPOTENCY_KEY_REUSED,
+MEETING_TOO_EARLY e INTERNAL_ERROR.
+Meeting/key nulos o hash nulo/vacío se rechazan como INVALID_REQUEST.
+En comandos nuevos, expectedVersion nulo o < 1 es INVALID_MEETING_INPUT.
+Un argumento > 2147483647 no puede entrar en la firma integer: PostgreSQL lo
+rechaza en el cast anterior al cuerpo; no puede transformarse allí en P0001.
+4D.3C deberá validar el rango antes de RPC. Una meeting con versión máxima
+produce INTERNAL_ERROR, sin intentar el incremento.
+
+Hash futuro, calculado por Express, con orden exacto:
+`{ meetingId: normalizedMeetingId, expectedVersion: expectedVersion }`.
+No incluir actor, operation, key ni status. El mapping HTTP de errores nuevos
+se implementará en 4D.3C; esta fase no crea endpoints.
+
+### Evidencia local y límites históricos
+
+Baseline manual del usuario en PowerShell: 631 tests, 631 pass, 0 fail,
+0 cancelled, 0 skipped, 0 todo; HEAD f662b16, rama migracion-vite limpia.
+Se acepta como evidencia: EACCES loopback de Codex es limitación del entorno.
+
+Validación inicial de `tests/meeting-outcome-migration.test.mjs`: 33 tests estáticos,
+con extracción acotada de funciones, orden de operaciones, firmas, grants,
+metadata y respuesta exactas, hashes históricos normalizados y equivalencia
+de creación salvo eliminación del bloqueo completed. Junto con
+cancel-meeting-migration.test.mjs y error-handler.test.mjs: 62/62 pass.
+
+`npm test` y runner equivalente con reporter TAP: 664 tests, 76 pass,
+588 fail, 0 cancelled/skipped/todo. Los 588 bloques fallidos contienen
+connect EACCES 127.0.0.1:<puerto>; cinco son assertions que esperaban HTTP 404
+y recibieron ese mismo EACCES. No se detectaron causas distintas de loopback.
+No se modificó harness, red ni mocks.
+Posteriormente, **usuario + ChatGPT** ejecutaron la suite completa en PowerShell
+local tras la implementación: **664 tests, 664 pass, 0 fail, 0 cancelled,
+0 skipped, 0 todo**. Esta evidencia manual es válida; el EACCES anterior fue
+una limitación del sandbox de Codex, no un fallo funcional del proyecto.
+
+La corrección final pre-preflight refuerza la comparación completa de ambos
+CHECK y añade dos tests de regresión, para un total de 35 tests de migration.
+Después de esta corrección, el usuario informó la suite manual final:
+**666 tests, 666 pass, 0 fail, 0 cancelled, 0 skipped y 0 todo**.
+La evidencia 664/664 corresponde al estado anterior y queda sustituida como
+validación final por 666/666. La aplicación remota y la validación principal
+también se completaron, según la evidencia registrada a continuación.
+
+Los tests estáticos no ejecutan PL/pgSQL ni prueban compilación, grants
+efectivos, rollback o concurrencia real. La evidencia PostgreSQL real se
+registra a continuación con su limitación de autorización.
+La nueva definición de creación debe auditarse en futuras
+migrations para evitar divergencia con esta copia forward-only.
+
+### Evidencia final y procedencia — 2026-10-20
+
+Los resultados de ejecución siguientes provienen de la evidencia manual
+aportada por el usuario para este cierre documental. No representan una nueva
+ejecución de tests, SQL, HTTP o migraciones remotas por Codex en esta revisión.
+Se distinguen de las verificaciones locales de archivos y Git.
+
+### Migración y validación estructural remota realizadas
+
+La migración `20261020120000_meeting_outcome_workflow.sql` fue aplicada
+correctamente. La ejecución manual de `migration list --linked` confirmó
+alineación local/remoto. No queda pendiente volver a aplicar esta migración.
+
+SHA-256 validado previamente y confirmado mediante lectura local en esta revisión:
+
+```text
+C3CE6E84EE0D8A0E27464DF306E38863968AB95E655BC393C717988221527BE1
+```
+
+La validación remota READ-ONLY confirmó para ambas RPC de resultado:
+
+| Propiedad | Resultado |
+| --- | --- |
+| Retorno | jsonb |
+| Volatilidad | VOLATILE |
+| Seguridad | SECURITY INVOKER |
+| search_path | pg_catalog, pg_temp |
+| TimeZone | UTC |
+| service_role_execute | true |
+| authenticated_execute | false |
+| anon_execute | false |
+
+Constraints verificados: `audit_constraint_ok=true`,
+`idempotency_constraint_ok=true`, `meetings_status_constraint_ok=true`
+y `exactly_three_constraints=true`.
+El índice `meetings_one_scheduled_per_consultation_idx` fue confirmado
+UNIQUE, con predicado `status = 'scheduled'`.
+
+### Validaciones PostgreSQL mutantes realizadas
+
+| Script | Alcance | Resultado informado |
+| --- | --- | --- |
+| 1 | scheduled → completed y replay | PASS |
+| 2 | scheduled → no_show y replay | PASS |
+| 3 | Crear nueva meeting después de completed | PASS |
+| 4 | Crear nueva meeting después de no_show | PASS |
+| 5, batería A–D | Autorización por rol y asignación | PRECONDICIÓN NO DISPONIBLE |
+| 5, actor inactivo | Rechazo de actor inactivo | NO EJECUTADO — LIMITACIÓN ACEPTADA DE VALIDACIÓN REMOTA |
+| 6 | Temporalidad | PASS |
+| 7 | Errores y precedencia | PASS |
+| 8 | Replay corrupto | PASS |
+| 9 | Atomicidad inducida | PASS |
+
+Script 6 demostró que COMPLETE puede ejecutarse después de la hora de inicio
+aunque la meeting todavía se encuentre dentro de su duración.
+
+Script 8 validó la distinción contractual: `id` malformado →
+`INTERNAL_ERROR`; otro UUID válido en `id` → `IDEMPOTENCY_KEY_REUSED`;
+`consultationRequestId` inconsistente/corrupto → `INTERNAL_ERROR`.
+Durante la preparación se corrigió un defecto de CASE/sintaxis exclusivamente
+en el harness, usando `expected_status`. No hubo cambio de producción.
+
+Script 9 validó la atomicidad mediante fallo inducido. Su cleanup informó
+`consultation=0`, `meeting=0`, `idempotency=0`, `audit=0` y `trigger=0`.
+
+### Concurrencia real C10–C13
+
+En los cuatro casos, B quedó realmente bloqueada por A y el observador
+confirmó el bloqueo. Después del COMMIT de A, B terminó e hizo COMMIT.
+La verificación final comparó las filas completas de A con su snapshot,
+confirmó que seguían intactas tras el COMMIT de B y eliminó el snapshot.
+
+| Caso | Ganador A | Evidencia del observador | Resultado de B y verificación final |
+| --- | --- | --- | --- |
+| C10: misma Idempotency-Key | complete_consultation_meeting | PASS C10 bloqueo real B por A | PASS C10 B: replay exacto contra registro persistido; PASS C10 final: filas completas de A intactas tras COMMIT B |
+| C11: keys distintas, complete vs no_show | completed/v2 | PASS C11 bloqueo real B por A | PASS C11 B: MEETING_NOT_SCHEDULED, sin registros B; PASS C11 final: filas completas de A intactas tras COMMIT B |
+| C12: reprogramación vs resultado | scheduled/v2 reprogramada | PASS C12 bloqueo real B por A | PASS C12 B: MEETING_VERSION_CONFLICT, solo reprogramacion; PASS C12 final: filas completas de A intactas tras COMMIT B |
+| C13: cancelación vs resultado | cancelled/v2 | PASS C13 bloqueo real B por A | PASS C13 B: MEETING_NOT_SCHEDULED, solo cancelacion; PASS C13 final: filas completas de A intactas tras COMMIT B |
+
+**C10, C11, C12 y C13: PASS completo.** En C12 y C13, B intentó COMPLETE
+con otra key y versión anterior.
+
+El primer intento de C10 se interrumpió porque B tenía
+`statement_timeout=5min` y el tiempo manual entre ventanas superó ese límite.
+Se limpió el fixture de forma controlada y se repitió con un timeout mayor.
+La repetición definitiva pasó completamente. El primer timeout fue una
+incidencia de ejecución manual, no un fallo de producción.
+
+### Cleanup final de concurrencia
+
+**PASS**, con estos conteos post-COMMIT:
+
+| Entidad | Residuos |
+| --- | --- |
+| consultation_residue | 0 |
+| meeting_residue | 0 |
+| idempotency_residue | 0 |
+| audit_residue | 0 |
+
+Después se ejecutó `DROP TABLE pg_temp.cleanup_4d3b_manifest;`, con resultado
+`DROP TABLE`. La sesión terminó en `postgres=>`.
+La evidencia final informa que no quedaron residuos sintéticos.
+No se deja cleanup de C10–C13 como tarea pendiente.
+
+### Estado de cierre y limitaciones aceptadas
+
+- **Implementación PostgreSQL: terminada.**
+- **Validación remota principal: terminada**, incluyendo estructura,
+  scripts 1–4 y 6–9, concurrencia C10–C13 y cleanup final 0/0/0/0.
+- **Concurrencia C10–C13: PASS. Atomicidad: PASS. Cleanup final: 0/0/0/0.**
+- **Script 5, batería A–D: PRECONDICIÓN NO DISPONIBLE.** No existían
+  simultáneamente admin activo, dos vendedoras activas, agendadora activa y
+  programa activo sin modificar usuarios reales. La batería no pudo ejecutarse
+  y no se declara PASS, ni se infiere su resultado de los demás scripts.
+- **Actor inactivo: NO EJECUTADO — LIMITACIÓN ACEPTADA DE VALIDACIÓN REMOTA.**
+  No se modificaron usuarios reales para fabricar el caso. El contrato está
+  cubierto por implementación/tests estáticos, pero no por ejecución PostgreSQL
+  remota específica. No se declara PASS.
+- **4D.3B cerrada técnicamente con estas limitaciones explícitas.** Se acepta
+  no ejecutar la prueba remota de actor inactivo ni fabricar las precondiciones
+  faltantes de Script 5 mediante creación, desactivación o modificación de
+  usuarios reales. No se deben alterar identidades reales ni datos legítimos
+  exclusivamente para satisfacer una prueba de validación. Ambas limitaciones
+  quedan aceptadas y documentadas; su aceptación no equivale a PASS.
+
+El contrato de autorización descrito arriba permanece como contrato de
+implementación; no constituye evidencia de ejecución de la batería no ejecutada.
+Esto no cierra toda 4D.3: Express/backend HTTP, frontend API y UI de resultados
+corresponden a fases posteriores.
+
+**Cierre técnico y documental de 4D.3B: APROBADO PARA STAGING**, con las
+limitaciones de validación remota anteriores aceptadas explícitamente.
