@@ -342,8 +342,9 @@ por el usuario. Validación local mediante suite backend y auditoría estática;
 validación PostgreSQL remota mediante fixtures sintéticos, atomicidad inducida
 y concurrencia real en dos sesiones, con cleanup y cero residuos.
 No se modifican las migraciones aplicadas de creación/reprogramación.
-**4D.2 completa NO está terminada**: quedan las capas de cancelación Express,
-frontend API/UI y E2E de la funcionalidad completa; este cierre es PostgreSQL + RPC.
+Este cierre histórico correspondió a PostgreSQL + RPC; en ese momento faltaban
+Express, frontend API/UI y E2E. Estado actual: **4D.2B CERRADA Y PUBLICADA**,
+commit `7811761`. El cierre integrado posterior se registra al final en 4D.2F.
 
 ### Contrato y permisos
 
@@ -601,10 +602,11 @@ temporal no forma parte del código de producción ni se incorpora al repositori
 
 ## 4D.2C — Backend Express de cancelación — 2026-10-16
 
-Implementado localmente y pendiente de revisión final, staging, commit y push:
-`PATCH /api/admin/meetings/:id/cancel`. **4D.2 completa sigue pendiente**:
-faltan frontend API, frontend UI y E2E completo de cancelación. No se modifican
-PostgreSQL, migraciones, frontend ni los middleware globales.
+Estado actual: **4D.2C CERRADA Y PUBLICADA**, commit `42a7b39`,
+con `PATCH /api/admin/meetings/:id/cancel`. El registro siguiente conserva la
+implementación y validación anteriores a su publicación; entonces faltaban
+frontend API/UI y E2E, cuyo cierre posterior se registra en 4D.2F.
+Esta subfase no modificó PostgreSQL, migraciones, frontend ni middleware globales.
 
 ### Arquitectura y autorización
 
@@ -777,6 +779,90 @@ Ejecuciones con loopback habilitado por el EACCES del sandbox ya constatado:
 631 tests, 631 pass, 0 fail, 0 cancelados/omitidos, 1859.5401 ms.
 Supabase simulado; la conversión se comprueba localmente con Node/Intl y los
 contratos SQL se inspeccionan, sin ejecución PostgreSQL ni validación remota nueva.
-No cambian hashes, idempotencia, autorización, RPCs ni migraciones. El P2 queda
-corregido localmente, pendiente de reauditoría final. Frontend API/UI y E2E
-completo siguen pendientes. Después de la suite solo cambió documentación.
+No cambiaron hashes, idempotencia, autorización, RPCs ni migraciones. En ese
+momento el P2 quedó corregido localmente para reauditoría y faltaban frontend
+API/UI y E2E. La publicación y el cierre posteriores se registran a continuación.
+Después de aquella suite solo cambió documentación.
+
+## 4D.2F — Cierre integrado de cancelación — 2026-10-20
+
+Estado técnico: **4D.2F CERRADO**. La **FASE 4D.2 — CANCELACIÓN DE REUNIONES**
+queda cerrada tras publicar esta documentación. Las capas previas están cerradas
+y publicadas:
+
+| Subfase | Commit | Entrega |
+|---|---|---|
+| 4D.2B | `7811761` | Flujo transaccional PostgreSQL/RPC |
+| 4D.2C | `42a7b39` | Cancelación de reuniones en Express |
+| 4D.2D | `6fa7fc1` | API frontend de cancelación |
+| 4D.2E | `c89363d` | Cancelación desde Agenda |
+
+La evidencia final fue ejecutada por **usuario + ChatGPT** y reportada para
+este cierre; no se atribuye su ejecución a Codex. El commit base evaluado fue
+`c89363d`. Codex solo actualiza estos documentos, sin repetir pruebas ni
+operaciones remotas. El procedimiento y la evidencia UI se detallan en
+[la sección 4D.2F frontend](../../frontend/docs/CRM_PHASE_4D_API.md).
+
+### Validación final e integración real
+
+Resultados finales reportados: backend `npm test`, **631 tests, 631 pass**;
+frontend `npm run test:crm`, **784 tests, 784 pass**. Ambas suites terminaron
+con **0 fail, 0 cancelled, 0 skipped y 0 todo**. `npm run build` frontend
+terminó correctamente: **125 modules transformed, built in 1.55s**.
+Después, git status --short no produjo salida y HEAD/origin/migracion-vite
+estaban en `c89363d`. Estos resultados preceden a la edición documental.
+
+El happy path real previo conectó navegador, API frontend, PATCH, Express,
+repository, RPC y PostgreSQL: scheduled → cancelled, refetch y badge Cancelada.
+Su cleanup dejó consultation/meeting/idempotency/audit en 0/0/0/0.
+
+El E2E adicional utilizó el fixture `TEST_ONLY_4D2F_c1fa6c4c`,
+consultation `49ec9e8d-5ffe-4ee3-b8bf-2564fe88f48a` y meeting
+`61d75dc9-2868-43a2-92a3-7cd354b442e2`. Partió de converted/scheduled,
+versión 1, 10:00 local, sin auditoría ni idempotencia. A mantuvo abierto
+Cancelar con versión 1; B reprogramó mediante UI real a las 11:00 del mismo día.
+DB confirmó scheduled/version 2, una auditoría y una idempotencia de
+reprogramación, y cero registros de cancelación.
+
+El intento posterior de A produjo **HTTP 409 / MEETING_VERSION_CONFLICT** real.
+La UI cerró el diálogo, informó el conflicto y refrescó el snapshot a
+Programada/11:00. Inmediatamente después, DB conservó consultation converted,
+meeting scheduled/version 2, reschedule_audit_count=1,
+reschedule_idempotency_count=1, cancel_audit_count=0 y
+cancel_idempotency_count=0. No persistió una cancelación rechazada.
+El checklist manual de diálogo, validación nativa, Escape, foco, reapertura,
+fondo inert, exclusión de diálogos y uso móvil aproximado de 390 px fue aprobado.
+
+### Estado posterior y cleanup verificado
+
+Después de esa comprobación hubo una cancelación válida independiente con
+reason=other: scheduled/version 2 → cancelled/version 3. El estado final tenía
+una auditoría meeting_rescheduled y una meeting_cancelled, y una idempotencia
+reschedule_consultation_meeting y una cancel_consultation_meeting.
+No debe atribuirse esa escritura al intento stale previamente rechazado.
+
+El primer cleanup se detuvo correctamente al encontrar cancelled/v3 cuando
+esperaba scheduled/v2. Tras auditar el estado se corrigió el harness/manual
+cleanup, incluida su suposición incorrecta sobre metadata:
+
+- meeting_rescheduled contiene oldScheduledAt, newScheduledAt, oldTimeZone,
+  newTimeZone, oldDurationMinutes, newDurationMinutes, oldMode, newMode,
+  previousVersion y newVersion; **no contiene consultationRequestId**.
+- meeting_cancelled contiene consultationRequestId, previousStatus, newStatus,
+  previousVersion, newVersion y reason.
+
+Fue una corrección del procedimiento manual, no del producto ni de sus contratos.
+El cleanup final respetó idempotency_records → audit_events → meetings →
+consultation_requests, sin CASCADE, y terminó con COMMIT. La lectura post-COMMIT
+confirmó consultation_residue=0, meeting_residue=0, idempotency_residue=0 y
+audit_residue=0: **CERO RESIDUOS REMOTOS**.
+
+### Límites y cierre documental
+
+Se conserva la evidencia real de replay, locks, atomicidad y concurrencia de
+4D.2B, sin repetirla en 4D.2F. Año 10000 y fallos de red mantienen su cobertura
+controlada en tests, sin afirmar nuevas pruebas remotas de esos casos. El 409
+observado aquí fue MEETING_VERSION_CONFLICT; no se presenta como un nuevo E2E
+de MEETING_NOT_SCHEDULED ni cambia la precedencia status-before-version.
+No cambian endpoint, roles, reasons, hash, idempotencia, respuesta o errores.
+Solo resta publicar este cierre documental para declarar cerrada toda 4D.2.
