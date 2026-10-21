@@ -659,3 +659,114 @@ las pruebas de API/UI y el getter centinela cubren esos riesgos con condiciones
 controladas. No se afirma un nuevo E2E remoto de esos casos ni de
 MEETING_NOT_SCHEDULED. Se conservan los contratos, sus límites y la cronología
 de las validaciones anteriores.
+
+## 4D.3D — API frontend de resultados — 2026-10-21
+
+Implementación local sobre `0ce82a3`, pendiente de auditoría y publicación.
+Alcance: meetings.js, internal.js, crm-meetings-api.test.mjs y este documento.
+La UI pertenece a 4D.3E; no se modifica Agenda ni backend.
+
+### Comandos y transporte
+
+```js
+await completeMeeting({
+    meetingId, idempotencyKey, payload: { expectedVersion: 1 }, access, signal,
+});
+await markMeetingNoShow({
+    meetingId, idempotencyKey, payload: { expectedVersion: 1 }, access, signal,
+});
+```
+
+Son dos comandos públicos explícitos. El primero fija PATCH
+`/api/admin/meetings/:id/complete` y el segundo PATCH
+`/api/admin/meetings/:id/no-show`. No reciben un selector status.
+Signal es opcional; access.signal es obligatorio. Reutilizan patchInternal,
+Authorization Bearer, Content-Type application/json, Idempotency-Key,
+cache no-store, credentials omit, redirect error, timeout de 15 segundos y
+confirmación de sesión antes/después. Solo HTTP 200 es éxito.
+
+Options exige meetingId, idempotencyKey, payload y access como datos propios;
+solo admite signal adicional. dataFields rechaza extras, símbolos, accesores
+y requeridos heredados sin ejecutar getters de options/payload. Conserva la
+política histórica de prototipos personalizados con campos propios válidos.
+UUID completos sin trim/coerción se normalizan a lowercase. Payload contiene
+exclusivamente expectedVersion, entero 1..2147483647 sin coerción.
+La ruta, clave y copia del payload se capturan antes de esperar Auth;
+no se modifican los objetos originales y se admiten inputs congelados.
+
+No hay GET previo, validación local de ownership, rol de negocio, estado,
+consulta converted, inicio/fin o elegibilidad temporal. Express/PostgreSQL
+conservan autoridad; los roles del backend para estos comandos son admin y
+vendedora.
+
+### Idempotencia y respuesta
+
+La clave es obligatoria y proviene del caller, que puede usar
+createMeetingIdempotencyKey una vez y conservar el comando en memoria.
+Ante incertidumbre, el retry manual usa la misma función, meeting, versión y
+clave. La API no genera claves, no reintenta ni mantiene caché o persistencia.
+La misma UUID puede transmitirse a ambos comandos sin cambiar sus endpoints.
+
+El retorno proyecta únicamente id, consultationRequestId, scheduledAt,
+timeZone, durationMinutes, mode, status y version, en un objeto independiente.
+Exige UUID válidos, id correspondiente al solicitado, isTimestamp(..., true),
+zona string no vacía, duración entera 1..2147483647, modo online/phone/office
+y versión 2..2147483647. Complete exige completed; no-show exige no_show.
+No compara la versión con expectedVersion + 1 para admitir snapshots de replay.
+Conserva literalmente offsets, microsegundos y año 10000 admitido históricamente,
+sin Date ni reconstrucción de Agenda; descarta extras del servidor.
+
+### Errores contextuales
+
+internal.js selecciona una whitelist separada solo para PATCH sobre las dos
+rutas exactas, con UUID completo. No amplía la whitelist histórica ni cambia
+GET, POST, reprogramación o cancelación. En particular, cancelación continúa
+omitiendo domainCode en 403/500.
+
+| HTTP/caso | error.code y error.message | error.domainCode |
+|---|---|---|
+| 400 | operation | Omitido |
+| 401 | expired | Omitido |
+| 403 | forbidden | ACTOR_NOT_ALLOWED |
+| 404 | operation | MEETING_NOT_FOUND |
+| 409 | operation | MEETING_NOT_SCHEDULED, MEETING_VERSION_CONFLICT, CONSULTATION_STATE_INCONSISTENT o IDEMPOTENCY_KEY_REUSED |
+| 422 | operation | MEETING_TOO_EARLY |
+| 500 | server | WORKFLOW_ISOLATION_NOT_SUPPORTED o INTERNAL_ERROR |
+| Red / timeout / contexto invalidado | network / timeout / stale | Omitido |
+| JSON de éxito ilegible, contrato inválido u otro 2xx | invalid_response | Omitido |
+
+Dominio opcional: solo se conserva si coincide el código permitido con el HTTP
+real. La extracción usa descriptores propios; no consulta herencia ni ejecuta
+getters de error/code. Mensajes, details, hint, cause, stack y campos arbitrarios
+remotos no se propagan. JSON de error ilegible conserva la clasificación HTTP.
+Se preserva status cuando el transporte crea InternalMutationError; AuthError
+y validación local no inventan status HTTP. Una sesión obsoleta descarta incluso
+errores tardíos 401/403/500. MEETING_TOO_EARLY queda disponible para la futura UI.
+
+### Validación local y límites
+
+Baseline de la auditoría previa: API 556/556 y CRM 784/784, sin fallos.
+Se añadieron 305 pruebas en crm-meetings-api.test.mjs con expectativas
+independientes para ambos comandos: request exacto, límites/BigInt, descriptores,
+captura antes de Auth, proyección, precisión temporal, respuestas corruptas,
+whitelist/HTTP, sanitización, red, abort/timeout, sesión/token obsoletos,
+retry explícito, separación de comandos y aislamiento de rutas históricas.
+El fixture de resultados falla si se intenta generar una UUID automáticamente.
+Las pruebas históricas permanecen intactas salvo permitir inyección opcional
+de crypto en el fixture compartido; su valor predeterminado sigue siendo webcrypto.
+
+Targeted ejecutado desde frontend:
+`node --experimental-vm-modules --test --test-reporter=tap tests/crm-meetings-api.test.mjs`:
+**861 tests, 861 pass, 0 fail**, 8425.7045 ms;
+cero cancelados, omitidos o pendientes.
+
+Suite completa posterior: `npm run test:crm`: **1089 tests, 1089 pass, 0 fail**,
+24888.5919 ms; cero cancelados, omitidos o pendientes. Incremento: 305 pruebas
+sobre ambas baselines. Pasan las regresiones de Agenda GET, creación POST,
+rescheduleMeeting, cancelMeeting, Auth y UI histórica.
+
+Auth/API reales con SDK/fetch simulados: no demuestran locks, concurrencia,
+transacciones ni idempotencia persistida en DB real. No hubo E2E remoto de
+4D.3D; el E2E mutante real permanece diferido al cierre consolidado de Fase 4.
+No se ejecutaron git add, commit, push, db push, SQL ni HTTP remotos, ni se
+leyeron secretos. No se modificaron UI, backend, migraciones o dependencias.

@@ -64,6 +64,15 @@ const patchDomainCodes = new Map([
     ['MEETING_NOT_IN_FUTURE', 422], ['INVALID_TIME_ZONE', 422], ['INVALID_LOCAL_TIME', 422],
 ]);
 
+// Política exclusiva de resultados; no ampliar los contratos históricos PATCH.
+const outcomePath = /^\/api\/admin\/meetings\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(?:complete|no-show)$/i;
+const outcomeDomainCodes = new Map([
+    ['ACTOR_NOT_ALLOWED', 403], ['MEETING_NOT_FOUND', 404],
+    ['MEETING_NOT_SCHEDULED', 409], ['MEETING_VERSION_CONFLICT', 409],
+    ['CONSULTATION_STATE_INCONSISTENT', 409], ['IDEMPOTENCY_KEY_REUSED', 409],
+    ['MEETING_TOO_EARLY', 422], ['WORKFLOW_ISOLATION_NOT_SUPPORTED', 500], ['INTERNAL_ERROR', 500],
+]);
+
 // Solo datos propios; no ejecutar accesores ni consultar valores heredados.
 function ownData(value, key) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
@@ -84,6 +93,8 @@ function mutateInternal(path, access, signal, payload, idempotencyKey, method, s
 
 // No conserva tokens, no reintenta ni implementa otro refresh/guard.
 async function requestInternal(path, access, signal, mutation) {
+    const isOutcome = mutation?.method === 'PATCH' && outcomePath.test(path);
+    const domainCodes = isOutcome ? outcomeDomainCodes : patchDomainCodes;
     const requestSignal = AbortSignal.any([access.signal, signal, AbortSignal.timeout(15000)]);
     const assertCurrent = () => {
         if (!access.isCurrent() || signal.aborted || access.signal.aborted) throw new AuthError('stale');
@@ -131,11 +142,12 @@ async function requestInternal(path, access, signal, mutation) {
                 failure = new InternalMutationError('invalid_response', response.status);
             }
         }
-        if (mutation?.method === 'PATCH' && [400, 404, 409, 422].includes(response.status)) {
+        if (mutation?.method === 'PATCH' &&
+            (isOutcome ? [403, 404, 409, 422, 500] : [400, 404, 409, 422]).includes(response.status)) {
             try {
                 const errorBody = await waitFor(response.json(), requestSignal);
                 const candidate = ownData(ownData(errorBody, 'error'), 'code');
-                if (typeof candidate === 'string' && patchDomainCodes.get(candidate) === response.status) domainCode = candidate;
+                if (typeof candidate === 'string' && domainCodes.get(candidate) === response.status) domainCode = candidate;
             } catch {
                 // Un error HTTP con JSON ilegible conserva su clasificación por status.
                 if (requestSignal.aborted) throw new AuthError('timeout');

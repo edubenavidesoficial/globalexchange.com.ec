@@ -37,7 +37,7 @@ async function fixture(options = {}) {
     let tail = Promise.resolve();
     const guard = new AbortController();
     const external = new AbortController();
-    const realm = vm.createContext({ URLSearchParams, crypto: webcrypto, AbortController,
+    const realm = vm.createContext({ URLSearchParams, crypto: options.crypto ?? webcrypto, AbortController,
         AbortSignal: new Proxy(AbortSignal, { get: (target, property) => property === 'timeout' ? ms => {
             assert.equal(ms, 15000); return AbortSignal.timeout(options.shortTimeout ? 30 : ms);
         } : Reflect.get(target, property) }),
@@ -768,3 +768,255 @@ test('4D.2D timeout y retry manual conservan comando', async () => {
     assert.equal(f.state.requests.length, 2); assert.equal(f.state.requests[0].body, f.state.requests[1].body);
     assert.equal(f.state.requests[0].headers['Idempotency-Key'], f.state.requests[1].headers['Idempotency-Key']);
 });
+
+// 4D.3D: expectativas literales, API/Auth reales y transporte simulado.
+const outcomeCases = [
+    ['completeMeeting', '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/complete', 'completed'],
+    ['markMeetingNoShow', '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/no-show', 'no_show'],
+];
+const outcomeResult = { id, consultationRequestId: key, scheduledAt: '2028-02-29T10:30:00.123456-05:00',
+    timeZone: 'America/Guayaquil', durationMinutes: 45, mode: 'online', version: 2 };
+async function outcomeFixture(name, status, options = {}) {
+    const f = await fixture({ status: 200, response: { data: { ...outcomeResult, status } },
+        crypto: { randomUUID() { assert.fail('Outcome must never generate keys'); } }, ...options });
+    f.outcome = (overrides = {}) => f.api[name]({ meetingId: id, idempotencyKey: key,
+        payload: { expectedVersion: 1 }, access: f.access, signal: f.external.signal, ...overrides });
+    return f;
+}
+for (const [name, route, status] of outcomeCases) {
+    test(`4D.3D ${name}: export, request exacto e inputs congelados`, async () => {
+        const f = await outcomeFixture(name, status);
+        assert.equal(typeof f.api[name], 'function');
+        const payload = Object.freeze({ expectedVersion: 1 });
+        const options = Object.freeze({ meetingId: id.toUpperCase(), idempotencyKey: key.toUpperCase(), payload, access: f.access });
+        assert.deepEqual(clone(await f.api[name](options)), { ...outcomeResult, status });
+        assert.equal(options.meetingId, id.toUpperCase()); assert.equal(options.idempotencyKey, key.toUpperCase());
+        assert.deepEqual(payload, { expectedVersion: 1 });
+        assert.equal(f.state.requests.length, 1); assert.equal(f.state.reads, 2);
+        const r = f.state.requests[0];
+        assert.equal(r.url, route); assert.equal(r.method, 'PATCH');
+        assert.deepEqual(clone(r.headers), { Authorization: 'Bearer synthetic-A',
+            'Content-Type': 'application/json', 'Idempotency-Key': key });
+        assert.equal(r.body, '{"expectedVersion":1}');
+        assert.equal(r.cache, 'no-store'); assert.equal(r.credentials, 'omit'); assert.equal(r.redirect, 'error');
+        assert.ok(r.signal instanceof AbortSignal);
+    });
+    for (const field of ['meetingId', 'idempotencyKey']) {
+        for (const [i, value] of [undefined, null, true, 1, '', 'bad', id.slice(1), ' '+id, id+' ', id+'\n'].entries()) {
+            test(`4D.3D ${name}: UUID ${field}/${i}`, async () => {
+                const f = await outcomeFixture(name, status);
+                await assert.rejects(f.outcome({ [field]: value }), { code: 'invalid_input' });
+                assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+            });
+        }
+    }
+    for (const [i, expectedVersion] of [undefined, 0, -1, 1.5, '1', true, null, 2147483648, NaN, Infinity, -Infinity, 1n].entries()) {
+        test(`4D.3D ${name}: versión inválida/${i}`, async () => {
+            const f = await outcomeFixture(name, status);
+            await assert.rejects(f.outcome({ payload: { expectedVersion } }), { code: 'invalid_input' });
+            assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+        });
+    }
+    for (const expectedVersion of [1, 2147483647]) test(`4D.3D ${name}: límite ${expectedVersion} sin comparar versión de replay`, async () => {
+        const f = await outcomeFixture(name, status);
+        assert.equal((await f.outcome({ payload: { expectedVersion } })).version, 2);
+        assert.deepEqual(JSON.parse(f.state.requests[0].body), { expectedVersion });
+    });
+    for (const value of [undefined, null, [], true, 1, 'text', {}]) test(`4D.3D ${name}: options/payload incompletos ${JSON.stringify(value)}`, async () => {
+        const f = await outcomeFixture(name, status);
+        await assert.rejects(f.api[name](value), { code: 'invalid_input' });
+        await assert.rejects(f.outcome({ payload: value }), { code: 'invalid_input' });
+        assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+    });
+    for (const field of ['status', 'reason', 'notes', 'actor', 'assignedTo', 'requestHash', 'idempotencyKey', '__proto__', 'constructor']) {
+        test(`4D.3D ${name}: extra ${field}`, async () => {
+            const f = await outcomeFixture(name, status);
+            await assert.rejects(f.outcome({ payload: { expectedVersion: 1, [field]: 'PRIVATE' } }), { code: 'invalid_input' });
+            if (field !== 'idempotencyKey') await assert.rejects(f.outcome({ [field]: 'PRIVATE' }), { code: 'invalid_input' });
+            assert.equal(f.state.requests.length, 0);
+        });
+    }
+    test(`4D.3D ${name}: descriptores, símbolos, herencia y prototipo histórico`, async () => {
+        const f = await outcomeFixture(name, status); let reads = 0;
+        const input = { meetingId: id, idempotencyKey: key, payload: { expectedVersion: 1 }, access: f.access };
+        for (const field of Object.keys(input)) {
+            const getter = Object.defineProperty({ ...input }, field, { get() { reads++; return input[field]; } });
+            await assert.rejects(f.api[name](getter), { code: 'invalid_input' });
+            const missing = { ...input }; delete missing[field];
+            await assert.rejects(f.api[name](missing), { code: 'invalid_input' });
+        }
+        await assert.rejects(f.api[name](Object.create(input)), { code: 'invalid_input' });
+        await assert.rejects(f.outcome({ [Symbol()]: true }), { code: 'invalid_input' });
+        for (const payload of [Object.create({ expectedVersion: 1 }), { expectedVersion: 1, [Symbol()]: true },
+            Object.defineProperty({}, 'expectedVersion', { get() { reads++; return 1; } })]) {
+            await assert.rejects(f.outcome({ payload }), { code: 'invalid_input' });
+        }
+        assert.equal(reads, 0); assert.equal(f.state.requests.length, 0);
+        await f.api[name](Object.assign(Object.create({ actor: 'PRIVATE' }), input, {
+            payload: Object.assign(Object.create({ status: 'PRIVATE' }), { expectedVersion: 1 }),
+        }));
+        assert.equal(f.state.requests[0].body, '{"expectedVersion":1}');
+    });
+    for (const override of [{ signal: null }, { signal: {} }, { access: null }, { access: {} }]) test(`4D.3D ${name}: access/signal inválido ${JSON.stringify(override)}`, async () => {
+        const f = await outcomeFixture(name, status);
+        await assert.rejects(f.outcome(override), { code: 'invalid_input' }); assert.equal(f.state.requests.length, 0);
+    });
+    test(`4D.3D ${name}: captura anterior a Auth`, async () => {
+        const f = await outcomeFixture(name, status, { holdRead: 1 });
+        const payload = { expectedVersion: 1 };
+        const options = { meetingId: id, idempotencyKey: key, payload, access: f.access };
+        const pending = f.api[name](options); await f.held;
+        payload.expectedVersion = 99; options.meetingId = key; options.idempotencyKey = id;
+        f.release.resolve(); await pending;
+        assert.equal(f.state.requests[0].url, route); assert.equal(f.state.requests[0].headers['Idempotency-Key'], key);
+        assert.equal(f.state.requests[0].body, '{"expectedVersion":1}');
+    });
+    for (const scheduledAt of ['2028-02-29T10:30:00.123456-05:00', '10000-01-01T04:30:00.123456789+00:00']) {
+        test(`4D.3D ${name}: ocho campos, precisión y copia ${scheduledAt}`, async () => {
+            const data = { ...outcomeResult, scheduledAt, status, notes: 'PRIVATE', assignedTo: {}, audit: 'PRIVATE' };
+            const f = await outcomeFixture(name, status, { response: { data, secret: 'PRIVATE' } });
+            const actual = await f.outcome();
+            assert.deepEqual(clone(actual), { ...outcomeResult, scheduledAt, status });
+            assert.equal(Object.keys(actual).length, 8);
+            actual.timeZone = 'changed'; assert.equal(data.timeZone, 'America/Guayaquil');
+        });
+    }
+    for (const mode of ['online', 'phone', 'office']) test(`4D.3D ${name}: límites response y ${mode}`, async () => {
+        const data = { ...outcomeResult, status, mode, version: 2147483647, durationMinutes: 2147483647 };
+        const f = await outcomeFixture(name, status, { response: { data } });
+        assert.deepEqual(clone(await f.outcome()), data);
+    });
+    for (const response of [null, [], {}, { data: null }, { data: [] }]) test(`4D.3D ${name}: envelope inválido ${JSON.stringify(response)}`, async () => {
+        const f = await outcomeFixture(name, status, { response });
+        await assert.rejects(f.outcome(), { code: 'invalid_response' });
+    });
+    for (const field of [...Object.keys(outcomeResult), 'status']) test(`4D.3D ${name}: response requiere ${field}`, async () => {
+        const data = { ...outcomeResult, status }; delete data[field];
+        const f = await outcomeFixture(name, status, { response: { data } });
+        await assert.rejects(f.outcome(), { code: 'invalid_response' });
+    });
+    for (const [field, values] of Object.entries({ id: [key, 'bad'], consultationRequestId: ['bad'],
+        scheduledAt: ['bad', '10001-01-01T00:00:00Z'], timeZone: ['', '  ', null],
+        durationMinutes: [0, -1, 1.5, '45', 2147483648], mode: ['unknown'],
+        status: [status === 'completed' ? 'no_show' : 'completed', 'unknown', 'scheduled'],
+        version: [1, 2147483648, 2.5, '2'] })) {
+        for (const [i, value] of values.entries()) test(`4D.3D ${name}: response corrupta ${field}/${i}`, async () => {
+            const f = await outcomeFixture(name, status, { response: { data: { ...outcomeResult, status, [field]: value } } });
+            await assert.rejects(f.outcome(), { code: 'invalid_response' });
+        });
+    }
+    const domains = [
+        [403, 'ACTOR_NOT_ALLOWED', 'forbidden'], [404, 'MEETING_NOT_FOUND', 'operation'],
+        ...['MEETING_NOT_SCHEDULED', 'MEETING_VERSION_CONFLICT', 'CONSULTATION_STATE_INCONSISTENT', 'IDEMPOTENCY_KEY_REUSED'].map(c => [409, c, 'operation']),
+        [422, 'MEETING_TOO_EARLY', 'operation'],
+        ...['WORKFLOW_ISOLATION_NOT_SUPPORTED', 'INTERNAL_ERROR'].map(c => [500, c, 'server']),
+    ];
+    for (const [http, domainCode, code] of domains) test(`4D.3D ${name}: dominio ${http}/${domainCode}`, async () => {
+        const f = await outcomeFixture(name, status, { status: http, response: { error: { code: domainCode,
+            message: 'PRIVATE', details: 'PRIVATE', hint: 'PRIVATE', cause: 'PRIVATE', stack: 'PRIVATE', arbitrary: 'PRIVATE' } } });
+        await assert.rejects(f.outcome(), e => {
+            assert.equal(e.code, code); assert.equal(e.message, code); assert.equal(e.status, http); assert.equal(e.domainCode, domainCode);
+            assert.deepEqual(Object.keys(e).sort(), ['code', 'domainCode', 'status']);
+            assert.ok(!JSON.stringify(e).includes('PRIVATE')); return true;
+        });
+        assert.equal(f.state.requests.length, 1); assert.equal(f.state.logout, 0); assert.equal(f.state.refresh, 0);
+    });
+    for (const [http, domainCode, code] of [[409, 'ACTOR_NOT_ALLOWED', 'operation'], [403, 'MEETING_VERSION_CONFLICT', 'forbidden'],
+        [500, 'MEETING_TOO_EARLY', 'server'], [422, 'INTERNAL_ERROR', 'operation'], [422, 'MEETING_NOT_IN_FUTURE', 'operation'],
+        [409, 'UNKNOWN', 'operation'], [400, 'INVALID_REQUEST', 'operation'], [401, 'ACTOR_NOT_ALLOWED', 'expired']]) {
+        test(`4D.3D ${name}: dominio omitido ${http}/${domainCode}`, async () => {
+            const f = await outcomeFixture(name, status, { status: http, response: { error: { code: domainCode, message: 'PRIVATE' } } });
+            await assert.rejects(f.outcome(), e => e.code === code && e.message === code &&
+                e.status === (http === 401 ? undefined : http) && !Object.hasOwn(e, 'domainCode') && !JSON.stringify(e).includes('PRIVATE'));
+            assert.equal(f.state.requests.length, 1); assert.equal(f.state.logout, 0);
+        });
+    }
+    test(`4D.3D ${name}: dominio propio sin getters`, async () => {
+        const f = await outcomeFixture(name, status, { status: 403 }); let reads = 0;
+        for (const response of [Object.create({ error: { code: 'ACTOR_NOT_ALLOWED' } }),
+            { error: Object.create({ code: 'ACTOR_NOT_ALLOWED' }) },
+            Object.defineProperty({}, 'error', { get() { reads++; return {}; } }),
+            { error: Object.defineProperty({}, 'code', { get() { reads++; return 'ACTOR_NOT_ALLOWED'; } }) },
+            ...['toString', 'constructor', '__proto__', {}, 1].map(code => ({ error: { code } }))]) {
+            f.state.response = response;
+            await assert.rejects(f.outcome(), e => e.code === 'forbidden' && !Object.hasOwn(e, 'domainCode'));
+        }
+        assert.equal(reads, 0);
+    });
+    for (const http of [403, 409, 422, 500]) test(`4D.3D ${name}: error JSON ilegible ${http}`, async () => {
+        const f = await outcomeFixture(name, status, { status: http, badJSON: true });
+        await assert.rejects(f.outcome(), { code: http === 500 ? 'server' : http === 403 ? 'forbidden' : 'operation', status: http });
+    });
+    for (const http of [201, 202, 204, 206]) test(`4D.3D ${name}: otro 2xx ${http} sin leer body`, async () => {
+        const f = await outcomeFixture(name, status, { status: http, holdBody: true });
+        await assert.rejects(bounded(f.outcome()), { code: 'invalid_response', status: http });
+    });
+    for (const [options, code] of [[{ network: true }, 'network'], [{ badJSON: true }, 'invalid_response']]) {
+        test(`4D.3D ${name}: ${code} sin retry automático`, async () => {
+            const f = await outcomeFixture(name, status, options);
+            await assert.rejects(f.outcome(), e => e.code === code && e.message === code && !JSON.stringify(e).includes('PRIVATE'));
+            assert.equal(f.state.requests.length, 1);
+        });
+    }
+    for (const hold of [{ holdRead: 1 }, { holdRead: 2 }, { holdFetch: true }, { holdBody: true },
+        { holdBody: true, status: 403 }, { holdBody: true, status: 500 }]) {
+        for (const abort of [false, true]) test(`4D.3D ${name}: ${abort ? 'abort' : 'timeout'} ${JSON.stringify(hold)}`, async () => {
+            const f = await outcomeFixture(name, status, { ...hold, shortTimeout: true });
+            const pending = f.outcome().catch(e => e.code); await f.held;
+            if (abort) f.external.abort();
+            assert.equal(await bounded(pending), abort ? 'stale' : 'timeout');
+            f.release.resolve(); assert.ok(f.state.requests.length <= 1); assert.equal(f.state.logout, 0);
+        });
+    }
+    for (const change of ['account', 'token', 'current', 'guard', 'caller']) test(`4D.3D ${name}: respuesta tardía ${change}`, async () => {
+        const f = await outcomeFixture(name, status, { holdFetch: true });
+        const pending = f.outcome().catch(e => e.code); await f.held;
+        if (change === 'account') f.state.session = B;
+        if (change === 'token') f.state.session = { ...A, access_token: 'rotated' };
+        if (change === 'current') f.state.current = false;
+        if (change === 'guard') f.guard.abort();
+        if (change === 'caller') f.external.abort();
+        f.release.resolve(); assert.equal(await pending, 'stale'); assert.equal(f.state.requests.length, 1);
+    });
+    for (const http of [401, 403, 500]) test(`4D.3D ${name}: error tardío ${http} descarta dominio`, async () => {
+        const f = await outcomeFixture(name, status, { status: http, holdFetch: true, response: { error: { code: http === 500 ? 'INTERNAL_ERROR' : 'ACTOR_NOT_ALLOWED' } } });
+        const pending = f.outcome().catch(e => e); await f.held; f.state.session = B; f.release.resolve();
+        const error = await pending; assert.equal(error.code, 'stale'); assert.equal(error.domainCode, undefined);
+    });
+    test(`4D.3D ${name}: abort previo evita sesión y fetch`, async () => {
+        const f = await outcomeFixture(name, status); f.external.abort();
+        await assert.rejects(f.outcome(), { code: 'stale' }); assert.equal(f.state.reads, 0); assert.equal(f.state.requests.length, 0);
+    });
+    test(`4D.3D ${name}: retry explícito tras red conserva ruta/key/body sin generar UUID`, async () => {
+        const f = await outcomeFixture(name, status, { network: true });
+        await assert.rejects(f.outcome(), { code: 'network' }); assert.equal(f.state.requests.length, 1);
+        f.state.network = false; await f.outcome(); assert.equal(f.state.requests.length, 2);
+        for (const r of f.state.requests) {
+            assert.equal(r.url, route); assert.equal(r.body, '{"expectedVersion":1}'); assert.equal(r.headers['Idempotency-Key'], key);
+        }
+    });
+}
+test('4D.3D misma reunión/version/key mantiene comandos separados', async () => {
+    const f = await outcomeFixture('completeMeeting', 'completed');
+    const input = { meetingId: id, idempotencyKey: key, payload: { expectedVersion: 1 }, access: f.access };
+    await f.api.completeMeeting(input); f.state.response = { data: { ...outcomeResult, status: 'no_show' } };
+    await f.api.markMeetingNoShow(input);
+    assert.deepEqual(f.state.requests.map(r => r.url), [
+        '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/complete',
+        '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/no-show',
+    ]);
+    assert.equal(f.state.requests[0].body, f.state.requests[1].body);
+    assert.equal(f.state.requests[0].headers['Idempotency-Key'], f.state.requests[1].headers['Idempotency-Key']);
+});
+for (const route of ['/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/cancel',
+    '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/schedule',
+    '/api/admin/meetings/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/complete/extra',
+    '/api/admin/meetings/not-a-uuid/complete']) {
+    for (const [http, domain, code] of [[403, 'ACTOR_NOT_ALLOWED', 'forbidden'], [500, 'INTERNAL_ERROR', 'server'], [422, 'MEETING_TOO_EARLY', 'operation']]) {
+        test(`4D.3D política contextual no afecta ${route}/${http}`, async () => {
+            const f = await fixture({ status: http, response: { error: { code: domain } } });
+            await assert.rejects(f.internal.patchInternal(route, f.access, f.external.signal, { expectedVersion: 1 }, key),
+                e => e.code === code && e.status === http && !Object.hasOwn(e, 'domainCode'));
+        });
+    }
+}

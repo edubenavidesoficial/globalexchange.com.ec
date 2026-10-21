@@ -148,6 +148,47 @@ const cancellationFields = ['expectedVersion', 'reason'];
 const cancellationReasons = new Set(['client_request', 'staff_unavailable', 'duplicate', 'administrative', 'other']);
 const pgPositiveInteger = value => Number.isInteger(value) && value > 0 && value <= 2147483647;
 
+const outcomeFields = new Set(['expectedVersion']);
+
+// Comandos públicos separados; endpoint y estado esperado nunca vienen del caller.
+export async function completeMeeting(options) {
+    return recordMeetingOutcome(options, 'complete', 'completed');
+}
+
+export async function markMeetingNoShow(options) {
+    return recordMeetingOutcome(options, 'no-show', 'no_show');
+}
+
+async function recordMeetingOutcome(options, command, expectedStatus) {
+    const input = dataFields(options, rescheduleOptions, ['meetingId', 'idempotencyKey', 'payload', 'access']);
+    const payload = input && dataFields(input.payload, outcomeFields, ['expectedVersion']);
+    const access = input?.access;
+    if (!input || !isUUID(input.meetingId) || !isUUID(input.idempotencyKey) || !payload ||
+        !pgPositiveInteger(payload.expectedVersion) ||
+        !isObject(access) || !isObject(access.session) || !nonBlank(access.session.user?.id) ||
+        !nonBlank(access.session.access_token) || typeof access.isCurrent !== 'function' ||
+        !(access.signal instanceof AbortSignal) || (input.signal !== undefined && !(input.signal instanceof AbortSignal))) {
+        throw new InternalMutationError('invalid_input');
+    }
+    // Capturar antes de Auth; no generar claves ni consultar estado/tiempo locales.
+    const meetingId = input.meetingId.toLowerCase();
+    const idempotencyKey = input.idempotencyKey.toLowerCase();
+    const body = { expectedVersion: payload.expectedVersion };
+    const response = await patchInternal(`/api/admin/meetings/${meetingId}/${command}`,
+        access, input.signal ?? new AbortController().signal, body, idempotencyKey);
+    const meeting = response?.data;
+    if (!isObject(response) || !isObject(meeting) || !isUUID(meeting.id) ||
+        meeting.id.toLowerCase() !== meetingId || !isUUID(meeting.consultationRequestId) ||
+        !isTimestamp(meeting.scheduledAt, true) || !nonBlank(meeting.timeZone) ||
+        !pgPositiveInteger(meeting.durationMinutes) || !['online', 'phone', 'office'].includes(meeting.mode) ||
+        meeting.status !== expectedStatus || !pgPositiveInteger(meeting.version) || meeting.version < 2) {
+        throw new InternalMutationError('invalid_response');
+    }
+    return { id: meeting.id, consultationRequestId: meeting.consultationRequestId,
+        scheduledAt: meeting.scheduledAt, timeZone: meeting.timeZone,
+        durationMinutes: meeting.durationMinutes, mode: meeting.mode, status: meeting.status, version: meeting.version };
+}
+
 export async function cancelMeeting(options) {
     const input = dataFields(options, rescheduleOptions, ['meetingId', 'idempotencyKey', 'payload', 'access']);
     const payload = input && dataFields(input.payload, new Set(cancellationFields), cancellationFields);
