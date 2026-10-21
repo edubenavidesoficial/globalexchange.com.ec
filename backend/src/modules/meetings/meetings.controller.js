@@ -1,4 +1,4 @@
-import { cancelMeeting, confirmMeeting, listMeetings, rescheduleMeeting } from './meetings.service.js';
+import { cancelMeeting, confirmMeeting, listMeetings, rescheduleMeeting, completeMeeting, markMeetingNoShow } from './meetings.service.js';
 import { MeetingError } from './meetings.errors.js';
 
 export async function getMeetings(req, res, next) {
@@ -50,6 +50,24 @@ export async function patchMeetingCancel(req, res, next) {
     try {
         if (!req.is('application/json')) throw new MeetingError('INVALID_REQUEST');
         const data = await cancelMeeting({ actorId: req.user.id, meetingId: req.params.id,
+            idempotencyKey: requireIdempotencyKey(req), body: req.body });
+        res.status(200).json({ data });
+    } catch (error) { next(error); }
+}
+
+export async function patchMeetingComplete(req, res, next) {
+    try {
+        if (!req.is('application/json')) throw new MeetingError('INVALID_REQUEST');
+        const data = await completeMeeting({ actorId: req.user.id, meetingId: req.params.id,
+            idempotencyKey: requireIdempotencyKey(req), body: req.body });
+        res.status(200).json({ data });
+    } catch (error) { next(error); }
+}
+
+export async function patchMeetingNoShow(req, res, next) {
+    try {
+        if (!req.is('application/json')) throw new MeetingError('INVALID_REQUEST');
+        const data = await markMeetingNoShow({ actorId: req.user.id, meetingId: req.params.id,
             idempotencyKey: requireIdempotencyKey(req), body: req.body });
         res.status(200).json({ data });
     } catch (error) { next(error); }

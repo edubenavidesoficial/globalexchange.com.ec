@@ -60,7 +60,9 @@ const fake = {
     async rpc(name, args) {
         state.calls.push({ name, args: clone(args) });
         if (state.rpcThrow) throw state.rpcThrow;
-        return { data: name === 'cancel_consultation_meeting' ? state.cancelData
+        return { data: name === 'complete_consultation_meeting' ? state.completeData
+            : name === 'mark_consultation_meeting_no_show' ? state.noShowData
+            : name === 'cancel_consultation_meeting' ? state.cancelData
             : name === 'reschedule_consultation_meeting' ? state.scheduleData : state.data, error: state.rpcError };
     },
 };
@@ -92,7 +94,9 @@ await new Promise(resolve => server.once('listening', resolve));
 after(() => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())));
 beforeEach(() => {
     state = { profile: { id: actor, full_name: 'Persona de prueba', role: 'admin', active: true },
-        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), scheduleData: clone(rescheduled), cancelData: clone(cancelled), listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
+        calls: [], queries: [], authCalls: 0, logs: [], data: clone(result), scheduleData: clone(rescheduled), cancelData: clone(cancelled),
+        completeData: { ...rescheduled, status: 'completed' }, noShowData: { ...rescheduled, status: 'no_show' },
+        listQueries: [], saleswomen: [], meetings: [], meetingQueries: [] };
 });
 function send(options = {}) {
     const payload = options.raw ?? JSON.stringify(options.body === undefined ? body : options.body);
@@ -1017,4 +1021,186 @@ for (const scheduledAt of [
 test('timestamp response: filtros Agenda conservan rango de cuatro dígitos', async () => {
     const r = await send({ method: 'GET', path: '/api/admin/meetings?from=9999-12-31T00:00:00Z&to=10000-01-01T00:00:00Z' });
     assert.equal(r.status, 400); assert.deepEqual(state.meetingQueries, []);
+});
+
+// 4D.3C: integración HTTP con RPC simuladas; no prueba locks ni tiempo PostgreSQL.
+const outcomeMapping = {
+    INVALID_REQUEST: [400, 'Los datos de la solicitud no son válidos.'],
+    INVALID_MEETING_INPUT: [400, 'Los datos de la reunión no son válidos.'],
+    ACTOR_NOT_ALLOWED: [403, 'No tienes permisos para registrar el resultado de esta reunión.'],
+    MEETING_NOT_FOUND: [404, 'La reunión no existe.'],
+    MEETING_NOT_SCHEDULED: [409, 'Solo se puede registrar el resultado de una reunión programada.'],
+    MEETING_VERSION_CONFLICT: [409, 'La reunión cambió. Vuelve a consultar sus datos.'],
+    CONSULTATION_STATE_INCONSISTENT: [409, 'La solicitud requiere revisión antes de registrar el resultado de la reunión.'],
+    IDEMPOTENCY_KEY_REUSED: [409, 'La clave de idempotencia ya corresponde a otros datos.'],
+    MEETING_TOO_EARLY: [422, 'Aún no se puede registrar este resultado de la reunión.'],
+    WORKFLOW_ISOLATION_NOT_SUPPORTED: [500, 'Ocurrió un error interno en el servidor.'],
+    INTERNAL_ERROR: [500, 'Ocurrió un error interno en el servidor.'],
+};
+const outcomeCases = [
+    ['complete', 'completed', 'complete_consultation_meeting', 'completeData', 'completeMeeting', 'completeConsultationMeeting'],
+    ['no-show', 'no_show', 'mark_consultation_meeting_no_show', 'noShowData', 'markMeetingNoShow', 'markConsultationMeetingNoShow'],
+];
+for (const [route, status, rpc, dataKey, serviceName, repositoryName] of outcomeCases) {
+    const patch = (options = {}) => send({ method: 'PATCH', path: `/api/admin/meetings/${options.id ?? meetingId}/${route}`,
+        body: { expectedVersion: 1 }, ...options });
+    const invalidOutcome = async (options, code) => {
+        const r = await patch(options);
+        assert.equal(r.status, 400); if (code) assert.equal(r.body.error.code, code);
+        assert.equal(state.calls.length, 0);
+    };
+    for (const role of ['admin', 'vendedora']) test(`outcome ${route}: ${role}, actor interno y cinco argumentos`, async () => {
+        state.profile.role = role; state.profile.id = assigned;
+        const r = await patch({ path: `/api/admin/meetings/${meetingId}/${route}?actorId=${actor}&role=admin`,
+            extraHeaders: ['X-Actor-Id', actor, 'X-Role', 'admin'] });
+        assert.deepEqual(r, { status: 200, body: { data: state[dataKey] } });
+        assert.deepEqual(state.calls, [{ name: rpc, args: { p_actor_id: assigned, p_meeting_id: meetingId,
+            p_idempotency_key: key, p_request_hash: createHash('sha256').update(JSON.stringify({ meetingId, expectedVersion: 1 }), 'utf8').digest('hex'),
+            p_expected_version: 1 } }]);
+        assert.deepEqual(state.queries, ['internal_users']);
+    });
+    for (const method of ['GET', 'POST', 'PUT', 'DELETE']) test(`outcome ${route}: método ${method} no registrado`, async () => {
+        await assert.rejects(patch({ method }), /Non-JSON response: HTTP 404/); assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: ruta sin id`, async () => {
+        await assert.rejects(patch({ path: `/api/admin/meetings/${route}` }), /Non-JSON response: HTTP 404/);
+        assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: agendadora rechazada antes de validar entrada`, async () => {
+        state.profile.role = 'agendadora';
+        assert.equal((await patch({ body: { role: 'admin' }, key: null })).status, 403);
+        assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: sin autenticación`, async () => {
+        assert.equal((await patch({ auth: false })).status, 401); assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: identidad inválida`, async () => {
+        const { AuthApiError } = await import('@supabase/supabase-js');
+        state.authError = new AuthApiError('synthetic', 401, 'bad_jwt');
+        assert.equal((await patch()).status, 401); assert.equal(state.calls.length, 0);
+    });
+    for (const profile of [null, { id: actor, role: 'admin', active: false }]) test(`outcome ${route}: perfil ausente/inactivo`, async () => {
+        state.profile = profile; assert.equal((await patch()).status, 403); assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: ownership y revocación rechazados por RPC`, async () => {
+        state.profile.role = 'vendedora'; state.rpcError = { code: 'P0001', message: 'ACTOR_NOT_ALLOWED' };
+        const r = await patch(); assert.equal(r.status, 403); assert.equal(r.body.error.code, 'ACTOR_NOT_ALLOWED');
+        assert.equal(state.calls.length, 1); assert.deepEqual(state.queries, ['internal_users']);
+    });
+    for (const contentType of ['application/json', 'application/json; charset=utf-8']) test(`outcome ${route}: Content-Type ${contentType}`, async () => {
+        assert.equal((await patch({ contentType })).status, 200);
+    });
+    for (const contentType of [null, 'text/plain', 'application/x-www-form-urlencoded']) test(`outcome ${route}: Content-Type inválido ${contentType}`, () => invalidOutcome({ contentType }, 'INVALID_REQUEST'));
+    for (const id of ['bad', meetingId.slice(1), `%20${meetingId}`, `${meetingId}%0A`]) test(`outcome ${route}: UUID inválido ${id}`, () => invalidOutcome({ id }, 'INVALID_MEETING_ID'));
+    for (const value of [null, '', 'bad', key + ',' + key]) test(`outcome ${route}: clave inválida ${value}`, () => invalidOutcome({ key: value }, 'INVALID_IDEMPOTENCY_KEY'));
+    for (const name of ['Idempotency-Key', 'iDEMPOTENCY-kEY']) test(`outcome ${route}: clave duplicada ${name}`, () => invalidOutcome({ extraHeaders: [name, key] }, 'INVALID_IDEMPOTENCY_KEY'));
+    test(`outcome ${route}: header case-insensitive y UUID lowercase`, async () => {
+        await patch(); await patch({ id: meetingId.toUpperCase(), key: key.toUpperCase(), keyName: 'iDEMPOTENCY-kEY' });
+        assert.deepEqual(state.calls[0], state.calls[1]);
+    });
+    for (const body of [null, [], 1, true, 'text']) test(`outcome ${route}: body no objeto ${JSON.stringify(body)}`, () => invalidOutcome({ body }));
+    test(`outcome ${route}: campo requerido`, () => invalidOutcome({ body: {} }, 'INVALID_MEETING_INPUT'));
+    for (const field of ['status', 'reason', 'notes', 'role', 'assigned_to', 'assignedTo', 'actor', 'actorId', 'requestHash', 'idempotencyKey', 'version', '__proto__', 'constructor']) {
+        test(`outcome ${route}: extra ${field}`, () => invalidOutcome({ body: { expectedVersion: 1, [field]: 'PRIVATE' } }, 'INVALID_REQUEST'));
+    }
+    for (const expectedVersion of [0, -1, 1.5, '1', true, false, null, 2147483648]) test(`outcome ${route}: versión inválida ${JSON.stringify(expectedVersion)}`, () => invalidOutcome({ body: { expectedVersion } }, 'INVALID_MEETING_INPUT'));
+    for (const expectedVersion of [1, 2147483647]) test(`outcome ${route}: límite válido ${expectedVersion}`, async () => {
+        assert.equal((await patch({ body: { expectedVersion } })).status, 200);
+        assert.equal(state.calls[0].args.p_expected_version, expectedVersion);
+    });
+    test(`outcome ${route}: JSON inválido sanitizado`, () => invalidOutcome({ raw: '{"PRIVATE":' }, 'INVALID_JSON'));
+    test(`outcome ${route}: service rechaza números no JSON y claves sin trim/coerción`, async () => {
+        const call = meetingModule('service')[serviceName];
+        const input = { actorId: actor, meetingId, idempotencyKey: key, body: { expectedVersion: 1 } };
+        for (const expectedVersion of [undefined, NaN, Infinity, -Infinity, 1n]) {
+            await assert.rejects(call({ ...input, body: { expectedVersion } }), e => e.code === 'INVALID_MEETING_INPUT');
+        }
+        for (const idempotencyKey of [` ${key}`, `${key} `, `${key}\n`, null, 1]) {
+            await assert.rejects(call({ ...input, idempotencyKey }), e => e.code === 'INVALID_IDEMPOTENCY_KEY');
+        }
+        assert.equal(state.calls.length, 0);
+    });
+    test(`outcome ${route}: hash cambia por meeting/version y excluye actor/key`, async () => {
+        await patch(); const baseline = state.calls.at(-1).args.p_request_hash;
+        await patch({ body: { expectedVersion: 2 } }); assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+        state[dataKey] = { ...state[dataKey], id: assigned };
+        await patch({ id: assigned }); assert.notEqual(state.calls.at(-1).args.p_request_hash, baseline);
+        state[dataKey] = { ...state[dataKey], id: meetingId }; state.profile.id = assigned;
+        await patch({ key: actor }); assert.equal(state.calls.at(-1).args.p_request_hash, baseline);
+    });
+    test(`outcome ${route}: inputs inmutables, repository sin queries`, async () => {
+        const input = Object.freeze({ actorId: actor, meetingId, idempotencyKey: key, body: Object.freeze({ expectedVersion: 1 }) });
+        assert.deepEqual(clone(await meetingModule('service')[serviceName](input)), state[dataKey]);
+        assert.equal(state.calls.length, 1); assert.deepEqual(state.queries, []);
+    });
+    test(`outcome ${route}: repository retorna data y propaga error sin reinterpretar`, async () => {
+        const call = meetingModule('repository')[repositoryName];
+        const input = { actorId: actor, idempotencyKey: key, requestHash: 'synthetic-hash', payload: { meetingId, expectedVersion: 1 } };
+        assert.equal(await call(input), state[dataKey]);
+        state.rpcError = { code: 'P0001', message: 'ACTOR_NOT_ALLOWED' };
+        await assert.rejects(call(input), e => e === state.rpcError);
+        assert.deepEqual(state.queries, []); assert.equal(state.calls.length, 2);
+    });
+    for (const [code, [http, message]] of Object.entries(outcomeMapping)) test(`outcome ${route}: ${code} -> ${http}`, async () => {
+        state.rpcError = { code: 'P0001', message: code, details: 'PRIVATE', hint: 'PRIVATE', cause: 'PRIVATE', stack: 'PRIVATE' };
+        assert.deepEqual(await patch(), { status: http, body: { error: { code, message } } });
+        assert.equal(state.calls.length, 1); assert.ok(!JSON.stringify(state.logs).includes('PRIVATE'));
+    });
+    for (const error of [{ code: '23505', message: 'MEETING_NOT_FOUND' }, { code: 'P0001', message: 'PRIVATE' },
+        ...['toString', 'constructor', '__proto__'].map(message => ({ code: 'P0001', message })), { statusCode: 403, message: 'PRIVATE' }]) {
+        test(`outcome ${route}: error desconocido ${error.code}/${error.message}`, async () => {
+            state.rpcError = error;
+            assert.deepEqual(await patch(), { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: outcomeMapping.INTERNAL_ERROR[1] } } });
+            assert.ok(!JSON.stringify(state.logs).includes('PRIVATE'));
+        });
+    }
+    test(`outcome ${route}: transporte sanitizado sin retry`, async () => {
+        state.rpcThrow = Object.assign(new Error('PRIVATE'), { cause: 'PRIVATE', stack: 'PRIVATE' });
+        const r = await patch(); assert.equal(r.status, 500); assert.equal(r.body.error.code, 'INTERNAL_ERROR');
+        assert.equal(state.calls.length, 1); assert.ok(!JSON.stringify([r, state.logs]).includes('PRIVATE'));
+    });
+    const response = { ...rescheduled, status };
+    const corrupt = [null, [], {}, 'bad', ...Object.keys(response).map(field => { const r = { ...response }; delete r[field]; return r; }),
+        ...Object.entries({ id: ['bad', assigned], consultationRequestId: ['bad', null], scheduledAt: ['infinity', '-infinity', '2028-02-30T00:00:00Z', '2028-01-01', '2028-01-01T00:00:00.1234567Z'],
+            timeZone: ['', null, 1], durationMinutes: [0, 1.5, '45', 2147483648], mode: ['bad', null],
+            status: ['scheduled', 'cancelled', status === 'completed' ? 'no_show' : 'completed', null],
+            version: [1, 0, 1.5, '2', null, 2147483648] }).flatMap(([field, values]) => values.map(value => ({ ...response, [field]: value })))];
+    for (const [i, data] of corrupt.entries()) test(`outcome ${route}: respuesta corrupta ${i}`, async () => {
+        state[dataKey] = data;
+        assert.deepEqual(await patch(), { status: 500, body: { error: { code: 'INTERNAL_ERROR', message: outcomeMapping.INTERNAL_ERROR[1] } } });
+    });
+    for (const scheduledAt of ['2000-02-29T15:30:00.123456+00:00', '10000-01-01T00:00:00.123456Z']) {
+        test(`outcome ${route}: ocho campos y replay simulado ${scheduledAt}`, async () => {
+            const safe = { ...response, scheduledAt, version: 2147483647 };
+            state[dataKey] = { ...safe, reason: 'PRIVATE', notes: 'PRIVATE', assignedTo: 'PRIVATE', actor: 'PRIVATE', audit: 'PRIVATE', requestHash: 'PRIVATE' };
+            const first = await patch(), second = await patch();
+            assert.deepEqual(first, { status: 200, body: { data: safe } }); assert.deepEqual(second, first);
+            assert.equal(Object.keys(first.body.data).length, 8);
+            assert.equal(state.calls.length, 2); assert.deepEqual(state.calls[0], state.calls[1]);
+            assert.deepEqual(state.queries, ['internal_users', 'internal_users']);
+        });
+    }
+}
+
+test('outcome normalizador: UUID, herencia, accesores y símbolos sin efectos', () => {
+    const { normalizeOutcome } = meetingModule('service');
+    for (const id of [null, 1, {}, ` ${meetingId}`, `${meetingId}\n`]) {
+        assert.throws(() => normalizeOutcome(id, { expectedVersion: 1 }), e => e.code === 'INVALID_MEETING_ID');
+    }
+    let reads = 0;
+    const accessor = {}; Object.defineProperty(accessor, 'expectedVersion', { get() { reads++; return 1; } });
+    for (const body of [accessor, Object.create({ expectedVersion: 1 }), Object.assign(new Date(), { expectedVersion: 1 }),
+        { expectedVersion: 1, [Symbol('extra')]: 1 }]) {
+        assert.throws(() => normalizeOutcome(meetingId, body), e => e.code === 'INVALID_REQUEST');
+    }
+    assert.equal(reads, 0); assert.equal(state.calls.length, 0);
+    assert.deepEqual(clone(normalizeOutcome(meetingId.toUpperCase(), { expectedVersion: 1 })), { meetingId, expectedVersion: 1 });
+});
+
+test('outcome hash excluye operación/status con ámbitos RPC distintos', async () => {
+    for (const [route] of outcomeCases) {
+        assert.equal((await send({ method: 'PATCH', path: `/api/admin/meetings/${meetingId}/${route}`, body: { expectedVersion: 1 } })).status, 200);
+    }
+    assert.equal(state.calls.length, 2); assert.notEqual(state.calls[0].name, state.calls[1].name);
+    assert.deepEqual(state.calls[0].args, state.calls[1].args);
 });

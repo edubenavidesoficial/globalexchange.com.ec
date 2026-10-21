@@ -1,5 +1,25 @@
 import supabase from '../../config/supabase.js';
 
+export async function completeConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
+    const { data, error } = await supabase.rpc('complete_consultation_meeting', {
+        p_actor_id: actorId, p_meeting_id: payload.meetingId,
+        p_idempotency_key: idempotencyKey, p_request_hash: requestHash,
+        p_expected_version: payload.expectedVersion,
+    });
+    if (error) throw error;
+    return data;
+}
+
+export async function markConsultationMeetingNoShow({ actorId, idempotencyKey, requestHash, payload }) {
+    const { data, error } = await supabase.rpc('mark_consultation_meeting_no_show', {
+        p_actor_id: actorId, p_meeting_id: payload.meetingId,
+        p_idempotency_key: idempotencyKey, p_request_hash: requestHash,
+        p_expected_version: payload.expectedVersion,
+    });
+    if (error) throw error;
+    return data;
+}
+
 export async function cancelConsultationMeeting({ actorId, idempotencyKey, requestHash, payload }) {
     const { data, error } = await supabase.rpc('cancel_consultation_meeting', {
         p_actor_id: actorId, p_meeting_id: payload.meetingId,

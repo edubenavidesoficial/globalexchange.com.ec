@@ -20,6 +20,7 @@ const errors = {
     INVALID_TIME_ZONE: [422, 'La zona horaria no es válida.'],
     INVALID_LOCAL_TIME: [422, 'La hora no existe en la zona horaria indicada.'],
     MEETING_NOT_IN_FUTURE: [422, 'La reunión debe estar en el futuro.'],
+    MEETING_TOO_EARLY: [422, 'Aún no se puede registrar este resultado de la reunión.'],
     WORKFLOW_ISOLATION_NOT_SUPPORTED: [500, 'Ocurrió un error interno en el servidor.'],
     INTERNAL_ERROR: [500, 'Ocurrió un error interno en el servidor.'],
 };
@@ -29,7 +30,7 @@ const rpcCodes = new Set([
     'CONSULTATION_NOT_FOUND', 'CONSULTATION_CANCELLED', 'CONSULTATION_ALREADY_SCHEDULED',
     'CONSULTATION_COMPLETED', 'CONSULTATION_STATE_INCONSISTENT', 'IDEMPOTENCY_KEY_REUSED',
     'ASSIGNEE_NOT_ELIGIBLE', 'INVALID_TIME_ZONE', 'INVALID_LOCAL_TIME',
-    'MEETING_NOT_IN_FUTURE', 'WORKFLOW_ISOLATION_NOT_SUPPORTED',
+    'MEETING_NOT_IN_FUTURE', 'MEETING_TOO_EARLY', 'WORKFLOW_ISOLATION_NOT_SUPPORTED',
     'MEETING_NOT_FOUND', 'MEETING_NOT_SCHEDULED', 'MEETING_VERSION_CONFLICT', 'INTERNAL_ERROR',
 ]);
 
@@ -39,11 +40,18 @@ const cancellationMessages = {
     CONSULTATION_STATE_INCONSISTENT: 'La solicitud requiere revisión antes de cancelar la reunión.',
 };
 
+const outcomeMessages = {
+    ACTOR_NOT_ALLOWED: 'No tienes permisos para registrar el resultado de esta reunión.',
+    MEETING_NOT_SCHEDULED: 'Solo se puede registrar el resultado de una reunión programada.',
+    CONSULTATION_STATE_INCONSISTENT: 'La solicitud requiere revisión antes de registrar el resultado de la reunión.',
+};
+
 export class MeetingError extends AppError {
     constructor(code, context) {
         const safeCode = Object.hasOwn(errors, code) ? code : 'INTERNAL_ERROR';
-        const message = context === 'cancel' && Object.hasOwn(cancellationMessages, safeCode)
-            ? cancellationMessages[safeCode] : errors[safeCode][1];
+        const messages = context === 'cancel' ? cancellationMessages : context === 'outcome' ? outcomeMessages : null;
+        const message = messages && Object.hasOwn(messages, safeCode)
+            ? messages[safeCode] : errors[safeCode][1];
         super(errors[safeCode][0], message, safeCode);
     }
 }

@@ -1175,3 +1175,147 @@ corresponden a fases posteriores.
 
 **Cierre técnico y documental de 4D.3B: APROBADO PARA STAGING**, con las
 limitaciones de validación remota anteriores aceptadas explícitamente.
+
+## 4D.3C — Backend Express de resultados — 2026-10-20
+
+Implementación local lista para auditoría, sin staging, commit ni push.
+
+### Contrato HTTP y arquitectura
+
+| Endpoint | RPC | Status de respuesta |
+| --- | --- | --- |
+| PATCH /api/admin/meetings/:id/complete | complete_consultation_meeting | completed |
+| PATCH /api/admin/meetings/:id/no-show | mark_consultation_meeting_no_show | no_show |
+
+Pipeline: authenticate → authorize('admin', 'vendedora') → controller → service
+→ repository → una RPC. Agendadora recibe 403 antes del controller. Actor
+exclusivamente de req.user.id, resuelto por authenticate desde el perfil interno
+activo; no se usan roles de metadata JWT, body, query o cabeceras auxiliares.
+La RPC revalida actividad, rol y ownership actual bajo lock, también en replay.
+Admin activo puede operar sobre cualquier meeting elegible; vendedora activa
+solo sobre su meeting. Express no realiza SELECT previo de meeting ni escribe
+directamente tablas; la consulta de autenticación a internal_users permanece.
+
+Se exige autenticación Bearer válida, Content-Type application/json (también
+charset=utf-8) y exactamente una Idempotency-Key UUID. Se detectan duplicados
+en rawHeaders sin distinguir casing. Meeting ID y key: formato canónico de
+36 caracteres, sin coerción ni trim, normalizados lowercase tras validación.
+Node puede eliminar espacios HTTP periféricos de headers antes del service.
+
+Body exacto para ambos comandos:
+
+```json
+{ "expectedVersion": 1 }
+```
+
+Objeto JSON plano con una única propiedad propia. Extras, símbolos, accesores
+o herencia personalizada: INVALID_REQUEST. Campo ausente o valor inválido:
+INVALID_MEETING_INPUT. expectedVersion debe satisfacer Number.isInteger y estar
+entre 1 y 2147483647 inclusive, sin coerción. Se rechazan strings, booleanos,
+null, fracciones, NaN, infinitos y BigInt. No se aceptan status, reason, notes,
+role, assigned_to, assignedTo, actor, hash ni key en el body.
+express.json() sigue antes de authenticate: JSON malformado o primitivas
+rechazadas por el parser pueden producir INVALID_JSON antes de autenticar.
+
+normalizeOutcome construye exactamente, en este orden:
+
+```js
+{ meetingId: normalizedMeetingId, expectedVersion: expectedVersion }
+```
+
+Hash SHA-256 de JSON.stringify(payload), UTF-8, hexadecimal lowercase. No incluye
+actor, operation, key ni status. Cada repository pasa exactamente p_actor_id,
+p_meeting_id, p_idempotency_key, p_request_hash y p_expected_version a su RPC.
+No hay retries automáticos, locks JavaScript, replay local ni consultas
+comerciales auxiliares. Los mensajes históricos permanecen intactos.
+
+### Idempotencia, versión y tiempo
+
+El ámbito sigue siendo (actor_id, operation, idempotency_key). Misma operación,
+actor, key y payload recupera la fotografía persistida; otro hash/meeting en
+ese ámbito produce IDEMPOTENCY_KEY_REUSED. La misma key en la otra operación
+no es replay: cada RPC tiene su ámbito. Si el primer comando ya terminó la
+meeting, el segundo comando nuevo encuentra MEETING_NOT_SCHEDULED.
+Los reintentos del cliente deben conservar ruta, key y payload originales.
+
+Express valida estructura/rango incluso en replay, pero no compara versión
+actual ni tiempo. PostgreSQL revalida autorización/ownership actuales; un
+replay autorizado no revalida status, versión, tiempo ni estado mutable del
+padre. Un comando nuevo valida status antes de comparar versión. El máximo
+2147483647 es una entrada válida; si la versión actual no puede incrementarse,
+la RPC produce INTERNAL_ERROR, sin reiniciar ni envolver el contador.
+
+PostgreSQL decide complete desde clock_timestamp() >= scheduled_at y no-show
+desde clock_timestamp() >= scheduled_at + duration_minutes minutos, después
+de locks. Express no calcula elegibilidad temporal. MEETING_TOO_EARLY se
+traduce a 422. Completed significa reunión realizada, no venta cerrada.
+La consultation permanece converted sin modificar updated_at. Los estados
+terminales no se reabren; puede crearse otra meeting posteriormente bajo el
+contrato existente si no hay una scheduled. No se añade reason ni notes.
+
+### Respuesta y errores
+
+Éxito y replay: 200 con {data: resultado}. Se validan y proyectan únicamente
+id, consultationRequestId, scheduledAt, timeZone, durationMinutes, mode,
+status y version. UUID válidos, id igual al solicitado, timestamp válido y
+finito, zona string no vacía, duración integer 1–2147483647, mode online/phone/
+office, status exacto del comando y versión integer 2–2147483647. Los extras
+se descartan. Una respuesta inválida produce 500 INTERNAL_ERROR.
+Se conservan timestamp y microsegundos sin reformatear; se reutiliza el rango
+HTTP 0001–10000, sin ampliar a todo PostgreSQL ni cambiar filtros de Agenda.
+No se reconstruye la fotografía desde tablas ni se compara con estado actual.
+
+| Código/condición | HTTP |
+| --- | --- |
+| INVALID_REQUEST, INVALID_MEETING_INPUT, INVALID_MEETING_ID, INVALID_IDEMPOTENCY_KEY, INVALID_JSON | 400 |
+| Autenticación ausente/inválida | 401 |
+| Perfil inexistente/inactivo o rol rechazado por middleware | 403 |
+| ACTOR_NOT_ALLOWED | 403 |
+| MEETING_NOT_FOUND | 404 |
+| MEETING_NOT_SCHEDULED, MEETING_VERSION_CONFLICT, CONSULTATION_STATE_INCONSISTENT, IDEMPOTENCY_KEY_REUSED | 409 |
+| MEETING_TOO_EARLY | 422 |
+| WORKFLOW_ISOLATION_NOT_SUPPORTED, INTERNAL_ERROR | 500 |
+| Error SQL desconocido, transporte o respuesta corrupta | 500 INTERNAL_ERROR |
+
+Contexto outcome para mensajes específicos:
+
+- ACTOR_NOT_ALLOWED: "No tienes permisos para registrar el resultado de esta reunión."
+- MEETING_NOT_SCHEDULED: "Solo se puede registrar el resultado de una reunión programada."
+- CONSULTATION_STATE_INCONSISTENT: "La solicitud requiere revisión antes de registrar el resultado de la reunión."
+- MEETING_TOO_EARLY: "Aún no se puede registrar este resultado de la reunión."
+
+Los demás mensajes conservan el contrato existente. Traducción cerrada por
+SQLSTATE P0001 y mensaje exacto en allowlist. Errores de dominio mantienen
+{error: {code, message}}; middleware conserva respuestas históricas sin code.
+Details, hint, cause, stack y mensajes arbitrarios no se exponen. Los logs de
+500 conservan exclusivamente evento, statusCode y código público controlado.
+
+### Validación local y alcance
+
+Se añaden 248 pruebas en meetings.test.mjs, parametrizadas para ambas rutas:
+métodos, roles, actor interno, rechazo RPC de ownership, headers, UUID, body
+estricto, límites, hash, cinco argumentos, llamada única, mappings, sanitización,
+respuestas corruptas, minimización, microsegundos, año 10000 y replay simulado.
+El fake sustituye Supabase antes de cargar configuración: no se lee .env ni
+se contacta a servicios remotos. No se modificó el mecanismo de loopback.
+
+El primer targeted en sandbox dio 248 tests: 7 pass y 241 fail por bloqueo
+EACCES de loopback (incluidas assertions que esperaban 404 y recibieron EACCES).
+La repetición con permiso para loopback del mismo targeted dio **248/248 pass**,
+0 fail/cancelled/skipped/todo. Comando:
+
+```text
+node --experimental-vm-modules --test --test-reporter=tap --test-name-pattern=outcome backend/tests/meetings.test.mjs
+```
+
+Suite completa con loopback habilitado, desde backend mediante npm test:
+**914 tests, 914 pass, 0 fail, 0 cancelled, 0 skipped, 0 todo**. Incluye las
+regresiones de creación, listado, reprogramación, cancelación, mensajes
+históricos, error-handler y contratos estáticos de migraciones.
+
+Estos mocks HTTP no prueban locks PostgreSQL, concurrencia, atomicidad ni
+temporalidad reales; esa evidencia y sus limitaciones siguen en 4D.3B.
+No se ejecutó SQL/HTTP remoto ni se alteraron migrations, schema, RLS, grants,
+índices, dependencias, frontend, app.js, middleware globales o usuarios reales.
+El alcance local se limita a los cinco archivos del módulo meetings, su suite
+y esta documentación. Sin staging, commit ni push.

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { cancelConsultationMeeting, createConsultationMeeting, findMeetings, rescheduleConsultationMeeting } from './meetings.repository.js';
+import { cancelConsultationMeeting, createConsultationMeeting, findMeetings, rescheduleConsultationMeeting, completeConsultationMeeting, markConsultationMeetingNoShow } from './meetings.repository.js';
 import { URLSearchParams } from 'node:url';
 import { AppError } from '../../errors/app-error.js';
 import { MeetingError, translateMeetingError } from './meetings.errors.js';
@@ -157,6 +157,33 @@ export function normalizeCancellation(meetingId, body) {
     return { meetingId: id, expectedVersion: body.expectedVersion, reason: body.reason };
 }
 
+export function normalizeOutcome(meetingId, body) {
+    const id = uuid(meetingId, 'INVALID_MEETING_ID');
+    requireExactBody(body, ['expectedVersion']);
+    if (!Number.isInteger(body.expectedVersion) || body.expectedVersion < 1 || body.expectedVersion > 2147483647) {
+        throw new MeetingError('INVALID_MEETING_INPUT');
+    }
+    return { meetingId: id, expectedVersion: body.expectedVersion };
+}
+
+async function recordOutcome({ actorId, meetingId, idempotencyKey, body }, repository, status) {
+    const key = uuid(idempotencyKey, 'INVALID_IDEMPOTENCY_KEY');
+    const payload = normalizeOutcome(meetingId, body);
+    const requestHash = createHash('sha256').update(JSON.stringify(payload), 'utf8').digest('hex');
+    try {
+        const data = await repository({ actorId, idempotencyKey: key, requestHash, payload });
+        return projectMeetingResponse(data, payload.meetingId, status);
+    } catch (error) { throw translateMeetingError(error, 'outcome'); }
+}
+
+export async function completeMeeting(input) {
+    return recordOutcome(input, completeConsultationMeeting, 'completed');
+}
+
+export async function markMeetingNoShow(input) {
+    return recordOutcome(input, markConsultationMeetingNoShow, 'no_show');
+}
+
 export async function cancelMeeting({ actorId, meetingId, idempotencyKey, body }) {
     const key = uuid(idempotencyKey, 'INVALID_IDEMPOTENCY_KEY');
     const payload = normalizeCancellation(meetingId, body);
@@ -186,7 +213,7 @@ function projectMeetingResponse(data, meetingId, status) {
         || typeof data.timeZone !== 'string' || !data.timeZone.trim()
         || !positive(data.durationMinutes) || !positive(data.version)
         || !['online', 'phone', 'office'].includes(data.mode) || data.status !== status
-        || (status === 'cancelled' && data.version < 2)) {
+        || (['cancelled', 'completed', 'no_show'].includes(status) && data.version < 2)) {
         throw new Error('Invalid RPC response');
     }
     return { id: data.id, consultationRequestId: data.consultationRequestId,
