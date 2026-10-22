@@ -1,6 +1,7 @@
 import { getAgendaMeetings } from '../api/meetings.js';
 import { initCancelDialog } from './crm-cancel-dialog.js';
 import { initRescheduleDialog } from './crm-reschedule-dialog.js';
+import { initOutcomeDialog } from './crm-outcome-dialog.js';
 import { agendaToday, shiftAgendaDay, agendaDayRange, agendaDayLabel, agendaHour } from './crm-agenda-date.js';
 
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
@@ -22,14 +23,17 @@ export function initCRMAgenda() {
     let generation = 0;
     let reschedulingDenied = false;
     let cancellationDenied = false;
+    let outcomeDenied = false;
     let refreshRequired = false;
     const available = () => Boolean(access?.isCurrent()) && !pending && !refreshRequired;
     const canOpen = () => available() &&
-        !root.querySelector('[data-reschedule-dialog]').open && !root.querySelector('[data-cancel-dialog]').open;
+        !root.querySelector('[data-reschedule-dialog]').open && !root.querySelector('[data-cancel-dialog]').open &&
+        !root.querySelector('[data-outcome-dialog]').open;
     function reload() {
         // Conservar el anuncio del diálogo que acaba de cerrar.
         if (root.querySelector('[data-reschedule-dialog]').open) dialog.invalidate();
         if (root.querySelector('[data-cancel-dialog]').open) cancellation.invalidate();
+        if (root.querySelector('[data-outcome-dialog]').open) outcome.invalidate();
         refreshRequired = true;
         generation++;
         pending?.abort(); pending = null;
@@ -44,6 +48,11 @@ export function initCRMAgenda() {
     const cancellation = initCancelDialog(root, {
         canOpen: () => canOpen() && !cancellationDenied,
         forbid() { cancellationDenied = true; controls(); },
+        reload,
+    });
+    const outcome = initOutcomeDialog(root, {
+        canOpen: () => canOpen() && !outcomeDenied,
+        forbid() { outcomeDenied = true; controls(); },
         reload,
     });
 
@@ -68,6 +77,7 @@ export function initCRMAgenda() {
         retry.disabled = !access || Boolean(pending);
         for (const button of rows.querySelectorAll('[data-agenda-reschedule]')) button.disabled = !available() || reschedulingDenied;
         for (const button of rows.querySelectorAll('[data-agenda-cancel]')) button.disabled = !available() || cancellationDenied;
+        for (const button of rows.querySelectorAll('[data-agenda-outcome]')) button.disabled = !available() || outcomeDenied;
     }
     function showDate() {
         date.value = day;
@@ -76,6 +86,8 @@ export function initCRMAgenda() {
     function invalidate() {
         dialog.invalidate();
         cancellation.invalidate();
+        outcome.invalidate();
+        outcomeDenied = false;
         reschedulingDenied = false; cancellationDenied = false; refreshRequired = false;
         generation++;
         pending?.abort();
@@ -129,6 +141,7 @@ export function initCRMAgenda() {
             if (meeting.consultation.email) field('Email', meeting.consultation.email);
             const badge = node('span', statuses[meeting.status], `agenda-badge agenda-badge--${meeting.status}`);
             item.append(time, person, badge, details);
+            const actions = node('div', undefined, 'agenda-meeting-actions');
             if (['admin', 'agendadora'].includes(access.user.role) && meeting.status === 'scheduled') {
                 const button = node('button', 'Reprogramar', 'crm-button agenda-reschedule-open');
                 button.type = 'button'; button.dataset.agendaReschedule = '';
@@ -143,9 +156,19 @@ export function initCRMAgenda() {
                 cancel.addEventListener('click', () => {
                     if (canOpen() && !cancellationDenied && owner === access && renderedGeneration === generation) cancellation.open(meeting, owner, cancel);
                 });
-                const actions = node('div', undefined, 'agenda-meeting-actions');
-                actions.append(button, cancel); item.append(actions);
+                actions.append(button, cancel);
             }
+            if (['admin', 'vendedora'].includes(access.user.role) && meeting.status === 'scheduled') {
+                const button = node('button', 'Registrar resultado', 'crm-button crm-button--primary');
+                button.type = 'button'; button.dataset.agendaOutcome = '';
+                button.setAttribute('aria-label', `Registrar resultado de la reunión de ${meeting.consultation.fullName}`);
+                const owner = access, renderedGeneration = generation;
+                button.addEventListener('click', () => {
+                    if (canOpen() && !outcomeDenied && owner === access && renderedGeneration === generation) outcome.open(meeting, owner, button);
+                });
+                actions.append(button);
+            }
+            if (actions.childElementCount) item.append(actions);
             fragment.append(item);
         }
         rows.replaceChildren(fragment);
@@ -186,6 +209,7 @@ export function initCRMAgenda() {
         if (day === next) return;
         dialog.invalidate();
         cancellation.invalidate();
+        outcome.invalidate();
         generation++;
         pending?.abort();
         pending = null;

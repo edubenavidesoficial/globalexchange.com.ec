@@ -25,11 +25,18 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     };
     const context = vm.createContext({ document, Intl, Date: Clock, AbortController });
     const requests = [], gets = [], outcomes = [], loads = [], cancellations = [], cancelOutcomes = [];
+    const results = [], resultResponses = [];
     let keys = 0, active = true, blocks = 0, revalidations = 0, hooks;
     const access = { user: { id: 'A', role }, isCurrent: () => active,
         blockAccess() { blocks++; active = false; hooks.onInvalidate(); },
         revalidate() { revalidations++; active = false; hooks.onInvalidate(); } };
-    const api = new vm.SyntheticModule(['getAgendaMeetings', 'rescheduleMeeting', 'cancelMeeting', 'createMeetingIdempotencyKey'], function () {
+    const api = new vm.SyntheticModule(['getAgendaMeetings', 'rescheduleMeeting', 'cancelMeeting', 'completeMeeting', 'markMeetingNoShow', 'createMeetingIdempotencyKey'], function () {
+        for (const operation of ['completeMeeting', 'markMeetingNoShow']) this.setExport(operation, async options => {
+            results.push({ operation, ...options });
+            const response = resultResponses.shift();
+            if (response instanceof Error) throw response;
+            return await response;
+        });
         this.setExport('getAgendaMeetings', async options => {
             gets.push(options);
             const next = loads.shift();
@@ -56,8 +63,10 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     await dialogModule.link(() => api);
     const cancelModule = new vm.SourceTextModule(await source('src/js/modules/crm-cancel-dialog.js'), { context });
     await cancelModule.link(() => api);
+    const outcomeModule = new vm.SourceTextModule(await source('src/js/modules/crm-outcome-dialog.js'), { context });
+    await outcomeModule.link(() => api);
     const agenda = new vm.SourceTextModule(await source('src/js/modules/crm-agenda.js'), { context });
-    await agenda.link(path => path.endsWith('meetings.js') ? api : path.endsWith('crm-reschedule-dialog.js') ? dialogModule : path.endsWith('crm-cancel-dialog.js') ? cancelModule : dates);
+    await agenda.link(path => path.endsWith('meetings.js') ? api : path.endsWith('crm-reschedule-dialog.js') ? dialogModule : path.endsWith('crm-cancel-dialog.js') ? cancelModule : path.endsWith('crm-outcome-dialog.js') ? outcomeModule : dates);
     await agenda.evaluate();
     hooks = agenda.namespace.initCRMAgenda();
     hooks.onAuthorized(access); await settle();
@@ -66,7 +75,12 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     const field = name => r('form').elements.namedItem(name);
     const submit = () => r('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
     const c = name => q(`[data-cancel-${name}]`);
-    return { c, cancellations, cancelOutcomes,
+    const o = name => q(`[data-outcome-${name}]`);
+    return { o, results, resultResponses,
+        resultOpen() { q('[data-agenda-outcome]')?.click(); },
+        resultSubmit() { o('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true })); },
+        resultEscape() { o('dialog').dispatchEvent(new dom.window.Event('cancel', { cancelable: true })); },
+        c, cancellations, cancelOutcomes,
         cancelOpen() { q('[data-agenda-cancel]')?.click(); },
         cancelSubmit() { c('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true })); },
         cancelEscape() { c('dialog').dispatchEvent(new dom.window.Event('cancel', { cancelable: true })); },
@@ -79,6 +93,167 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     };
 }
 const error = (code, status, domainCode) => Object.assign(new Error('SECRET provider details'), { code, status, domainCode });
+
+const chooseOutcome = (ui, value = 'completed') => { ui.o('form').elements.namedItem('outcome').value = value; };
+for (const role of ['admin', 'vendedora', 'agendadora']) test(`4D.3E.2 visibilidad ${role}, contexto y elección explícita`, async () => {
+    const data = agendaFixture(), ui = await setup({ role, data, now: '2020-01-01T00:00:00Z' });
+    assert.equal(ui.document.querySelectorAll('[data-agenda-outcome]').length, role === 'agendadora' ? 0 : 1);
+    for (const card of [...ui.document.querySelectorAll('.agenda-meeting')].slice(1)) assert.equal(card.querySelector('[data-agenda-outcome]'), null);
+    ui.resultOpen();
+    if (role === 'agendadora') { chooseOutcome(ui); ui.resultSubmit(); await settle(); assert.equal(ui.results.length, 0); return; }
+    assert.equal(ui.o('dialog').open, true);
+    assert.equal(ui.o('client').textContent, data[0].consultation.fullName);
+    assert.equal(ui.o('program').textContent, data[0].consultation.program.name);
+    assert.equal(ui.o('seller').textContent, data[0].assignedTo.fullName);
+    assert.equal(ui.o('status').textContent, 'Agendada');
+    assert.match(ui.o('schedule').textContent, /2026/);
+    const select = ui.o('form').elements.namedItem('outcome');
+    assert.equal(select.value, ''); assert.equal(ui.document.activeElement, select);
+    assert.deepEqual([...select.options].slice(1).map(option => option.textContent), ['Completada', 'No asistió']);
+    for (const id of [data[0].id, data[0].consultationRequestId]) assert.ok(!ui.o('dialog').textContent.includes(id));
+    assert.equal(ui.o('message').getAttribute('aria-live'), 'polite');
+    ui.resultSubmit(); await settle(); assert.equal(ui.keys, 0); assert.equal(ui.results.length, 0);
+    assert.equal(ui.gets.length, 1); // Abrir no solicita otro GET ni consulta temporal.
+    ui.resultEscape(); assert.equal(ui.o('dialog').open, false);
+    assert.equal(ui.document.activeElement, ui.q('[data-agenda-outcome]'));
+});
+
+for (const [value, operation] of [['completed', 'completeMeeting'], ['no_show', 'markMeetingNoShow']]) {
+    test(`4D.3E.2 ${value}: payload exacto, captura, doble envío, GET enriquecido y contadores`, async () => {
+        const data = agendaFixture(); data[0].version = 37;
+        const ui = await setup({ data, now: '2020-01-01T00:00:00Z' });
+        ui.resultOpen(); chooseOutcome(ui, value);
+        const pending = deferred(), load = deferred(); ui.resultResponses.push(pending.promise); ui.loads.push(load.promise);
+        ui.resultSubmit(); ui.resultSubmit();
+        assert.equal(ui.results.length, 1); assert.equal(ui.keys, 1);
+        const attempt = ui.results[0];
+        assert.equal(attempt.operation, operation); assert.equal(attempt.meetingId, data[0].id);
+        assert.deepEqual(Object.keys(attempt.payload), ['expectedVersion']); assert.equal(attempt.payload.expectedVersion, 37);
+        assert.equal(Object.isFrozen(attempt.payload), true);
+        assert.equal(ui.o('fields').disabled, true); assert.equal(ui.o('confirm').disabled, true);
+        assert.equal(ui.o('dialog').getAttribute('aria-busy'), 'true');
+        ui.resultEscape(); ui.o('back').click(); assert.equal(ui.o('dialog').open, true);
+        const day = ui.q('[data-agenda-date]').value;
+        pending.resolve({ status: value, scheduledAt: '10000-01-01T00:00:00Z' }); await settle();
+        assert.equal(ui.o('dialog').open, false); assert.equal(ui.gets.length, 2);
+        assert.equal(ui.q('[data-agenda-date]').value, day);
+        assert.equal(ui.q('[data-agenda-rows]').children.length, 0);
+        assert.equal(ui.q('[data-agenda-overview]').hidden, true);
+        const updated = structuredClone(data); updated[0].status = value; updated[0].version = 38;
+        load.resolve(updated); await settle();
+        assert.equal(ui.q(`[data-agenda-count="${value}"]`).textContent, '2');
+        assert.equal(ui.q('[data-agenda-count="scheduled"]').textContent, '0');
+        assert.equal(ui.q('[data-agenda-outcome]'), null);
+        assert.equal(ui.document.activeElement, ui.q('[data-agenda-day]'));
+    });
+
+    for (const [code, status, domain] of [
+        ['network'], ['timeout'], ['invalid_response'], ['server'], ['unavailable'],
+        ['server', 500, 'INTERNAL_ERROR'], ['server', 500, 'WORKFLOW_ISOLATION_NOT_SUPPORTED'],
+    ]) test(`4D.3E.2 ${value}: incierto ${domain || code} congela operación y retry`, async () => {
+        const data = agendaFixture(), ui = await setup({ data });
+        ui.resultOpen(); chooseOutcome(ui, value); ui.resultResponses.push(error(code, status, domain));
+        ui.resultSubmit(); await settle();
+        const first = ui.results[0];
+        assert.equal(ui.o('fields').disabled, true); assert.equal(ui.o('discard').hidden, false);
+        assert.equal(ui.o('uncertain').hidden, false); assert.equal(ui.o('back').disabled, true);
+        assert.doesNotMatch(ui.o('message').textContent, /SECRET|INTERNAL_ERROR|WORKFLOW_/);
+        if (domain === 'WORKFLOW_ISOLATION_NOT_SUPPORTED') assert.match(ui.o('message').textContent, /revisión al administrador/);
+        ui.resultEscape(); assert.equal(ui.o('dialog').open, true);
+        chooseOutcome(ui, value === 'completed' ? 'no_show' : 'completed');
+        data[0].id = 'changed'; data[0].version = 999;
+        ui.resultResponses.push(error('network')); ui.resultSubmit(); await settle();
+        const retry = ui.results[1];
+        assert.equal(ui.keys, 1); assert.equal(retry.operation, operation);
+        for (const field of ['meetingId', 'idempotencyKey', 'payload', 'access', 'signal']) assert.equal(retry[field], first[field]);
+        assert.equal(ui.gets.length, 1);
+    });
+}
+
+for (const [status, domain, message] of [
+    [409, 'MEETING_NOT_SCHEDULED', 'Esta reunión ya tiene otro estado. Actualizaremos la Agenda.'],
+    [409, 'MEETING_VERSION_CONFLICT', 'La reunión cambió desde que la abriste. Revisa la información actualizada.'],
+    [409, 'CONSULTATION_STATE_INCONSISTENT', 'La solicitud necesita revisión administrativa antes de continuar.'],
+    [409, 'IDEMPOTENCY_KEY_REUSED', 'No se pudo continuar con este intento. Actualiza la Agenda antes de volver a intentarlo.'],
+    [404, 'MEETING_NOT_FOUND', 'La reunión ya no está disponible.'],
+]) test(`4D.3E.2 ${domain} invalida y fuerza GET, sin acción vieja si GET falla`, async () => {
+    const ui = await setup(); ui.resultOpen(); chooseOutcome(ui);
+    ui.resultResponses.push(error('operation', status, domain)); ui.loads.push(error('network'));
+    ui.resultSubmit(); await settle();
+    assert.equal(ui.o('dialog').open, false); assert.equal(ui.gets.length, 2);
+    assert.equal(ui.o('announcement').textContent, message);
+    assert.equal(ui.q('[data-agenda-outcome]'), null); assert.equal(ui.results.length, 1);
+});
+
+test('4D.3E.2 MEETING_TOO_EARLY se explica sin reloj ni retry automático', async () => {
+    const ui = await setup({ now: '2100-01-01T00:00:00Z' }); ui.resultOpen(); chooseOutcome(ui);
+    ui.resultResponses.push(error('operation', 422, 'MEETING_TOO_EARLY')); ui.resultSubmit(); await settle();
+    assert.equal(ui.o('message').textContent, 'Todavía no se puede registrar este resultado. Inténtalo cuando corresponda según el horario de la reunión.');
+    assert.equal(ui.o('fields').disabled, false); assert.equal(ui.gets.length, 1); assert.equal(ui.results.length, 1);
+    chooseOutcome(ui, 'no_show'); ui.resultResponses.push(error('network')); ui.resultSubmit(); await settle();
+    assert.equal(ui.keys, 2); assert.equal(ui.results[1].operation, 'markMeetingNoShow');
+    ui.o('discard').click(); await settle(); assert.equal(ui.gets.length, 2);
+});
+
+test('4D.3E.2 ACTOR_NOT_ALLOWED bloquea acción hasta nueva autorización', async () => {
+    const ui = await setup(); ui.resultOpen(); chooseOutcome(ui);
+    ui.resultResponses.push(error('forbidden', 403, 'ACTOR_NOT_ALLOWED')); ui.resultSubmit(); await settle();
+    assert.equal(ui.o('message').textContent, 'No tienes permiso para registrar el resultado de esta reunión.');
+    assert.equal(ui.o('confirm').disabled, true); ui.resultSubmit(); assert.equal(ui.results.length, 1);
+    ui.o('back').click(); ui.q('[data-agenda-next]').click(); await settle();
+    assert.equal(ui.q('[data-agenda-outcome]').disabled, true);
+    ui.invalidate(); ui.authorize(); await settle(); assert.equal(ui.q('[data-agenda-outcome]').disabled, false);
+});
+
+for (const code of ['expired', 'denied', 'stale']) test(`4D.3E.2 ${code} delega sesión y limpia`, async () => {
+    const ui = await setup(); ui.resultOpen(); chooseOutcome(ui); ui.resultResponses.push(error(code)); ui.resultSubmit(); await settle();
+    assert.equal(ui.o('dialog').open, false); assert.equal(ui.o('client').textContent, '');
+    assert.equal(ui.q('[data-agenda-overview]').hidden, true);
+    assert.equal(code === 'stale' ? ui.revalidations : ui.blocks, 1);
+});
+
+test('4D.3E.2 descartar incierto exige GET y nueva versión antes de otro intento', async () => {
+    const ui = await setup(); ui.resultOpen(); chooseOutcome(ui); ui.resultResponses.push(error('timeout')); ui.resultSubmit(); await settle();
+    const pending = deferred(); ui.loads.push(pending.promise); ui.o('discard').click();
+    assert.equal(ui.o('dialog').open, false); assert.equal(ui.q('[data-agenda-outcome]'), null);
+    const data = agendaFixture(); data[0].version = 25; pending.resolve(data); await settle();
+    ui.resultOpen(); chooseOutcome(ui, 'no_show'); ui.resultResponses.push(error('network')); ui.resultSubmit(); await settle();
+    assert.equal(ui.results[1].payload.expectedVersion, 25); assert.equal(ui.keys, 2);
+});
+
+for (const lateError of [false, true]) test(`4D.3E.2 respuesta tardía ${lateError} no altera otro día ni diálogo`, async () => {
+    const ui = await setup(), pending = deferred(); ui.resultOpen(); chooseOutcome(ui); ui.resultResponses.push(pending.promise); ui.resultSubmit();
+    ui.q('[data-agenda-next]').click(); await settle();
+    assert.equal(ui.results[0].signal.aborted, true); ui.resultOpen();
+    const before = ui.q('[data-agenda]').innerHTML, gets = ui.gets.length;
+    if (lateError) pending.reject(error('expired')); else pending.resolve({}); await settle();
+    assert.equal(ui.q('[data-agenda]').innerHTML, before); assert.equal(ui.gets.length, gets); assert.equal(ui.blocks, 0);
+});
+
+test('4D.3E.2 respuesta de sesión anterior no afecta nueva sesión', async () => {
+    const ui = await setup(), pending = deferred(); ui.resultOpen(); chooseOutcome(ui); ui.resultResponses.push(pending.promise); ui.resultSubmit();
+    ui.invalidate(); ui.authorize({ ...ui.access, user: { id: 'B', role: 'admin' } }); await settle(); ui.resultOpen();
+    const before = ui.q('[data-agenda]').innerHTML; pending.resolve({}); await settle();
+    assert.equal(ui.q('[data-agenda]').innerHTML, before); assert.equal(ui.results[0].signal.aborted, true);
+});
+
+test('4D.3E.2 GET tardío de éxito no pisa otro día', async () => {
+    const ui = await setup(), pending = deferred(); ui.resultOpen(); chooseOutcome(ui); ui.loads.push(pending.promise); ui.resultSubmit(); await settle();
+    ui.q('[data-agenda-next]').click(); await settle(); const before = ui.q('[data-agenda]').innerHTML;
+    assert.equal(ui.gets[1].signal.aborted, true); pending.resolve([]); await settle(); assert.equal(ui.q('[data-agenda]').innerHTML, before);
+});
+
+test('4D.3E.2 exclusión de los tres diálogos y Escape/retorno de foco', async () => {
+    const ui = await setup();
+    for (const kind of ['reschedule', 'cancel']) {
+        ui.q(`[data-agenda-${kind}]`).click(); ui.resultOpen(); assert.equal(ui.o('dialog').open, false);
+        if (kind === 'reschedule') ui.escape(); else ui.cancelEscape();
+    }
+    ui.resultOpen(); ui.open(); ui.cancelOpen();
+    assert.equal(ui.r('dialog').open, false); assert.equal(ui.c('dialog').open, false);
+    ui.resultEscape(); assert.equal(ui.document.activeElement, ui.q('[data-agenda-outcome]'));
+    ui.resultOpen(); ui.o('back').click(); assert.equal(ui.o('dialog').open, false);
+});
 
 test('4D.3E.1 encabezado, fecha y contadores del día con estados canónicos', async () => {
     const ui = await setup({ now: '2026-10-13T08:00:00-05:00' });
@@ -109,7 +284,7 @@ test('4D.3E.1 cards muestran solo campos reales, texto seguro y email nullable',
         if (meeting.consultation.email) assert.ok(card.textContent.includes(meeting.consultation.email));
         assert.ok(card.textContent.includes(['En línea', 'Teléfono', 'Oficina', 'En línea'][index]));
         for (const id of [meeting.id, meeting.consultationRequestId, meeting.consultation.program.id]) assert.ok(!card.textContent.includes(id));
-        assert.doesNotMatch(card.textContent, /Agendadora|GE-\d|Zoom|Google Meet|Sala|WhatsApp|Cobros|Seguimiento|Ver cliente|Registrar resultado/);
+        assert.doesNotMatch(card.textContent, /Agendadora|GE-\d|Zoom|Google Meet|Sala|WhatsApp|Cobros|Seguimiento|Ver cliente/);
         assert.equal(card.querySelector('img, a'), null);
     }
 });

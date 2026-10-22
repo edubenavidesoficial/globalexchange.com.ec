@@ -54,7 +54,7 @@ async function setup(options = {}, page = 'crm') {
     dom?.window.close();
     const fixture = { session: A, user: userA, responses: [], consultationResponses: [], consultations: consultationsFixture,
         salespeople: [{ id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', fullName: 'Vendedora de prueba', role: 'vendedora' }],
-        salesResponses: [], meetingResponses: [], agendaResponses: [], rescheduleResponses: [], cancelResponses: [], agenda: agendaFixture(), page, ...options };
+        salesResponses: [], meetingResponses: [], agendaResponses: [], rescheduleResponses: [], cancelResponses: [], outcomeResponses: [], agenda: agendaFixture(), page, ...options };
     dom = new JSDOM(await includes(join(root, 'pages', page, 'index.html')), { url: `http://localhost/pages/${page}/` });
     // Solo pruebas: el navegador real proporciona top layer, foco y Escape nativos.
     dom.window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
@@ -96,6 +96,7 @@ async function setup(options = {}, page = 'crm') {
         window.calls = { me: 0, refresh: 0, logout: 0, login: 0, consultations: 0, sales: 0, meetings: 0, agenda: 0 };
         window.pendingAgenda = []; window.agendaRequests = []; window.agendaSignals = [];
         window.pendingCancels = []; window.cancelRequests = []; window.cancelSignals = [];
+        window.pendingOutcomes = []; window.outcomeRequests = []; window.outcomeSignals = [];
         window.pendingReschedules = []; window.rescheduleRequests = []; window.rescheduleSignals = [];
         window.pendingSales = []; window.pendingMeetings = []; window.meetingRequests = [];
         window.events = [];
@@ -134,6 +135,17 @@ async function setup(options = {}, page = 'crm') {
             }
         };
         window.fetch = async (url, options) => {
+            if (options.method === 'PATCH' && url.startsWith('/api/admin/meetings/') && (url.endsWith('/complete') || url.endsWith('/no-show'))) {
+                outcomeRequests.push({ url, method: options.method, headers: options.headers, body: options.body });
+                outcomeSignals.push(options.signal);
+                const response = fixture.outcomeResponses.shift() || {};
+                if (response.hold) await new Promise(resolve => pendingOutcomes.push(resolve));
+                const row = fixture.agenda[0];
+                const data = { id: row.id, consultationRequestId: row.consultationRequestId,
+                    scheduledAt: row.scheduledAt, timeZone: row.timeZone, durationMinutes: row.durationMinutes,
+                    mode: row.mode, status: url.endsWith('/complete') ? 'completed' : 'no_show', version: row.version + 1 };
+                return new Response(JSON.stringify(response.body ?? { data }), { status: response.status || 200 });
+            }
             if (options.method === 'PATCH' && url.startsWith('/api/admin/meetings/') && url.endsWith('/cancel')) {
                 cancelRequests.push({ url, method: options.method, headers: options.headers, body: options.body });
                 cancelSignals.push(options.signal);
@@ -232,7 +244,9 @@ async function setup(options = {}, page = 'crm') {
         await reschedule.link(() => meetings);
         const cancellation = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-cancel-dialog.js'), 'utf8'), { context });
         await cancellation.link(() => meetings);
-        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : specifier.endsWith('crm-cancel-dialog.js') ? cancellation : dates);
+        const outcome = new vm.SourceTextModule(await readFile(join(root, 'src/js/modules/crm-outcome-dialog.js'), 'utf8'), { context });
+        await outcome.link(() => meetings);
+        await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : specifier.endsWith('crm-cancel-dialog.js') ? cancellation : specifier.endsWith('crm-outcome-dialog.js') ? outcome : dates);
         await agenda.evaluate(); hooks = agenda.namespace.initCRMAgenda();
     }
     if (page === 'crm/solicitudes') {
@@ -1209,6 +1223,55 @@ test('UI meetings: conflicto de A no transfiere bloqueo ni respuesta GET tardía
 });
 
 const agendaPage = options => setup(options, 'crm/agenda');
+const outcomeOpen = "document.querySelector('[data-outcome-dialog]').open";
+async function startOutcome(options = {}, value = 'completed') {
+    await agendaPage(options); await until(agendaLoaded); await click('[data-agenda-outcome]');
+    await evaluate(`document.querySelector('[name=outcome]').value = ${JSON.stringify(value)}; document.querySelector('[data-outcome-form]').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))`);
+}
+for (const [value, endpoint] of [['completed', 'complete'], ['no_show', 'no-show']]) test(`4D.3E.2 shell API real ${endpoint}, snapshot parcial y GET`, async () => {
+    const updated = agendaFixture(); updated[0].status = value; updated[0].version = 2;
+    await startOutcome({ agendaResponses: [{}, { data: updated }] }, value);
+    await until('calls.agenda === 2'); await until(agendaLoaded);
+    const request = await evaluate('outcomeRequests[0]');
+    assert.equal(request.url, `/api/admin/meetings/${updated[0].id}/${endpoint}`);
+    assert.deepEqual(JSON.parse(request.body), { expectedVersion: 1 });
+    assert.match(request.headers['Idempotency-Key'], /^[0-9a-f-]{36}$/);
+    assert.equal(await evaluate(outcomeOpen), false);
+    assert.equal(await evaluate(`document.querySelector('[data-agenda-count="${value}"]').textContent`), '2');
+    assert.equal(await evaluate("document.querySelector('[data-agenda-outcome]')"), null);
+    assert.equal(await evaluate('cancelRequests.length + rescheduleRequests.length'), 0);
+});
+test('4D.3E.2 shell error 500 contextual conserva key/body/endpoint en retry', async () => {
+    await startOutcome({ outcomeResponses: [{ status: 500, body: { error: { code: 'INTERNAL_ERROR', message: 'SECRET' } } }, { hold: true }] });
+    await until("!document.querySelector('[data-outcome-uncertain]').hidden");
+    assert.doesNotMatch(await evaluate("document.querySelector('[data-outcome-message]').textContent"), /SECRET|INTERNAL_ERROR/);
+    await evaluate("document.querySelector('[name=outcome]').value='no_show'; document.querySelector('[data-outcome-form]').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))");
+    await until('pendingOutcomes.length === 1');
+    const requests = await evaluate('outcomeRequests');
+    assert.equal(requests[1].url, requests[0].url); assert.equal(requests[1].body, requests[0].body);
+    assert.equal(requests[1].headers['Idempotency-Key'], requests[0].headers['Idempotency-Key']);
+    await evaluate('pendingOutcomes.shift()()'); await until('calls.agenda === 2');
+});
+test('4D.3E.2 shell logout aborta resultado pendiente', async () => {
+    await startOutcome({ outcomeResponses: [{ hold: true }] }); await until('pendingOutcomes.length === 1');
+    const dialog = dom.window.document.querySelector('[data-outcome-dialog]');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(dialog.open, false); assert.equal(dialog.querySelector('[name=outcome]').value, '');
+    assert.equal(await evaluate('outcomeSignals[0].aborted'), true);
+    await evaluate('pendingOutcomes.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate('calls.agenda'), 1);
+});
+test('4D.3E.2 shell cuenta anterior no actualiza Agenda nueva', async () => {
+    await startOutcome({ outcomeResponses: [{ hold: true }] }); await until('pendingOutcomes.length === 1');
+    await evaluate(`fixture.responses.push({ hold: true, user: ${JSON.stringify(userB)} }); emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until('pending.length === 1'); assert.equal(await evaluate(outcomeOpen), false);
+    assert.equal(await evaluate('outcomeSignals[0].aborted'), true);
+    await evaluate('pending.shift()()'); await until(agendaLoaded);
+    const html = await evaluate("document.querySelector('[data-agenda]').innerHTML");
+    await evaluate('pendingOutcomes.shift()()'); await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(await evaluate("document.querySelector('[data-agenda]').innerHTML"), html);
+    assert.equal(await evaluate('calls.agenda'), 2);
+});
 const agendaLoaded = "document.querySelector('[data-agenda-summary]').textContent !== ''";
 const agendaText = "document.querySelector('[data-agenda-rows]').textContent";
 const agendaError = "!document.querySelector('[data-agenda-retry]').hidden";

@@ -104,4 +104,34 @@
             </div>
         </form>
     </dialog>
+    <p data-outcome-announcement role="status" aria-live="polite" aria-atomic="true"></p>
+    <dialog class="outcome-dialog" data-outcome-dialog aria-labelledby="outcome-title" aria-describedby="outcome-zone">
+        <h2 id="outcome-title">Registrar resultado</h2>
+        <dl class="outcome-context">
+            <div><dt>Contacto</dt><dd data-outcome-client></dd></div>
+            <div><dt>Programa</dt><dd data-outcome-program></dd></div>
+            <div><dt>Vendedora</dt><dd data-outcome-seller></dd></div>
+            <div><dt>Fecha y hora</dt><dd data-outcome-schedule></dd></div>
+            <div><dt>Estado actual</dt><dd data-outcome-status></dd></div>
+        </dl>
+        <p id="outcome-zone" data-outcome-zone></p>
+        <form data-outcome-form>
+            <fieldset data-outcome-fields>
+                <legend>Resultado de la reunión</legend>
+                <label for="outcome-choice">Selecciona un resultado</label>
+                <select id="outcome-choice" name="outcome" required aria-describedby="outcome-message">
+                    <option value="">Selecciona una opción</option>
+                    <option value="completed">Completada</option>
+                    <option value="no_show">No asistió</option>
+                </select>
+            </fieldset>
+            <p id="outcome-message" data-outcome-message role="status" aria-live="polite" aria-atomic="true"></p>
+            <p data-outcome-uncertain hidden>No se confirmó si el resultado fue registrado. Reintentar enviará el mismo resultado. Descartar el intento requiere actualizar la Agenda, porque la operación pudo haberse aplicado.</p>
+            <div class="outcome-actions">
+                <button class="crm-button" type="button" data-outcome-back>Volver</button>
+                <button class="crm-button" type="button" data-outcome-discard hidden>Descartar intento y actualizar</button>
+                <button class="crm-button crm-button--primary" type="submit" data-outcome-confirm>Confirmar resultado</button>
+            </div>
+        </form>
+    </dialog>
 </section>
