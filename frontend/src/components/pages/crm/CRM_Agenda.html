@@ -1,5 +1,5 @@
 <section data-agenda aria-labelledby="agenda-title" aria-busy="false">
-    <p class="crm-eyebrow">Panel comercial</p>
+    <p class="crm-eyebrow">Gestión comercial</p>
     <h1 class="crm-title" id="agenda-title" data-crm-heading tabindex="-1">Agenda</h1>
     <p class="crm-intro">Las reuniones del día, con la información que necesitas para acompañar cada oportunidad.</p>
     <div class="agenda-toolbar">
@@ -15,6 +15,24 @@
         <h2 data-agenda-day tabindex="-1"></h2>
         <span data-agenda-summary></span>
     </div>
+    <section class="agenda-overview" data-agenda-overview hidden aria-labelledby="agenda-priority-title">
+        <div class="agenda-priority">
+            <div>
+                <p class="crm-eyebrow">Prioridad del día</p>
+                <h3 id="agenda-priority-title" data-agenda-priority-title></h3>
+                <p data-agenda-priority-copy></p>
+            </div>
+            <div class="agenda-priority-meeting" data-agenda-priority-meeting></div>
+        </div>
+        <p class="agenda-count-caption">Resumen de las reuniones cargadas del día seleccionado</p>
+        <dl class="agenda-counts">
+            <div><dt>Total</dt><dd data-agenda-count="total"></dd></div>
+            <div><dt>Agendadas</dt><dd data-agenda-count="scheduled"></dd></div>
+            <div><dt>Completadas</dt><dd data-agenda-count="completed"></dd></div>
+            <div><dt>No asistieron</dt><dd data-agenda-count="no_show"></dd></div>
+            <div><dt>Canceladas</dt><dd data-agenda-count="cancelled"></dd></div>
+        </dl>
+    </section>
     <p class="agenda-status" data-agenda-status role="status" aria-live="polite" aria-atomic="true"></p>
     <button class="crm-button crm-button--primary" type="button" data-agenda-retry hidden>Reintentar</button>
     <ol class="agenda-list" data-agenda-rows aria-label="Reuniones del día"></ol>

@@ -1242,7 +1242,7 @@ for (const role of ['admin', 'agendadora', 'vendedora']) test(`Agenda UI: navega
 test('Agenda UI: estados, modalidades, hora Ecuador y datos sin IDs', async () => {
     const data = agendaFixture(); data[0].scheduledAt = '2026-10-13T14:30:00+00:00';
     await agendaPage({ agenda: data }); await until(agendaLoaded);
-    assert.deepEqual(await evaluate("[...document.querySelectorAll('.agenda-badge')].map(e => e.textContent)"), ['Programada', 'Completada', 'Cancelada', 'No asistió']);
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('.agenda-badge')].map(e => e.textContent)"), ['Agendada', 'Completada', 'Cancelada', 'No asistió']);
     const text = await evaluate(agendaText);
     for (const word of ['09:30', '45 min', 'En línea', 'Teléfono', 'Oficina', 'Vendedora de Prueba', 'contacto@example.invalid', '000 000 0000', 'Idiomas en el extranjero']) assert.ok(text.includes(word), word);
     for (const row of data) for (const value of [row.id, row.consultationRequestId, row.assignedTo.id, row.consultation.program.id]) assert.ok(!text.includes(value));
@@ -1254,7 +1254,7 @@ for (const count of [0, 1]) test(`Agenda UI: ${count} reuniones y controles disp
     assert.equal(await evaluate("document.querySelector('[data-agenda-summary]').textContent"), count ? '1 reunión' : '0 reuniones');
     assert.equal(await evaluate("document.querySelector('[data-agenda-next]').disabled"), false);
     assert.equal(await evaluate("document.querySelector('[data-agenda-date]').disabled"), false);
-    if (!count) assert.match(await evaluate("document.querySelector('[data-agenda-status]').textContent"), /No hay reuniones programadas/);
+    if (!count) assert.match(await evaluate("document.querySelector('[data-agenda-status]').textContent"), /No tienes reuniones para este día/);
 });
 test('Agenda UI: XSS en todos los campos se presenta como texto; code no se muestra', async () => {
     const evil = '<img src=x onerror=alert(1)><script>evil()</script>';

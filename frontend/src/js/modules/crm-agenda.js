@@ -4,7 +4,7 @@ import { initRescheduleDialog } from './crm-reschedule-dialog.js';
 import { agendaToday, shiftAgendaDay, agendaDayRange, agendaDayLabel, agendaHour } from './crm-agenda-date.js';
 
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
-const statuses = { scheduled: 'Programada', completed: 'Completada', cancelled: 'Cancelada', no_show: 'No asistió' };
+const statuses = { scheduled: 'Agendada', completed: 'Completada', cancelled: 'Cancelada', no_show: 'No asistió' };
 function node(tag, text, className) {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -49,6 +49,11 @@ export function initCRMAgenda() {
 
     function clear() {
         rows.replaceChildren();
+        find('overview').hidden = true;
+        for (const count of root.querySelectorAll('[data-agenda-count]')) count.textContent = '';
+        find('priority-title').textContent = '';
+        find('priority-copy').textContent = '';
+        find('priority-meeting').replaceChildren();
         find('summary').textContent = '';
         find('status').textContent = '';
         retry.hidden = true;
@@ -80,6 +85,31 @@ export function initCRMAgenda() {
         controls();
     }
     function render(data) {
+        // El GET ya ordena por scheduled_at e id. Conservar ese orden, incluso
+        // empates con precisión PostgreSQL, y las referencias usadas por diálogos.
+        const today = day === agendaToday();
+        find('priority-title').textContent = today ? '¿Qué tengo que hacer hoy?' : 'Organiza las reuniones de este día';
+        find('priority-copy').textContent = today
+            ? 'Consulta tus reuniones de hoy y gestiona los cambios de horario.'
+            : 'Consulta el horario y los estados de la fecha seleccionada.';
+        // Solo orientación al cargar; el reloj no interviene en permisos.
+        const next = data.find(meeting => meeting.status === 'scheduled' &&
+            (!today || new Date(meeting.scheduledAt).getTime() >= Date.now()));
+        const priority = find('priority-meeting');
+        priority.replaceChildren();
+        if (next) {
+            priority.append(node('span', today ? 'Próxima agendada · al cargar' : 'Primera agendada del día', 'agenda-priority-label'),
+                node('strong', `${agendaHour(next.scheduledAt)} · ${next.consultation.fullName}`),
+                node('span', next.consultation.program.name));
+        } else {
+            priority.append(node('strong', today ? 'Sin próximas reuniones agendadas' : 'Sin reuniones agendadas'),
+                node('span', 'En las reuniones cargadas para este día.'));
+        }
+        for (const count of root.querySelectorAll('[data-agenda-count]')) {
+            count.textContent = String(count.dataset.agendaCount === 'total' ? data.length
+                : data.filter(meeting => meeting.status === count.dataset.agendaCount).length);
+        }
+        find('overview').hidden = false;
         const fragment = document.createDocumentFragment();
         for (const meeting of data) {
             const item = node('li', undefined, 'agenda-meeting');
@@ -94,9 +124,9 @@ export function initCRMAgenda() {
                 details.append(group);
             };
             field('Modalidad', modes[meeting.mode]);
-            field('Vendedora', meeting.assignedTo.fullName);
+            field('Vendedora', meeting.assignedTo?.fullName?.trim() || 'Sin asignar');
             field('Teléfono', meeting.consultation.phone);
-            if (meeting.consultation.email !== null) field('Email', meeting.consultation.email);
+            if (meeting.consultation.email) field('Email', meeting.consultation.email);
             const badge = node('span', statuses[meeting.status], `agenda-badge agenda-badge--${meeting.status}`);
             item.append(time, person, badge, details);
             if (['admin', 'agendadora'].includes(access.user.role) && meeting.status === 'scheduled') {
@@ -121,7 +151,7 @@ export function initCRMAgenda() {
         rows.replaceChildren(fragment);
         find('summary').textContent = `${data.length} ${data.length === 1 ? 'reunión' : 'reuniones'}`;
         find('status').textContent = data.length ? `${data.length} ${data.length === 1 ? 'reunión cargada' : 'reuniones cargadas'}.`
-            : 'No hay reuniones programadas para este día.';
+            : 'No tienes reuniones para este día.';
     }
     async function load() {
         if (pending || !access?.isCurrent()) return;
