@@ -1319,3 +1319,115 @@ No se ejecutó SQL/HTTP remoto ni se alteraron migrations, schema, RLS, grants,
 índices, dependencias, frontend, app.js, middleware globales o usuarios reales.
 El alcance local se limita a los cinco archivos del módulo meetings, su suite
 y esta documentación. Sin staging, commit ni push.
+
+## 4D.4B.1A — Meeting Context Schema
+
+Checkpoint cerrado el 2026-10-22: schema compatible aplicado y validado en
+Supabase remoto. Este cierre corresponde únicamente a **4D.4B.1A**, no a toda
+4D.4B. La evidencia remota de esta sección fue proporcionada por el responsable
+del proyecto; durante el cierre documental no se repitieron comandos remotos.
+
+### Objetivo y migration
+
+La migration `20261022010000_meeting_context_schema.sql` incorpora contexto de
+atribución, una revisión de agenda y el límite DB de notas, sin modificar los
+workflows existentes. Es transaccional (`BEGIN`/`COMMIT`), exige UTF8 antes de
+instalar el helper y no oculta drift mediante `IF NOT EXISTS`.
+
+| Columna de public.meetings | Definición | Semántica |
+| --- | --- | --- |
+| booked_by | uuid nullable, sin default | Autoría de la reserva; no equivale a created_by |
+| role_at_booking | text nullable, sin default | Snapshot del rol: admin o agendadora |
+| booking_attribution_source | text NOT NULL DEFAULT 'unknown' | unknown, explicit, verified_backfill o administrative_correction |
+| schedule_revision | integer NOT NULL DEFAULT 1 | Contador positivo reservado para futuros workflows |
+
+`unknown` exige `booked_by` y `role_at_booking` NULL. Los otros tres sources
+exigen ambos campos no NULL. Los históricos quedan NULL/NULL/unknown: no hubo
+backfill desde `created_by` ni desde el rol actual de `internal_users`.
+La obligatoriedad de atribución explícita para nuevas reuniones aún NO está
+activa; los INSERT legacy pueden seguir omitiendo estas columnas.
+
+`schedule_revision` inicia en 1 y todavía **NO es una garantía logística**.
+Reschedule legacy no la incrementa; cancel, complete y no-show también
+preservan su valor. No hay trigger ni sincronización con `version`. No debe
+usarse todavía para confirmation, resources o jobs.
+
+### Notes, helper y seguridad
+
+Notes admite NULL o un máximo de **2000 unidades UTF-16**. El helper
+`public.utf16_length(text)` equivale a JavaScript `.length` para texto Unicode
+válido: cada punto BMP aporta 1 y cada suplementario aporta 2. Vacío devuelve
+0 y NULL devuelve NULL. No hubo canonicalización, normalización ni truncamiento
+de notas históricas; el CHECK se añadió con validación normal, sin `NOT VALID`.
+
+El helper retorna bigint y es LANGUAGE SQL, IMMUTABLE, STRICT, PARALLEL SAFE,
+SECURITY INVOKER, con `search_path = pg_catalog, pg_temp`. El catálogo remoto
+confirmó EXECUTE para postgres y service_role, sin acceso para anon ni
+authenticated. La migration revoca explícitamente PUBLIC y los roles indicados
+antes de conceder EXECUTE a service_role. RLS y permisos de tabla se preservan;
+no se añaden policies ni grants de navegador.
+
+### Evidencia remota de aplicación y catálogo
+
+El preflight remoto READ-ONLY fue aprobado: PostgreSQL 17.6, UTF8, collation
+determinista, sin drift y únicamente esta migration pendiente. Se reportaron
+0 notes por encima de 2000 unidades UTF-16, 0 datos inválidos y 0 referencias
+huérfanas; RLS activo, sin policies de navegador, grants esperados y RPC legacy
+intactas. `db push --dry-run` mostró únicamente esta migration.
+
+Posteriormente se aplicó correctamente mediante
+`npx supabase@2.120.0 db push`. `migration list --linked` confirmó
+`20261022010000` local = remote. La validación PostgreSQL real confirmó las
+cuatro columnas y sus tipos, nullabilidad y defaults descritos arriba.
+
+Las seis constraints siguientes quedaron con `convalidated = true`:
+
+- `meetings_booked_by_fkey`: referencia a public.internal_users(id), ON DELETE RESTRICT y ON UPDATE NO ACTION.
+- `meetings_role_at_booking_valid`: NULL, admin o agendadora.
+- `meetings_booking_attribution_source_valid`: los cuatro sources documentados.
+- `meetings_booking_attribution_consistent`: coherencia NULL-safe de atribución.
+- `meetings_schedule_revision_positive`: schedule_revision > 0.
+- `meetings_notes_utf16_length_valid`: notes IS NULL OR public.utf16_length(notes) <= 2000.
+
+Se confirmó `meetings_booked_by_scheduled_at_idx`, índice B-tree no unique y
+no parcial, con orden `(booked_by, scheduled_at)`.
+
+### Validación Unicode real y compatibilidad
+
+Estas pruebas se ejecutaron en PostgreSQL, además de los fixtures JavaScript:
+
+| Entrada | Resultado utf16_length |
+| --- | --- |
+| NULL | NULL |
+| Cadena vacía | 0 |
+| abc | 3 |
+| á | 1 |
+| a + U+0301 | 2 |
+| Símbolo BMP | 1 |
+| Emoji suplementario | 2 |
+| Secuencia con variation selector validada | 2 |
+| Secuencia ZWJ 👩‍💻 | 5 |
+| 1000 emojis suplementarios | 2000 |
+| 1001 emojis suplementarios | 2002 |
+
+No se modificaron create, reschedule, cancel, complete ni no-show. Las cinco
+RPC legacy conservan SECURITY INVOKER, VOLATILE,
+`search_path = pg_catalog, pg_temp` y `TimeZone = UTC`. Los INSERT usan listas
+explícitas y las respuestas JSON proyectan campos explícitos; las columnas
+nuevas no amplían DTO históricos. Hashes, replays, response payloads, audit
+actions e idempotency operations permanecen intactos.
+
+### Tests, límites y próximo checkpoint
+
+Resultados locales registrados: **27/27 focalizados PASS** en
+`meeting-context-schema-migration.test.mjs` y **941/941 backend PASS**.
+La suite estática comprueba el contrato SQL y los fixtures JS; la evidencia
+PostgreSQL real anterior es independiente. No se repitieron tests en este
+cierre porque únicamente se modificó documentación.
+
+Todavía no existen las RPC `update_meeting_notes` ni
+`correct_meeting_booking_attribution`; tampoco create v2, incremento logístico
+de schedule_revision, recursos, Zoom, confirmation ni reminders. Esta fase
+no habilita consumidores logísticos ni atribución obligatoria en create legacy.
+
+Próximo checkpoint: **4D.4B.1B — meeting context workflows**.
