@@ -1431,3 +1431,163 @@ de schedule_revision, recursos, Zoom, confirmation ni reminders. Esta fase
 no habilita consumidores logísticos ni atribución obligatoria en create legacy.
 
 Próximo checkpoint: **4D.4B.1B — meeting context workflows**.
+
+## 4D.4B.1B — Meeting context workflows: evidencia de validación
+
+Cierre documental del checkpoint con evidencia proporcionada por el responsable
+del proyecto. Las pruebas descritas se realizaron antes de esta actualización;
+en esta tarea no se ejecutaron SQL, comandos remotos ni tests. Esta sección
+actualiza el estado posterior a 4D.4B.1A sin reescribir su registro histórico
+ni declarar cerrada toda 4D.4B.
+
+### Aplicación y objetos instalados
+
+La migration `20261022020000_meeting_context_workflows.sql` fue aplicada
+correctamente a Supabase remoto. El preflight había confirmado que era la
+única pendiente; la lista de migrations local/remota quedó alineada.
+
+Objetos instalados y verificados:
+
+- `public.canonicalize_meeting_notes(text)`.
+- `public.update_meeting_notes(uuid,uuid,integer,text,text)`.
+- `public.correct_meeting_booking_attribution(uuid,uuid,uuid,text,integer,uuid,text,text)`.
+
+Los tres son SECURITY INVOKER con `search_path = pg_catalog, pg_temp`.
+El canonicalizer es IMMUTABLE, STRICT y PARALLEL SAFE. Las RPC mutantes son
+VOLATILE y PARALLEL UNSAFE, con TimeZone=UTC. EXECUTE efectivo confirmado
+solo para postgres y service_role, sin anon/authenticated.
+
+Las constraints cerradas de audit/idempotency se ampliaron y quedaron
+validadas, conservando los valores históricos: audit añade únicamente
+`meeting_notes_updated` y `meeting_booking_attribution_corrected`;
+idempotency añade únicamente `correct_meeting_booking_attribution`.
+Notes no utiliza Idempotency-Key.
+
+### Canonicalizer: PostgreSQL remoto real
+
+Se probó el conjunto completo de whitespace ECMAScript:
+U+0009–U+000D, U+0020, U+00A0, U+1680, U+2000–U+200A,
+U+2028, U+2029, U+202F, U+205F, U+3000 y U+FEFF.
+
+Resultados registrados:
+
+- `edge_trim_failures=0`.
+- `internal_preservation_failures=0`.
+- `whitespace_to_null_failures=0`.
+- NULL y cadena vacía devuelven NULL.
+- U+0085 y U+200B se preservan, al igual que los espacios internos.
+- El contenido no se normaliza Unicode.
+
+En Windows se construyó Unicode mediante `chr()` por limitaciones de codepage
+del cliente psql. Fue una limitación del cliente, no un defecto de PostgreSQL
+ni de las RPC.
+
+### update_meeting_notes: PostgreSQL remoto real
+
+| Caso probado | Resultado observado |
+| --- | --- |
+| Happy path scheduled | Canonicalización correcta, changed=true, version 1→2 y schedule_revision preservado. Una auditoría meeting_notes_updated sin contenido de notes en metadata. ROLLBACK final sin residuos. |
+| No-op | changed=false; version, schedule_revision, updated_by y updated_at intactos; sin audit. |
+| CAS incorrecto | MEETING_VERSION_CONFLICT y cero mutaciones. |
+| 1000 emojis suplementarios | 2000 unidades UTF-16, aceptados. |
+| 1001 emojis suplementarios | 2002 unidades UTF-16, INVALID_MEETING_NOTES. |
+| Actor vendedora | ACTOR_NOT_ALLOWED. |
+| Reason en scheduled | INVALID_CORRECTION_REASON. |
+| Terminal sin reason | INVALID_CORRECTION_REASON. |
+| Terminal con admin y clerical_error | Éxito. |
+
+La rama de agendadora no se forzó porque no había una agendadora activa
+disponible. No se modificaron usuarios reales para crear esa precondición;
+esa rama no queda acreditada por ejecución remota en esta evidencia.
+
+### correct_meeting_booking_attribution: PostgreSQL remoto real
+
+| Caso probado | Resultado observado |
+| --- | --- |
+| Happy path | De unknown a UUID de usuario admin / rol admin / administrative_correction; changed=true, version 1→2, schedule_revision preservado, una auditoría y un idempotency record. |
+| Replay misma key/hash | Snapshot exacto, sin nuevas escrituras. |
+| Target vendedora, rol solicitado admin estructuralmente válido | BOOKING_ATTRIBUTION_TARGET_NOT_ELIGIBLE. |
+| Target admin, rol solicitado agendadora | BOOKING_ATTRIBUTION_ROLE_MISMATCH. |
+| Key reutilizada con hash distinto después de corrección válida | IDEMPOTENCY_KEY_REUSED; estado ganador intacto, exactamente 1 audit y 1 idempotency record. |
+| Actor vendedora | ACTOR_NOT_ALLOWED; sin mutación, audit ni idempotency. |
+| Reason libre | INVALID_CORRECTION_REASON; sin mutación, audit ni idempotency. |
+| expectedVersion stale | MEETING_VERSION_CONFLICT; sin mutación, audit ni idempotency. |
+| Cambio real con version=2147483647 | INTERNAL_ERROR; meeting intacta, 0 audit y 0 idempotency. |
+
+El no-op idempotente se probó con atribución ya igual a usuario admin / rol
+admin / administrative_correction, version=5 y schedule_revision=9.
+Devolvió changed=false, conservó updated_by y updated_at (sin UPDATE real),
+produjo 0 audit y exactamente 1 idempotency record. El replay fue exacto y
+mantuvo los conteos en 0 audit / 1 idempotency.
+
+Para replay corrupto se insertó manualmente, como fixture, un response_payload
+estructuralmente inválido. Misma key/hash produjo INTERNAL_ERROR; meeting
+intacta, 0 audit y ningún idempotency record nuevo. El único registro era el
+fixture corrupto original. ROLLBACK dejó cero residuos.
+
+### Concurrencia PostgreSQL remota: dos sesiones reales
+
+| Carrera probada | Bloqueo y resultado observado |
+| --- | --- |
+| Misma Idempotency-Key y mismo hash | A realizó el cambio y mantuvo la transacción abierta. B quedó bloqueada hasta COMMIT de A y devolvió replay exacto. Estado final version=2, schedule_revision preservado, exactamente 1 audit y 1 idempotency. Cleanup explícito: 0 residuos. |
+| Keys distintas y mismo expectedVersion | Una sesión ganó; la segunda esperó resolución y terminó MEETING_VERSION_CONFLICT. Una sola mutación, una auditoría y un registro idempotente del ganador. Cleanup explícito: 0 residuos. |
+
+Estos resultados acreditan esas dos carreras. No se presentan como ejecución
+de toda la matriz de concurrencia diseñada en la auditoría, incluidas las
+carreras con notes, cancel, reschedule o cambios de actividad/rol del target.
+
+### Atomicidad inducida: PostgreSQL 18 local AISLADO
+
+Estas pruebas NO se realizaron en Supabase remoto. Se creó la base temporal
+`globalexchange_4d4b1b_atomicity_test`, con un schema auth.users mínimo
+exclusivamente para la FK local y roles temporales anon, authenticated y
+service_role. Se aplicaron correctamente las 12 migrations reales del
+repositorio, en orden.
+
+Los triggers de fallo fueron instrumentación temporal de este entorno
+aislado; no se añadieron a las migrations del repositorio.
+
+| Prueba | Fallo inducido y resultado observado |
+| --- | --- |
+| A. Notes: fallo audit | Un trigger temporal rechazó INSERT de meeting_notes_updated después del UPDATE. ROLLBACK TO SAVEPOINT restauró notes, version, schedule_revision, updated_by y updated_at; audit=0. |
+| B. Attribution: fallo audit | Un trigger temporal rechazó meeting_booking_attribution_corrected. Se revirtió el UPDATE previo; atribución, versión, schedule_revision y timestamps originales; audit=0, idempotency=0. |
+| C. Attribution: fallo idempotency | Falló INSERT idempotency_records después de UPDATE + audit. PostgreSQL revirtió ambos; estado inicial intacto, audit=0, idempotency=0. |
+| D. Attribution no-op: fallo idempotency | El fixture ya tenía la atribución solicitada. Falló la persistencia idempotente; meeting idéntica, audit=0, idempotency=0. |
+
+Cleanup local confirmado después del rollback:
+
+- `auth_residue=0`.
+- `internal_user_residue=0`.
+- `consultation_residue=0`.
+- `meeting_residue=0`.
+- `audit_residue=0`.
+- `idempotency_residue=0`.
+- 0 triggers temporales.
+
+Posteriormente se ejecutó
+`DROP DATABASE globalexchange_4d4b1b_atomicity_test WITH (FORCE)` y se
+eliminaron los roles temporales service_role, authenticated y anon.
+La verificación final confirmó base y roles inexistentes.
+
+La atomicidad inducida queda respaldada en PostgreSQL 18 local con esos
+fixtures; no se extrapola como una prueba de fallos inducidos en Supabase
+remoto ni como equivalencia completa de su entorno de autenticación.
+
+### Tests registrados y límites del checkpoint
+
+Se conserva la validación focalizada previamente registrada:
+**52/52 targeted migration tests PASS**.
+
+Después de actualizar esta documentación se volvió a ejecutar la suite backend
+completa: **993/993 PASS**, con 0 fail, 0 cancelled, 0 skipped y 0 todo.
+
+No se modificaron las RPC legacy. Create/reschedule todavía no escriben la
+nueva atribución como garantía completa: corresponde al checkpoint posterior
+**4D.4B.1C**. schedule_revision todavía no debe presentarse como garantía
+logística integral hasta evolucionar los escritores correspondientes.
+
+La evidencia anterior no acredita casos reales no reportados, como replay
+tras desactivar al target, todas las combinaciones de roles/estados o toda
+la matriz de concurrencia. No se implementan recursos, Zoom, availability,
+confirmation ni reminders en este cierre. El estado documentado corresponde
+únicamente a **4D.4B.1B**, no al cierre de toda 4D.4B.
