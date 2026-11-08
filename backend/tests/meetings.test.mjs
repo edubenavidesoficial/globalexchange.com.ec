@@ -67,25 +67,151 @@ const fake = {
     },
 };
 const context = vm.createContext({ console: { error: (...args) => state.logs.push(clone(args)) } });
-const modules = new Map();
-async function load(id) {
-    if (modules.has(id)) return modules.get(id);
-    let module;
-    if (id === pathToFileURL(resolve(root, 'src/config/supabase.js')).href) {
-        module = new vm.SyntheticModule(['default'], function () { this.setExport('default', fake); }, { context });
-    } else if (!id.startsWith('file:')) {
-        const native = await import(id);
-        module = new vm.SyntheticModule(Object.keys(native), function () {
-            for (const name of Object.keys(native)) this.setExport(name, native[name]);
-        }, { context });
-    } else {
-        module = new vm.SourceTextModule(await readFile(fileURLToPath(id), 'utf8'), { context, identifier: id });
+function createModuleLoader(context, readSource = id => readFile(fileURLToPath(id), 'utf8')) {
+    const modules = new Map();
+    const constructions = new Map();
+    const loads = new Map();
+    let linkQueue = Promise.resolve();
+    function construct(id) {
+        if (constructions.has(id)) return constructions.get(id);
+        // Register before starting any asynchronous work, including native imports.
+        const pending = Promise.resolve().then(async () => {
+            let module;
+            if (id === pathToFileURL(resolve(root, 'src/config/supabase.js')).href) {
+                module = new vm.SyntheticModule(['default'], function () { this.setExport('default', fake); }, { context });
+            } else if (!id.startsWith('file:')) {
+                const native = await import(id);
+                module = new vm.SyntheticModule(Object.keys(native), function () {
+                    for (const name of Object.keys(native)) this.setExport(name, native[name]);
+                }, { context });
+            } else {
+                module = new vm.SourceTextModule(await readSource(id), { context, identifier: id });
+            }
+            modules.set(id, module);
+            return module;
+        }).catch(error => {
+            constructions.delete(id);
+            throw error;
+        });
+        constructions.set(id, pending);
+        return pending;
     }
-    modules.set(id, module);
-    await module.link((specifier, parent) => load(specifier.startsWith('.')
-        ? new URL(specifier, parent.identifier).href : specifier));
-    return module;
+    function load(id) {
+        if (loads.has(id)) return loads.get(id);
+        // Serialize root linking when graphs overlap. The VM links dependencies itself;
+        // the linker returns constructed modules, never waits for a cycle to finish linking.
+        const pending = linkQueue.then(async () => {
+            const module = await construct(id);
+            if (module.status === 'unlinked') {
+                await module.link((specifier, parent) => construct(specifier.startsWith('.')
+                    ? new URL(specifier, parent.identifier).href : specifier));
+            }
+            return module;
+        }).catch(error => {
+            loads.delete(id);
+            constructions.delete(id);
+            modules.delete(id);
+            throw error;
+        });
+        loads.set(id, pending);
+        // A rejected root must not poison later loads or retries.
+        linkQueue = pending.then(() => undefined, () => undefined);
+        return pending;
+    }
+    return { load, modules };
 }
+const { load, modules } = createModuleLoader(context);
+
+// Fresh harnesses exercise the real import graph without opening HTTP servers.
+for (let run = 1; run <= 20; run++) test(`loader identity: concurrent real graph ${run}/20`, async () => {
+    const counts = new Map();
+    const harness = createModuleLoader(vm.createContext({ console }), async id => {
+        counts.set(id, (counts.get(id) ?? 0) + 1);
+        const source = await readFile(fileURLToPath(id), 'utf8');
+        // Expose the actual binding used by the middleware, only in this VM copy.
+        return id.endsWith('/middlewares/error-handler.js')
+            ? source + '\nexport const harnessAppError = AppError;' : source;
+    });
+    const appId = pathToFileURL(resolve(root, 'src/app.js')).href;
+    const errorId = pathToFileURL(resolve(root, 'src/errors/app-error.js')).href;
+    const first = harness.load(appId), second = harness.load(appId);
+    const errorFirst = harness.load(errorId), errorSecond = harness.load(errorId);
+    assert.equal(first, second, 'Concurrent callers share the load Promise');
+    assert.equal(errorFirst, errorSecond);
+    const [app, sameApp, error, sameError] = await Promise.all([first, second, errorFirst, errorSecond]);
+    assert.equal(app, sameApp);
+    assert.equal(error, sameError);
+    assert.equal(await harness.load(errorId), error, 'Later callers reuse the constructed module');
+    await app.evaluate();
+    const namespace = path => harness.modules.get(pathToFileURL(resolve(root, path)).href).namespace;
+    const { MeetingError } = namespace('src/modules/meetings/meetings.errors.js');
+    const { harnessAppError, errorHandler } = namespace('src/middlewares/error-handler.js');
+    assert.equal(error.namespace.AppError, harnessAppError);
+    const failure = new MeetingError('INVALID_REQUEST');
+    assert.ok(failure instanceof harnessAppError);
+    let status, payload;
+    const response = { status(value) { status = value; return this; }, json(value) { payload = value; } };
+    errorHandler(failure, {}, response, () => assert.fail('Unexpected next'));
+    assert.equal(status, 400);
+    assert.equal(payload.error.code, 'INVALID_REQUEST');
+    for (const [id, count] of counts) assert.equal(count, 1, 'One construction per URL: ' + id);
+});
+
+test('loader retries a rejected construction and shares the retry Promise', async () => {
+    const id = 'file:///harness/retry.mjs';
+    let attempts = 0;
+    const failure = new Error('synthetic read failure');
+    const harness = createModuleLoader(vm.createContext({}), async () => {
+        if (++attempts === 1) throw failure;
+        return 'export const value = 42;';
+    });
+    const first = harness.load(id), same = harness.load(id);
+    assert.equal(first, same);
+    const results = await Promise.allSettled([first, same]);
+    for (const result of results) { assert.equal(result.status, 'rejected'); assert.equal(result.reason, failure); }
+    assert.equal(attempts, 1);
+    assert.equal(harness.modules.has(id), false);
+    const retry = harness.load(id);
+    assert.notEqual(retry, first);
+    assert.equal(retry, harness.load(id));
+    const module = await retry;
+    await module.evaluate();
+    assert.equal(module.namespace.value, 42);
+    assert.equal(attempts, 2);
+});
+
+test('loader handles cycles and concurrently requested overlapping roots', async () => {
+    const sources = new Map([
+        ['file:///harness/a.mjs', "import { b } from './b.mjs'; export const a = 'a'; export const readB = () => b;"],
+        ['file:///harness/b.mjs', "import { a } from './a.mjs'; export const b = 'b'; export const readA = () => a;"],
+    ]);
+    const counts = new Map();
+    const harness = createModuleLoader(vm.createContext({}), async id => {
+        counts.set(id, (counts.get(id) ?? 0) + 1);
+        return sources.get(id);
+    });
+    const [a, b] = await Promise.all([...sources.keys()].map(harness.load));
+    await a.evaluate();
+    assert.equal(a.namespace.readB(), 'b');
+    assert.equal(b.namespace.readA(), 'a');
+    assert.deepEqual([...counts.values()], [1, 1]);
+});
+
+test('loader retries failed linking without poisoning the queue', async () => {
+    let available = false;
+    const harness = createModuleLoader(vm.createContext({}), async id => {
+        if (id.endsWith('/parent.mjs')) return "export { value } from './child.mjs';";
+        if (!available) throw new Error('synthetic missing dependency');
+        return 'export const value = 7;';
+    });
+    const id = 'file:///harness/parent.mjs';
+    await assert.rejects(harness.load(id), /synthetic missing dependency/);
+    available = true;
+    const module = await harness.load(id);
+    await module.evaluate();
+    assert.equal(module.namespace.value, 7);
+});
+
 const appModule = await load(pathToFileURL(resolve(root, 'src/app.js')).href);
 await appModule.evaluate();
 const app = appModule.namespace.default;

@@ -1591,3 +1591,202 @@ tras desactivar al target, todas las combinaciones de roles/estados o toda
 la matriz de concurrencia. No se implementan recursos, Zoom, availability,
 confirmation ni reminders en este cierre. El estado documentado corresponde
 únicamente a **4D.4B.1B**, no al cierre de toda 4D.4B.
+
+## 4D.4B.1C — Create/reschedule: consolidación de validación PostgreSQL real
+
+La migration `20261022030000_meeting_context_schedule_workflows.sql` fue
+aplicada correctamente a Supabase remoto PostgreSQL **17.6**, con las RPC
+`create_consultation_meeting` y `reschedule_consultation_meeting` verificadas.
+La batería remota A–O y las cinco carreras C1/C2/C3_NOTES/C3_ATTRIBUTION/C4
+terminaron satisfactoriamente según la evidencia proporcionada por el
+responsable del proyecto para este cierre. No se repitieron SQL, fixtures,
+migraciones ni pruebas remotas durante la consolidación documental.
+
+Esta sección registra el estado posterior a 1A/1B; no reescribe sus resultados
+históricos ni declara cerrada toda 4D.4B. No se dispone aquí de una transcripción
+íntegra de cada sesión ni de fechas exactas de ejecución: los PASS, bloqueos,
+PID y residuos siguientes son los reportados por el responsable, contrastados
+con las assertions de los scripts conservados. No son observaciones remotas
+nuevas efectuadas por el agente durante este cierre.
+
+### Contrato vigente y alcance preservado
+
+- CREATE atribuye nuevas meetings al actor validado bajo lock: `booked_by`,
+  `role_at_booking`, source `explicit`, version=1 y schedule_revision=1.
+  La asignada sigue siendo independiente del autor de reserva. No hay backfill.
+- RESCHEDULE conserva atribución, notes y asignación. Cada comando nuevo
+  exitoso incrementa version, incluso con logística idéntica; schedule_revision
+  aumenta únicamente si cambia scheduled_at, la zona textual, duración o mode.
+- Una revisión INT_MAX permite logística idéntica; cambio real con revisión
+  INT_MAX y cualquier comando nuevo con version INT_MAX fallan sin efectos.
+- Firmas, hashes, respuesta histórica CREATE y respuesta RESCHEDULE de ocho
+  campos, auditoría, operaciones idempotentes, permisos y precedencia de replay
+  mantienen sus contratos. No se añaden campos de contexto a los DTO públicos.
+- Continúan READ COMMITTED, advisory lock por operación/actor/key, validación
+  del actor bajo SHARE y orden padre→meeting para comandos nuevos. Replay
+  devuelve la fotografía persistida antes de consultar estado mutable.
+
+### CREATE A–E: evidencia remota
+
+Archivo: `../tests/manual/4d4b1c/01_create_A_E.sql`.
+
+| Caso | Validación reportada PASS |
+| --- | --- |
+| A | CREATE scheduled, atribución explícita del actor, version/revisión 1/1, consulta converted, respuesta exacta, dos audits y una idempotencia. |
+| B | Replay idéntico, sin cambios en snapshots de consulta, meetings, audit e idempotencia. |
+| C | Misma key y distinto hash: IDEMPOTENCY_KEY_REUSED; sin efectos adicionales. |
+| D | Nueva scheduled después de una meeting completed sintética; preservación del historial, atribución nueva y sin duplicar conversion audit. |
+| E | Scheduled existente: CONSULTATION_ALREADY_SCHEDULED; sin efectos adicionales. |
+| B historical precedence | Replay original después de cambiar el estado de la meeting original; respuesta histórica y ausencia de efectos. |
+
+Los seis PASS fueron reportados. D prepara directamente el estado completed
+del fixture: no constituye una prueba del workflow de outcomes.
+ROLLBACK final y residuos **0/0/0/0** en consultation_requests, meetings,
+audit_events e idempotency_records; no hubo COMMIT en este grupo.
+
+### RESCHEDULE F–O: 13/13 PASS remotos
+
+Archivo: `../tests/manual/4d4b1c/02_reschedule_F_O.sql`. Fixture independiente
+de CREATE, con meeting inicial version=7/revisión=3 y resets limitados a sus IDs.
+
+| Caso | Validación reportada PASS |
+| --- | --- |
+| F_DATE / F_ZONE / F_DURATION / F_MODE | Cuatro cambios reales independientes; incluyen UTC→Etc/UTC como cambio de zona textual. Version y revisión aumentan, con atribución preservada. |
+| G | Logística idéntica: version aumenta, revisión se conserva; audit e idempotencia presentes. |
+| H | Replay exacto tras preparar cancelled y ambos contadores INT_MAX; sin nuevas escrituras. |
+| I | Misma key/hash distinto: IDEMPOTENCY_KEY_REUSED; estado ganador intacto. |
+| J | Versión esperada obsoleta: MEETING_VERSION_CONFLICT y cero efectos. |
+| K | Revisión INT_MAX y logística idéntica: éxito sin overflow de revisión. |
+| L | Revisión INT_MAX y cambio real: INTERNAL_ERROR, sin efectos. |
+| M | Version INT_MAX: INTERNAL_ERROR incluso con logística idéntica, sin efectos. |
+| N | Preserva administrative_correction y su atribución. |
+| O | Preserva unknown y booker/rol NULL, sin rellenar históricos. |
+
+Las assertions incluyen persistencia, respuesta exacta, metadata/deltas de
+audit, snapshot idempotente y ausencia de cambios indebidos en el padre.
+ROLLBACK final y residuos **0/0/0/0**; no hubo COMMIT en este grupo.
+
+### Concurrencia real: cinco escenarios independientes
+
+Se utilizaron `03_concurrency_setup.sql`, `04_concurrency_A.sql`,
+`05_concurrency_B.sql` y `06_concurrency_cleanup.sql` del mismo directorio,
+con conexiones independientes A/B y observador. El setup comprometió el
+fixture para compartirlo; A mantuvo su mutación pendiente hasta observar
+el bloqueo de B. La evidencia reportada incluye COMMIT de A y PASS de B;
+para C2/C3_NOTES/C3_ATTRIBUTION/C4 también se reportó expresamente COMMIT B.
+
+| Escenario | Bloqueo observado / PID | Resultado reportado y assertions del harness |
+| --- | --- | --- |
+| C1 — misma key/hash | Lock / advisory; PID no aportados | COMMIT A; PASS C1 con replay exacto. Version/revisión 2/2 y un audit/una idempotencia. |
+| C2 — keys distintas | Lock / transactionid; A=18252, B=18275, blockers={18252} | COMMIT A, PASS B C2, COMMIT B. MEETING_VERSION_CONFLICT; una sola mutación, version/revisión 2/2 y audit/idempotencia 1/1. |
+| C3_NOTES | Lock / transactionid; A=18394, B=18416, blockers={18394} | COMMIT A, PASS B C3_NOTES, COMMIT B. Conflicto inicial; retry con versión actual conserva notas y atribución; termina 3/2, audit/idempotencia 2/1. |
+| C3_ATTRIBUTION | Lock / transactionid; A=19138, B=19142, blockers={19138} | COMMIT A, PASS B C3_ATTRIBUTION, COMMIT B. Conflicto inicial; retry conserva la corrección administrativa; termina 3/2, audit/idempotencia 2/2. |
+| C4 — CREATE concurrente | Lock / transactionid; A=19215, B=19218, blockers={19215} | COMMIT A, PASS B C4, COMMIT B. CONSULTATION_ALREADY_SCHEDULED para B, sin segunda creación incompatible; una scheduled, dos audits y una idempotencia. |
+
+Cada escenario terminó con **cleanup PASS y residuos 0/0/0/0**, en el orden
+consultation_requests / meetings / audit_events / idempotency_records.
+Los PID identifican observaciones históricas, no sesiones que deban reutilizarse.
+C3 acredita contexto→reschedule; no acredita el orden inverso ni todas las
+intercalaciones. Los conteos y campos seleccionados de concurrencia no son
+snapshots íntegros de todas las filas como los utilizados en A–O.
+
+### Evidencia reproducible y seguridad operacional
+
+Se conservan sin cambios los seis scripts manuales:
+
+1. `../tests/manual/4d4b1c/01_create_A_E.sql`.
+2. `../tests/manual/4d4b1c/02_reschedule_F_O.sql`.
+3. `../tests/manual/4d4b1c/03_concurrency_setup.sql`.
+4. `../tests/manual/4d4b1c/04_concurrency_A.sql`.
+5. `../tests/manual/4d4b1c/05_concurrency_B.sql`.
+6. `../tests/manual/4d4b1c/06_concurrency_cleanup.sql`.
+
+El README de ese directorio conserva la matriz, comandos, observador y
+recuperación. Sus frases «diseño, no ejecutado» y cabeceras equivalentes de
+scripts describen el estado inicial del harness; esta sección actualiza la
+evidencia de ejecución. No se editaron esos archivos fuera del alcance autorizado.
+
+El preflight remoto reportado confirmó PostgreSQL 17.6, fixtures vacíos,
+permisos/RPC y referencias activas correctos, dependencias de cleanup compatibles,
+sin sesiones antiguas, publicaciones relevantes, webhooks/triggers personalizados,
+Edge Functions desplegadas, suscripciones Realtime registradas, pg_cron ni pg_net.
+El CRM todavía no estaba publicado ni utilizado por empleados. El formulario
+público inserta otra solicitud con UUID generado y prepara WhatsApp mediante
+wa.me en el navegador tras el éxito HTTP; el harness SQL no invoca ese frontend.
+Estos datos describen el entorno revisado, no una garantía permanente de ausencia
+de consumidores externos. Las consultas CRM no excluyen fixtures sintéticos.
+
+Los guards RUN_4D4B1C y SCENARIO, namespaces separados, colisiones rechazadas,
+marcadores y manifiestos limitan las mutaciones a fixtures. Usuarios/programas
+existentes se referencian sin modificarlos. Cleanup valida propiedad antes de
+borrar audit→idempotencia→meeting→consulta y consulta residuos después del COMMIT.
+
+Una repetición futura exige nuevo preflight y autorización: procesos psql
+dedicados, sin transacción previa ni pooler transaccional, un escenario a la vez,
+evidencia de B bloqueada por A antes de confirmar y cleanup tras finalizar ambas
+sesiones. A/B limitan locks a 120s, sentencia a 150s e inactividad transaccional
+a 180s; setup/cleanup usan 5s/30s/90s. Timeout, desconexión, falta de bloqueo o
+ROLLBACK de A invalidan la carrera. C1 podría mostrar PASS si B se convierte en
+primer escritor después de revertir A: ese PASS aislado no acredita concurrencia.
+Ante COMMIT incierto se inspecciona el estado; nunca se amplía el DELETE ni se
+reutiliza un namespace ocupado. Cleanup no revierte efectos externos ya emitidos.
+
+### Correcciones previas del harness y límites de evidencia
+
+Los CASE incluidos directamente en condiciones IF de 01/02/04/05 se separaron
+en variables esperadas, preservando assertions. La validación previa de los
+11 DO de 03–06 pasó en PostgreSQL local 18.6 aislado, con RETURN inmediato,
+meetings%rowtype sustituido por record y escenario sustituido en memoria.
+Esa compilación no ejecutó las pruebas ni validó resolución del schema remoto;
+es evidencia distinta de las ejecuciones funcionales 17.6 reportadas arriba.
+
+El loader de meetings.test.mjs deduplica construcciones/cargas por URL mediante
+Promises registradas antes del trabajo asíncrono, serializa el enlace de raíces
+y comprueba identidad AppError, ciclos y retry. No modifica error-handler ni
+módulos productivos. El test estático 1C preserva literales SQL al normalizar
+whitespace y rechaza expresamente 'read committed'→'read  committed', además
+de las mutaciones de guards, replay, atribución, revisión y respuesta.
+
+No se acredita un nuevo E2E HTTP remoto, prueba de carga, todas las combinaciones
+de roles, carreras inversas ni fallos inducidos de audit/idempotency para 1C.
+La atomicidad inducida local descrita en 1B no se convierte en evidencia 1C.
+Las ramas remotas aquí usan admin; no se crearon usuarios para probar agendadora.
+schedule_revision expresa cambios logísticos de estas RPC, no un reloj global
+de lifecycle ni garantía sobre escrituras directas privilegiadas. No se añaden
+resources, Zoom, availability, confirmation ni reminders.
+
+### Validación local del cierre y auditoría final
+
+Comandos ejecutados desde backend en esta consolidación:
+
+| Comando | Tests | Pass | Fail | Cancelled | Skipped | Todo |
+| --- | --- | --- | --- | --- | --- | --- |
+| `node --test tests/meeting-context-schedule-workflows-migration.test.mjs` | 44 | 44 | 0 | 0 | 0 | 0 |
+| `npm test` con loopback permitido | 1060 | 1060 | 0 | 0 | 0 | 0 |
+
+El primer intento de npm test dentro del sandbox falló por conexiones
+EACCES a 127.0.0.1; no se cuenta como PASS. La repetición autorizada con
+loopback permitido pasó completa. Se realizó una repetición exitosa de la
+suite en este cierre, no cinco corridas consecutivas nuevas. Incluye los
+20 casos de identidad concurrente del loader y sus pruebas de retry/ciclos.
+Los tests estáticos y HTTP con mocks no sustituyen la evidencia PostgreSQL.
+
+Auditoría final: seis scripts revisados completos, alcance contrastado con
+las RPC y contratos; sin hallazgos CRITICAL/HIGH ni bloqueantes identificados.
+MEDIUM operacional residual para futuras repeticiones: commits de fixtures,
+coordinación manual, evidencia de bloqueo y cleanup obligatorio; el preflight
+de consumidores externos debe renovarse si cambia el entorno. LOW documental:
+cabeceras/README conservan el estado inicial «no ejecutado», aclarado arriba.
+LOW de cobertura: roles, intercalaciones y fallos inducidos no reportados
+permanecen fuera de la evidencia, al igual que nuevas garantías de consumidores.
+
+La consolidación modifica exclusivamente PHASE_4D_API.md. Se preservan los
+cambios previos de meetings.test.mjs, la migration 1C aplicada, el test estático
+1C y los seis scripts con su README todavía untracked al revisar el checkpoint.
+No se modifican código productivo, dependencias ni migrations. No se ejecutan
+SQL remoto, git add, commit, push ni db push; staging permanece vacío.
+
+Veredicto del checkpoint documentado: **APROBADO PARA COMMIT**, sujeto a la
+revisión y selección manual del conjunto por el responsable. No constituye
+autorización para reaplicar la migration ya instalada ni repetir mutaciones
+remotas, y no declara cerrada toda la Fase 4D.4B.
