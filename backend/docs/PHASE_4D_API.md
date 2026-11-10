@@ -1790,3 +1790,14 @@ Veredicto del checkpoint documentado: **APROBADO PARA COMMIT**, sujeto a la
 revisión y selección manual del conjunto por el responsable. No constituye
 autorización para reaplicar la migration ya instalada ni repetir mutaciones
 remotas, y no declara cerrada toda la Fase 4D.4B.
+
+## F0 / 4D.4B.2A — Formalización contractual local — 2026-11-10
+
+Paquete documental: [contrato maestro y decisiones aprobadas](PHASE_4D4B2_F0_MASTER_CONTRACT.md),
+[trazabilidad completa P/D](PHASE_4D4B2_F0_TRACEABILITY.md) y
+[decisiones diferidas, observaciones, validación futura y roadmap](PHASE_4D4B2_F0_DECISIONS_AND_VALIDATION.md).
+Dictamen: **APTO CON OBSERVACIONES NO BLOQUEANTES**; B-01 a B-11 aprobadas, opción A.
+Este registro no altera los contratos ni la evidencia histórica anteriores y no acredita
+implementación o validación funcional nueva. **4D.4B.2B: PROPUESTO — NO AUTORIZADO.**
+La autorización cubre exclusivamente documentación local sin staging; no autoriza SQL,
+implementación, cambios en Supabase, proveedores externos, commit, push ni despliegue.
