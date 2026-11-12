@@ -1801,3 +1801,13 @@ Este registro no altera los contratos ni la evidencia histórica anteriores y no
 implementación o validación funcional nueva. **4D.4B.2B: PROPUESTO — NO AUTORIZADO.**
 La autorización cubre exclusivamente documentación local sin staging; no autoriza SQL,
 implementación, cambios en Supabase, proveedores externos, commit, push ni despliegue.
+
+## 2B.0 / 4D.4B.2B — Contrato físico V2.1 — 2026-11-11
+
+Paquete documental local preparado, sujeto a auditoría independiente READ-ONLY del diff:
+[contrato físico canónico V2.1](PHASE_4D4B2B_2B0_PHYSICAL_CONTRACT.md),
+[plan de validación futuro — NO EJECUTADO](PHASE_4D4B2B_2B0_VALIDATION_PLAN.md) y
+[revisión de cierre documental](PHASE_4D4B2B_2B0_CLOSURE_REVIEW.md).
+Conserva F0 publicado en `49192c933e8eb51b362ab8069884392ed2de8f57` y los contratos históricos.
+No acredita implementación, pruebas PostgreSQL ni publicación Git de este paquete.
+**4D.4B.2B: PROPUESTO — NO AUTORIZADO PARA IMPLEMENTACIÓN. 2B.1 NO AUTORIZADO.**
