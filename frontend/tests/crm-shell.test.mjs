@@ -7,7 +7,7 @@ import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
-import { consultationsFixture } from './fixtures/consultations.mjs';
+import { consultationsFixture, detailFixture } from './fixtures/consultations.mjs';
 import { agendaFixture } from './fixtures/agenda.mjs';
 import { shiftAgendaDay } from '../src/js/modules/crm-agenda-date.js';
 
@@ -646,6 +646,158 @@ const loaded = "!document.querySelector('[data-consultations-summary]').hidden";
 const loadError = "!document.querySelector('[data-consultations-retry]').hidden";
 const rowText = "document.querySelector('[data-consultations-rows]').textContent";
 const inbox = options => setup(options, 'crm/solicitudes');
+
+const detailOpen = "document.querySelector('[data-consultations-detail]').open";
+const detailText = "document.querySelector('[data-consultations-detail-content]').textContent";
+const detailButton = '[data-consultations-detail-open]';
+const detailClose = '[data-consultations-detail-close]';
+async function openDetailFixture(options = {}) {
+    await inbox({ consultations: detailFixture(), ...options });
+    await until(loaded); await click(detailButton);
+}
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Detalle: ${role}, campos reales, preferencias y ninguna consulta/escritura adicional`, async () => {
+    await openDetailFixture({ user: { ...userA, role } });
+    assert.equal(await evaluate(detailOpen), true);
+    const values = await evaluate("[...document.querySelectorAll('[data-consultations-detail-content] dd')].map(e => e.textContent)");
+    const item = detailFixture()[0];
+    assert.deepEqual(values, [item.id, 'Pendiente', '05/10/2026, 21:30', item.fullName, item.phone, item.email,
+        item.city, item.program.name, 'En línea', '10/10/2026', '09:30', item.message]);
+    assert.match(await evaluate(detailText), /Fecha preferida para asesoría/);
+    assert.match(await evaluate(detailText), /Hora preferida para asesoría/);
+    assert.match(dom.window.document.querySelector('#consultation-detail-description').textContent, /no son reuniones confirmadas/);
+    assert.equal(dom.window.document.activeElement.id, 'consultation-detail-title');
+    await click(detailClose);
+    assert.equal(await evaluate(detailOpen), false);
+    assert.equal(await evaluate(detailText), '');
+    assert.equal(dom.window.document.activeElement, dom.window.document.querySelector(detailButton));
+    assert.deepEqual(await evaluate('[calls.consultations, calls.sales, calls.meetings, calls.agenda]'), [1, 0, 0, 0]);
+});
+test('Detalle: filtros intactos, Escape, contacto coincidente conserva solicitudes separadas', async () => {
+    await inbox({ consultations: detailFixture() }); await until(loaded);
+    await setFilter('search', 'sintético'); await setFilter('state', 'converted'); await setFilter('program', 'fixture-program');
+    await click(detailButton);
+    assert.match(await evaluate(detailText), /Otra solicitud independiente/);
+    assert.ok(!(await evaluate(detailText)).includes(detailFixture()[0].message));
+    const dialog = dom.window.document.querySelector('[data-consultations-detail]');
+    // Escape nativo emite cancel; jsdom no implementa la interacción del navegador.
+    const cancel = new dom.window.Event('cancel', { cancelable: true });
+    dialog.dispatchEvent(cancel);
+    assert.equal(cancel.defaultPrevented, true);
+    assert.equal(dialog.open, false);
+    assert.deepEqual(await evaluate("['search','state','program'].map(n => document.querySelector('[data-consultations-'+n+']').value)"), ['sintético', 'converted', 'fixture-program']);
+    assert.equal(dom.window.document.activeElement, dom.window.document.querySelector(detailButton));
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+test('Detalle: ausentes/nulos y fechas inválidas se muestran como no disponibles', async () => {
+    await openDetailFixture({ consultations: [{ id: consultationsFixture[0].id, fullName: null, program: null, createdAt: 'invalid', preferredTime: '99:99' }] });
+    const values = await evaluate("[...document.querySelectorAll('[data-consultations-detail-content] dd')].map(e => e.textContent)");
+    assert.equal(values[0], consultationsFixture[0].id);
+    assert.deepEqual(values.slice(1), Array(11).fill('No disponible'));
+});
+test('Detalle: ID ausente, inválido o duplicado no permite abrir registros ambiguos', async () => {
+    await inbox({ consultations: [{}, { id: 'invalid' }, { id: consultationsFixture[0].id + '\n' }, ...[0, 1].map(() => ({ ...consultationsFixture[0] }))] }); await until(loaded);
+    for (const button of dom.window.document.querySelectorAll(detailButton)) { assert.equal(button.disabled, true); button.click(); }
+    assert.equal(await evaluate(detailOpen), false);
+});
+test('Detalle: recarga limpia datos en espera y actualiza por ID aunque cambie el orden', async () => {
+    await openDetailFixture();
+    await evaluate("fixture.consultationResponses.push({hold:true, data:[fixture.consultations[1], {...fixture.consultations[0], message:'Versión actualizada', status:'converted'}]})");
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    assert.equal(await evaluate(detailText), '');
+    assert.equal(await evaluate(detailOpen), true);
+    await evaluate('pendingConsultations.shift()()'); await until(loaded);
+    assert.match(await evaluate(detailText), /Versión actualizada/);
+    assert.match(await evaluate(detailText), /Convertida/);
+    await click(detailClose); assert.equal(await evaluate(headingFocused), true);
+    assert.equal(await evaluate('calls.consultations'), 2);
+});
+for (const failure of [false, true]) test(`Detalle: recarga ${failure ? 'fallida' : 'sin registro'} cierra sin conservar datos`, async () => {
+    await openDetailFixture();
+    await evaluate(`fixture.consultationResponses.push(${failure ? '{status:500}' : '{data:[]}'})`);
+    await click('[data-consultations-refresh]'); await until(failure ? loadError : loaded);
+    assert.equal(await evaluate(detailOpen), false); assert.equal(await evaluate(detailText), '');
+    assert.equal(await evaluate(headingFocused), true);
+    if (!failure) assert.match(await evaluate("document.querySelector('[data-consultations-status]').textContent"), /ya no está disponible/);
+});
+test('Detalle: filtro retira activador y cierre enfoca encabezado seguro', async () => {
+    await openDetailFixture(); await setFilter('search', 'sin coincidencias'); await click(detailClose);
+    assert.equal(await evaluate(headingFocused), true);
+});
+test('Detalle: cerrar durante recarga impide reapertura al llegar la respuesta', async () => {
+    await openDetailFixture();
+    await evaluate('fixture.consultationResponses.push({hold:true})');
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    await click(detailClose); await evaluate('pendingConsultations.shift()()'); await until(loaded);
+    assert.equal(await evaluate(detailOpen), false); assert.equal(await evaluate(detailText), '');
+});
+test('Detalle: XSS es texto, sin copiar datos a atributos ni URL ni almacenamiento', async () => {
+    const evil = '<img src=x onerror=alert(1)><script>alert(1)</script>';
+    await openDetailFixture({ consultations: [{ ...consultationsFixture[0], fullName: evil, message: evil }] });
+    const content = dom.window.document.querySelector('[data-consultations-detail-content]');
+    assert.equal(content.querySelectorAll('img,script').length, 0);
+    assert.equal((content.textContent.split(evil).length - 1), 2);
+    assert.equal([...dom.window.document.querySelectorAll('*')].some(el => [...el.attributes].some(a => a.value.includes(evil))), false);
+    assert.equal(dom.window.localStorage.length, 0); assert.equal(dom.window.sessionStorage.length, 0);
+    assert.equal(dom.window.location.search, ''); assert.equal(dom.window.location.hash, '');
+});
+for (const status of [401, 403]) test(`Detalle: ${status} invalida y no permite reabrir`, async () => {
+    await openDetailFixture();
+    const oldButton = dom.window.document.querySelector(detailButton);
+    await evaluate(`fixture.consultationResponses.push({status:${status}})`);
+    await click('[data-consultations-refresh]'); await until(blocked);
+    oldButton.click();
+    assert.equal(await evaluate(detailOpen), false); assert.equal(await evaluate(detailText), '');
+});
+test('Detalle: logout limpia DOM retenido y activadores antiguos quedan inertes', async () => {
+    await openDetailFixture();
+    const oldRoot = dom.window.document.querySelector('[data-consultations]');
+    const oldButton = oldRoot.querySelector(detailButton);
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    oldButton.click();
+    assert.equal(oldRoot.querySelector('[data-consultations-detail]').open, false);
+    assert.equal(oldRoot.querySelector('[data-consultations-detail-content]').textContent, '');
+    assert.equal(oldRoot.querySelector('[data-consultations-rows]').textContent, '');
+});
+test('Detalle: cambio de cuenta descarta recarga tardía y referencias de A', async () => {
+    await openDetailFixture();
+    const oldButton = dom.window.document.querySelector(detailButton);
+    await evaluate('fixture.consultationResponses.push({hold:true})');
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    await evaluate(`fixture.consultations = [{...fixture.consultations[1], message:'Solo cuenta B'}]; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until(loaded); oldButton.click();
+    assert.equal(await evaluate(detailOpen), false);
+    await click(detailButton); await evaluate('pendingConsultations.shift()()');
+    await new Promise(resolve => setTimeout(resolve, 20));
+    assert.match(await evaluate(detailText), /Solo cuenta B/);
+    assert.equal(await evaluate('requestSignals[1].aborted'), true);
+});
+test('Detalle: BFCache reautoriza y reinicializar no duplica apertura/cierre', async () => {
+    await openDetailFixture();
+    const oldButton = dom.window.document.querySelector(detailButton);
+    assert.equal(await evaluate('reinitializeConsultations()'), true);
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    oldButton.click(); assert.equal(await evaluate(detailOpen), false); assert.equal(await evaluate(detailText), '');
+    await evaluate('fixture.responses.push({hold:true})');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    await until('pending.length === 1'); assert.equal(await evaluate('calls.consultations'), 1);
+    await evaluate('pending.shift()()'); await until(loaded);
+    const dialog = dom.window.document.querySelector('[data-consultations-detail]');
+    let opened = 0, closed = 0;
+    dialog.showModal = function () { opened++; this.open = true; };
+    dialog.close = function () { closed++; this.open = false; };
+    await click(detailButton); await click(detailClose);
+    assert.deepEqual([opened, closed], [1, 1]);
+    assert.equal(await evaluate('calls.consultations'), 2);
+});
+test('Detalle: exclusión mutua con agendamiento y flujo original sigue funcionando', async () => {
+    await openDetailFixture(); await click('[data-meeting-open]');
+    assert.equal(await evaluate(modalOpen), false); assert.equal(await evaluate('calls.sales'), 0);
+    await click(detailClose); await click('[data-meeting-open]'); await until(sellersReady);
+    await click(detailButton); assert.equal(await evaluate(detailOpen), false);
+    await fillMeeting(); await submitMeeting(); await until('calls.consultations === 2'); await until(loaded);
+    assert.equal(await evaluate('calls.meetings'), 1);
+    await click(detailButton); assert.match(await evaluate(detailText), /Convertida/);
+});
 
 const filterRows = () => evaluate("[...document.querySelectorAll('[data-consultations-rows] tr')].map(row => row.querySelector('strong').textContent)");
 const filterCount = "document.querySelector('[data-consultations-filter-count]').textContent";

@@ -47,6 +47,16 @@
 .consultations-meeting-message { min-height: 1.5em; }
 .consultations-meeting :focus-visible { outline: 3px solid var(--crm-blue); outline-offset: 3px; }
 .consultations-meeting :disabled { opacity: .65; }
+.consultations-detail-open { font-size: 12px; padding: 8px; white-space: normal; margin-bottom: 8px; }
+.consultations-detail-open:focus-visible { outline: 3px solid var(--crm-blue); outline-offset: 3px; }
+.consultations-detail-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.consultations-detail-heading button { flex-shrink: 0; }
+.consultations-detail section { border-top: 1px solid var(--crm-border); margin-top: 20px; }
+.consultations-detail h3 { font-size: 16px; }
+.consultations-detail dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.consultations-detail dl > div:last-child { grid-column: 1 / -1; }
+.consultations-detail dt { color: var(--crm-muted); font-size: 13px; }
+.consultations-detail dd { margin: 5px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 1199px) {
     .consultations-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .consultations-table-wrap { border: 0; background: transparent; box-shadow: none; }
@@ -58,6 +68,7 @@
     .consultations-table td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 700; color: var(--crm-muted); margin-bottom: 6px; }
 }
 @media (max-width: 560px) {
+    .consultations-detail dl { grid-template-columns: minmax(0, 1fr); }
     .consultations-filters { grid-template-columns: minmax(0, 1fr); padding: 16px; }
     .consultations-meeting { padding: 20px; }
     .consultations-meeting-fields { grid-template-columns: minmax(0, 1fr); }

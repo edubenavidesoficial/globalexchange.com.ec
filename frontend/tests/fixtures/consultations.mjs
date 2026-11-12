@@ -13,3 +13,9 @@ export const consultationsFixture = ['pending', 'converted', 'cancelled'].map((s
     status,
     createdAt: '2026-10-06T02:30:00Z',
 }));
+
+// Contacto compartido deliberadamente: nunca implica identidad de persona.
+export const detailFixture = () => consultationsFixture.slice(0, 2).map((item, index) => ({
+    ...item, fullName: 'Interesado sintético', phone: '0000000000', email: 'detalle@example.invalid',
+    message: index ? 'Otra solicitud independiente.' : 'Primera línea de prueba.\n' + 'Mensaje extenso sintético. '.repeat(150),
+}));

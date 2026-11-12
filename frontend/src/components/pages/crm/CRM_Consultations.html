@@ -44,6 +44,15 @@
         </table>
     </div>
     <p class="crm-note">La fecha y hora indicadas son preferencias, no reuniones confirmadas.</p>
+    <dialog class="consultations-meeting consultations-detail" data-consultations-detail aria-labelledby="consultation-detail-title" aria-describedby="consultation-detail-description">
+        <div class="consultations-detail-heading">
+            <h2 id="consultation-detail-title" tabindex="-1">Detalle de solicitud</h2>
+            <button class="crm-button" type="button" data-consultations-detail-close>Cerrar</button>
+        </div>
+        <p class="crm-note" id="consultation-detail-description">Datos de una solicitud individual. Las preferencias de asesoría no son reuniones confirmadas.</p>
+        <p data-consultations-detail-status role="status" aria-live="polite" aria-atomic="true"></p>
+        <div data-consultations-detail-content></div>
+    </dialog>
     <dialog class="consultations-meeting" data-meeting-dialog aria-labelledby="meeting-title" aria-describedby="meeting-context">
         <h2 id="meeting-title" tabindex="-1">Agendar reunión</h2>
         <p id="meeting-context"><strong>Solicitante:</strong> <span data-meeting-applicant></span><br><strong>Programa:</strong> <span data-meeting-program></span></p>

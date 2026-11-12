@@ -8,6 +8,7 @@ const label = (map, value) => Object.hasOwn(map, value) ? map[value] : '—';
 const instances = new WeakMap();
 const normalize = value => typeof value === 'string' ? value.trim().toLocaleLowerCase('es') : '';
 const programId = item => typeof item.program?.id === 'string' ? item.program.id.trim() : '';
+const requestId = value => typeof value === 'string' && value.length === 36 && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value) ? value.toLowerCase() : null;
 
 export function calendarDate(value) {
     // Fecha calendario: nunca pasa por Date ni por una conversión de zona horaria.
@@ -45,6 +46,70 @@ export function initCRMConsultations() {
     let pending = null;
     let schedulingDenied = false;
     let refreshRequired = false;
+    const detailDialog = find('detail');
+    const detailContent = find('detail-content');
+    const detailStatus = find('detail-status');
+    let selectedId = null;
+    let detailOpener = null;
+    function closeDetail(restoreFocus = true) {
+        const opener = detailOpener;
+        const hadSelection = selectedId !== null;
+        selectedId = null;
+        detailOpener = null;
+        detailContent.replaceChildren();
+        detailStatus.textContent = '';
+        detailDialog.setAttribute('aria-busy', 'false');
+        if (detailDialog.open) detailDialog.close();
+        if (restoreFocus && hadSelection && access?.isCurrent()) {
+            if (opener?.isConnected && !opener.disabled) opener.focus();
+            else focusHeading();
+        }
+    }
+    function selectedRequest(id) {
+        if (!id || !loadedData) return null;
+        const matches = loadedData.filter(item => requestId(item.id) === id);
+        return matches.length === 1 ? matches[0] : null;
+    }
+    function renderDetail(item) {
+        detailContent.replaceChildren();
+        const time = typeof item.preferredTime === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/.test(item.preferredTime) ? item.preferredTime.slice(0, 5) : '—';
+        const groups = [
+            ['Identificación de la solicitud', [['Identificador de solicitud', item.id], ['Estado actual', label(statuses, item.status)], ['Fecha de creación', createdDate(item.createdAt)]]],
+            ['Contacto', [['Nombre del interesado', item.fullName], ['Teléfono', item.phone], ['Correo electrónico', item.email], ['Ciudad', item.city]]],
+            ['Programa', [['Programa de interés', item.program?.name]]],
+            ['Solicitud de asesoría', [['Modalidad preferida', label(modes, item.mode)], ['Fecha preferida para asesoría', calendarDate(item.preferredDate)], ['Hora preferida para asesoría', time], ['Mensaje del interesado', item.message]]],
+        ];
+        for (const [title, fields] of groups) {
+            const section = node('section');
+            section.append(node('h3', title));
+            const list = node('dl');
+            for (const [name, value] of fields) {
+                const pair = node('div');
+                pair.append(node('dt', name), node('dd', text(value) === '—' ? 'No disponible' : value));
+                list.append(pair);
+            }
+            section.append(list);
+            detailContent.append(section);
+        }
+        detailDialog.setAttribute('aria-busy', 'false');
+        detailStatus.textContent = '';
+    }
+    function openDetail(id, opener, owner, version) {
+        if (access !== owner || version !== generation || !access?.isCurrent() || pending ||
+            !opener.isConnected || root.querySelector('dialog[open]')) return;
+        const item = selectedRequest(id);
+        if (!item) return;
+        selectedId = id;
+        detailOpener = opener;
+        renderDetail(item);
+        detailDialog.showModal();
+        root.querySelector('#consultation-detail-title').focus();
+    }
+    find('detail-close').addEventListener('click', () => closeDetail());
+    detailDialog.addEventListener('cancel', event => { event.preventDefault(); closeDetail(); });
+    detailDialog.addEventListener('close', () => {
+        if (!detailDialog.open && selectedId) closeDetail();
+    });
     const focusHeading = () => {
         const heading = root.querySelector('#consultations-title');
         if (access?.isCurrent() && heading?.isConnected) heading.focus();
@@ -83,6 +148,7 @@ export function initCRMConsultations() {
         root.setAttribute('aria-busy', String(value));
     }
     function invalidate() {
+        closeDetail(false);
         meeting.invalidate();
         schedulingDenied = false;
         refreshRequired = false;
@@ -121,11 +187,19 @@ export function initCRMConsultations() {
             cell('Estado').append(badge);
             cell('Recibida').append(node('span', createdDate(item.createdAt)));
             const action = cell('Acción');
+            const id = requestId(item.id);
+            const owner = access, version = generation;
+            const view = node('button', 'Ver detalle', 'crm-button consultations-detail-open');
+            view.type = 'button';
+            view.dataset.consultationsDetailOpen = '';
+            view.disabled = !selectedRequest(id);
+            view.addEventListener('click', () => openDetail(id, view, owner, version));
+            action.append(view);
             if (item.status === 'pending' && ['admin', 'agendadora'].includes(access?.user?.role)) {
                 const button = node('button', 'Agendar reunión', 'crm-button consultations-meeting-open');
                 button.type = 'button'; button.dataset.meetingOpen = '';
                 button.disabled = schedulingDenied || refreshRequired;
-                button.addEventListener('click', () => { if (!schedulingDenied && !refreshRequired) meeting.open(item, access, button); });
+                button.addEventListener('click', () => { if (!root.querySelector('dialog[open]') && !schedulingDenied && !refreshRequired) meeting.open(item, access, button); });
                 action.append(button);
             }
             fragment.append(row);
@@ -170,6 +244,14 @@ export function initCRMConsultations() {
         find('summary').hidden = false;
         find('filters').disabled = false;
         applyFilters();
+        if (selectedId) {
+            const item = selectedRequest(selectedId);
+            if (item) renderDetail(item);
+            else {
+                closeDetail();
+                find('status').textContent = 'La solicitud ya no está disponible entre los datos cargados.';
+            }
+        }
         if (removedProgram) find('status').textContent = 'El programa seleccionado ya no está entre las solicitudes cargadas. Se muestran todos los programas. ' + find('status').textContent;
     }
     async function load() {
@@ -178,6 +260,12 @@ export function initCRMConsultations() {
         const version = generation;
         const controller = new AbortController();
         pending = controller;
+        if (selectedId) {
+            detailOpener = null;
+            detailContent.replaceChildren();
+            detailDialog.setAttribute('aria-busy', 'true');
+            detailStatus.textContent = 'Actualizando solicitud…';
+        }
         clear();
         busy(true);
         find('status').textContent = 'Cargando solicitudes…';
@@ -193,6 +281,7 @@ export function initCRMConsultations() {
             if (version !== generation || !current.isCurrent()) return;
             if (['expired', 'denied'].includes(error?.code)) { current.blockAccess(); return; }
             if (error?.code === 'stale') { current.revalidate(); return; }
+            closeDetail();
             clear();
             find('status').textContent = 'No fue posible cargar las solicitudes.';
             retry.hidden = false;
