@@ -9,6 +9,54 @@ const instances = new WeakMap();
 const normalize = value => typeof value === 'string' ? value.trim().toLocaleLowerCase('es') : '';
 const programId = item => typeof item.program?.id === 'string' ? item.program.id.trim() : '';
 const requestId = value => typeof value === 'string' && value.length === 36 && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value) ? value.toLowerCase() : null;
+const orders = { recent: 'Más recientes primero', oldest: 'Más antiguas primero', 'name-asc': 'Nombre A–Z', 'name-desc': 'Nombre Z–A' };
+const names = new Intl.Collator('es', { sensitivity: 'base' });
+
+function creationInstant(value) {
+    if (typeof value !== 'string') return null;
+    const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|[+-]\d{2}:\d{2})$/.exec(value);
+    if (!match || match[0] !== value) return null;
+    const [, year, month, day, hour, minute, second, fraction = '', zone] = match;
+    const leap = +year % 4 === 0 && (+year % 100 !== 0 || +year % 400 === 0);
+    const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (+month < 1 || +month > 12 || +day < 1 || +day > days[+month - 1] ||
+        +hour > 23 || +minute > 59 || +second > 59 ||
+        (zone !== 'Z' && (+zone.slice(1, 3) > 23 || +zone.slice(4) > 59))) return null;
+    const seconds = Date.parse(`${year}-${month}-${day}T${hour}:${minute}:${second}${zone}`) / 1000;
+    // Segundos UTC enteros + fracción decimal exacta, sin límite de microsegundos.
+    // Sin ceros finales, comparar las fracciones como texto conserva su valor.
+    return Number.isFinite(seconds) ? { seconds, fraction: fraction.replace(/0+$/, '') } : null;
+}
+
+function orderedRequests(data, order) {
+    const entries = data.map((item, index) => ({
+        item, index, time: creationInstant(item.createdAt), name: normalize(item.fullName), id: requestId(item.id),
+    }));
+    const byDate = (a, b, direction) => {
+        if (a.time === null || b.time === null) return Number(a.time === null) - Number(b.time === null);
+        return direction * (a.time.seconds - b.time.seconds ||
+            (a.time.fraction < b.time.fraction ? -1 : a.time.fraction > b.time.fraction ? 1 : 0));
+    };
+    const primary = (a, b) => {
+        if (order === 'recent' || order === 'oldest') return byDate(a, b, order === 'oldest' ? 1 : -1);
+        const missing = Number(!a.name) - Number(!b.name);
+        return missing || (order === 'name-desc' ? -1 : 1) * names.compare(a.name, b.name) || byDate(a, b, -1);
+    };
+    entries.sort((a, b) => primary(a, b) || a.index - b.index);
+    // Un ID anómalo no tiene posición lexicográfica fiable. Mantener su grupo
+    // empatado evita comparadores no transitivos al mezclar IDs e índices.
+    for (let start = 0; start < entries.length;) {
+        let end = start + 1;
+        while (end < entries.length && primary(entries[start], entries[end]) === 0) end++;
+        const group = entries.slice(start, end);
+        if (group.every(entry => entry.id)) {
+            group.sort((a, b) => (a.id < b.id ? 1 : a.id > b.id ? -1 : a.index - b.index));
+            for (let offset = 0; offset < group.length; offset++) entries[start + offset] = group[offset];
+        }
+        start = end;
+    }
+    return entries.map(entry => entry.item);
+}
 
 export function calendarDate(value) {
     // Fecha calendario: nunca pasa por Date ni por una conversión de zona horaria.
@@ -40,6 +88,9 @@ export function initCRMConsultations() {
     const retry = find('retry');
     const search = find('search'), state = find('state'), program = find('program');
     const filters = { search: '', state: '', program: '' };
+    const order = find('order');
+    let selectedOrder = 'recent';
+    order.value = selectedOrder;
     let loadedData = null;
     let access = null;
     let generation = 0;
@@ -157,6 +208,8 @@ export function initCRMConsultations() {
         pending = null;
         access = null;
         filters.search = filters.state = filters.program = '';
+        selectedOrder = order.value = 'recent';
+        find('caption').textContent = `Solicitudes registradas · ${orders[selectedOrder]}`;
         search.value = state.value = '';
         clear();
         busy(false);
@@ -210,11 +263,13 @@ export function initCRMConsultations() {
     function applyFilters() {
         if (loadedData === null || !access?.isCurrent()) return;
         const query = normalize(filters.search);
-        const visible = loadedData.filter(item =>
+        const filtered = loadedData.filter(item =>
             (!query || [item.fullName, item.phone, item.email].some(value => normalize(value).includes(query))) &&
             (!filters.state || item.status === filters.state) &&
             (!filters.program || programId(item) === filters.program));
+        const visible = orderedRequests(filtered, selectedOrder);
         render(visible);
+        find('caption').textContent = `Solicitudes registradas · ${orders[selectedOrder]}`;
         find('filter-count').hidden = false;
         find('filter-count').textContent = `Mostrando ${visible.length} de ${loadedData.length} solicitudes cargadas`;
         find('status').textContent = refreshRequired
@@ -224,6 +279,7 @@ export function initCRMConsultations() {
     }
     function acceptData(data) {
         loadedData = data;
+        order.value = selectedOrder;
         const programs = new Map();
         for (const item of data) {
             const id = programId(item);
@@ -301,6 +357,14 @@ export function initCRMConsultations() {
     search.addEventListener('input', updateFilters);
     state.addEventListener('change', updateFilters);
     program.addEventListener('change', updateFilters);
+    order.addEventListener('change', () => {
+        if (pending || loadedData === null || !access?.isCurrent()) return;
+        selectedOrder = Object.hasOwn(orders, order.value) ? order.value : 'recent';
+        order.value = selectedOrder;
+        applyFilters();
+        // Reutilizar la región de resultados; el selector conserva el foco.
+        find('filter-count').textContent += ` · ${orders[selectedOrder]}`;
+    });
     find('clear').addEventListener('click', () => {
         if (pending || loadedData === null || !access?.isCurrent()) return;
         search.value = state.value = program.value = '';

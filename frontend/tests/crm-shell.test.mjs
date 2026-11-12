@@ -7,7 +7,7 @@ import vm from 'node:vm';
 import { webcrypto } from 'node:crypto';
 import { JSDOM } from 'jsdom';
 import { createClient, NavigatorLockAcquireTimeoutError } from '@supabase/supabase-js';
-import { consultationsFixture, detailFixture } from './fixtures/consultations.mjs';
+import { consultationsFixture, detailFixture, orderFixture, preciseOrderFixture } from './fixtures/consultations.mjs';
 import { agendaFixture } from './fixtures/agenda.mjs';
 import { shiftAgendaDay } from '../src/js/modules/crm-agenda-date.js';
 
@@ -200,7 +200,20 @@ async function setup(options = {}, page = 'crm') {
                 if (response.timeout) {
                     await new Promise((resolve, reject) => options.signal.addEventListener('abort', () => reject(new Error('Fixture timeout')), { once: true }));
                 }
-                return new Response(JSON.stringify(response.body ?? { data: response.data ?? fixture.consultations }), { status: response.status || 200 });
+                const result = new Response(JSON.stringify(response.body ?? { data: response.data ?? fixture.consultations }), { status: response.status || 200 });
+                if (fixture.freezeConsultations) {
+                    const json = result.json.bind(result);
+                    result.json = async () => {
+                        const body = await json();
+                        const freeze = value => {
+                            if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value); }
+                        };
+                        freeze(body);
+                        window.receivedConsultations = body.data;
+                        return body;
+                    };
+                }
+                return result;
             }
             if (url !== '/api/auth/me') throw new Error('Unexpected request');
             calls.me++;
@@ -800,6 +813,222 @@ test('Detalle: exclusión mutua con agendamiento y flujo original sigue funciona
 });
 
 const filterRows = () => evaluate("[...document.querySelectorAll('[data-consultations-rows] tr')].map(row => row.querySelector('strong').textContent)");
+const orderValue = "document.querySelector('[data-consultations-order]').value";
+const orderRows = () => evaluate("[...document.querySelectorAll('[data-consultations-rows] tr')].map(row => row.querySelector('.consultations-secondary').textContent)");
+const orderedMarkers = indexes => indexes.map(index => `Registro sintético ${index}`);
+for (const [label, timestamps, recent, oldest] of [
+    ['microsegundos del mismo milisegundo', ['2026-01-01T00:00:00.000900Z', '2026-01-01T00:00:00.000100Z'], [0, 1], [1, 0]],
+    ['instantes iguales con offsets', ['2026-01-01T00:00:00.000100Z', '2026-01-01T05:30:00.0001+05:30', '2025-12-31T19:00:00.0001000-05:00'], [2, 1, 0], [2, 1, 0]],
+    ['instantes distintos con offsets', ['2026-01-01T05:30:00.0009+05:30', '2025-12-31T19:00:00.0001-05:00', '2026-01-01T00:00:01Z'], [2, 0, 1], [1, 0, 2]],
+    ['fracciones de longitud variable', ['2026-01-01T00:00:00.1Z', '2026-01-01T00:00:00.100000001Z', '2026-01-01T00:00:00.09Z', '2026-01-01T00:00:00.100000Z', '2026-01-01T00:00:00Z'], [1, 3, 0, 2, 4], [4, 2, 3, 0, 1]],
+    ['instantes anteriores al epoch', ['1969-12-31T23:59:59.999999Z', '1970-01-01T00:00:00Z'], [1, 0], [0, 1]],
+]) test(`Precisión temporal: ${label}, cuatro órdenes, filtros y datos inmutables`, async () => {
+    const data = preciseOrderFixture(timestamps);
+    await inbox({ consultations: data, freezeConsultations: true }); await until(loaded);
+    assert.deepEqual(await orderRows(), orderedMarkers(recent));
+    for (const [mode, expected] of [['oldest', oldest], ['name-asc', recent], ['name-desc', recent], ['recent', recent]]) {
+        await setFilter('order', mode);
+        await setFilter('search', 'lvaro'); await setFilter('state', 'pending'); await setFilter('program', 'fixture-program');
+        assert.deepEqual(await orderRows(), orderedMarkers(expected));
+    }
+    assert.deepEqual(await evaluate('receivedConsultations'), data);
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+
+test('Precisión temporal: fechas imposibles, sin zona, offsets inválidos y ausentes al final', async () => {
+    const timestamps = ['2026-01-01T00:00:00.0009Z', '2026-02-30T00:00:00Z',
+        '2026-01-01T24:00:00Z', '2026-01-01T00:00:00+24:00', '2026-01-01T00:00:00+05:60',
+        '2026-01-01T00:00:00', null, '', 'invalid', '2026-01-01T00:00:00Z\n',
+        '2025-02-29T00:00:00Z', '2026-13-01T00:00:00Z', '2026-01-00T00:00:00Z',
+        '2026-01-01T00:60:00Z', '2026-01-01T00:00:60Z', '2026-01-01T00:00:00.Z'];
+    await inbox({ consultations: preciseOrderFixture(timestamps), freezeConsultations: true }); await until(loaded);
+    for (const mode of ['recent', 'oldest', 'name-asc', 'name-desc']) {
+        await setFilter('order', mode);
+        assert.deepEqual(await orderRows(), orderedMarkers([0, ...timestamps.slice(1).map((_, i) => i + 1).reverse()]));
+    }
+});
+
+test('Precisión temporal: año bisiesto válido y empate exacto conserva UUID y estabilidad', async () => {
+    const data = preciseOrderFixture(['2024-02-29T00:00:00.000001Z', '2024-02-28T19:00:00.0000010-05:00']);
+    data.push({ ...data[1], city: 'Duplicado sintético' });
+    await inbox({ consultations: data, freezeConsultations: true }); await until(loaded);
+    for (const mode of ['recent', 'oldest', 'name-asc', 'name-desc']) {
+        await setFilter('order', mode);
+        assert.deepEqual(await orderRows(), ['Registro sintético 1', 'Duplicado sintético', 'Registro sintético 0']);
+    }
+});
+
+for (const [order, indexes] of [
+    ['recent', [3, 1, 2, 0, 6, 5, 4]], ['oldest', [0, 2, 3, 1, 6, 5, 4]],
+    ['name-asc', [1, 2, 6, 3, 0, 5, 4]], ['name-desc', [0, 3, 6, 1, 2, 5, 4]],
+]) test(`Orden V2: ${order}, fechas equivalentes, acentos y ausentes al final sin mutación`, async () => {
+    const data = orderFixture();
+    await inbox({ consultations: data, freezeConsultations: true }); await until(loaded);
+    assert.equal(await evaluate(orderValue), 'recent');
+    if (order !== 'recent') await setFilter('order', order);
+    assert.deepEqual(await orderRows(), orderedMarkers(indexes));
+    assert.deepEqual(await evaluate('receivedConsultations'), data);
+    assert.equal(await evaluate('calls.consultations'), 1);
+    assert.equal(dom.window.localStorage.length + dom.window.sessionStorage.length, 0);
+    assert.equal(dom.window.location.search + dom.window.location.hash, '');
+});
+
+test('Orden V2: empates totales e IDs anómalos conservan orden recibido', async () => {
+    const data = orderFixture().slice(0, 4).map((item, index) => ({ ...item,
+        fullName: index % 2 ? 'áLVARO' : 'Alvaro', createdAt: '2026-01-01T00:00:00Z',
+        id: index === 1 ? 'invalid' : consultationsFixture[0].id,
+    }));
+    await inbox({ consultations: data }); await until(loaded);
+    for (const mode of ['recent', 'oldest', 'name-asc', 'name-desc']) {
+        await setFilter('order', mode);
+        assert.deepEqual(await orderRows(), orderedMarkers([0, 1, 2, 3]));
+    }
+});
+
+test('Orden V2: nombres equivalentes desempatan por fecha, ID y posición', async () => {
+    const data = orderFixture().slice(0, 4).map(item => ({ ...item, fullName: 'ÁLVARO' }));
+    data.push({ ...data[3], city: 'Duplicado sintético' });
+    await inbox({ consultations: data }); await until(loaded);
+    for (const mode of ['name-asc', 'name-desc']) {
+        await setFilter('order', mode);
+        assert.deepEqual(await orderRows(), [orderedMarkers([3])[0], 'Duplicado sintético', ...orderedMarkers([1, 2, 0])]);
+    }
+});
+
+test('Orden V2: nombres no textuales y fechas no textuales quedan al final', async () => {
+    const data = orderFixture().slice(0, 3);
+    data[0].fullName = 42; data[0].createdAt = 0;
+    data[1].fullName = {}; data[1].createdAt = '';
+    await inbox({ consultations: data }); await until(loaded);
+    for (const mode of ['recent', 'oldest', 'name-asc', 'name-desc']) {
+        await setFilter('order', mode);
+        assert.deepEqual(await orderRows(), orderedMarkers([2, 1, 0]));
+    }
+});
+
+test('Orden V2: búsqueda, estado, programa y combinación conservan orden y contadores', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded);
+    await setFilter('order', 'oldest');
+    for (const [filter, value, expected] of [
+        ['search', 'lvaro', [2, 1]], ['state', 'pending', [0, 3, 1, 6, 5]], ['program', 'a', [0, 3, 1, 6, 5]],
+    ]) {
+        await click('[data-consultations-clear]'); await setFilter(filter, value);
+        assert.deepEqual(await orderRows(), orderedMarkers(expected));
+        assert.equal(await evaluate(orderValue), 'oldest');
+    }
+    await setFilter('search', 'lvaro'); await setFilter('state', 'pending');
+    assert.deepEqual(await orderRows(), orderedMarkers([1]));
+    assert.equal(await evaluate(filterCount), 'Mostrando 1 de 7 solicitudes cargadas');
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('[data-count]')].map(e => e.textContent)"), ['7', '5', '1', '1']);
+    await setFilter('search', 'sin coincidencias');
+    assert.deepEqual(await orderRows(), []);
+    await click('[data-consultations-clear]');
+    assert.deepEqual(await orderRows(), orderedMarkers([0, 2, 3, 1, 6, 5, 4]));
+    assert.equal(await evaluate(orderValue), 'oldest');
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+
+test('Orden V2: refresh y retry conservan selección y deshabilitan el selector durante carga', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    await evaluate('fixture.consultationResponses.push({hold:true})');
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    assert.ok(dom.window.document.querySelector('[data-consultations-order]').matches(':disabled'));
+    await evaluate('pendingConsultations.shift()()'); await until(loaded);
+    assert.equal(await evaluate(orderValue), 'oldest');
+    await evaluate('fixture.consultationResponses.push({status:500})');
+    await click('[data-consultations-refresh]'); await until(loadError);
+    await setFilter('order', 'name-desc'); // Evento sintético sobre control deshabilitado: no cambia el estado.
+    await click('[data-consultations-retry]'); await until(loaded);
+    assert.deepEqual(await orderRows(), orderedMarkers([0, 2, 3, 1, 6, 5, 4]));
+    assert.equal(await evaluate(orderValue), 'oldest');
+});
+
+test('Orden V2: detalle por UUID, cierre, foco y activador desconectado', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    const opener = dom.window.document.querySelector(detailButton);
+    await click(detailButton);
+    assert.match(await evaluate(detailText), /Zeta/);
+    await click(detailClose); assert.equal(dom.window.document.activeElement, opener);
+    assert.equal(await evaluate(orderValue), 'oldest');
+    await click(detailButton); await setFilter('order', 'name-asc');
+    assert.match(await evaluate(detailText), /Zeta/);
+    await click(detailClose); assert.equal(await evaluate(headingFocused), true);
+    await click(detailButton); assert.match(await evaluate(detailText), /Álvaro/);
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Orden V2: ${role} conserva permisos y agendamiento por registro`, async () => {
+    await inbox({ consultations: orderFixture(), user: { ...userA, role } }); await until(loaded);
+    await setFilter('order', 'oldest');
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), role === 'vendedora' ? 0 : 5);
+    if (role === 'vendedora') return;
+    await click('[data-meeting-open]'); await fillMeeting();
+    assert.equal(await evaluate("document.querySelector('[data-meeting-applicant]').textContent"), 'Zeta');
+    await submitMeeting(); await until('calls.consultations === 2'); await until(loaded);
+    assert.equal(await evaluate(orderValue), 'oldest');
+    assert.equal(await evaluate('fixture.consultations[0].status'), 'converted');
+    assert.equal(await evaluate('calls.meetings'), 1);
+});
+
+for (const status of [401, 403]) test(`Orden V2: ${status} restablece orden e impide recuperar datos`, async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    await evaluate(`fixture.consultationResponses.push({status:${status}})`);
+    await click('[data-consultations-refresh]'); await until(blocked);
+    assert.equal(await evaluate(orderValue), 'recent');
+    assert.deepEqual(await orderRows(), []);
+});
+
+test('Orden V2: logout limpia selección y respuesta tardía', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    const retained = dom.window.document.querySelector('[data-consultations]');
+    await evaluate('fixture.consultationResponses.push({hold:true})');
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    await evaluate('pendingConsultations.shift()()');
+    assert.equal(retained.querySelector('[data-consultations-order]').value, 'recent');
+    assert.equal(retained.querySelector('[data-consultations-rows]').textContent, '');
+});
+
+test('Orden V2: cambio de cuenta descarta selección y respuesta anterior', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    await evaluate('fixture.consultationResponses.push({hold:true, data:fixture.consultations})');
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    await evaluate(`fixture.consultations = [{...fixture.consultations[0], fullName:'Cuenta B sintética'}]; emitAuth('SIGNED_IN', ${JSON.stringify(B)})`);
+    await until(loaded); await evaluate('pendingConsultations.shift()()');
+    assert.equal(await evaluate(orderValue), 'recent');
+    assert.deepEqual(await filterRows(), ['Cuenta B sintética']);
+    assert.equal(await evaluate('requestSignals[1].aborted'), true);
+});
+
+test('Orden V2: BFCache reautoriza, reinicializar no duplica render ni GET', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded); await setFilter('order', 'oldest');
+    assert.equal(await evaluate('reinitializeConsultations()'), true);
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+    assert.equal(await evaluate(orderValue), 'recent'); assert.deepEqual(await orderRows(), []);
+    await evaluate('fixture.responses.push({hold:true})');
+    dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+    assert.deepEqual(await orderRows(), []);
+    await until('pending.length === 1');
+    await evaluate('pending.shift()()'); await until(loaded);
+    const rows = dom.window.document.querySelector('[data-consultations-rows]');
+    let renders = 0;
+    const original = rows.replaceChildren.bind(rows);
+    rows.replaceChildren = (...children) => { renders++; original(...children); };
+    await setFilter('order', 'oldest');
+    assert.equal(renders, 1); assert.equal(await evaluate('calls.consultations'), 2);
+});
+
+test('Orden V2: nombre accesible, ayuda, foco y anuncio único del orden aplicado', async () => {
+    await inbox({ consultations: orderFixture() }); await until(loaded);
+    const control = dom.window.document.querySelector('[data-consultations-order]');
+    assert.equal(control.labels.length, 1); assert.match(control.labels[0].textContent, /Ordenar por/);
+    assert.match(dom.window.document.getElementById(control.getAttribute('aria-describedby')).textContent, /únicamente a las solicitudes cargadas/);
+    assert.deepEqual([...control.options].map(option => option.textContent), ['Más recientes primero', 'Más antiguas primero', 'Nombre A–Z', 'Nombre Z–A']);
+    control.focus(); await setFilter('order', 'name-desc');
+    assert.equal(dom.window.document.activeElement, control);
+    assert.match(await evaluate(filterCount), /Nombre Z–A/);
+    assert.match(dom.window.document.querySelector('caption').textContent, /Nombre Z–A/);
+});
 const filterCount = "document.querySelector('[data-consultations-filter-count]').textContent";
 async function setFilter(name, value) {
     await evaluate(`document.querySelector('[data-consultations-${name}]').value = ${JSON.stringify(value)};

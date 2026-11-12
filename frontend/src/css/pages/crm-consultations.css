@@ -7,7 +7,7 @@
 .consultations-summary dd { margin: 6px 0 0; font-size: 28px; font-weight: 750; color: var(--crm-navy); }
 .consultations-status { color: var(--crm-muted); }
 .consultations-status:empty { display: none; }
-.consultations-filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: 16px; min-width: 0; padding: 20px; margin: 0; border: 1px solid var(--crm-border); border-radius: 16px; background: white; }
+.consultations-filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); align-items: end; gap: 16px; min-width: 0; padding: 20px; margin: 0; border: 1px solid var(--crm-border); border-radius: 16px; background: white; }
 .consultations-filters legend { padding: 0 6px; font-weight: 650; color: var(--crm-navy); }
 .consultations-filters label { display: flex; flex-direction: column; gap: 8px; min-width: 0; font-size: 14px; color: var(--crm-navy); }
 .consultations-filters input, .consultations-filters select { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; padding: 10px; border: 1px solid var(--crm-border); border-radius: 9px; background: white; color: inherit; font: inherit; }

@@ -23,9 +23,18 @@
         <label for="consultations-program">Programa
             <select id="consultations-program" data-consultations-program><option value="">Todos los programas</option></select>
         </label>
+        <label for="consultations-order">Ordenar por
+            <select id="consultations-order" data-consultations-order aria-describedby="consultations-order-help">
+                <option value="recent">Más recientes primero</option>
+                <option value="oldest">Más antiguas primero</option>
+                <option value="name-asc">Nombre A–Z</option>
+                <option value="name-desc">Nombre Z–A</option>
+            </select>
+        </label>
         <button class="crm-button" type="button" data-consultations-clear>Limpiar filtros</button>
     </fieldset>
     <p class="crm-note" id="consultations-filter-help">La búsqueda, los filtros y los contadores corresponden solo a las solicitudes cargadas.</p>
+    <p class="crm-note" id="consultations-order-help">El orden se aplica únicamente a las solicitudes cargadas.</p>
     <p class="consultations-filter-count" data-consultations-filter-count role="status" aria-live="polite" aria-atomic="true" hidden></p>
     <dl class="consultations-summary" data-consultations-summary hidden>
         <div><dt>Total</dt><dd data-count="total">0</dd></div>
@@ -38,7 +47,7 @@
     <button class="crm-button crm-button--primary" type="button" data-consultations-retry hidden>Reintentar</button>
     <div class="consultations-table-wrap" data-consultations-results hidden>
         <table class="consultations-table">
-            <caption>Solicitudes registradas · más recientes primero</caption>
+            <caption data-consultations-caption>Solicitudes registradas · Más recientes primero</caption>
             <thead><tr><th scope="col">Solicitante</th><th scope="col">Programa</th><th scope="col">Contacto</th><th scope="col">Preferencia</th><th scope="col">Modalidad</th><th scope="col">Estado</th><th scope="col">Recibida</th><th scope="col">Acción</th></tr></thead>
             <tbody data-consultations-rows></tbody>
         </table>
