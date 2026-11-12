@@ -259,6 +259,7 @@ async function setup(options = {}, page = 'crm') {
         await dialog.link(() => meetings);
         await consultations.link(specifier => specifier.endsWith('internal.js') ? api : dialog); await consultations.evaluate();
         hooks = consultations.namespace.initCRMConsultations();
+        sandbox.reinitializeConsultations = () => consultations.namespace.initCRMConsultations() === hooks;
     }
     module.namespace[page === 'login' ? 'initLogin' : 'initCRM'](hooks);
 }
@@ -645,6 +646,156 @@ const loadError = "!document.querySelector('[data-consultations-retry]').hidden"
 const rowText = "document.querySelector('[data-consultations-rows]').textContent";
 const inbox = options => setup(options, 'crm/solicitudes');
 
+const filterRows = () => evaluate("[...document.querySelectorAll('[data-consultations-rows] tr')].map(row => row.querySelector('strong').textContent)");
+const filterCount = "document.querySelector('[data-consultations-filter-count]').textContent";
+async function setFilter(name, value) {
+    await evaluate(`document.querySelector('[data-consultations-${name}]').value = ${JSON.stringify(value)};
+        document.querySelector('[data-consultations-${name}]').dispatchEvent(new Event('${name === 'search' ? 'input' : 'change'}', { bubbles: true }))`);
+}
+function filterFixture() {
+    return [
+        { ...consultationsFixture[0], fullName: 'Persona Alfa', phone: '000111222', email: 'alfa@example.invalid', program: { id: 'program-a', name: 'Idiomas', code: 'idioma-a' } },
+        { ...consultationsFixture[1], fullName: 'Persona Beta', phone: '000333444', email: 'beta@example.invalid', program: { id: 'program-b', name: 'Idiomas', code: 'idioma-b' } },
+        { ...consultationsFixture[2], fullName: 'Persona Gamma', phone: null, email: null, program: null },
+    ];
+}
+for (const [query, expected] of [['alF', 'Persona Alfa'], ['  PERSONA BETA  ', 'Persona Beta'], ['333', 'Persona Beta'], ['  ALFA@EXAMPLE  ', 'Persona Alfa']]) {
+    test(`Solicitudes V1: búsqueda parcial ${query}`, async () => {
+        await inbox({ consultations: filterFixture() }); await until(loaded);
+        await setFilter('search', query);
+        assert.deepEqual(await filterRows(), [expected]);
+        assert.equal(await evaluate(filterCount), 'Mostrando 1 de 3 solicitudes cargadas');
+        assert.deepEqual(await evaluate('[calls.consultations, calls.meetings, calls.sales]'), [1, 0, 0]);
+    });
+}
+test('Solicitudes V1: campos ausentes, nulos y programa sin ID no inventan coincidencias', async () => {
+    await inbox({ consultations: [{}, { fullName: null, phone: null, email: null, program: {} },
+        { fullName: 'Prueba sin ID', program: { name: 'Sin identificador' } }] }); await until(loaded);
+    await setFilter('search', 'null'); assert.deepEqual(await filterRows(), []);
+    await setFilter('search', 'undefined'); assert.deepEqual(await filterRows(), []);
+    await setFilter('search', 'prueba'); assert.deepEqual(await filterRows(), ['Prueba sin ID']);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-program]').options.length"), 1);
+    assert.deepEqual(await evaluate('errors'), []);
+});
+for (const [status, name] of [['pending', 'Persona Alfa'], ['converted', 'Persona Beta'], ['cancelled', 'Persona Gamma']]) {
+    test(`Solicitudes V1: estado ${status}`, async () => {
+        await inbox({ consultations: filterFixture() }); await until(loaded); await setFilter('state', status);
+        assert.deepEqual(await filterRows(), [name]);
+        assert.deepEqual(await evaluate("[...document.querySelectorAll('[data-count]')].map(e => e.textContent)"), ['3', '1', '1', '1']);
+    });
+}
+test('Solicitudes V1: programas por ID, nombres iguales y combinación de tres criterios', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded);
+    assert.deepEqual(await evaluate("[...document.querySelector('[data-consultations-program]').options].map(o => o.value)"), ['', 'program-a', 'program-b']);
+    await setFilter('program', 'program-b'); assert.deepEqual(await filterRows(), ['Persona Beta']);
+    await setFilter('search', 'persona'); await setFilter('state', 'converted');
+    assert.deepEqual(await filterRows(), ['Persona Beta']);
+    await setFilter('state', 'pending'); assert.deepEqual(await filterRows(), []);
+    assert.match(await evaluate("document.querySelector('[data-consultations-status]').textContent"), /Ninguna solicitud cargada coincide/);
+    assert.equal(await evaluate(filterCount), 'Mostrando 0 de 3 solicitudes cargadas');
+    await click('[data-consultations-clear]');
+    assert.deepEqual(await filterRows(), filterFixture().map(item => item.fullName));
+    assert.deepEqual(await evaluate("['search','state','program'].map(n => document.querySelector('[data-consultations-'+n+']').value)"), ['', '', '']);
+    assert.equal(await evaluate('calls.consultations'), 1);
+});
+test('Solicitudes V1: vacío cargado se distingue de cero coincidencias', async () => {
+    await inbox({ consultations: [] }); await until(loaded);
+    await setFilter('search', 'persona');
+    assert.equal(await evaluate(filterCount), 'Mostrando 0 de 0 solicitudes cargadas');
+    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'No hay solicitudes cargadas.');
+    await click('[data-consultations-clear]'); assert.equal(await evaluate('calls.consultations'), 1);
+});
+test('Solicitudes V1: actualizar conserva filtros y sustituye datos, sin filas antiguas durante carga', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded);
+    await setFilter('search', 'persona'); await setFilter('state', 'pending'); await setFilter('program', 'program-a');
+    await evaluate("fixture.consultationResponses.push({ hold: true, data: [{ ...fixture.consultations[0], fullName: 'Persona Nueva' }] })");
+    await click('[data-consultations-refresh]'); await until('pendingConsultations.length === 1');
+    assert.deepEqual(await filterRows(), []); assert.equal(await evaluate(filterCount), '');
+    assert.equal(await evaluate("document.querySelector('[data-consultations-filters]').disabled"), true);
+    await evaluate('pendingConsultations.shift()()'); await until(loaded);
+    assert.deepEqual(await filterRows(), ['Persona Nueva']);
+    assert.deepEqual(await evaluate("['search','state','program'].map(n => document.querySelector('[data-consultations-'+n+']').value)"), ['persona', 'pending', 'program-a']);
+    assert.equal(await evaluate(filterCount), 'Mostrando 1 de 1 solicitudes cargadas');
+});
+test('Solicitudes V1: programa desaparecido vuelve a Todos y conserva los demás criterios', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded);
+    await setFilter('search', 'persona'); await setFilter('state', 'converted'); await setFilter('program', 'program-a');
+    await evaluate('fixture.consultations = [fixture.consultations[1]]');
+    await click('[data-consultations-refresh]'); await until(loaded);
+    assert.deepEqual(await filterRows(), ['Persona Beta']);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-program]').value"), '');
+    assert.match(await evaluate("document.querySelector('[data-consultations-status]').textContent"), /programa seleccionado ya no/);
+});
+test('Solicitudes V1: error no permite recuperar datos anteriores al filtrar; retry conserva criterios', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded); await setFilter('search', 'beta');
+    await evaluate('fixture.consultationResponses.push({ status: 500 })'); await click('[data-consultations-refresh]'); await until(loadError);
+    await setFilter('search', 'alfa');
+    assert.deepEqual(await filterRows(), []); assert.equal(await evaluate(filterCount), '');
+    assert.equal(await evaluate("document.querySelector('[data-consultations-filters]').disabled"), true);
+    // Restaurar la entrada manipulada por el test: un usuario no puede editar el fieldset disabled.
+    await evaluate("document.querySelector('[data-consultations-search]').value = 'beta'");
+    await click('[data-consultations-retry]'); await until(loaded);
+    assert.deepEqual(await filterRows(), ['Persona Beta']);
+});
+test('Solicitudes V1: agendar reaplica filtros tras un solo POST y una recarga', async () => {
+    await inbox({ consultations: filterFixture(), meetingResponses: [{ hold: true }] }); await until(loaded);
+    await setFilter('search', 'alfa'); await setFilter('state', 'pending'); await setFilter('program', 'program-a');
+    await click('[data-meeting-open]'); await fillMeeting(); await submitMeeting(); await submitMeeting();
+    await until('pendingMeetings.length === 1'); await evaluate('pendingMeetings.shift()()');
+    await until('calls.consultations === 2'); await until(loaded);
+    assert.deepEqual(await filterRows(), []); assert.equal(await evaluate(filterCount), 'Mostrando 0 de 3 solicitudes cargadas');
+    assert.equal(await evaluate('calls.meetings'), 1);
+    assert.equal(await evaluate(modalOpen), false);
+    await setFilter('state', 'converted'); assert.deepEqual(await filterRows(), ['Persona Alfa']);
+});
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Solicitudes V1: filtrar conserva permisos ${role}`, async () => {
+    await inbox({ user: { ...userA, role }, consultations: filterFixture() }); await until(loaded);
+    await setFilter('state', 'pending'); await setFilter('search', 'alfa');
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), role === 'vendedora' ? 0 : 1);
+    await click('[data-consultations-clear]');
+    assert.equal(await evaluate("document.querySelectorAll('[data-meeting-open]').length"), role === 'vendedora' ? 0 : 1);
+});
+test('Solicitudes V1: logout borra filtros, opciones, contador y datos retenidos en la vista', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded);
+    await setFilter('search', 'alfa'); await setFilter('program', 'program-a');
+    const oldRoot = dom.window.document.querySelector('[data-consultations]');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(oldRoot.querySelector('[data-consultations-search]').value, '');
+    assert.equal(oldRoot.querySelector('[data-consultations-program]').options.length, 1);
+    assert.equal(oldRoot.querySelector('[data-consultations-filter-count]').textContent, '');
+    oldRoot.querySelector('[data-consultations-search]').dispatchEvent(new dom.window.Event('input'));
+    assert.equal(oldRoot.querySelector('[data-consultations-rows]').textContent, '');
+});
+test('Solicitudes V1: reinicialización y BFCache repetidos no duplican listeners ni acciones', async () => {
+    await inbox({ consultations: filterFixture() }); await until(loaded);
+    for (let i = 0; i < 2; i++) {
+        assert.equal(await evaluate('reinitializeConsultations()'), true);
+        dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+        assert.deepEqual(await filterRows(), []);
+        dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+        await until(loaded);
+    }
+    assert.equal(await evaluate('calls.consultations'), 3);
+    const rows = dom.window.document.querySelector('[data-consultations-rows]');
+    let renders = 0;
+    const observer = new dom.window.MutationObserver(records => { renders += records.length; });
+    observer.observe(rows, { childList: true });
+    await setFilter('search', 'alfa'); await new Promise(resolve => setTimeout(resolve, 0));
+    observer.disconnect(); assert.equal(renders, 1);
+    await click('[data-meeting-open]'); await fillMeeting(); await submitMeeting();
+    await until('calls.consultations === 4'); await until(loaded);
+    assert.equal(await evaluate('calls.meetings'), 1); assert.equal(await evaluate('calls.sales'), 1);
+});
+test('Solicitudes V1: opciones seguras, labels y contador accesible', async () => {
+    const data = filterFixture(); data[0].program.name = '<img src=x onerror=alert(1)>';
+    await inbox({ consultations: data }); await until(loaded);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-program]').options[1].textContent"), data[0].program.name);
+    assert.equal(await evaluate("document.querySelectorAll('[data-consultations-filters] img').length"), 0);
+    assert.equal(await evaluate("[...document.querySelectorAll('[data-consultations-filters] input, [data-consultations-filters] select')].every(e => e.labels.length === 1)"), true);
+    assert.equal(await evaluate("document.querySelector('[data-consultations-filter-count]').getAttribute('role')"), 'status');
+    assert.deepEqual(await evaluate('errors'), []);
+});
+
 test('32 · Solicitudes espera autorización del shell', async () => {
     await inbox({ responses: [{ hold: true }] }); await until('pending.length === 1');
     assert.equal(await evaluate('calls.consultations'), 0);
@@ -661,7 +812,7 @@ test('33 · 200 renderiza contrato real, resumen y GET autenticado', async () =>
 });
 test('34 · data vacío muestra empty state y resumen en cero', async () => {
     await inbox({ consultations: [] }); await until(loaded);
-    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'No hay solicitudes registradas todavía.');
+    assert.equal(await evaluate("document.querySelector('[data-consultations-status]').textContent"), 'No hay solicitudes cargadas.');
     assert.deepEqual(await evaluate("[...document.querySelectorAll('[data-count]')].map(e => e.textContent)"), ['0', '0', '0', '0']);
 });
 test('35 · email/message null se presentan como raya', async () => {

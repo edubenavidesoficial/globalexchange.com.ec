@@ -7,6 +7,26 @@
         </div>
         <button class="crm-button" type="button" data-consultations-refresh disabled aria-busy="false">Actualizar</button>
     </div>
+    <fieldset class="consultations-filters" data-consultations-filters disabled aria-describedby="consultations-filter-help">
+        <legend>Buscar y filtrar solicitudes</legend>
+        <label class="consultations-search" for="consultations-search">Nombre, teléfono o correo
+            <input id="consultations-search" type="search" data-consultations-search autocomplete="off" placeholder="Buscar interesado">
+        </label>
+        <label for="consultations-state">Estado
+            <select id="consultations-state" data-consultations-state>
+                <option value="">Todos los estados</option>
+                <option value="pending">Pendiente</option>
+                <option value="converted">Convertida</option>
+                <option value="cancelled">Cancelada</option>
+            </select>
+        </label>
+        <label for="consultations-program">Programa
+            <select id="consultations-program" data-consultations-program><option value="">Todos los programas</option></select>
+        </label>
+        <button class="crm-button" type="button" data-consultations-clear>Limpiar filtros</button>
+    </fieldset>
+    <p class="crm-note" id="consultations-filter-help">La búsqueda, los filtros y los contadores corresponden solo a las solicitudes cargadas.</p>
+    <p class="consultations-filter-count" data-consultations-filter-count role="status" aria-live="polite" aria-atomic="true" hidden></p>
     <dl class="consultations-summary" data-consultations-summary hidden>
         <div><dt>Total</dt><dd data-count="total">0</dd></div>
         <div><dt>Pendientes</dt><dd data-count="pending">0</dd></div>

@@ -5,6 +5,9 @@ const statuses = { pending: 'Pendiente', converted: 'Convertida', cancelled: 'Ca
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
 const text = value => typeof value === 'string' && value.trim() ? value : '—';
 const label = (map, value) => Object.hasOwn(map, value) ? map[value] : '—';
+const instances = new WeakMap();
+const normalize = value => typeof value === 'string' ? value.trim().toLocaleLowerCase('es') : '';
+const programId = item => typeof item.program?.id === 'string' ? item.program.id.trim() : '';
 
 export function calendarDate(value) {
     // Fecha calendario: nunca pasa por Date ni por una conversión de zona horaria.
@@ -28,10 +31,15 @@ function node(tag, value, className) {
 
 export function initCRMConsultations() {
     const root = document.querySelector('[data-consultations]');
+    if (!root) return;
+    if (instances.has(root)) return instances.get(root);
     const find = name => root.querySelector(`[data-consultations-${name}]`);
     const rows = find('rows');
     const refresh = find('refresh');
     const retry = find('retry');
+    const search = find('search'), state = find('state'), program = find('program');
+    const filters = { search: '', state: '', program: '' };
+    let loadedData = null;
     let access = null;
     let generation = 0;
     let pending = null;
@@ -56,6 +64,11 @@ export function initCRMConsultations() {
     } });
 
     function clear() {
+        loadedData = null;
+        program.replaceChildren(Object.assign(document.createElement('option'), { value: '', textContent: 'Todos los programas' }));
+        find('filters').disabled = true;
+        find('filter-count').textContent = '';
+        find('filter-count').hidden = true;
         rows.replaceChildren();
         find('results').hidden = true;
         find('summary').hidden = true;
@@ -77,6 +90,8 @@ export function initCRMConsultations() {
         pending?.abort();
         pending = null;
         access = null;
+        filters.search = filters.state = filters.program = '';
+        search.value = state.value = '';
         clear();
         busy(false);
     }
@@ -116,13 +131,46 @@ export function initCRMConsultations() {
             fragment.append(row);
         }
         rows.replaceChildren(fragment);
+        find('results').hidden = data.length === 0;
+    }
+    function applyFilters() {
+        if (loadedData === null || !access?.isCurrent()) return;
+        const query = normalize(filters.search);
+        const visible = loadedData.filter(item =>
+            (!query || [item.fullName, item.phone, item.email].some(value => normalize(value).includes(query))) &&
+            (!filters.state || item.status === filters.state) &&
+            (!filters.program || programId(item) === filters.program));
+        render(visible);
+        find('filter-count').hidden = false;
+        find('filter-count').textContent = `Mostrando ${visible.length} de ${loadedData.length} solicitudes cargadas`;
+        find('status').textContent = refreshRequired
+            ? 'La bandeja debe actualizarse antes de agendar otra reunión.'
+            : !loadedData.length ? 'No hay solicitudes cargadas.'
+                : !visible.length ? 'Ninguna solicitud cargada coincide con los filtros. Puedes limpiar los filtros.' : '';
+    }
+    function acceptData(data) {
+        loadedData = data;
+        const programs = new Map();
+        for (const item of data) {
+            const id = programId(item);
+            if (id && normalize(item.program?.name)) programs.set(id, item.program.name);
+        }
+        for (const [id, name] of programs) {
+            const option = document.createElement('option');
+            option.value = id; option.textContent = name;
+            program.append(option);
+        }
+        const removedProgram = filters.program && !programs.has(filters.program);
+        if (removedProgram) filters.program = '';
+        program.value = filters.program;
         for (const element of root.querySelectorAll('[data-count]')) {
             element.textContent = String(element.dataset.count === 'total' ? data.length
                 : data.filter(item => item.status === element.dataset.count).length);
         }
         find('summary').hidden = false;
-        find('results').hidden = data.length === 0;
-        find('status').textContent = data.length ? `${data.length} solicitudes cargadas.` : 'No hay solicitudes registradas todavía.';
+        find('filters').disabled = false;
+        applyFilters();
+        if (removedProgram) find('status').textContent = 'El programa seleccionado ya no está entre las solicitudes cargadas. Se muestran todos los programas. ' + find('status').textContent;
     }
     async function load() {
         if (pending || !access?.isCurrent()) return;
@@ -140,7 +188,7 @@ export function initCRMConsultations() {
                 throw new Error('Invalid response');
             }
             refreshRequired = false;
-            render(body.data);
+            acceptData(body.data);
         } catch (error) {
             if (version !== generation || !current.isCurrent()) return;
             if (['expired', 'denied'].includes(error?.code)) { current.blockAccess(); return; }
@@ -154,8 +202,27 @@ export function initCRMConsultations() {
     }
     refresh.addEventListener('click', () => void load());
     retry.addEventListener('click', () => void load());
-    return {
+    function updateFilters() {
+        if (pending || loadedData === null || !access?.isCurrent()) return;
+        filters.search = search.value;
+        filters.state = state.value;
+        filters.program = program.value;
+        applyFilters();
+    }
+    search.addEventListener('input', updateFilters);
+    state.addEventListener('change', updateFilters);
+    program.addEventListener('change', updateFilters);
+    find('clear').addEventListener('click', () => {
+        if (pending || loadedData === null || !access?.isCurrent()) return;
+        search.value = state.value = program.value = '';
+        updateFilters();
+    });
+    // La página es multipágina: el guard invalida en logout/pagehide y BFCache.
+    // Reutilizar hooks evita registrar listeners al inicializar el mismo DOM otra vez.
+    const hooks = {
         onInvalidate: invalidate,
         onAuthorized(value) { access = value; void load(); },
     };
+    instances.set(root, hooks);
+    return hooks;
 }

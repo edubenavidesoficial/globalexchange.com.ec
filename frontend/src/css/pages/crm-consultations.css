@@ -7,6 +7,14 @@
 .consultations-summary dd { margin: 6px 0 0; font-size: 28px; font-weight: 750; color: var(--crm-navy); }
 .consultations-status { color: var(--crm-muted); }
 .consultations-status:empty { display: none; }
+.consultations-filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: 16px; min-width: 0; padding: 20px; margin: 0; border: 1px solid var(--crm-border); border-radius: 16px; background: white; }
+.consultations-filters legend { padding: 0 6px; font-weight: 650; color: var(--crm-navy); }
+.consultations-filters label { display: flex; flex-direction: column; gap: 8px; min-width: 0; font-size: 14px; color: var(--crm-navy); }
+.consultations-filters input, .consultations-filters select { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; padding: 10px; border: 1px solid var(--crm-border); border-radius: 9px; background: white; color: inherit; font: inherit; }
+.consultations-filters button { min-height: 44px; white-space: normal; }
+.consultations-filters :focus-visible { outline: 3px solid var(--crm-blue); outline-offset: 3px; }
+.consultations-filters:disabled { opacity: .65; }
+.consultations-filter-count { font-weight: 650; color: var(--crm-navy); overflow-wrap: anywhere; }
 .consultations-table-wrap { border: 1px solid var(--crm-border); border-radius: 18px; background: white; box-shadow: 0 6px 24px #18286106; }
 .consultations-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
 .consultations-table caption { text-align: left; padding: 20px; font-weight: 650; color: var(--crm-navy); }
@@ -40,6 +48,7 @@
 .consultations-meeting :focus-visible { outline: 3px solid var(--crm-blue); outline-offset: 3px; }
 .consultations-meeting :disabled { opacity: .65; }
 @media (max-width: 1199px) {
+    .consultations-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .consultations-table-wrap { border: 0; background: transparent; box-shadow: none; }
     .consultations-table, .consultations-table tbody { display: block; }
     .consultations-table caption { display: block; padding: 0 0 16px; }
@@ -49,6 +58,7 @@
     .consultations-table td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 700; color: var(--crm-muted); margin-bottom: 6px; }
 }
 @media (max-width: 560px) {
+    .consultations-filters { grid-template-columns: minmax(0, 1fr); padding: 16px; }
     .consultations-meeting { padding: 20px; }
     .consultations-meeting-fields { grid-template-columns: minmax(0, 1fr); }
     .consultations-heading { flex-direction: column; gap: 0; margin-bottom: 24px; }
