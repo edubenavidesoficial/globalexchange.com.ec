@@ -33,6 +33,20 @@
             <div><dt>Canceladas</dt><dd data-agenda-count="cancelled"></dd></div>
         </dl>
     </section>
+    <fieldset class="agenda-filters" data-agenda-filters disabled>
+        <legend>Filtrar reuniones del día</legend>
+        <label>Estado<select data-agenda-filter-state>
+            <option value="">Todos los estados</option>
+            <option value="scheduled">Agendada</option><option value="completed">Completada</option>
+            <option value="cancelled">Cancelada</option><option value="no_show">No asistió</option>
+        </select></label>
+        <label data-agenda-seller-label hidden>Vendedora<select data-agenda-filter-seller disabled>
+            <option value="">Todas las vendedoras</option>
+        </select></label>
+        <button class="crm-button" type="button" data-agenda-clear-filters>Limpiar filtros</button>
+    </fieldset>
+    <p class="agenda-filter-count" data-agenda-filter-count role="status" aria-live="polite" aria-atomic="true" hidden></p>
+    <p class="crm-note" data-agenda-filter-notice role="status" aria-live="polite"></p>
     <p class="agenda-status" data-agenda-status role="status" aria-live="polite" aria-atomic="true"></p>
     <button class="crm-button crm-button--primary" type="button" data-agenda-retry hidden>Reintentar</button>
     <ol class="agenda-list" data-agenda-rows aria-label="Reuniones del día"></ol>

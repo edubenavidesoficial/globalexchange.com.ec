@@ -6,6 +6,8 @@ import { agendaToday, shiftAgendaDay, agendaDayRange, agendaDayLabel, agendaHour
 
 const modes = { online: 'En línea', phone: 'Teléfono', office: 'Oficina' };
 const statuses = { scheduled: 'Agendada', completed: 'Completada', cancelled: 'Cancelada', no_show: 'No asistió' };
+const instances = new WeakMap();
+const sellerId = meeting => typeof meeting.assignedTo?.id === 'string' ? meeting.assignedTo.id.trim().toLowerCase() : '';
 function node(tag, text, className) {
     const element = document.createElement(tag);
     if (text !== undefined) element.textContent = text;
@@ -15,6 +17,8 @@ function node(tag, text, className) {
 
 export function initCRMAgenda() {
     const root = document.querySelector('[data-agenda]');
+    if (!root) return;
+    if (instances.has(root)) return instances.get(root);
     const find = name => root.querySelector(`[data-agenda-${name}]`);
     const rows = find('rows'), date = find('date'), retry = find('retry');
     let day = agendaToday();
@@ -25,6 +29,10 @@ export function initCRMAgenda() {
     let cancellationDenied = false;
     let outcomeDenied = false;
     let refreshRequired = false;
+    let loadedData = null;
+    const filters = { state: '', seller: '' };
+    const stateSelect = find('filter-state'), sellerSelect = find('filter-seller');
+    const canFilterSeller = () => ['admin', 'agendadora'].includes(access?.user?.role);
     const available = () => Boolean(access?.isCurrent()) && !pending && !refreshRequired;
     const canOpen = () => available() &&
         !root.querySelector('[data-reschedule-dialog]').open && !root.querySelector('[data-cancel-dialog]').open &&
@@ -57,6 +65,11 @@ export function initCRMAgenda() {
     });
 
     function clear() {
+        loadedData = null;
+        sellerSelect.replaceChildren(Object.assign(node('option', 'Todas las vendedoras'), { value: '' }));
+        find('filter-count').textContent = '';
+        find('filter-count').hidden = true;
+        find('filter-notice').textContent = '';
         rows.replaceChildren();
         find('overview').hidden = true;
         for (const count of root.querySelectorAll('[data-agenda-count]')) count.textContent = '';
@@ -68,6 +81,9 @@ export function initCRMAgenda() {
         retry.hidden = true;
     }
     function controls() {
+        find('filters').disabled = !access || Boolean(pending) || loadedData === null;
+        find('seller-label').hidden = !canFilterSeller();
+        sellerSelect.disabled = !canFilterSeller();
         root.setAttribute('aria-busy', String(Boolean(pending)));
         date.disabled = !access;
         find('previous').disabled = !access || !agendaDayRange(shiftAgendaDay(day, -1));
@@ -93,10 +109,12 @@ export function initCRMAgenda() {
         pending?.abort();
         pending = null;
         access = null;
+        filters.state = filters.seller = '';
+        stateSelect.value = '';
         clear();
         controls();
     }
-    function render(data) {
+    function renderOverview(data) {
         // El GET ya ordena por scheduled_at e id. Conservar ese orden, incluso
         // empates con precisión PostgreSQL, y las referencias usadas por diálogos.
         const today = day === agendaToday();
@@ -122,6 +140,9 @@ export function initCRMAgenda() {
                 : data.filter(meeting => meeting.status === count.dataset.agendaCount).length);
         }
         find('overview').hidden = false;
+        find('summary').textContent = `${data.length} ${data.length === 1 ? 'reunión' : 'reuniones'}`;
+    }
+    function renderRows(data) {
         const fragment = document.createDocumentFragment();
         for (const meeting of data) {
             const item = node('li', undefined, 'agenda-meeting');
@@ -172,9 +193,34 @@ export function initCRMAgenda() {
             fragment.append(item);
         }
         rows.replaceChildren(fragment);
-        find('summary').textContent = `${data.length} ${data.length === 1 ? 'reunión' : 'reuniones'}`;
-        find('status').textContent = data.length ? `${data.length} ${data.length === 1 ? 'reunión cargada' : 'reuniones cargadas'}.`
-            : 'No tienes reuniones para este día.';
+    }
+    function applyFilters() {
+        if (loadedData === null || !access?.isCurrent()) return;
+        const visible = loadedData.filter(meeting => (!filters.state || meeting.status === filters.state) &&
+            (!canFilterSeller() || !filters.seller || sellerId(meeting) === filters.seller));
+        renderRows(visible);
+        find('filter-count').hidden = false;
+        find('filter-count').textContent = `Mostrando ${visible.length} de ${loadedData.length} reuniones cargadas del día`;
+        find('status').textContent = !loadedData.length ? 'No hay reuniones cargadas para este día.'
+            : !visible.length ? 'Ninguna reunión coincide con los filtros. Puedes limpiar los filtros.'
+                : `${visible.length} ${visible.length === 1 ? 'reunión visible' : 'reuniones visibles'}.`;
+        controls();
+    }
+    function acceptData(data) {
+        loadedData = data;
+        const sellers = new Map();
+        if (canFilterSeller()) for (const meeting of data) {
+            const id = sellerId(meeting), name = meeting.assignedTo?.fullName;
+            if (id && typeof name === 'string' && name.trim()) sellers.set(id, name);
+        }
+        for (const [id, name] of sellers) sellerSelect.append(Object.assign(node('option', name), { value: id }));
+        if (filters.seller && !sellers.has(filters.seller)) {
+            filters.seller = '';
+            if (canFilterSeller()) find('filter-notice').textContent = 'La vendedora seleccionada ya no está en las reuniones cargadas. Se restableció Todas las vendedoras.';
+        }
+        sellerSelect.value = filters.seller;
+        renderOverview(data);
+        applyFilters();
     }
     async function load() {
         if (pending || !access?.isCurrent()) return;
@@ -188,7 +234,7 @@ export function initCRMAgenda() {
             const data = await getAgendaMeetings({ ...agendaDayRange(day), access: current, signal: controller.signal });
             if (version !== generation || !current.isCurrent()) return;
             refreshRequired = false;
-            render(data);
+            acceptData(data);
         } catch (error) {
             if (version !== generation || !current.isCurrent()) return;
             if (['expired', 'denied'].includes(error?.code)) { current.blockAccess(); return; }
@@ -228,5 +274,22 @@ export function initCRMAgenda() {
     });
     showDate();
     controls();
-    return { onInvalidate: invalidate, onAuthorized(value) { access = value; void load(); } };
+    function updateFilters() {
+        if (!available() || loadedData === null || !canOpen()) return;
+        filters.state = stateSelect.value;
+        filters.seller = canFilterSeller() ? sellerSelect.value : '';
+        find('filter-notice').textContent = '';
+        applyFilters();
+    }
+    stateSelect.addEventListener('change', updateFilters);
+    sellerSelect.addEventListener('change', updateFilters);
+    find('clear-filters').addEventListener('click', () => {
+        if (!available() || loadedData === null || !canOpen()) return;
+        stateSelect.value = sellerSelect.value = '';
+        updateFilters();
+    });
+    // El guard limpia en pagehide/logout; BFCache reutiliza estos mismos hooks.
+    const hooks = { onInvalidate: invalidate, onAuthorized(value) { access = value; void load(); } };
+    instances.set(root, hooks);
+    return hooks;
 }

@@ -248,6 +248,7 @@ async function setup(options = {}, page = 'crm') {
         await outcome.link(() => meetings);
         await agenda.link(specifier => specifier.endsWith('meetings.js') ? meetings : specifier.endsWith('crm-reschedule-dialog.js') ? reschedule : specifier.endsWith('crm-cancel-dialog.js') ? cancellation : specifier.endsWith('crm-outcome-dialog.js') ? outcome : dates);
         await agenda.evaluate(); hooks = agenda.namespace.initCRMAgenda();
+        sandbox.reinitializeAgenda = () => agenda.namespace.initCRMAgenda() === hooks;
     }
     if (page === 'crm/solicitudes') {
         const api = new vm.SourceTextModule(await readFile(join(root, 'src/js/api/internal.js'), 'utf8'), { context });
@@ -1374,6 +1375,50 @@ test('UI meetings: conflicto de A no transfiere bloqueo ni respuesta GET tardía
 });
 
 const agendaPage = options => setup(options, 'crm/agenda');
+async function agendaFilter(name, value) {
+    await evaluate(`document.querySelector('[data-agenda-filter-${name}]').value = ${JSON.stringify(value)};
+        document.querySelector('[data-agenda-filter-${name}]').dispatchEvent(new Event('change', { bubbles: true }))`);
+}
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Agenda V1 shell: permisos del selector ${role}`, async () => {
+    await agendaPage({ user: { ...userA, role } }); await until(agendaLoaded);
+    assert.equal(await evaluate("document.querySelector('[data-agenda-seller-label]').hidden"), role === 'vendedora');
+    assert.equal(await evaluate("document.querySelector('[data-agenda-filter-seller]').options.length"), role === 'vendedora' ? 1 : 2);
+    await agendaFilter('state', 'scheduled');
+    assert.equal(await evaluate('calls.agenda'), 1);
+    assert.equal(await evaluate("document.querySelectorAll('[data-agenda-reschedule]').length"), role === 'vendedora' ? 0 : 1);
+    assert.equal(await evaluate("document.querySelectorAll('[data-agenda-outcome]').length"), role === 'agendadora' ? 0 : 1);
+});
+test('Agenda V1 shell: logout elimina filtros, opciones y reuniones de la vista anterior', async () => {
+    await agendaPage(); await until(agendaLoaded);
+    await agendaFilter('state', 'scheduled'); await agendaFilter('seller', agendaFixture()[0].assignedTo.id);
+    const old = dom.window.document.querySelector('[data-agenda]');
+    await click('.crm-sidebar [data-crm-logout]'); await until(loginReached);
+    assert.equal(old.querySelector('[data-agenda-rows]').textContent, '');
+    assert.equal(old.querySelector('[data-agenda-filter-count]').textContent, '');
+    assert.equal(old.querySelector('[data-agenda-filter-state]').value, '');
+    assert.equal(old.querySelector('[data-agenda-filter-seller]').options.length, 1);
+    old.querySelector('[data-agenda-filter-state]').dispatchEvent(new dom.window.Event('change'));
+    assert.equal(old.querySelector('[data-agenda-rows]').textContent, '');
+});
+test('Agenda V1 shell: BFCache exige autorización y reinicializar no duplica listeners', async () => {
+    await agendaPage(); await until(agendaLoaded); await agendaFilter('state', 'completed');
+    for (let i = 0; i < 2; i++) {
+        assert.equal(await evaluate('reinitializeAgenda()'), true);
+        dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pagehide', { persisted: true }));
+        assert.equal(await evaluate("document.querySelector('[data-agenda-filter-count]').textContent"), '');
+        assert.equal(await evaluate("document.querySelector('[data-agenda-filter-state]').value"), '');
+        await evaluate('fixture.responses.push({ hold: true })');
+        dom.window.dispatchEvent(new dom.window.PageTransitionEvent('pageshow', { persisted: true }));
+        await until('pending.length === 1');
+        assert.equal(await evaluate('calls.agenda'), i + 1); assert.equal(await evaluate(shellVisible), false);
+        await evaluate('pending.shift()()'); await until(agendaLoaded);
+    }
+    let renders = 0;
+    const observer = new dom.window.MutationObserver(records => { renders += records.length; });
+    observer.observe(dom.window.document.querySelector('[data-agenda-rows]'), { childList: true });
+    await agendaFilter('state', 'scheduled'); await new Promise(resolve => setTimeout(resolve, 0)); observer.disconnect();
+    assert.equal(renders, 1); assert.equal(await evaluate('calls.agenda'), 3);
+});
 const outcomeOpen = "document.querySelector('[data-outcome-dialog]').open";
 async function startOutcome(options = {}, value = 'completed') {
     await agendaPage(options); await until(agendaLoaded); await click('[data-agenda-outcome]');
@@ -1468,7 +1513,7 @@ for (const count of [0, 1]) test(`Agenda UI: ${count} reuniones y controles disp
     assert.equal(await evaluate("document.querySelector('[data-agenda-summary]').textContent"), count ? '1 reunión' : '0 reuniones');
     assert.equal(await evaluate("document.querySelector('[data-agenda-next]').disabled"), false);
     assert.equal(await evaluate("document.querySelector('[data-agenda-date]').disabled"), false);
-    if (!count) assert.match(await evaluate("document.querySelector('[data-agenda-status]').textContent"), /No tienes reuniones para este día/);
+    if (!count) assert.match(await evaluate("document.querySelector('[data-agenda-status]').textContent"), /No hay reuniones cargadas para este día/);
 });
 test('Agenda UI: XSS en todos los campos se presenta como texto; code no se muestra', async () => {
     const evil = '<img src=x onerror=alert(1)><script>evil()</script>';

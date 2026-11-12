@@ -76,7 +76,7 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     const submit = () => r('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
     const c = name => q(`[data-cancel-${name}]`);
     const o = name => q(`[data-outcome-${name}]`);
-    return { o, results, resultResponses,
+    return { o, results, resultResponses, reinitialize: () => agenda.namespace.initCRMAgenda(),
         resultOpen() { q('[data-agenda-outcome]')?.click(); },
         resultSubmit() { o('form').dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true })); },
         resultEscape() { o('dialog').dispatchEvent(new dom.window.Event('cancel', { cancelable: true })); },
@@ -93,6 +93,141 @@ async function setup({ role = 'admin', data = agendaFixture(), now } = {}) {
     };
 }
 const error = (code, status, domainCode) => Object.assign(new Error('SECRET provider details'), { code, status, domainCode });
+
+function filterData() {
+    const data = agendaFixture();
+    data.forEach((meeting, index) => { meeting.assignedTo = { id: index % 2 ? 'seller-b' : 'seller-a', fullName: 'Nombre de prueba' }; });
+    return data;
+}
+function filter(ui, name, value) {
+    const select = ui.q(`[data-agenda-filter-${name}]`);
+    select.value = value;
+    select.dispatchEvent(new ui.dom.window.Event('change', { bubbles: true }));
+}
+const names = ui => [...ui.document.querySelectorAll('.agenda-person h3')].map(n => n.textContent);
+const countText = ui => ui.q('[data-agenda-filter-count]').textContent;
+for (const state of ['', 'scheduled', 'completed', 'cancelled', 'no_show']) test(`Agenda V1: estado ${state || 'todos'}, contador y orden`, async () => {
+    const data = filterData(), before = JSON.stringify(data), ui = await setup({ data });
+    filter(ui, 'state', state);
+    const expected = data.filter(m => !state || m.status === state);
+    assert.deepEqual(names(ui), expected.map(m => m.consultation.fullName));
+    assert.equal(countText(ui), `Mostrando ${expected.length} de 4 reuniones cargadas del día`);
+    assert.equal(JSON.stringify(data), before); assert.equal(ui.gets.length, 1);
+});
+test('Agenda V1: IDs distintos con nombres iguales, deduplicación, combinación y limpieza sin GET', async () => {
+    const data = filterData(), ui = await setup({ data });
+    const day = ui.q('[data-agenda-date]').value;
+    assert.deepEqual([...ui.q('[data-agenda-filter-seller]').options].map(o => o.value), ['', 'seller-a', 'seller-b']);
+    filter(ui, 'seller', 'seller-b'); assert.deepEqual(names(ui), [data[1], data[3]].map(m => m.consultation.fullName));
+    filter(ui, 'state', 'completed'); assert.deepEqual(names(ui), [data[1].consultation.fullName]);
+    filter(ui, 'state', 'scheduled'); assert.equal(names(ui).length, 0);
+    assert.match(ui.q('[data-agenda-status]').textContent, /Ninguna reunión coincide.*limpiar/);
+    assert.equal(countText(ui), 'Mostrando 0 de 4 reuniones cargadas del día');
+    ui.q('[data-agenda-clear-filters]').click();
+    assert.deepEqual(names(ui), data.map(m => m.consultation.fullName));
+    assert.equal(ui.q('[data-agenda-filter-state]').value, ''); assert.equal(ui.q('[data-agenda-filter-seller]').value, '');
+    assert.equal(ui.q('[data-agenda-date]').value, day); assert.equal(ui.gets.length, 1);
+    assert.equal(ui.requests.length + ui.cancellations.length + ui.results.length, 0);
+});
+test('Agenda V1: resumen y próxima reunión permanecen independientes de filtros', async () => {
+    const ui = await setup({ data: filterData(), now: '2026-10-13T08:00:00-05:00' });
+    const overview = ui.q('[data-agenda-overview]').innerHTML;
+    filter(ui, 'state', 'completed'); filter(ui, 'seller', 'seller-b');
+    assert.equal(ui.q('[data-agenda-overview]').innerHTML, overview);
+    assert.equal(ui.q('[data-agenda-summary]').textContent, '4 reuniones');
+});
+test('Agenda V1: sin responsable no inventa opciones ni pierde reuniones en Todas', async () => {
+    const data = filterData(); data[0].assignedTo = null; delete data[1].assignedTo; data[2].assignedTo = {};
+    const ui = await setup({ data });
+    assert.equal(names(ui).length, 4);
+    assert.deepEqual([...ui.q('[data-agenda-filter-seller]').options].map(o => o.value), ['', 'seller-b']);
+    filter(ui, 'seller', 'seller-b'); assert.deepEqual(names(ui), [data[3].consultation.fullName]);
+    ui.q('[data-agenda-clear-filters]').click(); assert.equal(names(ui).length, 4);
+});
+test('Agenda V1: día vacío, carga, error y retry no reutilizan datos viejos', async () => {
+    const ui = await setup({ data: filterData() }), pending = deferred();
+    filter(ui, 'state', 'scheduled'); ui.loads.push(pending.promise); ui.q('[data-agenda-next]').click();
+    assert.equal(names(ui).length, 0); assert.equal(countText(ui), '');
+    assert.equal(ui.q('[data-agenda-filters]').disabled, true); assert.match(ui.q('[data-agenda-status]').textContent, /Cargando/);
+    pending.reject(error('network')); await settle();
+    assert.equal(countText(ui), ''); assert.equal(names(ui).length, 0); assert.equal(ui.q('[data-agenda-retry]').hidden, false);
+    ui.loads.push([]); ui.q('[data-agenda-retry]').click(); await settle();
+    assert.equal(countText(ui), 'Mostrando 0 de 0 reuniones cargadas del día');
+    assert.equal(ui.q('[data-agenda-status]').textContent, 'No hay reuniones cargadas para este día.');
+    assert.equal(ui.q('[data-agenda-filter-state]').value, 'scheduled');
+});
+test('Agenda V1: fecha conserva filtros válidos y restablece vendedora desaparecida con aviso', async () => {
+    const data = filterData(), ui = await setup({ data });
+    filter(ui, 'state', 'completed'); filter(ui, 'seller', 'seller-b');
+    ui.loads.push([data[1]]); ui.q('[data-agenda-next]').click(); await settle();
+    assert.equal(ui.q('[data-agenda-filter-state]').value, 'completed'); assert.equal(ui.q('[data-agenda-filter-seller]').value, 'seller-b');
+    assert.equal(countText(ui), 'Mostrando 1 de 1 reuniones cargadas del día');
+    ui.loads.push([data[0]]); ui.q('[data-agenda-next]').click(); await settle();
+    assert.equal(ui.q('[data-agenda-filter-state]').value, 'completed'); assert.equal(ui.q('[data-agenda-filter-seller]').value, '');
+    assert.match(ui.q('[data-agenda-filter-notice]').textContent, /restableció Todas/);
+    assert.equal(countText(ui), 'Mostrando 0 de 1 reuniones cargadas del día');
+});
+test('Agenda V1: respuesta tardía no sustituye día, opciones ni filtros actuales', async () => {
+    const data = filterData(), ui = await setup({ data }), pending = deferred();
+    filter(ui, 'state', 'completed'); filter(ui, 'seller', 'seller-b');
+    ui.loads.push(pending.promise); ui.q('[data-agenda-next]').click();
+    ui.loads.push([data[1]]); ui.q('[data-agenda-next]').click(); await settle();
+    const before = ui.q('[data-agenda]').innerHTML;
+    pending.resolve([data[0]]); await settle(); assert.equal(ui.q('[data-agenda]').innerHTML, before);
+    assert.equal(ui.gets[1].signal.aborted, true);
+});
+for (const action of ['schedule', 'cancel', 'completed', 'no_show']) test(`Agenda V1: ${action} recarga y reaplica filtros sin doble operación`, async () => {
+    const data = filterData(), ui = await setup({ data }), pending = deferred();
+    filter(ui, 'state', 'scheduled'); filter(ui, 'seller', 'seller-a');
+    const updated = structuredClone(data);
+    if (action === 'schedule') updated.shift(); else updated[0].status = action === 'cancel' ? 'cancelled' : action;
+    ui.loads.push(updated);
+    if (action === 'schedule') { ui.outcomes.push(pending.promise); ui.open(); ui.submit(); ui.submit(); }
+    else if (action === 'cancel') { ui.cancelOutcomes.push(pending.promise); ui.cancelOpen(); ui.c('form').elements.namedItem('reason').value = 'client_request'; ui.cancelSubmit(); ui.cancelSubmit(); }
+    else { ui.resultResponses.push(pending.promise); ui.resultOpen(); ui.o('form').elements.namedItem('outcome').value = action; ui.resultSubmit(); ui.resultSubmit(); }
+    assert.equal(ui.requests.length + ui.cancellations.length + ui.results.length, 1);
+    pending.resolve(); await settle();
+    assert.equal(ui.gets.length, 2); assert.equal(names(ui).length, 0);
+    assert.equal(ui.q('[data-agenda-filter-state]').value, 'scheduled'); assert.equal(ui.q('[data-agenda-filter-seller]').value, 'seller-a');
+    assert.equal(countText(ui), `Mostrando 0 de ${updated.length} reuniones cargadas del día`);
+    assert.equal(ui.q('[data-agenda-count="total"]').textContent, String(updated.length));
+});
+for (const role of ['admin', 'agendadora', 'vendedora']) test(`Agenda V1: selector y acciones por rol ${role}`, async () => {
+    const ui = await setup({ role, data: filterData() });
+    assert.equal(ui.q('[data-agenda-seller-label]').hidden, role === 'vendedora');
+    assert.equal(ui.q('[data-agenda-filter-seller]').disabled, role === 'vendedora');
+    if (role === 'vendedora') assert.equal(ui.q('[data-agenda-filter-seller]').options.length, 1);
+    filter(ui, 'state', 'scheduled');
+    assert.equal(!!ui.q('[data-agenda-reschedule]'), role !== 'vendedora');
+    assert.equal(!!ui.q('[data-agenda-cancel]'), role !== 'vendedora');
+    assert.equal(!!ui.q('[data-agenda-outcome]'), role !== 'agendadora');
+});
+test('Agenda V1: invalidar elimina datos y reautorizar no hereda filtros', async () => {
+    const ui = await setup({ data: filterData() }); filter(ui, 'state', 'completed'); filter(ui, 'seller', 'seller-b');
+    ui.invalidate();
+    assert.equal(countText(ui), ''); assert.equal(names(ui).length, 0); assert.equal(ui.q('[data-agenda-filter-state]').value, '');
+    assert.equal(ui.q('[data-agenda-filter-seller]').options.length, 1);
+    filter(ui, 'state', 'scheduled'); assert.equal(names(ui).length, 0);
+    ui.q('[data-agenda-filter-state]').value = '';
+    ui.authorize(); await settle(); assert.equal(names(ui).length, 4);
+});
+test('Agenda V1: reinicializar conserva hooks y un solo listener de filtro', async () => {
+    const ui = await setup({ data: filterData() });
+    assert.equal(ui.reinitialize(), ui.hooks); assert.equal(ui.reinitialize(), ui.hooks);
+    let mutations = 0; const observer = new ui.dom.window.MutationObserver(records => { mutations += records.length; });
+    observer.observe(ui.q('[data-agenda-rows]'), { childList: true });
+    filter(ui, 'state', 'scheduled'); await settle(); observer.disconnect();
+    assert.equal(mutations, 1); assert.equal(ui.gets.length, 1);
+});
+test('Agenda V1: nombres no confiables se insertan como texto y controles tienen labels', async () => {
+    const data = filterData(), danger = '<img src=x onerror=alert(1)>';
+    data[0].assignedTo.fullName = danger; data[2].assignedTo.fullName = danger;
+    const ui = await setup({ data });
+    assert.equal(ui.q('[data-agenda-filter-seller]').options[1].textContent, danger);
+    assert.equal(ui.q('[data-agenda-filters] img'), null);
+    for (const select of ui.document.querySelectorAll('[data-agenda-filters] select')) assert.equal(select.labels.length, 1);
+    assert.equal(ui.q('[data-agenda-filter-count]').getAttribute('aria-live'), 'polite');
+});
 
 const chooseOutcome = (ui, value = 'completed') => { ui.o('form').elements.namedItem('outcome').value = value; };
 for (const role of ['admin', 'vendedora', 'agendadora']) test(`4D.3E.2 visibilidad ${role}, contexto y elección explícita`, async () => {
@@ -346,7 +481,7 @@ test('4D.3E.1 vacío es cero confirmado; error/carga no muestran totales viejos;
     ui.loads.push([]); ui.q('[data-agenda-retry]').click(); await settle();
     assert.equal(ui.q('[data-agenda-overview]').hidden, false);
     assert.equal(ui.q('[data-agenda-count="total"]').textContent, '0');
-    assert.equal(ui.q('[data-agenda-status]').textContent, 'No tienes reuniones para este día.');
+    assert.equal(ui.q('[data-agenda-status]').textContent, 'No hay reuniones cargadas para este día.');
     assert.equal(ui.document.activeElement, ui.q('[data-agenda-day]'));
 });
 
